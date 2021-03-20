@@ -1,0 +1,69 @@
+{
+  "name": "motion",
+  "version": "6.0.0",
+  "description": "The Motion library for the web",
+  "author": "Matt Perry",
+  "main": "dist/cjs.js",
+  "module": "dist/es/index.js",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    "bezier": "./dist/es/easing/cubic-bezier.js",
+    "require": "./dist/cjs.js",
+    "default": "./dist/es/index.js"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/mattgperry/motion",
+  "sideEffects": false,
+  "keywords": [
+    "motion",
+    "animation",
+    "bezier",
+    "cubic bezier",
+    "easing"
+  ],
+  "scripts": {
+    "build": "tsc -p . && rollup -c",
+    "test": "jest --coverage --config jest.config.json --maxWorkers=2",
+    "format": "yarn prettier --write .",
+    "postpublish": "git push --tags",
+    "prepublishOnly": "yarn test && yarn build"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "transform": {
+      "\\.(ts)$": "../../../node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "/__tests__/.*\\.test.(ts|js)$",
+    "rootDir": "src",
+    "collectCoverageFrom": [
+      "**/*.{js,jsx,ts,tsx}",
+      "!**/node_modules/**",
+      "!**/__tests__/**",
+      "!**/worklet/**"
+    ],
+    "coverageDirectory": "<rootDir>/../coverage"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.21",
+    "bundlesize": "^0.18.1",
+    "husky": "=4",
+    "jest": "^26.6.3",
+    "lint-staged": ">=10",
+    "prettier": "2.2.1",
+    "rollup": "^2.42.1",
+    "rollup-plugin-terser": "^7.0.2",
+    "ts-jest": "^26.5.4",
+    "typescript": "^4.2.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  }
+}

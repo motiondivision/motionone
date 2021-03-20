@@ -1,0 +1,6 @@
+*
+**/*
+!dist/**
+!src/**
+!types/**
+!LICENSE.md
