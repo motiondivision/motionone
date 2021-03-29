@@ -1,4 +1,4 @@
-import { cubicBezier } from "../cubic-bezier"
+import { cubicBezier } from "../bezier"
 
 describe("cubicBezier", () => {
   test("correctly generates easing functions from curve definitions", () => {
