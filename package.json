@@ -1,6 +1,6 @@
 {
   "name": "motion",
-  "version": "6.0.1-alpha.1",
+  "version": "6.0.1-alpha.2",
   "description": "The Motion library for the web",
   "author": "Matt Perry",
   "main": "dist/cjs.js",
@@ -23,11 +23,13 @@
     "easing"
   ],
   "scripts": {
-    "build": "tsc -p . && rollup -c",
+    "build": "tsc -p . && rollup -c && bundlesize",
     "test": "jest --coverage --config jest.config.json --maxWorkers=2",
     "format": "yarn prettier --write .",
     "postpublish": "git push --tags",
-    "prepublishOnly": "yarn test && yarn build"
+    "prepublishOnly": "yarn test && yarn build",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -47,15 +49,29 @@
     ],
     "coverageDirectory": "<rootDir>/../coverage"
   },
+  "dependencies": {
+    "popmotion": "^9.3.5"
+  },
   "devDependencies": {
+    "@babel/core": "^7.13.16",
     "@rollup/plugin-node-resolve": "^11.2.0",
+    "@rollup/plugin-replace": "^2.4.1",
+    "@storybook/addon-actions": "^6.2.9",
+    "@storybook/addon-essentials": "^6.2.9",
+    "@storybook/addon-links": "^6.2.9",
+    "@storybook/node-logger": "^6.2.9",
+    "@storybook/preset-create-react-app": "^3.1.7",
+    "@storybook/react": "^6.2.9",
     "@types/jest": "^26.0.21",
+    "babel-loader": "^8.2.2",
     "bundlesize": "^0.18.1",
     "husky": "=4",
     "jest": "^26.6.3",
     "jest-watch-typeahead": "^0.6.1",
     "lint-staged": ">=10",
     "prettier": "2.2.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "rollup": "^2.42.1",
     "rollup-plugin-terser": "^7.0.2",
     "ts-jest": "^26.5.4",
@@ -69,7 +85,22 @@
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
   },
-  "dependencies": {
-    "@rollup/plugin-replace": "^2.4.1"
-  }
+  "eslintConfig": {
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
+    ]
+  },
+  "bundlesize": [
+    {
+      "path": "./dist/motion.min.js",
+      "maxSize": "1 kB"
+    }
+  ]
 }

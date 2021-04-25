@@ -1,0 +1,1 @@
+export { animate } from "./animate"
