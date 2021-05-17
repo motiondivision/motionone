@@ -18,10 +18,6 @@
     "rootDir": "src",
     "sourceMap": true,
     "baseUrl": "src",
-    "paths": {
-      "@framer": ["../src/index"],
-      "@framer/*": ["../src/*"]
-    },
     "strictNullChecks": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
@@ -42,8 +38,8 @@
     "jest.setup.tsx",
     "dev",
     "types",
-    "dev/examples.framer",
     "test",
+    "demos",
     "skins",
     "dist",
     "temp",

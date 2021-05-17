@@ -1,7 +1,7 @@
 import React, { useRef } from "react"
 import { useEffect } from "react"
-import "./box.css"
-import { animate } from "../dom/animate"
+import "./animate.css"
+import { animate } from "../src"
 
 export interface BoxProps {}
 

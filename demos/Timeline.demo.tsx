@@ -1,10 +1,10 @@
 import React from "react"
 import { Story, Meta } from "@storybook/react"
 
-import { Box, BoxProps } from "./Box"
+import { Box, BoxProps } from "./Timeline"
 
 export default {
-  title: "Example/Box",
+  title: "Timeline/Box",
   component: Box,
   argTypes: {
     backgroundColor: { control: "color" },
