@@ -1,6 +1,9 @@
 import resolve from "@rollup/plugin-node-resolve"
 import { terser } from "rollup-plugin-terser"
 import replace from "@rollup/plugin-replace"
+import commonjs from "@rollup/plugin-commonjs"
+import * as react from "react"
+import * as reactDom from "react-dom"
 import pkg from "./package.json"
 
 const config = {
@@ -26,7 +29,9 @@ const umd = Object.assign({}, config, {
     format: "umd",
     name: "Motion",
     exports: "named",
+    globals: { react: "React" },
   },
+  external: ["react", "react-dom"],
   plugins: [
     resolve(),
     replace({
@@ -55,7 +60,15 @@ const cjs = Object.assign({}, config, {
     format: "cjs",
     exports: "named",
   },
-  plugins: [resolve()],
+  plugins: [
+    resolve(),
+    commonjs({
+      namedExports: {
+        react: Object.keys(react),
+        "react-dom": Object.keys(reactDom),
+      },
+    }),
+  ],
   external,
 })
 
@@ -66,7 +79,15 @@ const es = Object.assign({}, config, {
     preserveModules: true,
     dir: "dist/es",
   },
-  plugins: [resolve()],
+  plugins: [
+    resolve(),
+    commonjs({
+      namedExports: {
+        react: Object.keys(react),
+        "react-dom": Object.keys(reactDom),
+      },
+    }),
+  ],
   external,
 })
 

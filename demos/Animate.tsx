@@ -1,23 +1,32 @@
 import React, { useRef } from "react"
 import { useEffect } from "react"
 import "./animate.css"
-import { animate } from "../src"
+import { animated } from "../src"
 
 export interface BoxProps {}
 
 export const Box: React.FC<BoxProps> = ({}) => {
-  const ref = useRef(null)
+  return (
+    <animated.div
+      options={{ repeat: 6, delay: 1 }}
+      first={{ backgroundColor: "red", transform: "none" }}
+      style={{ backgroundColor: "blue", transform: "translateX(100px)" }}
+      className="container"
+    />
+  )
 
-  useEffect(() => {
-    const element = ref.current
-    if (!element) return
+  // const ref = useRef(null)
 
-    animate(
-      element,
-      { backgroundColor: "blue", transform: "translateX(100px)" },
-      { repeat: 6, delay: 1 }
-    )
-  }, [])
+  // useEffect(() => {
+  //   const element = ref.current
+  //   if (!element) return
 
-  return <div ref={ref} className="container" />
+  //   animate(
+  //     element,
+  //     { backgroundColor: "blue", transform: "translateX(100px)" },
+  //     { repeat: 6, delay: 1 }
+  //   )
+  // }, [])
+
+  // return <div ref={ref} className="container" />
 }
