@@ -6,7 +6,7 @@ import { AnimationOptions, Keyframe } from "./types"
 export function animate(
   element: Element,
   // elements: Element | Element[] | NodeListOf<Element> | string,
-  keyframes: Keyframe | Keyframe[],
+  keyframes: Keyframe, // | Keyframe[],
   options: AnimationOptions = {}
 ) {
   // if (typeof elements === "string") {

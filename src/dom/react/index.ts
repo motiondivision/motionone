@@ -1,70 +1,5 @@
-import * as React from "react"
-import { useEffect, useRef } from "react"
-import { animate } from "../animate"
-import { AnimationOptions, Keyframe } from "../types"
-
-interface AnimatedProps {
-  children?: React.ReactChild
-  first?: React.CSSProperties
-  style?: React.CSSProperties
-  options?: AnimationOptions
-  onStart?: () => void
-  onComplete?: () => void
-}
-
-export function useAnimation(
-  ref: React.RefObject<Element>,
-  target?: React.CSSProperties,
-  options?: AnimationOptions
-) {
-  const prevTarget = useRef({})
-  useEffect(() => {
-    if (!target) return
-
-    const targetKeyframe: Keyframe = {}
-
-    for (const key in target) {
-      if (target !== prevTarget.current[key]) {
-        targetKeyframe[key] = target[key]
-      }
-    }
-
-    if (Object.keys(targetKeyframe).length && ref.current) {
-      animate(ref.current, targetKeyframe, options)
-    }
-
-    prevTarget.current = target
-  })
-}
-
-function useInitialRender() {
-  const isInitialRender = useRef(true)
-  useEffect(() => {
-    isInitialRender.current = false
-  }, [])
-
-  return isInitialRender.current
-}
-
-function createAnimatedComponent(Component: string) {
-  function Animated(
-    { options, style, first, onStart, onComplete, ...props }: AnimatedProps,
-    _externalRef: React.Ref<Element>
-  ) {
-    const ref = useRef(null)
-    useAnimation(ref, style, { ...options, onStart, onComplete })
-
-    const isInitialRender = useInitialRender()
-
-    return React.createElement(Component, {
-      ...props,
-      style: isInitialRender && first ? first : style,
-      ref,
-    })
-  }
-
-  return React.forwardRef(Animated)
-}
+import { createAnimatedComponent } from "./component"
+import { AnimatedDOMComponents } from "./types"
 
 const components = new Map<string, any>()
 export const animated = new Proxy(
@@ -78,4 +13,4 @@ export const animated = new Proxy(
       return components.get(key)!
     },
   }
-)
+) as AnimatedDOMComponents

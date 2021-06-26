@@ -1,16 +1,22 @@
-import React, { useRef } from "react"
-import { useEffect } from "react"
+import React from "react"
 import "./animate.css"
 import { animated } from "../src"
 
 export interface BoxProps {}
 
 export const Box: React.FC<BoxProps> = ({}) => {
+  const [color, setColor] = React.useState(false)
   return (
     <animated.div
-      options={{ repeat: 6, delay: 1 }}
-      first={{ backgroundColor: "red", transform: "none" }}
-      style={{ backgroundColor: "blue", transform: "translateX(100px)" }}
+      options={{ duration: 0.3 }}
+      // first={{ backgroundColor: "red", transform: "none" }}
+      style={{
+        backgroundColor: color ? "red" : "blue",
+        transform: "none",
+      }}
+      onClick={() => setColor(!color)}
+      hover={{ transform: "scale(2)" }}
+      press={{ transform: "scale(0.7)" }}
       className="container"
     />
   )
