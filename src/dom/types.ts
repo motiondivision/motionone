@@ -11,6 +11,8 @@ export interface AnimationOptions {
   repeat?: number
   initialProgress?: number
   stagger?: number
+  onStart?: () => void
+  onComplete?: () => void
 }
 
 export type RelativeTimestamp = `-${number}` | `+${number}`

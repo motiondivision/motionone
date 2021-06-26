@@ -8,6 +8,8 @@ interface AnimatedProps {
   first?: React.CSSProperties
   style?: React.CSSProperties
   options?: AnimationOptions
+  onStart?: () => void
+  onComplete?: () => void
 }
 
 export function useAnimation(
@@ -46,11 +48,11 @@ function useInitialRender() {
 
 function createAnimatedComponent(Component: string) {
   function Animated(
-    { options, style, first, ...props }: AnimatedProps,
+    { options, style, first, onStart, onComplete, ...props }: AnimatedProps,
     _externalRef: React.Ref<Element>
   ) {
     const ref = useRef(null)
-    useAnimation(ref, style, options)
+    useAnimation(ref, style, { ...options, onStart, onComplete })
 
     const isInitialRender = useInitialRender()
 

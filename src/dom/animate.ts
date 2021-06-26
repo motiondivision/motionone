@@ -31,16 +31,13 @@ export function animate(
 
   delay = secondsToMilliseconds(delay)
   duration = secondsToMilliseconds(duration)
-  console.log({
-    delay,
-    duration,
-    easing: Array.isArray(easing) ? convertToBezierString(easing) : easing,
-    iterations: repeat + 1,
-    iterationStart,
-  })
+
   function onComplete() {
     Object.assign((element as HTMLElement).style, getTargetKeyframe(keyframes))
+    options.onComplete?.()
   }
+
+  options.onStart?.()
 
   const animation = element.animate(keyframes, {
     delay,
