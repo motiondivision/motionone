@@ -5,13 +5,14 @@ import { AnimationOptions, Keyframe } from "../types"
 
 interface AnimatedProps {
   children?: React.ReactChild
-  style: React.CSSProperties
+  first?: React.CSSProperties
+  style?: React.CSSProperties
   options?: AnimationOptions
 }
 
 export function useAnimation(
   ref: React.RefObject<Element>,
-  target: React.CSSProperties,
+  target?: React.CSSProperties,
   options?: AnimationOptions
 ) {
   const prevTarget = useRef({})
