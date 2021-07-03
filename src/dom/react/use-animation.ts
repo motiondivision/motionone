@@ -2,9 +2,10 @@ import { AnimationOptions } from "../types"
 import { CSSProperties, RefObject, useEffect, useRef } from "react"
 import { animate } from ".."
 import { Keyframe } from "../types"
+// import { animateSpring } from "../animate-spring"
 
 export function useAnimation(
-  ref: RefObject<Element>,
+  ref: RefObject<HTMLElement>,
   target?: CSSProperties,
   options?: AnimationOptions
 ) {
@@ -21,6 +22,10 @@ export function useAnimation(
     }
 
     if (Object.keys(targetKeyframe).length && ref.current) {
+      // animateSpring(ref.current, "x", parseFloat(targetKeyframe.x as any), {
+      //   stiffness: 200,
+      //   damping: 10,
+      // })
       animate(ref.current, targetKeyframe, options)
     }
 

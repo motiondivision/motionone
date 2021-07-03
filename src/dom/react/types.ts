@@ -13,7 +13,7 @@ import { AnimationOptions } from "../types"
 
 export interface AnimatedProps {
   children?: ReactChild
-  first?: CSSProperties
+  initial?: CSSProperties
   style?: CSSProperties
   hover?: CSSProperties
   press?: CSSProperties

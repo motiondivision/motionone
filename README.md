@@ -165,3 +165,9 @@ animate({
 Using the smallest parts of Popmotion to provide synchronous time-based and spring animations would probably only amount to a ~3kb overall bundlesize.
 
 As there'd only be a single spring animation powering all the animating values it'd be a much cheaper runtime than normal spring animations, in addition to all the benefits of browser interpolation.
+
+## TODO
+
+- [] Spring animations
+- [] Multiple keyframe support in React
+- [] Exit animations support in React

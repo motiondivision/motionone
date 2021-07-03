@@ -4,6 +4,13 @@ export interface Keyframe {
 
 export type BezierDefinition = [number, number, number, number]
 
+export interface AnimationMetadata {
+  transformKeys: string[]
+  transform?: string
+  animations: { [key: string]: Animation }
+  springGenerators: { [key: string]: any }
+}
+
 export interface AnimationOptions {
   delay?: number
   duration?: number

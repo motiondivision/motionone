@@ -1,12 +1,13 @@
 import { convertToBezierString } from "../utils/bezier-string"
 import { secondsToMilliseconds } from "../utils/convert-time"
 import { getTargetKeyframe } from "../utils/get-target-keyframe"
+import { mapTransformsToVariables } from "./transforms"
 import { AnimationOptions, Keyframe } from "./types"
 
 export function animate(
-  element: Element,
+  element: HTMLElement,
   // elements: Element | Element[] | NodeListOf<Element> | string,
-  keyframes: Keyframe, // | Keyframe[],
+  keyframes: Keyframe | Keyframe[],
   options: AnimationOptions = {}
 ) {
   // if (typeof elements === "string") {
@@ -26,14 +27,25 @@ export function animate(
     duration = 0.3,
     repeat = 0,
     initialProgress: iterationStart = 0,
-    easing = "linear",
+    easing = "ease",
   } = options
 
   delay = secondsToMilliseconds(delay)
   duration = secondsToMilliseconds(duration)
+  keyframes = mapTransformsToVariables(element, keyframes)
+  const finalTarget = getTargetKeyframe(keyframes)
 
   function onComplete() {
-    Object.assign((element as HTMLElement).style, getTargetKeyframe(keyframes))
+    // Set styles
+    Object.assign(element.style, finalTarget)
+
+    // Set CSS variables
+    for (const key in finalTarget) {
+      if (key.startsWith("--")) {
+        element.style.setProperty(key, finalTarget[key] as string)
+      }
+    }
+
     options.onComplete?.()
   }
 
@@ -48,4 +60,6 @@ export function animate(
   })
 
   animation.finished.then(onComplete)
+
+  return animation
 }

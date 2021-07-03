@@ -9,7 +9,7 @@ export function createAnimatedComponent<Props extends {}>(Component: string) {
     {
       options,
       style,
-      first,
+      initial,
       hover,
       press,
       onStart,
@@ -18,8 +18,9 @@ export function createAnimatedComponent<Props extends {}>(Component: string) {
     }: Props & AnimatedProps,
     _externalRef: React.Ref<Element>
   ) {
-    const [renderedStyle] = useState(first || style)
-    const target = Object.assign({}, style) // TODO Replace with spread
+    // TODO Map rendered style transforms to CSS vars
+    const [renderedStyle] = useState(initial || style)
+    const target = { ...style }
     const hoverProps = useHover(target, hover, props)
     const pressProps = usePress(target, press, props)
 
