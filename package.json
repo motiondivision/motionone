@@ -25,10 +25,12 @@
   "scripts": {
     "build": "tsc -p . && rollup -c && bundlesize",
     "test": "jest --coverage --config jest.config.json --maxWorkers=2",
+    "test-browser": "node ./cypress/scripts/collect-tests.js && start-server-and-test start-dev-server http://0.0.0.0:8000 'cypress run'",
     "format": "yarn prettier --write .",
     "postpublish": "git push --tags",
     "prepublishOnly": "yarn test && yarn build",
     "storybook": "start-storybook -p 6006",
+    "start-dev-server": "python -m SimpleHTTPServer",
     "build-storybook": "build-storybook"
   },
   "jest": {
@@ -52,6 +54,7 @@
   "dependencies": {
     "@rollup/plugin-commonjs": "^19.0.0",
     "popmotion": "^9.3.5",
+    "start-server-and-test": "^1.12.5",
     "tslib": "^2.3.0"
   },
   "optionalDependencies": {
@@ -73,6 +76,7 @@
     "@types/react": "^17.0.11",
     "babel-loader": "^8.2.2",
     "bundlesize": "^0.18.1",
+    "cypress": "^7.6.0",
     "husky": "=4",
     "jest": "^26.6.3",
     "jest-watch-typeahead": "^0.6.1",
