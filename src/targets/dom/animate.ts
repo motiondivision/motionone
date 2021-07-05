@@ -1,4 +1,4 @@
-import { Keyframe, ResolvedAnimationOptions } from "./types"
+import { Keyframe, AnimationOptions } from "./types"
 import { cubicBezierAsString } from "./utils/bezier-string"
 import { getTargetKeyframe } from "./utils/keyframes"
 import { ms } from "./utils/time"
@@ -22,9 +22,7 @@ export function animate(
     easing = "ease",
     onStart,
     onComplete,
-  }: // onRepeat,
-  // onCancel,
-  ResolvedAnimationOptions = {}
+  }: AnimationOptions = {}
 ) {
   onStart?.()
 
@@ -74,7 +72,7 @@ export function animate(
 //         typeof options[key] === "function" ? options[key](i) : options[key]
 //     }
 
-//     return animateElement(element, keyframes, elementOptions)
+//     return animate(element, keyframes, elementOptions)
 //   })
 
 //   onStart?.()

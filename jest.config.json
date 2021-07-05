@@ -6,7 +6,7 @@
     "!**/node_modules/**",
     "!**/__tests__/**"
   ],
-  "setupFilesAfterEnv": ["<rootDir>/../jest-setup.ts"],
+  "setupFilesAfterEnv": ["<rootDir>/../jest.setup.ts"],
   "coverageDirectory": "<rootDir>/../coverage",
   "testMatch": ["**/__tests__/**/*.test.(js|ts)?(x)"],
   "testPathIgnorePatterns": ["ssr.test.tsx"],

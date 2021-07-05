@@ -26,6 +26,7 @@
     "build": "tsc -p . && rollup -c && bundlesize",
     "test": "jest --coverage --config jest.config.json --maxWorkers=2",
     "test-browser": "node ./cypress/scripts/collect-tests.js && start-server-and-test start-dev-server http://0.0.0.0:8000 'cypress run'",
+    "watch": "concurrently \"tsc --watch -p .\" \"rollup -c -w\" \"npm run start-dev-server\"",
     "format": "yarn prettier --write .",
     "postpublish": "git push --tags",
     "prepublishOnly": "yarn test && yarn build",
@@ -53,6 +54,7 @@
   },
   "dependencies": {
     "@rollup/plugin-commonjs": "^19.0.0",
+    "concurrently": "^6.2.0",
     "popmotion": "^9.3.5",
     "start-server-and-test": "^1.12.5",
     "tslib": "^2.3.0"

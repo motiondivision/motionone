@@ -24,17 +24,10 @@ export type AnimationEventHandlers = {
   onRepeat?: () => void
 }
 
-export type ResolvedAnimationOptions = {
+export type AnimationOptions = {
   delay?: number
   endDelay?: number
   duration?: number
   easing?: Easing
   repeat?: number
 } & AnimationEventHandlers
-
-export type MakeIndexGenerated<T> = {
-  [K in keyof T]: T[K] | ((i: number) => T[K])
-} &
-  AnimationEventHandlers
-
-export type AnimationOptions = MakeIndexGenerated<ResolvedAnimationOptions>
