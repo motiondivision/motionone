@@ -20,9 +20,9 @@ export function animate(
   element: Element,
   keyframes: Keyframe,
   {
+    duration = 0.3,
     delay = 0,
     endDelay = 0,
-    duration = 0.3,
     repeat = 0,
     easing = "ease",
     direction,
