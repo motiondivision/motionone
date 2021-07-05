@@ -26,12 +26,12 @@
     "build": "tsc -p . && rollup -c && bundlesize",
     "test": "jest --coverage --config jest.config.json --maxWorkers=2",
     "test-browser": "node ./cypress/scripts/collect-tests.js && start-server-and-test start-dev-server http://0.0.0.0:8000 'cypress run'",
-    "watch": "concurrently \"tsc --watch -p .\" \"rollup -c -w\" \"npm run start-dev-server\"",
+    "watch": "concurrently \"tsc --watch -p .\" \"rollup -c -w\" \"npm run dev\"",
     "format": "yarn prettier --write .",
     "postpublish": "git push --tags",
     "prepublishOnly": "yarn test && yarn build",
     "storybook": "start-storybook -p 6006",
-    "start-dev-server": "python -m SimpleHTTPServer",
+    "dev": "python -m SimpleHTTPServer",
     "build-storybook": "build-storybook"
   },
   "jest": {

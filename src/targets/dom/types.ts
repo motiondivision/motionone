@@ -21,7 +21,6 @@ export type AnimationEventHandlers = {
   onStart?: () => void
   onComplete?: () => void
   onCancel?: () => void
-  onRepeat?: () => void
 }
 
 export type AnimationOptions = {
@@ -30,4 +29,13 @@ export type AnimationOptions = {
   duration?: number
   easing?: Easing
   repeat?: number
+  direction?: "normal" | "reverse" | "alternate" | "alternate-reverse"
 } & AnimationEventHandlers
+
+export interface AnimationWithCommitStyles extends Animation {
+  commitStyles: () => void
+}
+
+export interface AnimationControls extends AnimationWithCommitStyles {
+  stop: () => void
+}

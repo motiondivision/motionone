@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <title></title>
+    <style>
+      #box {
+        width: 100px;
+        height: 100px;
+        border-radius: 10px;
+        background-color: #73d99f;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="box"></div>
+    <script src="../../dist/motion.umd.js"></script>
+    <script>
+      const { animate } = Motion
+
+      const animation = animate(
+        document.getElementById("box"),
+        {
+          transform: "translateX(200px)",
+        },
+        {
+          duration: 2,
+          repeat: 2,
+          onStart: () => {
+            console.log("animation start")
+            setTimeout(() => {
+              animation.stop()
+            }, 1000)
+          },
+          onCancel: () => console.log("animation cancel"),
+        }
+      )
+    </script>
+  </body>
+</html>
