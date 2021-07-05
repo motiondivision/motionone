@@ -1,4 +1,4 @@
-import { AnimationOptions, ResolvedAnimationOptions } from "./types"
+import { Keyframe, ResolvedAnimationOptions } from "./types"
 import { cubicBezierAsString } from "./utils/bezier-string"
 import { getTargetKeyframe } from "./utils/keyframes"
 import { ms } from "./utils/time"
@@ -7,9 +7,11 @@ import { ms } from "./utils/time"
  * TODO:
  *  - Fix keyframe type
  *  - Support multiple keyframes
+ *  - Handle repeat and cancel events
  *  - Fix returned controls of animate
+ *  - animateElemnt -> animate, animate -> animateList
  */
-export function animateElement(
+export function animate(
   element: Element,
   keyframes: Keyframe,
   {
@@ -20,7 +22,9 @@ export function animateElement(
     easing = "ease",
     onStart,
     onComplete,
-  }: ResolvedAnimationOptions
+  }: // onRepeat,
+  // onCancel,
+  ResolvedAnimationOptions = {}
 ) {
   onStart?.()
 
@@ -33,7 +37,7 @@ export function animateElement(
   })
 
   animation.finished.then(() => {
-    const target = getTargetKeyframe(keframes)
+    const target = getTargetKeyframe(keyframes)
     Object.assign((element as HTMLElement).style, target)
 
     // TODO CSS variables
@@ -52,32 +56,32 @@ export function animateElement(
 /**
  *
  */
-export function animate(
-  elements: Element | Element[] | NodeListOf<Element> | string,
-  keyframes: Keyframe,
-  { delay = 0, onStart, onComplete, ...options }: AnimationOptions
-) {
-  if (typeof elements === "string") {
-    elements = document.querySelectorAll(elements)
-  } else if (elements instanceof Element) {
-    elements = [elements]
-  }
+// export function animateAll(
+//   elements: Element | Element[] | NodeListOf<Element> | string,
+//   keyframes: Keyframe,
+//   { delay = 0, onStart, onComplete, ...options }: AnimationOptions
+// ) {
+//   if (typeof elements === "string") {
+//     elements = document.querySelectorAll(elements)
+//   } else if (elements instanceof Element) {
+//     elements = [elements]
+//   }
 
-  const animations = Array.from(elements).map((element, i) => {
-    const elementOptions: ResolvedAnimationOptions = {}
-    for (const key in options) {
-      elementOptions[key] =
-        typeof options[key] === "function" ? options[key](i) : options[key]
-    }
+//   const animations = Array.from(elements).map((element, i) => {
+//     const elementOptions: ResolvedAnimationOptions = {}
+//     for (const key in options) {
+//       elementOptions[key] =
+//         typeof options[key] === "function" ? options[key](i) : options[key]
+//     }
 
-    return animateElement(element, keyframes, elementOptions)
-  })
+//     return animateElement(element, keyframes, elementOptions)
+//   })
 
-  onStart?.()
+//   onStart?.()
 
-  Promise.all(animations.map((animation) => animation.finished)).then(
-    onComplete
-  )
+//   Promise.all(animations.map((animation) => animation.finished)).then(
+//     onComplete
+//   )
 
-  return animations
-}
+//   return animations
+// }
