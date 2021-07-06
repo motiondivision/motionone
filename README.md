@@ -2,7 +2,7 @@
 
 A concept animation library for the web. The primary design goals are:
 
-1. Minimize bundlesize - currently **0.75kb** but I'm budgeting for around 3.
+1. Minimize bundlesize - currently **0.75kb** but I'm budgeting for around 3 (vs Anime.js @ 7 and Greensock @ 25).
 2. Improve [WebAnimations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API) DX
 3. Subvert WAAPI's technical limitations (springs, individual transforms etc) by re-evaluating trade-offs.
 
