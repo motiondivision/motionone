@@ -37,8 +37,7 @@ export function animate(
     endDelay: ms(endDelay),
     easing: Array.isArray(easing) ? cubicBezierAsString(easing) : easing,
     direction,
-    iterations: repeat + 1,
-    id: "test",
+    iterations: repeat + 1
   })
 
   animation.finished
