@@ -8,15 +8,15 @@ A concept animation library for the web. The primary design goals are:
 
 [Learn more](https://github.com/motiondivision/motion/discussions/1)
 
-## Discussion
+## 💬 Discussion
 
 As a sponsor, your feedback and thoughts will be crucial to helping guide the development of the API. [Join the discussion!](https://github.com/motiondivision/motion/discussions)
 
-## Documentation
+## 📝 Documentation
 
 Rich docs will be going up at [motion.dev](https://motion.dev) in due course.
 
-## Install
+## ⏬ Install
 
 ```bash
 npm install motion@alpha
@@ -24,7 +24,7 @@ npm install motion@alpha
 
 **Note:** The API is still subject to discussion and as such I recommend locking to a specific version number for now.
 
-## API
+## 🚧 API
 
 ### `animate`
 
