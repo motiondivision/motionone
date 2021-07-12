@@ -1,10 +1,15 @@
 export type BezierDefinition = [number, number, number, number]
 
-// TODO: Add CSS variable template type
-// TODO: Key as style
-export interface Keyframe {
+export interface MotionKeyframeValues {
   [key: string]: string | number
 }
+
+export interface MotionKeyframeOptions {
+  easing?: Easing
+  offset?: number
+}
+
+export type MotionKeyframe = MotionKeyframeValues & MotionKeyframeOptions
 
 export type Easing =
   | "linear"
@@ -18,8 +23,6 @@ export type Easing =
   | BezierDefinition
 
 export type AnimationEventHandlers = {
-  onStart?: () => void
-  onComplete?: () => void
   onCancel?: () => void
 }
 
@@ -39,3 +42,11 @@ export interface AnimationWithCommitStyles extends Animation {
 export interface AnimationControls extends AnimationWithCommitStyles {
   stop: () => void
 }
+
+export interface CssPropertyDefinition {
+  syntax: `<${string}>`
+  initialValue: string | number
+  toDefaultUnit?: (v: number) => string
+}
+
+export type CssPropertyDefinitionMap = { [key: string]: CssPropertyDefinition }

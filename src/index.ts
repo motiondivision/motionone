@@ -1,1 +1,1 @@
-export { animate } from "./targets/dom/animate"
+export { animateValue, animateElement } from "./targets/dom/animate"

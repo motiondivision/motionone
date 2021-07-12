@@ -14,25 +14,36 @@
     <div id="box"></div>
     <script src="../../dist/motion.umd.js"></script>
     <script>
-      const { animate } = Motion
+      const { animate, animateValue } = Motion
 
-      const animation = animate(
-        document.getElementById("box"),
-        {
-          transform: "translateX(200px)",
-        },
-        {
-          duration: 2,
-          repeat: 2,
-          onStart: () => {
-            console.log("animation start")
-            setTimeout(() => {
-              animation.stop()
-            }, 1000)
-          },
-          onCancel: () => console.log("animation cancel"),
-        }
-      )
+      animateValue(document.getElementById("box"), "translateX", 360, {
+        duration: 1,
+      })
+      setTimeout(() => {
+        animateValue(document.getElementById("box"), "rotate", 360, {
+          duration: 1,
+        })
+      }, 1000)
+
+      // const animation = animate(
+      //   document.getElementById("box"),
+      //   {
+      //     transform: "translateX(200px)",
+      //   },
+      //   {
+      //     duration: 2,
+      //     repeat: 2,
+      //     onStart: () => {
+      //       console.log("animation start")
+      //       setTimeout(() => {
+      //         animate(document.getElementById("box"), {
+      //           transform: "translateX(0px)",
+      //         })
+      //       }, 1000)
+      //     },
+      //     onCancel: () => console.log("animation cancel"),
+      //   }
+      // )
     </script>
   </body>
 </html>

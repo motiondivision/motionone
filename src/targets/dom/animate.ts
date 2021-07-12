@@ -1,24 +1,33 @@
+import { getAnimationData } from "./data"
 import {
-  Keyframe,
   AnimationOptions,
   AnimationWithCommitStyles,
-  AnimationControls,
+  MotionKeyframe,
 } from "./types"
 import { cubicBezierAsString } from "./utils/bezier-string"
-import { getTargetKeyframe } from "./utils/keyframes"
+import {
+  browserSupportsCssRegisterProperty,
+  isCssVar,
+  registerCssVariable,
+} from "./utils/css-var"
 import { ms } from "./utils/time"
+import {
+  addTransformToElement,
+  asTransformCssVar,
+  isTransform,
+  transformPropertyDefinitions,
+} from "./utils/transforms"
 
 /**
  * TODO:
- *  - Fix keyframe type
- *  - Support multiple keyframes
- *  - Handle repeat and cancel events
- *  - Fix returned controls of animate
- *  - animateElemnt -> animate, animate -> animateList
+ * - Support offsets
+ * - Detect WAAPI support and set default canAnimateNatively
+ * - Automatic interrupt by cancelling existing animation
  */
-export function animate(
+export function animateValue(
   element: Element,
-  keyframes: Keyframe,
+  name: string,
+  keyframes: string | number | Array<string | number>,
   {
     duration = 0.3,
     delay = 0,
@@ -26,54 +35,124 @@ export function animate(
     repeat = 0,
     easing = "ease",
     direction,
-    onStart,
-    onCancel,
-    onComplete,
   }: AnimationOptions = {}
 ) {
-  const animation = element.animate(keyframes, {
-    delay: ms(delay),
-    duration: ms(duration),
-    endDelay: ms(endDelay),
-    easing: Array.isArray(easing) ? cubicBezierAsString(easing) : easing,
-    direction,
-    iterations: repeat + 1
-  })
+  let canAnimateNatively = true
 
-  animation.finished
-    .then(() => {
-      const target = getTargetKeyframe(keyframes)
-      Object.assign((element as HTMLElement).style, target)
+  keyframes = Array.isArray(keyframes) ? keyframes : [keyframes]
 
-      // TODO CSS variables
-      // for (const key in finalTarget) {
-      //   if (key.startsWith("--")) {
-      //     element.style.setProperty(key, finalTarget[key] as string)
-      //   }
-      // }
-      onComplete && onComplete()
-    })
-    .catch(() => {})
+  let finalFrame = emptyCatch
 
-  onStart && onStart()
-  onCancel && animation.addEventListener("cancel", onCancel)
+  if (isTransform(name)) {
+    addTransformToElement(element as HTMLElement, name)
+    name = asTransformCssVar(name)
 
-  return new Proxy(animation, controls) as AnimationControls
-}
-
-const controls = {
-  get: (target: AnimationWithCommitStyles, key: string) => {
-    switch (key) {
-      case "stop":
-        return () => {
-          target?.commitStyles()
-          target.cancel()
-        }
-      default:
-        return Reflect.get(target, key)
+    // Convert numbers to default value types
+    const definition = transformPropertyDefinitions.get(name)
+    if (definition?.toDefaultUnit) {
+      keyframes = keyframes.map((value) =>
+        typeof value === "number" ? definition.toDefaultUnit!(value) : value
+      )
     }
-  },
+  }
+
+  const target = keyframes[keyframes.length - 1]
+
+  if (isCssVar(name)) {
+    finalFrame = () =>
+      (element as HTMLElement).style.setProperty(name, target as string)
+
+    if (!browserSupportsCssRegisterProperty) {
+      canAnimateNatively = false
+    } else {
+      registerCssVariable(name)
+    }
+  } else {
+    finalFrame = () => ((element as HTMLElement).style[name] = target)
+  }
+
+  const data = getAnimationData(element)
+  if (data.activeAnimations[name]) {
+    stop(data.activeAnimations[name]!)
+    data.activeAnimations[name] = undefined
+  }
+
+  if (canAnimateNatively) {
+    const animation = element.animate(
+      { [name]: keyframes } as PropertyIndexedKeyframes,
+      {
+        delay: ms(delay),
+        duration: ms(duration),
+        endDelay: ms(endDelay),
+        easing: Array.isArray(easing) ? cubicBezierAsString(easing) : easing,
+        direction,
+        iterations: repeat + 1,
+      }
+    ) as AnimationWithCommitStyles
+
+    data.activeAnimations[name] = animation
+
+    animation.finished.then(finalFrame).catch(emptyCatch)
+
+    return animation
+  } else {
+    finalFrame()
+  }
 }
+
+/**
+ * TODO:
+ * - Allow value-specific options
+ */
+export function animate(
+  element: Element,
+  keyframes: MotionKeyframe,
+  { onCancel, ...options }: AnimationOptions
+) {
+  const animations: AnimationWithCommitStyles[] = []
+  for (const key in keyframes) {
+    const animation = animateValue(element, key, keyframes[key], options)
+    animation && animations.push(animation)
+  }
+
+  const finished = Promise.all(
+    animations.map((animation) => animation.finished)
+  )
+
+  return new Proxy(animations, {
+    get: (target, key) => {
+      switch (key) {
+        case "finished":
+          return finished
+        case "currentTime":
+        case "playbackRate":
+          return target[0]?.[key]
+        case "stop":
+          return () => target.forEach(stop)
+        default:
+          return () => target.forEach((animation) => animation[key]())
+      }
+    },
+    set: (target, key, value: number) => {
+      switch (key) {
+        case "currentTime":
+        case "playbackRate":
+          for (let i = 0; i < target.length; i++) {
+            target[i][key] = value
+          }
+          return true
+      }
+      return false
+    },
+  })
+}
+
+function stop(animation: AnimationWithCommitStyles) {
+  animation.commitStyles()
+  animation.cancel()
+}
+
+const emptyCatch = () => {}
 
 /**
  *
