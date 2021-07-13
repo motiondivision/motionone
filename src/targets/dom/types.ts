@@ -1,15 +1,42 @@
 export type BezierDefinition = [number, number, number, number]
 
-export interface MotionKeyframeValues {
-  [key: string]: string | number
+export interface CSSStyleDeclarationWithTransform extends CSSStyleDeclaration {
+  x: number | string
+  y: number | string
+  z: number
+  rotateX: number | string
+  rotateY: number | string
+  rotateZ: number | string
+  scaleX: number
+  scaleY: number
+  scaleZ: number
+  skewX: number
+  skewY: number
 }
 
-export interface MotionKeyframeOptions {
-  easing?: Easing
-  offset?: number
+export type StyleAnimationOptions = {
+  [K in keyof CSSStyleDeclarationWithTransform]?: AnimationOptions
 }
 
-export type MotionKeyframe = MotionKeyframeValues & MotionKeyframeOptions
+export type VariableAnimationOptions = {
+  [key: `--${string}`]: AnimationOptions
+}
+
+export type AnimationOptionsWithOverrides = StyleAnimationOptions &
+  VariableAnimationOptions &
+  AnimationOptions
+
+export type ValueKeyframes = string | number | Array<string | number>
+
+export type StyleKeyframe = {
+  [K in keyof CSSStyleDeclarationWithTransform]?: ValueKeyframes
+}
+
+export type VariableKeyframe = {
+  [key: `--${string}`]: ValueKeyframes
+}
+
+export type MotionKeyframe = StyleKeyframe & VariableKeyframe
 
 export type Easing =
   | "linear"
@@ -32,13 +59,6 @@ export type AnimationOptions = {
   offset?: number[]
 }
 
-export type ValueAnimationOptions = {
-  [key: string]: AnimationOptions
-}
-
-export type AnimationOptionsWithOverrides = AnimationOptions &
-  ValueAnimationOptions
-
 export interface AnimationWithCommitStyles extends Animation {
   commitStyles: () => void
 }
@@ -49,6 +69,7 @@ export interface AnimationControls {
   stop: VoidFunction
   finish: VoidFunction
   cancel: VoidFunction
+  finished: Promise<any>
   currentTime: number | null
   playbackRate: number
 }
