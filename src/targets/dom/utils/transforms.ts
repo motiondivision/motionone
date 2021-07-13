@@ -14,6 +14,12 @@ export const axes = ["", "X", "Y", "Z"]
  */
 const order = ["translate", "scale", "rotate", "skew"]
 
+export const transformAlias = {
+  x: "translateX",
+  y: "translateY",
+  z: "translateZ",
+}
+
 const rotation: CssPropertyDefinition = {
   syntax: "<angle>",
   initialValue: "0deg",

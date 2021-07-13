@@ -2,6 +2,15 @@
   <head>
     <title></title>
     <style>
+      body {
+        min-height: 100vh;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        padding-left: 100px;
+      }
+
       #box {
         width: 100px;
         height: 100px;
@@ -15,15 +24,30 @@
     <script src="../../dist/motion.umd.js"></script>
     <script>
       const { animate, animateValue } = Motion
+      const box = document.getElementById("box")
 
-      animateValue(document.getElementById("box"), "translateX", 360, {
-        duration: 1,
+      animate(
+        box,
+        { x: 200 },
+        { duration: 1, delay: 1, direction: "alternate", repeat: Infinity }
+      )
+
+      box.addEventListener("mouseenter", () => {
+        animate(box, { scale: 2 }, { duration: 0.3 })
       })
-      setTimeout(() => {
-        animateValue(document.getElementById("box"), "rotate", 360, {
-          duration: 1,
-        })
-      }, 1000)
+
+      box.addEventListener("mouseleave", () => {
+        animate(box, { scale: 1 }, { duration: 0.3 })
+      })
+
+      // animateValue(document.getElementById("box"), "translateX", 360, {
+      //   duration: 1,
+      // })
+      // setTimeout(() => {
+      //   animateValue(document.getElementById("box"), "rotate", 360, {
+      //     duration: 1,
+      //   })
+      // }, 1000)
 
       // const animation = animate(
       //   document.getElementById("box"),
