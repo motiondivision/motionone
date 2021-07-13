@@ -28,17 +28,29 @@
 
       animate(
         box,
-        { x: 200 },
-        { duration: 1, delay: 1, direction: "alternate", repeat: Infinity }
-      )
+        { y: [0, 100, 200] },
+        {
+          duration: 1,
+          delay: 1,
+          direction: "alternate",
+          repeat: Infinity,
+          easing: "linear",
+          y: { easing: ["ease-in", "linear"] },
+          // offset: [0, 0.2, 1],
+        }
+      ).finished.catch((e) => console.log(e))
 
-      box.addEventListener("mouseenter", () => {
-        animate(box, { scale: 2 }, { duration: 0.3 })
-      })
+      // box.addEventListener("mouseenter", () => {
+      //   animate(box, { scale: 2 }, { duration: 0.3 }).finished.catch((e) =>
+      //     console.log(1, e)
+      //   )
+      // })
 
-      box.addEventListener("mouseleave", () => {
-        animate(box, { scale: 1 }, { duration: 0.3 })
-      })
+      // box.addEventListener("mouseleave", () => {
+      //   animate(box, { scale: 1 }, { duration: 0.3 }).finished.catch((e) =>
+      //     console.log(2, e)
+      //   )
+      // })
 
       // animateValue(document.getElementById("box"), "translateX", 360, {
       //   duration: 1,

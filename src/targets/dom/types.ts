@@ -22,25 +22,35 @@ export type Easing =
   | `steps(${number}, ${"start" | "end"})`
   | BezierDefinition
 
-export type AnimationEventHandlers = {
-  onCancel?: () => void
-}
-
 export type AnimationOptions = {
   delay?: number
   endDelay?: number
   duration?: number
-  easing?: Easing
+  easing?: Easing | Easing[]
   repeat?: number
   direction?: "normal" | "reverse" | "alternate" | "alternate-reverse"
-} & AnimationEventHandlers
+  offset?: number[]
+}
+
+export type ValueAnimationOptions = {
+  [key: string]: AnimationOptions
+}
+
+export type AnimationOptionsWithOverrides = AnimationOptions &
+  ValueAnimationOptions
 
 export interface AnimationWithCommitStyles extends Animation {
   commitStyles: () => void
 }
 
-export interface AnimationControls extends AnimationWithCommitStyles {
-  stop: () => void
+export interface AnimationControls {
+  play: VoidFunction
+  pause: VoidFunction
+  stop: VoidFunction
+  finish: VoidFunction
+  cancel: VoidFunction
+  currentTime: number | null
+  playbackRate: number
 }
 
 export interface CssPropertyDefinition {

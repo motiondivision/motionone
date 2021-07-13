@@ -1,14 +1,15 @@
 import {
-  AnimationOptions,
+  AnimationControls,
+  AnimationOptionsWithOverrides,
   AnimationWithCommitStyles,
   MotionKeyframe,
 } from "./types"
 import { animateValue } from "./animate-value"
+import { getOptions } from "./utils/options"
 
 interface AnimationState {
   animations: AnimationWithCommitStyles[]
   finished: Promise<any>
-  onCancel?: VoidFunction
 }
 /**
  * TODO:
@@ -18,15 +19,15 @@ interface AnimationState {
 export function animate(
   element: Element,
   keyframes: MotionKeyframe,
-  { onCancel, ...options }: AnimationOptions
+  options: AnimationOptionsWithOverrides
 ) {
   const state: Partial<AnimationState> = {
     animations: [],
-    onCancel,
   }
 
   for (const key in keyframes) {
-    const animation = animateValue(element, key, keyframes[key], options)
+    const valueOptions = getOptions(options, key)
+    const animation = animateValue(element, key, keyframes[key], valueOptions)
     animation && state.animations!.push(animation)
   }
 
@@ -34,19 +35,17 @@ export function animate(
     state.animations!.map((animation) => animation.finished)
   )
 
-  return new Proxy(state, controls)
+  return new Proxy(state, controls) as AnimationControls
 }
 
 const controls = {
   get: (target: AnimationState, key: string) => {
     switch (key) {
-      case "stop":
-      case "cancel":
-        target.onCancel?.()
       case "finished":
         return target.finished
       case "currentTime":
       case "playbackRate":
+        // TODO find first active animation and return
         return target[0]?.[key]
       case "stop":
         return () => target.animations.forEach(stop)

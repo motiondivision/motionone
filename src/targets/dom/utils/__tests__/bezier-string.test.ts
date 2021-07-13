@@ -1,4 +1,4 @@
-import { cubicBezierAsString } from "../bezier-string"
+import { cubicBezierAsString } from "../easing"
 
 describe("cubicBezierAsString", () => {
   test("Converts array to CSS bezier definition", () => {
