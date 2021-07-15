@@ -5,7 +5,7 @@ import {
   isCssVar,
   registerCssVariable,
 } from "./utils/css-var"
-import { noop } from "./utils/noop"
+import { noop } from "../../utils/noop"
 import { ms } from "./utils/time"
 import {
   addTransformToElement,

@@ -112,7 +112,7 @@
   "bundlesize": [
     {
       "path": "./dist/motion.min.js",
-      "maxSize": "1.8 kB"
+      "maxSize": "4 kB"
     }
   ]
 }

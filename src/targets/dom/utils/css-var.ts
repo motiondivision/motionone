@@ -16,6 +16,8 @@ const registeredProperties = new Set<string>()
 export function registerCssVariable(name: string) {
   if (registeredProperties.has(name)) return
 
+  registeredProperties.add(name)
+
   try {
     const { syntax, initialValue } =
       transformPropertyDefinitions.get(name) || {}
@@ -26,7 +28,5 @@ export function registerCssVariable(name: string) {
       syntax,
       initialValue,
     })
-  } catch (e) {
-    console.log(e)
-  }
+  } catch (e) {}
 }
