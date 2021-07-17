@@ -49,15 +49,28 @@ export type Easing =
   | `steps(${number}, ${"start" | "end"})`
   | BezierDefinition
 
-export type AnimationOptions = {
-  delay?: number
-  endDelay?: number
+export type SpringOptions = {
+  stiffness?: number
+  damping?: number
+  mass?: number
+  velocity?: number
+  restSpeed?: number
+  restDelta?: number
+}
+
+export type KeyframeOptions = {
   duration?: number
   easing?: Easing | Easing[]
-  repeat?: number
-  direction?: "normal" | "reverse" | "alternate" | "alternate-reverse"
   offset?: number[]
 }
+
+export type AnimationOptions = SpringOptions &
+  KeyframeOptions & {
+    delay?: number
+    endDelay?: number
+    repeat?: number
+    direction?: "normal" | "reverse" | "alternate" | "alternate-reverse"
+  }
 
 export interface AnimationWithCommitStyles extends Animation {
   commitStyles: () => void

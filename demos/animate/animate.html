@@ -28,14 +28,16 @@
 
       animate(
         box,
-        { y: [0, "calc(100% - 100vh)", "200px"] },
+        { transform: ["translate(0px, 0px)", "translate(100px, 200px)"] },
         {
           duration: 1,
           delay: 1,
+          stiffness: 200,
+          damping: 10,
           direction: "alternate",
           repeat: Infinity,
           easing: "linear",
-          y: { easing: ["ease-in", "linear"] },
+          x: { easing: ["ease-in", "linear"] },
           // offset: [0, 0.2, 1],
         }
       ).finished.catch((e) => console.log(e))
