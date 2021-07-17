@@ -11,11 +11,7 @@ interface AnimationState {
   animations: AnimationWithCommitStyles[]
   finished: Promise<any>
 }
-/**
- * TODO:
- * - Allow value-specific options
- * - Handle onCancel
- */
+
 export function animate(
   element: Element,
   keyframes: MotionKeyframe,
@@ -27,7 +23,7 @@ export function animate(
 
   for (const key in keyframes) {
     const valueOptions = getOptions(options, key)
-    const animation = animateValue(element, key, keyframes[key], valueOptions)
+    const animation = animateValue(element, key, keyframes[key]!, valueOptions)
     animation && state.animations!.push(animation)
   }
 

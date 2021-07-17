@@ -15,3 +15,9 @@ As a sponsor, your feedback and thoughts will be crucial to helping guide the de
 ## 📚 Documentation
 
 Full docs are available for sponsors at [motion.dev](https://motion.dev).
+
+## 🙌 Sponsors
+
+A huge thank you to all sponsors of this project, with a special shoutout to:
+
+- [Vlad Gorodetsky](https://github.com/bai)

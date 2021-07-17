@@ -5,7 +5,7 @@ import {
   isCssVar,
   registerCssVariable,
 } from "./utils/css-var"
-import { noop, noopReturn } from "../../utils/noop"
+import { noop } from "../../utils/noop"
 import { ms } from "./utils/time"
 import {
   addTransformToElement,
@@ -16,13 +16,13 @@ import {
 } from "./utils/transforms"
 import { stop } from "./utils/stop-animation"
 import { convertEasing, convertEasingList, isEasingList } from "./utils/easing"
-import { spring } from "../../generators/spring"
-import { fastInterpolate } from "../../utils/interpolate"
+// import { spring } from "../../generators/spring"
+// import { fastInterpolate } from "../../utils/interpolate"
 
 /**
  * The resolution of pregenerated keyframes in milliseconds
  */
-const pregenerationResolution = 10
+// const pregenerationResolution = 10
 
 /**
  * The max number of pregenerated keyframes. With pregenerationResolution this
@@ -35,7 +35,7 @@ const pregenerationResolution = 10
  * on the main thread, it could also be possible simple to run these
  * animations synchronously.
  */
-const maxPregeneratedKeyframes = 200
+// const maxPregeneratedKeyframes = 200
 
 /**
  * TODO:
@@ -53,13 +53,13 @@ export function animateValue(
     easing = "ease",
     direction,
     offset,
-    stiffness,
-    damping,
-    mass,
-    velocity,
-    restSpeed = 2,
-    restDelta = 0.1,
-  }: AnimationOptions = {}
+  }: // stiffness,
+  // damping,
+  // mass,
+  // velocity,
+  // restSpeed = 2,
+  // restDelta = 0.1,
+  AnimationOptions = {}
 ) {
   let canAnimateNatively = true
 
@@ -83,62 +83,62 @@ export function animateValue(
    * Pregenerate keyframes if this is a spring
    * TODO: Move to another function
    */
-  if (Boolean(stiffness ?? damping ?? mass) && keyframes.length <= 2) {
-    // TODO get current value instead of 0
-    let from = keyframes.length === 1 ? 0 : keyframes[0]
-    let to = keyframes[1] ?? keyframes[0]
+  // if (Boolean(stiffness ?? damping ?? mass) && keyframes.length <= 2) {
+  //   // TODO get current value instead of 0
+  //   let from = keyframes.length === 1 ? 0 : keyframes[0]
+  //   let to = keyframes[1] ?? keyframes[0]
 
-    const needsInterpolation =
-      typeof from === "string" || typeof to === "string"
+  //   const needsInterpolation =
+  //     typeof from === "string" || typeof to === "string"
 
-    let numberToValueType = noopReturn
+  //   let numberToValueType = noopReturn
 
-    if (needsInterpolation) {
-      numberToValueType = fastInterpolate([0, 100], [from, to]) as any
-      from = 0
-      to = 100
-    }
+  //   if (needsInterpolation) {
+  //     numberToValueType = fastInterpolate([0, 100], [from, to]) as any
+  //     from = 0
+  //     to = 100
+  //   }
 
-    from = from as number
-    to = to as number
+  //   from = from as number
+  //   to = to as number
 
-    if (velocity === undefined) {
-      // TODO generate initial velocity from existing animation
-    }
+  //   if (velocity === undefined) {
+  //     // TODO generate initial velocity from existing animation
+  //   }
 
-    const generator = spring({ stiffness, damping, mass, velocity, from, to })
-    let isComplete = false
-    const pregeneratedKeyframes = []
-    let numPregeneratedKeyframes = 0
-    let t = 0
-    let prev = from
+  //   const generator = spring({ stiffness, damping, mass, velocity, from, to })
+  //   let isComplete = false
+  //   const pregeneratedKeyframes = []
+  //   let numPregeneratedKeyframes = 0
+  //   let t = 0
+  //   let prev = from
 
-    while (!isComplete) {
-      numPregeneratedKeyframes++
+  //   while (!isComplete) {
+  //     numPregeneratedKeyframes++
 
-      const next = generator(t)
-      pregeneratedKeyframes.push(numberToValueType(next))
+  //     const next = generator(t)
+  //     pregeneratedKeyframes.push(numberToValueType(next))
 
-      const currentVelocity =
-        t !== 0 ? (next - prev) * (1000 / pregenerationResolution) : 0
-      const isBelowVelocityThreshold = Math.abs(currentVelocity) <= restSpeed
-      const isBelowDisplacementThreshold = Math.abs(to - next) <= restDelta
-      isComplete = isBelowVelocityThreshold && isBelowDisplacementThreshold
+  //     const currentVelocity =
+  //       t !== 0 ? (next - prev) * (1000 / pregenerationResolution) : 0
+  //     const isBelowVelocityThreshold = Math.abs(currentVelocity) <= restSpeed
+  //     const isBelowDisplacementThreshold = Math.abs(to - next) <= restDelta
+  //     isComplete = isBelowVelocityThreshold && isBelowDisplacementThreshold
 
-      t += pregenerationResolution
+  //     t += pregenerationResolution
 
-      if (numPregeneratedKeyframes > maxPregeneratedKeyframes) {
-        // TODO Warn in development mode
-        isComplete = true
-      }
+  //     if (numPregeneratedKeyframes > maxPregeneratedKeyframes) {
+  //       // TODO Warn in development mode
+  //       isComplete = true
+  //     }
 
-      prev = next
-    }
+  //     prev = next
+  //   }
 
-    easing = "linear"
-    keyframes = pregeneratedKeyframes
-    duration = t / 1000
-  }
+  //   easing = "linear"
+  //   keyframes = pregeneratedKeyframes
+  //   duration = t / 1000
+  // }
 
   /**
    * Convert numbers to default value types. Currently this only supports
@@ -180,11 +180,14 @@ export function animateValue(
    * feature detects CSS.registerProperty but could check WAAPI too.
    */
   if (canAnimateNatively) {
+    const values = { [name]: keyframes }
+    if (isEasingList(easing)) values.easing = convertEasingList(easing)
+    if (offset) values.offset = offset
+    console.log(values)
     const animation = element.animate(
       {
         [name]: keyframes,
         offset,
-        easing: isEasingList(easing) ? convertEasingList(easing) : undefined,
       } as PropertyIndexedKeyframes,
       {
         delay: ms(delay),
