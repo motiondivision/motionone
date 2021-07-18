@@ -1,4 +1,3 @@
-import { CssPropertyDefinition } from "../types"
 import { transformPropertyDefinitions } from "./transforms"
 
 export const browserSupportsCssRegisterProperty =
@@ -9,12 +8,7 @@ export const isCssVar = (name: string) => name.startsWith("--")
 
 export const registeredProperties = new Set<string>()
 
-/**
- * TODO:
- * - Pass target keyframe value and auto-detect number, color, length
- */
-
-export function registerCssVariable(name: string, value?: string | number) {
+export function registerCssVariable(name: string) {
   if (registeredProperties.has(name)) return
 
   registeredProperties.add(name)
@@ -22,7 +16,7 @@ export function registerCssVariable(name: string, value?: string | number) {
   try {
     const { syntax, initialValue } = transformPropertyDefinitions.has(name)
       ? transformPropertyDefinitions.get(name)!
-      : detectCssPropertyType(value)
+      : ({} as any)
 
     ;(CSS as any).registerProperty({
       name,
@@ -31,10 +25,4 @@ export function registerCssVariable(name: string, value?: string | number) {
       initialValue,
     })
   } catch (e) {}
-}
-
-export function detectCssPropertyType(
-  _value?: string | number
-): Partial<CssPropertyDefinition> {
-  return {}
 }

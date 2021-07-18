@@ -180,14 +180,11 @@ export function animateValue(
    * feature detects CSS.registerProperty but could check WAAPI too.
    */
   if (canAnimateNatively) {
-    const values = { [name]: keyframes }
-    if (isEasingList(easing)) values.easing = convertEasingList(easing)
-    if (offset) values.offset = offset
-    console.log(values)
     const animation = element.animate(
       {
         [name]: keyframes,
         offset,
+        easing: isEasingList(easing) ? convertEasingList(easing) : undefined,
       } as PropertyIndexedKeyframes,
       {
         delay: ms(delay),

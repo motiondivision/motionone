@@ -42,7 +42,7 @@ const controls = {
       case "currentTime":
       case "playbackRate":
         // TODO find first active animation and return
-        return target[0]?.[key]
+        return target.animations[0]?.[key]
       case "stop":
         return () => target.animations.forEach(stop)
       default:
