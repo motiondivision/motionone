@@ -1,10 +1,11 @@
 import { HTMLProps } from "react"
+import { MotionKeyframes } from "../dom/types"
 import { AnimatedProps } from "./types"
 import { useGestureState } from "./use-gesture-state"
 
 export function usePress(
-  target: React.CSSProperties,
-  stylesToApply?: React.CSSProperties,
+  target: MotionKeyframes,
+  stylesToApply?: MotionKeyframes,
   { onPointerDown }: AnimatedProps & HTMLProps<any> = {}
 ): HTMLProps<any> {
   const setGestureState = useGestureState(target, stylesToApply)

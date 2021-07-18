@@ -25,6 +25,8 @@
   "scripts": {
     "build": "tsc -p . && rollup -c && bundlesize",
     "test": "jest --coverage --config jest.config.json --maxWorkers=2",
+    "test-react": "",
+    "test-react-ssr": "jest --coverage --config jest.config.react-ssr.json --maxWorkers=2",
     "test-browser": "node ./cypress/scripts/collect-tests.js && start-server-and-test start-dev-server http://0.0.0.0:8000 'cypress run'",
     "watch": "concurrently \"tsc --watch -p .\" \"rollup -c -w\" \"npm run dev\"",
     "format": "yarn prettier --write .",
@@ -74,6 +76,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@types/jest": "^26.0.21",
     "@types/react": "^17.0.11",
+    "@types/react-dom": "^17.0.9",
     "babel-loader": "^8.2.2",
     "bundlesize": "^0.18.1",
     "canvas": "^2.8.0",

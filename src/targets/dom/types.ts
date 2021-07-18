@@ -28,15 +28,15 @@ export type AnimationOptionsWithOverrides = StyleAnimationOptions &
 
 export type ValueKeyframes = string | number | Array<string | number>
 
-export type StyleKeyframe = {
+export type StyleKeyframes = {
   [K in keyof CSSStyleDeclarationWithTransform]?: ValueKeyframes
 }
 
-export type VariableKeyframe = {
+export type VariableKeyframes = {
   [key: `--${string}`]: ValueKeyframes
 }
 
-export type MotionKeyframe = StyleKeyframe & VariableKeyframe
+export type MotionKeyframes = StyleKeyframes & VariableKeyframes
 
 export type Easing =
   | "linear"
@@ -94,3 +94,5 @@ export interface CssPropertyDefinition {
 }
 
 export type CssPropertyDefinitionMap = { [key: string]: CssPropertyDefinition }
+
+export interface AnimationGenerator {}

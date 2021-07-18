@@ -9,7 +9,7 @@
   "setupFilesAfterEnv": ["<rootDir>/../jest.setup.ts"],
   "coverageDirectory": "<rootDir>/../coverage",
   "testMatch": ["**/__tests__/**/*.test.(js|ts)?(x)"],
-  "testPathIgnorePatterns": ["ssr.test.tsx"],
+  "testPathIgnorePatterns": ["./src/targets/react/*"],
   "watchPlugins": [
     "jest-watch-typeahead/filename",
     "jest-watch-typeahead/testname"

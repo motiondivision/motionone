@@ -1,12 +1,12 @@
-import { AnimationOptions } from "../dom/types"
+import { AnimationOptions, MotionKeyframes } from "../dom/types"
 import { AnimationCallback } from "../react/types"
-import { CSSProperties, RefObject, useEffect, useRef } from "react"
+import { RefObject, useEffect, useRef } from "react"
 import { animateValue } from "../dom/animate-value"
 import { noop } from "../../utils/noop"
 
 export function useAnimation(
   ref: RefObject<HTMLElement>,
-  target?: CSSProperties,
+  target?: MotionKeyframes,
   options?: AnimationOptions,
   onStart?: AnimationCallback,
   onComplete?: AnimationCallback
@@ -15,7 +15,7 @@ export function useAnimation(
   useEffect(() => {
     if (!target) return
 
-    const targetKeyframe: CSSProperties = {}
+    const targetKeyframe: MotionKeyframes = {}
 
     const allKeys = new Set([
       ...Object.keys(target),

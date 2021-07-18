@@ -1,4 +1,4 @@
-import { getAnimationData } from "./data"
+import { AnimationData, getAnimationData } from "./data"
 import { AnimationOptions, AnimationWithCommitStyles } from "./types"
 import {
   browserSupportsCssRegisterProperty,
@@ -53,31 +53,25 @@ export function animateValue(
     easing = "ease",
     direction,
     offset,
-  }: // stiffness,
-  // damping,
-  // mass,
-  // velocity,
-  // restSpeed = 2,
-  // restDelta = 0.1,
-  AnimationOptions = {}
+  }: AnimationOptions = {}
 ) {
+  const data = getAnimationData(element)
   let canAnimateNatively = true
+  let finalFrame = noop
 
   keyframes = Array.isArray(keyframes) ? keyframes : [keyframes]
 
-  let finalFrame = noop
-
+  /**
+   * If this is an individual transform, we need to map its
+   * key to a CSS variable and update the element's transform style
+   */
   if (isTransform(name)) {
     if (transformAlias[name]) name = transformAlias[name]
     addTransformToElement(element as HTMLElement, name)
     name = asTransformCssVar(name)
   }
 
-  const data = getAnimationData(element)
-  if (data.activeAnimations[name]) {
-    stop(data.activeAnimations[name]!)
-    data.activeAnimations[name] = undefined
-  }
+  stopCurrentAnimation(data, name)
 
   /**
    * Pregenerate keyframes if this is a spring
@@ -145,7 +139,7 @@ export function animateValue(
    * transforms but it could also support other value types.
    */
   const definition = transformPropertyDefinitions.get(name)
-  if (definition?.toDefaultUnit) {
+  if (definition && definition.toDefaultUnit) {
     keyframes = keyframes.map((value) =>
       typeof value === "number" ? definition.toDefaultUnit!(value) : value
     )
@@ -166,10 +160,10 @@ export function animateValue(
     finalFrame = () =>
       (element as HTMLElement).style.setProperty(name, target as string)
 
-    if (!browserSupportsCssRegisterProperty) {
-      canAnimateNatively = false
-    } else {
+    if (browserSupportsCssRegisterProperty) {
       registerCssVariable(name)
+    } else {
+      canAnimateNatively = false
     }
   } else {
     finalFrame = () => ((element as HTMLElement).style[name] = target)
@@ -203,5 +197,12 @@ export function animateValue(
     return animation
   } else {
     finalFrame()
+  }
+}
+
+function stopCurrentAnimation(data: AnimationData, name: string) {
+  if (data.activeAnimations[name]) {
+    stop(data.activeAnimations[name]!)
+    data.activeAnimations[name] = undefined
   }
 }

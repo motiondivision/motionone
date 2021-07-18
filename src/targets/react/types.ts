@@ -9,16 +9,36 @@ import {
   RefAttributes,
   SVGAttributes,
 } from "react"
-import { AnimationOptions } from "../dom/types"
+import { AnimationOptions, MotionKeyframes } from "../dom/types"
 
-export type AnimationCallback = (target: CSSProperties) => void
+export type AnimationCallback = (target: MotionKeyframes) => void
+
+export interface CSSPropertiesWithTransform extends CSSProperties {
+  x?: number | string
+  y?: number | string
+  z?: number
+  rotateX?: number | string
+  rotateY?: number | string
+  rotateZ?: number | string
+  scaleX?: number
+  scaleY?: number
+  scaleZ?: number
+  skewX?: number
+  skewY?: number
+}
+
+export type CSSVariables = {
+  [key: `--${string}`]: string | number
+}
+
+export type MotionCSSProperties = CSSPropertiesWithTransform & CSSVariables
 
 export interface AnimatedProps {
   children?: ReactChild
-  initial?: CSSProperties
-  style?: CSSProperties
-  hover?: CSSProperties
-  press?: CSSProperties
+  initial?: MotionCSSProperties
+  style?: MotionKeyframes
+  hover?: MotionKeyframes
+  press?: MotionKeyframes
   options?: AnimationOptions
   onStart?: AnimationCallback
   onComplete?: AnimationCallback

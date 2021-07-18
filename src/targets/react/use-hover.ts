@@ -1,10 +1,11 @@
 import { HTMLProps } from "react"
+import { MotionKeyframes } from "../dom/types"
 import { AnimatedProps } from "./types"
 import { useGestureState } from "./use-gesture-state"
 
 export function useHover(
-  target: React.CSSProperties,
-  stylesToApply?: React.CSSProperties,
+  target: MotionKeyframes,
+  stylesToApply?: MotionKeyframes,
   { onPointerEnter, onPointerLeave }: AnimatedProps & HTMLProps<any> = {}
 ): HTMLProps<any> {
   const setGestureState = useGestureState(target, stylesToApply)

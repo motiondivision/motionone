@@ -1,0 +1,11 @@
+{
+  "preset": "ts-jest",
+  "rootDir": "src",
+  "testEnvironment": "node",
+  "setupFilesAfterEnv": ["<rootDir>/../jest.setup.ts"],
+  "testMatch": ["**/__tests__/**/*ssr.test.(js|ts)?(x)"],
+  "watchPlugins": [
+    "jest-watch-typeahead/filename",
+    "jest-watch-typeahead/testname"
+  ]
+}
