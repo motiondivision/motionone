@@ -1,17 +1,19 @@
 import { AnimationOptions, MotionKeyframes } from "../dom/types"
-import { AnimationCallback } from "../react/types"
+import { AnimationCallback, MotionCSSProperties } from "../react/types"
 import { RefObject, useEffect, useRef } from "react"
 import { animateValue } from "../dom/animate-value"
 import { noop } from "../../utils/noop"
+import { hasChanged } from "./utils/has-changed"
 
 export function useAnimation(
   ref: RefObject<HTMLElement>,
-  target?: MotionKeyframes,
+  initial: MotionKeyframes | MotionCSSProperties,
+  target: MotionKeyframes,
   options?: AnimationOptions,
   onStart?: AnimationCallback,
   onComplete?: AnimationCallback
 ) {
-  const prevTarget = useRef({})
+  const prevTarget = useRef(initial)
   useEffect(() => {
     if (!target) return
 
@@ -22,12 +24,10 @@ export function useAnimation(
       ...Object.keys(prevTarget.current),
     ])
 
-    // TODO: Add equality check for keyframes
     allKeys.forEach((key) => {
       let next = target[key]
 
-      if (next === prevTarget.current[key]) return
-
+      if (!hasChanged(next, prevTarget.current[key])) return
       /**
        * TODO: If next is undefined, throw error or record a "base value"
        * to animate back down to

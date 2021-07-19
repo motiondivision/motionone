@@ -1,14 +1,14 @@
-import { spring } from "../spring"
-import { animateSync } from "./utils"
+import { createSpringGenerator } from "../create"
+import { animateSync } from "../../__tests__/utils"
 
-describe("spring", () => {
+describe("createSpringGenerator", () => {
   test("Runs animations with default values ", () => {
-    expect(animateSync(spring({}), 200)).toEqual([0, 1, 1, 1])
+    expect(animateSync(createSpringGenerator({}), 200)).toEqual([0, 1, 1, 1])
   })
   test("Underdamped spring", () => {
     expect(
       animateSync(
-        spring({
+        createSpringGenerator({
           from: 100,
           to: 1000,
           stiffness: 300,
@@ -29,8 +29,11 @@ describe("spring", () => {
       restDelta: 0.5,
     }
 
-    const noVelocity = animateSync(spring(settings), 200)
-    const velocity = animateSync(spring({ ...settings, velocity: 1000 }), 200)
+    const noVelocity = animateSync(createSpringGenerator(settings), 200)
+    const velocity = animateSync(
+      createSpringGenerator({ ...settings, velocity: 1000 }),
+      200
+    )
 
     expect(noVelocity).not.toEqual(velocity)
   })
@@ -38,7 +41,7 @@ describe("spring", () => {
   test("Critically damped spring", () => {
     expect(
       animateSync(
-        spring({
+        createSpringGenerator({
           from: 100,
           to: 1000,
           stiffness: 100,
@@ -61,8 +64,11 @@ describe("spring", () => {
       restDelta: 0.5,
     }
 
-    const noVelocity = animateSync(spring(settings), 200)
-    const velocity = animateSync(spring({ ...settings, velocity: 1000 }), 200)
+    const noVelocity = animateSync(createSpringGenerator(settings), 200)
+    const velocity = animateSync(
+      createSpringGenerator({ ...settings, velocity: 1000 }),
+      200
+    )
 
     expect(noVelocity).not.toEqual(velocity)
   })

@@ -79,11 +79,14 @@ export const addTransformToElement = (element: HTMLElement, name: string) => {
   const { activeTransforms } = getAnimationData(element)
   addUniqueItem(activeTransforms, name)
 
-  element.style.transform = activeTransforms
-    .sort(compareTransformOrder)
-    .reduce(buildTransformTemplate, "")
-    .trim()
+  element.style.transform = buildTransformTemplate(activeTransforms)
 }
 
-const buildTransformTemplate = (template: string, name: string) =>
+export const buildTransformTemplate = (activeTransforms: string[]): string =>
+  activeTransforms
+    .sort(compareTransformOrder)
+    .reduce(transformListToString, "")
+    .trim()
+
+const transformListToString = (template: string, name: string) =>
   `${template} ${name}(var(${asTransformCssVar(name)}))`

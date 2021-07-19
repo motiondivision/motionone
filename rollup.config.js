@@ -92,4 +92,37 @@ const es = Object.assign({}, config, {
   external,
 })
 
-export default [umd, umdProd, cjs, es]
+const minPlugins = [resolve(), terser({ output: { comments: false } })]
+
+const sizeReact = Object.assign({}, es, {
+  input: "lib/targets/react/index.js",
+  output: Object.assign({}, es.output, {
+    file: `dist/size-react.js`,
+    preserveModules: false,
+    dir: undefined,
+  }),
+  plugins: minPlugins,
+  external: ["react", "react-dom"],
+})
+
+const sizeAnimateDom = Object.assign({}, es, {
+  input: "lib/targets/dom/animate.js",
+  output: Object.assign({}, es.output, {
+    file: `dist/size-animate-dom.js`,
+    preserveModules: false,
+    dir: undefined,
+  }),
+  plugins: minPlugins,
+})
+
+const sizeSpring = Object.assign({}, es, {
+  input: "lib/generators/spring/index.js",
+  output: Object.assign({}, es.output, {
+    file: `dist/size-spring.js`,
+    preserveModules: false,
+    dir: undefined,
+  }),
+  plugins: minPlugins,
+})
+
+export default [umd, umdProd, cjs, es, sizeAnimateDom, sizeSpring, sizeReact]

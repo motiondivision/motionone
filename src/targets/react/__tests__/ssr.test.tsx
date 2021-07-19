@@ -22,6 +22,11 @@ function runTests(render: any) {
     expect(div).toBe(`<div style="opacity:1"></div>`)
   })
 
+  test("Renders expected markup from style as keyframes", () => {
+    const div = render(<animated.div style={{ opacity: [0, 1] }} />)
+    expect(div).toBe(`<div style="opacity:0"></div>`)
+  })
+
   test("Renders expected markup from initial", () => {
     const div = render(<animated.div initial={{ opacity: 0 }} />)
     expect(div).toBe(`<div style="opacity:0"></div>`)
@@ -37,7 +42,7 @@ function runTests(render: any) {
   test("Renders expected transform", () => {
     const div = render(<animated.div initial={{ x: 100 }} />)
     expect(div).toBe(
-      `<div style="--motion-translateX:100px; transform:translateX(var(--motion-translateX))"></div>`
+      `<div style="--motion-translateX:100px;transform:translateX(var(--motion-translateX))"></div>`
     )
   })
 }

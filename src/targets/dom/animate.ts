@@ -2,7 +2,7 @@ import {
   AnimationControls,
   AnimationOptionsWithOverrides,
   AnimationWithCommitStyles,
-  MotionKeyframe,
+  MotionKeyframes,
 } from "./types"
 import { animateValue } from "./animate-value"
 import { getOptions } from "./utils/options"
@@ -14,7 +14,7 @@ interface AnimationState {
 
 export function animate(
   element: Element,
-  keyframes: MotionKeyframe,
+  keyframes: MotionKeyframes,
   options: AnimationOptionsWithOverrides
 ) {
   const state: Partial<AnimationState> = {

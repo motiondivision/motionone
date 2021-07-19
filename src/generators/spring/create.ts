@@ -1,5 +1,5 @@
 import { velocityPerSecond } from "popmotion"
-import { AnimationGenerator } from "./types"
+import { AnimationGenerator } from "../types"
 
 const defaultStiffness = 100.0
 const defaultDamping = 10.0
@@ -14,7 +14,7 @@ export const calcDampingRatio = (
 export const calcAngularFreq = (undampedFreq: number, dampingRatio: number) =>
   undampedFreq * Math.sqrt(1 - dampingRatio * dampingRatio)
 
-export const spring = ({
+export const createSpringGenerator = ({
   stiffness = defaultStiffness,
   damping = 10.0,
   mass = 1.0,

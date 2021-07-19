@@ -1301,6 +1301,10 @@
                   (this._startTime = null),
                   (this._paused = !0)
               },
+              /**
+               * EDIT: Adding commitStyles
+               */
+              commitStyles: function () {},
               finish: function () {
                 this._idle ||
                   ((this.currentTime =

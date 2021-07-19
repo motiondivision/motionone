@@ -1,26 +1,19 @@
-import { progress } from "popmotion"
+import { progress, mixColor, mixComplex } from "popmotion"
 import { color } from "style-value-types"
-import { invariant } from "hey-listen"
 export type Interpolator<T> = (v: number) => T
 
+// TODO Support unit types
 function detectMixerFactory<T>(v: T) {
-  // if (typeof v === 'number') {
-  //   return mixNumber;
-  // } else
-
-  // TODO Support unit types
   if (color.test(v)) {
-    // return mixColor
+    return mixColor
   } else {
-    // return mixComplex
+    return mixComplex
   }
-
-  invariant(true, "sdadjhsd a kjdas  dsda sd asds d")
 }
 
 export function fastInterpolate<T>(
-  [from, to]: number[],
-  output: T[]
+  [from, to]: [number, number],
+  output: [T, T]
 ): Interpolator<T> {
   const mixerFactory = detectMixerFactory(output[0])
   const mixer = (mixerFactory as any)(output[0] as any, output[1] as any)

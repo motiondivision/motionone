@@ -60,7 +60,7 @@ export type SpringOptions = {
 
 export type KeyframeOptions = {
   duration?: number
-  easing?: Easing | Easing[]
+  easing?: Easing | Easing[] | AnimationGenerator
   offset?: number[]
 }
 
@@ -95,4 +95,12 @@ export interface CssPropertyDefinition {
 
 export type CssPropertyDefinitionMap = { [key: string]: CssPropertyDefinition }
 
-export interface AnimationGenerator {}
+export interface PregeneratedAnimation {
+  keyframes: Array<string | number>
+  duration: number
+}
+
+export interface AnimationGenerator {
+  isAnimationGenerator: true
+  generate: (keyframes: Array<string | number>) => false | PregeneratedAnimation
+}

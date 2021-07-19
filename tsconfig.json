@@ -35,7 +35,7 @@
     "node_modules",
     "build",
     "**/__tests__/*",
-    "jest.setup.ts",
+    "jest.setup.tsx",
     "_notes",
     "dev",
     "types",

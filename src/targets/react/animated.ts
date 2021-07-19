@@ -3,7 +3,7 @@ import { AnimatedProps, MotionCSSProperties } from "./types"
 import { useAnimation } from "./use-animation"
 import { useHover } from "./use-hover"
 import { usePress } from "./use-press"
-import { getInitialKeyframes } from "./utils/get-initial-keyframes"
+import { convertKeyframesToStyles } from "./utils/keyframes"
 
 export function createAnimatedComponent<Props extends {}>(Component: string) {
   function Animated(
@@ -24,14 +24,21 @@ export function createAnimatedComponent<Props extends {}>(Component: string) {
      * further updates ourselves.
      */
     const renderedStyle = useRef<null | MotionCSSProperties>(null)
-    renderedStyle.current ||= { ...initial, ...getInitialKeyframes(style) }
+    renderedStyle.current ||= convertKeyframesToStyles({ ...initial, ...style })
 
-    const target = { ...style }
+    const target = { ...initial, ...style }
     const hoverProps = useHover(target, hover, props)
     const pressProps = usePress(target, press, props)
 
     const ref = useRef(null)
-    useAnimation(ref, target, options, onStart, onComplete)
+    useAnimation(
+      ref,
+      { ...style, ...initial },
+      target,
+      options,
+      onStart,
+      onComplete
+    )
 
     return createElement(
       Component,

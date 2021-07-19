@@ -8,7 +8,7 @@
   "types": "dist/types/index.d.ts",
   "exports": {
     ".": "./dist/es/index.js",
-    "./bezier": "./dist/es/easing/cubic-bezier.js",
+    "react": "./dist/es/targets/react/index.js",
     "require": "./dist/cjs.js",
     "default": "./dist/es/index.js"
   },
@@ -73,7 +73,9 @@
     "@storybook/node-logger": "^6.2.9",
     "@storybook/preset-create-react-app": "^3.1.7",
     "@storybook/react": "^6.2.9",
+    "@testing-library/dom": "^8.1.0",
     "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^12.0.0",
     "@types/jest": "^26.0.21",
     "@types/react": "^17.0.11",
     "@types/react-dom": "^17.0.9",
@@ -117,6 +119,18 @@
     {
       "path": "./dist/motion.min.js",
       "maxSize": "4 kB"
+    },
+    {
+      "path": "./dist/size-animate-dom.js",
+      "maxSize": "1.5 kB"
+    },
+    {
+      "path": "./dist/size-spring.js",
+      "maxSize": "1.5 kB"
+    },
+    {
+      "path": "./dist/size-react.js",
+      "maxSize": "2.5 kB"
     }
   ]
 }
