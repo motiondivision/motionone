@@ -5,7 +5,7 @@
   "author": "Matt Perry",
   "main": "dist/cjs.js",
   "module": "dist/es/index.js",
-  "types": "dist/types/index.d.ts",
+  "types": "types/index.d.ts",
   "exports": {
     ".": "./dist/es/index.js",
     "react": "./dist/es/targets/react/index.js",
@@ -23,7 +23,7 @@
     "easing"
   ],
   "scripts": {
-    "build": "tsc -p . && rollup -c && bundlesize",
+    "build": "rm -rf lib dist types && tsc -p . && rollup -c && bundlesize",
     "test": "jest --coverage --config jest.config.json --maxWorkers=2",
     "test-react": "",
     "test-react-ssr": "jest --coverage --config jest.config.react-ssr.json --maxWorkers=2",
@@ -118,7 +118,7 @@
   "bundlesize": [
     {
       "path": "./dist/motion.min.js",
-      "maxSize": "4 kB"
+      "maxSize": "5 kB"
     },
     {
       "path": "./dist/size-animate-dom.js",
