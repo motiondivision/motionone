@@ -123,7 +123,7 @@
     },
     {
       "path": "./dist/size-animate-dom.js",
-      "maxSize": "1.5 kB"
+      "maxSize": "1.7 kB"
     },
     {
       "path": "./dist/size-spring.js",
@@ -131,7 +131,7 @@
     },
     {
       "path": "./dist/size-react.js",
-      "maxSize": "2.6 kB"
+      "maxSize": "2.8 kB"
     }
   ]
 }

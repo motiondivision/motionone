@@ -1,8 +1,21 @@
-export const supports = {
-  cssRegisterProperty:
+const featureTests = {
+  cssRegisterProperty: () =>
     typeof CSS !== "undefined" &&
     Object.hasOwnProperty.call(CSS, "registerProperty"),
-  partialKeyframes: true,
+  waapi: () => Object.hasOwnProperty.call(Element.prototype, "animate"),
 }
 
-// TODO Detect keyframes by running an animation with one keyframe, if it throws set partialKeyframes to true
+const results = {}
+
+interface FeatureTests {
+  cssRegisterProperty: () => boolean
+  waapi: () => boolean
+}
+
+export const supports = Object.keys(featureTests).reduce((acc, key) => {
+  acc[key] = () => {
+    if (results[key] === undefined) results[key] = featureTests[key]()
+    return results[key]
+  }
+  return acc
+}, {}) as FeatureTests

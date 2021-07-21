@@ -91,7 +91,7 @@ export function animateValue(
     finalFrame = () =>
       (element as HTMLElement).style.setProperty(name, target as string)
 
-    if (supports.cssRegisterProperty) {
+    if (supports.cssRegisterProperty()) {
       registerCssVariable(name)
     } else {
       canAnimateNatively = false
@@ -104,19 +104,10 @@ export function animateValue(
    * If we can animate this value with WAAPI, do so. Currently this only
    * feature detects CSS.registerProperty but could check WAAPI too.
    */
-  if (canAnimateNatively) {
-    /**
-     * If this browser doesn't support partial keyframes we need to read the
-     * property from the DOM. A similar technique could be used to support
-     * null as the first keyframe Framer Motion-style
-     */
-    if (!supports.partialKeyframes && keyframes.length === 1) {
-      keyframes.unshift(getComputedStyle(element)[name])
-    }
-
+  if (supports.waapi() && canAnimateNatively) {
     const animation = element.animate(
       {
-        [name]: keyframes,
+        [name]: keyframes.length === 1 ? keyframes[0] : keyframes,
         offset,
         easing: isEasingList(easing) ? convertEasingList(easing) : undefined,
       } as PropertyIndexedKeyframes,
