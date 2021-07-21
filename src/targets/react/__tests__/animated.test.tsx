@@ -6,6 +6,7 @@ import {
   render,
 } from "../../../../jest.setup"
 import { animated } from "../"
+import { AnimatePresence } from "framer-motion"
 import "../../dom/__tests__/web-animations.min-edited"
 import * as React from "react"
 
@@ -208,5 +209,36 @@ describe("animated", () => {
     })
 
     return expect(promise).resolves.toEqual({ opacity: [0, 0.2] })
+  })
+
+  test("Animates out a component when its removed", async () => {
+    const promise = new Promise<Element | null>((resolve) => {
+      const Component = ({ isVisible }: { isVisible: boolean }) => {
+        return (
+          <AnimatePresence>
+            {isVisible && (
+              <animated.div
+                exit={{ opacity: [1, 0] }}
+                options={{ duration }}
+                style={{ opacity: [0, 1] }}
+              />
+            )}
+          </AnimatePresence>
+        )
+      }
+
+      const { container, rerender } = render(<Component isVisible />)
+      rerender(<Component isVisible />)
+      rerender(<Component isVisible={false} />)
+      rerender(<Component isVisible={false} />)
+
+      // Check it's gone
+      setTimeout(() => {
+        resolve(container.firstChild as Element | null)
+      }, 150)
+    })
+
+    const child = await promise
+    expect(child).toBeFalsy()
   })
 })

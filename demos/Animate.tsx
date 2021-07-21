@@ -1,18 +1,26 @@
-import React, { useRef } from "react"
+import React, { useState } from "react"
 import "./animate.css"
 import { animated } from "../src/targets/react"
+import { AnimatePresence } from "framer-motion"
 
 export interface BoxProps {}
 
 export const Box: React.FC<BoxProps> = ({}) => {
+  const [isVisible, setIsVisible] = useState(true)
   return (
-    <animated.div
-      className="container"
-      initial={{ opacity: 0 }}
-      style={{ opacity: 1, scale: 1 }}
-      hover={{ scale: 1.2 }}
-      press={{ scale: 0.9 }}
-    />
+    <AnimatePresence>
+      {isVisible && (
+        <animated.div
+          onClick={() => setIsVisible(false)}
+          className="container"
+          initial={{ opacity: 0 }}
+          style={{ opacity: 1, scale: 1 }}
+          hover={{ scale: 1.2 }}
+          press={{ scale: 0.9 }}
+          exit={{ scale: 0, opacity: 0 }}
+        />
+      )}
+    </AnimatePresence>
   )
 }
 
