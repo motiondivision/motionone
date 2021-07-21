@@ -55,6 +55,7 @@
     "coverageDirectory": "<rootDir>/../coverage"
   },
   "dependencies": {
+    "framer-motion": "^4.1.17",
     "popmotion": "^9.3.5",
     "tslib": "^2.3.0"
   },
@@ -118,7 +119,7 @@
   "bundlesize": [
     {
       "path": "./dist/motion.min.js",
-      "maxSize": "5 kB"
+      "maxSize": "6 kB"
     },
     {
       "path": "./dist/size-animate-dom.js",
@@ -130,7 +131,7 @@
     },
     {
       "path": "./dist/size-react.js",
-      "maxSize": "2.5 kB"
+      "maxSize": "2.6 kB"
     }
   ]
 }

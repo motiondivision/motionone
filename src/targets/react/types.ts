@@ -39,6 +39,7 @@ export interface AnimatedProps {
   style?: MotionKeyframes
   hover?: MotionKeyframes
   press?: MotionKeyframes
+  exit?: MotionKeyframes
   options?: AnimationOptions
   onStart?: AnimationCallback
   onComplete?: AnimationCallback

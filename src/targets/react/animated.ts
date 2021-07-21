@@ -3,6 +3,7 @@ import { AnimatedProps, MotionCSSProperties } from "./types"
 import { useAnimation } from "./use-animation"
 import { useHover } from "./use-hover"
 import { usePress } from "./use-press"
+import { useExit } from "./use-exit"
 import { convertKeyframesToStyles } from "./utils/keyframes"
 
 export function createAnimatedComponent<Props extends {}>(Component: string) {
@@ -13,6 +14,7 @@ export function createAnimatedComponent<Props extends {}>(Component: string) {
       initial,
       hover,
       press,
+      exit,
       onStart,
       onComplete,
       ...props
@@ -29,6 +31,7 @@ export function createAnimatedComponent<Props extends {}>(Component: string) {
     const target = { ...initial, ...style }
     const hoverProps = useHover(target, hover, props)
     const pressProps = usePress(target, press, props)
+    const onExitComplete = useExit(target, exit)
 
     const ref = useRef(null)
     useAnimation(
@@ -37,7 +40,10 @@ export function createAnimatedComponent<Props extends {}>(Component: string) {
       target,
       options,
       onStart,
-      onComplete
+      (animation) => {
+        onComplete && onComplete(animation)
+        onExitComplete && onExitComplete()
+      }
     )
 
     return createElement(
