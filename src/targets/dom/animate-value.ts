@@ -1,10 +1,6 @@
 import { AnimationData, getAnimationData } from "./data"
 import { AnimationOptions, AnimationWithCommitStyles } from "./types"
-import {
-  browserSupportsCssRegisterProperty,
-  isCssVar,
-  registerCssVariable,
-} from "./utils/css-var"
+import { isCssVar, registerCssVariable } from "./utils/css-var"
 import { noop } from "../../utils/noop"
 import { ms } from "./utils/time"
 import {
@@ -17,6 +13,7 @@ import {
 import { stop } from "./utils/stop-animation"
 import { convertEasing, convertEasingList, isEasingList } from "./utils/easing"
 import { isAnimationGenerator } from "../../generators"
+import { supports } from "./utils/feature-detection"
 
 /**
  * TODO:
@@ -94,7 +91,7 @@ export function animateValue(
     finalFrame = () =>
       (element as HTMLElement).style.setProperty(name, target as string)
 
-    if (browserSupportsCssRegisterProperty) {
+    if (supports.cssRegisterProperty) {
       registerCssVariable(name)
     } else {
       canAnimateNatively = false
@@ -108,6 +105,15 @@ export function animateValue(
    * feature detects CSS.registerProperty but could check WAAPI too.
    */
   if (canAnimateNatively) {
+    /**
+     * If this browser doesn't support partial keyframes we need to read the
+     * property from the DOM. A similar technique could be used to support
+     * null as the first keyframe Framer Motion-style
+     */
+    if (!supports.partialKeyframes && keyframes.length === 1) {
+      keyframes.unshift(getComputedStyle(element)[name])
+    }
+
     const animation = element.animate(
       {
         [name]: keyframes,

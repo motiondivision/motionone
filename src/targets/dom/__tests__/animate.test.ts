@@ -13,7 +13,7 @@ describe("animate", () => {
     const div = document.createElement("div")
     const animation = animate(
       div,
-      { opacity: [0.1, 0.6] },
+      { opacity: 0.6 },
       { duration, x: {}, "--css-var": {} }
     )
     await animation.finished.then(() => {
@@ -31,7 +31,7 @@ describe("animate", () => {
 
   test("Applies transform template", async () => {
     const div = document.createElement("div")
-    const animation = animate(div, { x: [0, 1] }, { duration })
+    const animation = animate(div, { x: 1 }, { duration })
     await animation.finished.then(() => {
       expect(div).toHaveStyle("transform: translateX(var(--motion-translateX))")
     })
@@ -39,7 +39,7 @@ describe("animate", () => {
 
   test.skip("Can manually finish animation", async () => {
     const div = document.createElement("div")
-    const animation = animate(div, { opacity: [0.2, 0.5] }, { duration: 10 })
+    const animation = animate(div, { opacity: 0.5 }, { duration: 10 })
 
     return new Promise<void>((resolve) => {
       animation.finished.then(() => {
@@ -53,7 +53,8 @@ describe("animate", () => {
 
   test.skip("Can manually cancel animation", async () => {
     const div = document.createElement("div")
-    const animation = animate(div, { opacity: [0.2, 0.5] }, { duration: 10 })
+    div.style.opacity = "0.2"
+    const animation = animate(div, { opacity: 0.5 }, { duration: 10 })
     return new Promise<void>((resolve) => {
       animation.finished.catch(() => {
         console.log("animation canceled")
@@ -66,7 +67,7 @@ describe("animate", () => {
 
   test("currentTime sets and gets currentTime", async () => {
     const div = document.createElement("div")
-    const animation = animate(div, { opacity: [0.2, 0.5] }, { duration: 10 })
+    const animation = animate(div, { opacity: 0.5 }, { duration: 10 })
 
     expect(animation.currentTime).toBe(0)
     animation.currentTime = 50
