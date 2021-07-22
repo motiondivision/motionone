@@ -125,9 +125,9 @@ describe("animated", () => {
     const promise = new Promise((resolve, reject) => {
       const Component = () => (
         <animated.div
-          hover={{ opacity: [0.2, 0.3] }}
+          hover={{ opacity: 0.3 }}
           options={{ duration }}
-          style={{ opacity: [0, 0.2] }}
+          style={{ opacity: 0 }}
           onComplete={(animation) => resolve(animation)}
         />
       )
@@ -136,10 +136,10 @@ describe("animated", () => {
       rerender(<Component />)
 
       pointerEnter(container.firstChild as Element)
-      setTimeout(() => reject(), 50)
+      setTimeout(() => reject(), 100)
     })
 
-    return expect(promise).resolves.toEqual({ opacity: [0.2, 0.3] })
+    return expect(promise).resolves.toEqual({ opacity: 0.3 })
   })
 
   test("Values animate back to style/initial when hover ends", async () => {
@@ -188,6 +188,7 @@ describe("animated", () => {
   })
 
   test("Values animate back to style/initial/hover when press ends", async () => {
+    console.warn = jest.fn()
     const promise = new Promise((resolve, reject) => {
       const Component = () => (
         <animated.div
@@ -212,6 +213,7 @@ describe("animated", () => {
   })
 
   test("Animates out a component when its removed", async () => {
+    console.warn = jest.fn()
     const promise = new Promise<Element | null>((resolve) => {
       const Component = ({ isVisible }: { isVisible: boolean }) => {
         return (

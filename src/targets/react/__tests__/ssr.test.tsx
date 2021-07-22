@@ -34,9 +34,12 @@ function runTests(render: any) {
 
   test("Renders expected CSS variables", () => {
     const div = render(
-      <animated.div initial={{ "--foo": 0 }} style={{ "--bar": 1 }} />
+      <animated.div
+        initial={{ "--foo": 0, "--bar": 2 }}
+        style={{ "--bar": 1, "--car": 3 }}
+      />
     )
-    expect(div).toBe(`<div style="--foo:0;--bar:1"></div>`)
+    expect(div).toBe(`<div style="--bar:2;--car:3;--foo:0"></div>`)
   })
 
   test("Renders expected transform", () => {

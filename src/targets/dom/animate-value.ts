@@ -88,8 +88,9 @@ export function animateValue(
    * rather than directly onto the element.style object.
    */
   if (isCssVar(name)) {
-    finalFrame = () =>
-      (element as HTMLElement).style.setProperty(name, target as string)
+    finalFrame = () => {
+      ;(element as HTMLElement).style.setProperty(name, target as string)
+    }
 
     if (supports.cssRegisterProperty()) {
       registerCssVariable(name)
@@ -97,7 +98,9 @@ export function animateValue(
       canAnimateNatively = false
     }
   } else {
-    finalFrame = () => ((element as HTMLElement).style[name] = target)
+    finalFrame = () => {
+      ;(element as HTMLElement).style[name] = target
+    }
   }
 
   /**
@@ -105,9 +108,16 @@ export function animateValue(
    * feature detects CSS.registerProperty but could check WAAPI too.
    */
   if (supports.waapi() && canAnimateNatively) {
+    if (!supports.partialKeyframes() && keyframes.length === 1) {
+      const initialKeyframe = isCssVar(name)
+        ? (element as HTMLElement).style.getPropertyValue(name)
+        : getComputedStyle(element)[name]
+      keyframes.unshift(initialKeyframe)
+    }
+
     const animation = element.animate(
       {
-        [name]: keyframes.length === 1 ? keyframes[0] : keyframes,
+        [name]: keyframes,
         offset,
         easing: isEasingList(easing) ? convertEasingList(easing) : undefined,
       } as PropertyIndexedKeyframes,

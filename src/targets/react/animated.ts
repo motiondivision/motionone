@@ -26,7 +26,7 @@ export function createAnimatedComponent<Props extends {}>(Component: string) {
      * further updates ourselves.
      */
     const renderedStyle = useRef<null | MotionCSSProperties>(null)
-    renderedStyle.current ||= convertKeyframesToStyles({ ...initial, ...style })
+    renderedStyle.current ||= convertKeyframesToStyles({ ...style, ...initial })
 
     const target = { ...initial, ...style }
     const hoverProps = useHover(target, hover, props)

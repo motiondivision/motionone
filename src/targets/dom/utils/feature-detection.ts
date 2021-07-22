@@ -3,6 +3,16 @@ const featureTests = {
     typeof CSS !== "undefined" &&
     Object.hasOwnProperty.call(CSS, "registerProperty"),
   waapi: () => Object.hasOwnProperty.call(Element.prototype, "animate"),
+  partialKeyframes: () => {
+    try {
+      document
+        .createElement("div")
+        .animate({ opacity: [1] }, { duration: 0.001 })
+    } catch (e) {
+      return false
+    }
+    return true
+  },
 }
 
 const results = {}
@@ -10,6 +20,7 @@ const results = {}
 interface FeatureTests {
   cssRegisterProperty: () => boolean
   waapi: () => boolean
+  partialKeyframes: () => boolean
 }
 
 export const supports = Object.keys(featureTests).reduce((acc, key) => {
