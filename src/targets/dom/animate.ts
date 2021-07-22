@@ -15,7 +15,7 @@ interface AnimationState {
 export function animate(
   element: Element,
   keyframes: MotionKeyframes,
-  options: AnimationOptionsWithOverrides
+  options: AnimationOptionsWithOverrides = {}
 ) {
   const state: Partial<AnimationState> = {
     animations: [],

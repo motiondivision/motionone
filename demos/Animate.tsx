@@ -17,7 +17,7 @@ export const Box: React.FC<BoxProps> = ({}) => {
             style={{ opacity: 1, transform: "scale(1)" }}
             hover={{ transform: "scale(1.2)" }}
             press={{ transform: "scale(0.9)" }}
-            exit={{ transform: "scale(0)", opacity: 0 }}
+            exit={{ transform: "scale(0)", opacity: "0.2" }}
             options={{ duration: 2 }}
           />
         )}
