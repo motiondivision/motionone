@@ -6,10 +6,6 @@
   "main": "dist/cjs.js",
   "module": "dist/es/index.js",
   "types": "types/index.d.ts",
-  "exports": {
-    ".": "./dist/es/index.js",
-    "./react": "./dist/es/targets/react/index.js"
-  },
   "license": "MIT",
   "repository": "https://github.com/mattgperry/motion",
   "sideEffects": false,
