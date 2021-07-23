@@ -4,7 +4,6 @@ import {
   ForwardRefExoticComponent,
   HTMLAttributes,
   PropsWithoutRef,
-  ReactChild,
   ReactHTML,
   RefAttributes,
   SVGAttributes,
