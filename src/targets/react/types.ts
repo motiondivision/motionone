@@ -34,7 +34,6 @@ export type CSSVariables = {
 export type MotionCSSProperties = CSSPropertiesWithTransform & CSSVariables
 
 export interface AnimatedProps {
-  children?: ReactChild
   initial?: MotionCSSProperties
   style?: MotionKeyframes
   hover?: MotionKeyframes

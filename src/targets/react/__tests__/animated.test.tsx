@@ -24,6 +24,24 @@ import * as React from "react"
 const duration = 0.001
 
 describe("animated", () => {
+  test("Types are correct", async () => {
+    const promise = new Promise((resolve) => {
+      const Component = () => (
+        <animated.div>
+          <animated.svg></animated.svg>
+          <animated.a></animated.a>
+        </animated.div>
+      )
+
+      const { rerender } = render(<Component />)
+      rerender(<Component />)
+
+      setTimeout(() => resolve(true), 0)
+    })
+
+    return expect(promise).resolves.toBe(true)
+  })
+
   test("No animation runs on mount if no initial is defined", async () => {
     const promise = new Promise((resolve, reject) => {
       const Component = () => (
