@@ -8,7 +8,7 @@
   "types": "types/index.d.ts",
   "exports": {
     ".": "./dist/es/index.js",
-    "react": "./dist/es/targets/react/index.js",
+    "./react": "./dist/es/targets/react/index.js",
     "require": "./dist/cjs.js",
     "default": "./dist/es/index.js"
   },
@@ -57,7 +57,8 @@
   "dependencies": {
     "framer-motion": "^4.1.17",
     "popmotion": "^9.3.5",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "web-animations-js": "^2.3.2"
   },
   "optionalDependencies": {
     "react": "^17.0.2",

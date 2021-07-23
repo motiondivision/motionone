@@ -8,22 +8,19 @@ export interface BoxProps {}
 export const Box: React.FC<BoxProps> = ({}) => {
   const [isVisible, setIsVisible] = useState(true)
   return (
-    <>
-      <AnimatePresence>
-        {isVisible && (
-          <animated.div
-            className="container"
-            initial={{ opacity: 0 }}
-            style={{ opacity: 1, transform: "scale(1)" }}
-            hover={{ transform: "scale(1.2)" }}
-            press={{ transform: "scale(0.9)" }}
-            exit={{ transform: "scale(0)", opacity: "0.2" }}
-            options={{ duration: 2 }}
-          />
-        )}
-      </AnimatePresence>
-      <button onClick={() => setIsVisible(!isVisible)}>Toggle</button>
-    </>
+    <AnimatePresence>
+      {isVisible && (
+        <animated.div
+          onClick={() => setIsVisible(false)}
+          className="container"
+          initial={{ opacity: 0 }}
+          style={{ opacity: 1, scale: 1 }}
+          hover={{ scale: 1.2 }}
+          press={{ scale: 0.9 }}
+          exit={{ scale: 0, opacity: 0 }}
+        />
+      )}
+    </AnimatePresence>
   )
 }
 
