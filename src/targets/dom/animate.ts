@@ -37,7 +37,6 @@ export function animate(
 
 const controls = {
   get: (target: AnimationState, key: string) => {
-    console.log("getting", key)
     switch (key) {
       case "finished":
         return target.finished
