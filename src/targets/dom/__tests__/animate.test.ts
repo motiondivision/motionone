@@ -9,6 +9,33 @@ import "./web-animations.min-edited.js"
 const duration = 0.001
 
 describe("animate", () => {
+  test("No type errors", async () => {
+    const div = document.createElement("div")
+    const animation = animate(
+      div,
+      { opacity: 0.6, x: 1, scale: 1, "--css-var": 2 },
+      {
+        duration,
+        x: {},
+        "--css-var": {
+          direction: "alternate",
+        },
+        stiffness: 1,
+        damping: 1,
+        mass: 1,
+        velocity: 1,
+        restSpeed: 1,
+        restDelta: 1,
+        direction: "alternate",
+        easing: "steps(2, start)",
+        offset: [0],
+      }
+    )
+    await animation.finished.then(() => {
+      expect(true).toBe(true)
+    })
+  })
+
   test("Applies target keyframe when animation has finished", async () => {
     const div = document.createElement("div")
     const animation = animate(

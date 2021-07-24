@@ -1,6 +1,9 @@
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+
 export type BezierDefinition = [number, number, number, number]
 
-export interface CSSStyleDeclarationWithTransform extends CSSStyleDeclaration {
+export interface CSSStyleDeclarationWithTransform
+  extends Omit<CSSStyleDeclaration, "direction"> {
   x: number | string
   y: number | string
   z: number
