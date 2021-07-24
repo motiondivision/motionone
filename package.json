@@ -1,6 +1,6 @@
 {
   "name": "motion",
-  "version": "6.0.1-alpha.23",
+  "version": "6.0.1-alpha.24",
   "description": "The Motion library for the web",
   "author": "Matt Perry",
   "main": "dist/cjs.js",
