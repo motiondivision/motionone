@@ -1,6 +1,6 @@
 import { AnimationWithCommitStyles } from "../types"
 
-export function stop(animation: AnimationWithCommitStyles) {
+export function stopAnimation(animation: AnimationWithCommitStyles) {
   animation.commitStyles()
   animation.cancel()
 }

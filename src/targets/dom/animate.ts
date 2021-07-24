@@ -4,6 +4,7 @@ import {
   AnimationWithCommitStyles,
   MotionKeyframes,
 } from "./types"
+import { stopAnimation } from "./utils/stop-animation"
 import { animateValue } from "./animate-value"
 import { getOptions } from "./utils/options"
 
@@ -36,21 +37,27 @@ export function animate(
 
 const controls = {
   get: (target: AnimationState, key: string) => {
+    console.log("getting", key)
     switch (key) {
       case "finished":
         return target.finished
       case "currentTime":
+        // TODO Find first active animation
+        const duration = target.animations[0]?.[key] || 0
+        return duration ? duration / 1000 : 0
       case "playbackRate":
-        // TODO find first active animation and return
+        // TODO Find first active animation
         return target.animations[0]?.[key]
       case "stop":
-        return () => target.animations.forEach(stop)
+        return () => target.animations.forEach(stopAnimation)
       default:
         return () => target.animations.forEach((animation) => animation[key]())
     }
   },
   set: (target: AnimationState, key: string, value: number) => {
     switch (key) {
+      case "currentTime":
+        value = value * 1000
       case "currentTime":
       case "playbackRate":
         for (let i = 0; i < target.animations.length; i++) {

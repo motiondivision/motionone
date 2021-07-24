@@ -25,22 +25,29 @@
     <script>
       const { animate, animateValue } = Motion
       const box = document.getElementById("box")
-
-      animate(
+      console.log(Motion)
+      const animation = animate(
         box,
         { transform: ["translate(0px, 0px)", "translate(100px, 200px)"] },
         {
-          duration: 1,
-          delay: 1,
-          stiffness: 200,
-          damping: 10,
-          direction: "alternate",
-          repeat: Infinity,
-          easing: "linear",
-          x: { easing: ["ease-in", "linear"] },
-          // offset: [0, 0.2, 1],
+          duration: 2,
+          // duration: 1,
+          // delay: 1,
+          // stiffness: 200,
+          // damping: 10,
+          // direction: "alternate",
+          // repeat: Infinity,
+          // easing: "linear",
+          // x: { easing: ["ease-in", "linear"] },
+          // // offset: [0, 0.2, 1],
         }
-      ).finished.catch((e) => console.log(e))
+      )
+
+      animation.finished.catch((e) => console.log(e))
+
+      setTimeout(() => {
+        animation.stop()
+      }, 1000)
 
       // box.addEventListener("mouseenter", () => {
       //   animate(box, { scale: 2 }, { duration: 0.3 }).finished.catch((e) =>

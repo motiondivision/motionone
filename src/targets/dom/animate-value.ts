@@ -10,7 +10,7 @@ import {
   transformAlias,
   transformPropertyDefinitions,
 } from "./utils/transforms"
-import { stop } from "./utils/stop-animation"
+import { stopAnimation } from "./utils/stop-animation"
 import { convertEasing, convertEasingList, isEasingList } from "./utils/easing"
 import { isAnimationGenerator } from "../../generators"
 import { supports } from "./utils/feature-detection"
@@ -143,7 +143,7 @@ export function animateValue(
 
 function stopCurrentAnimation(data: AnimationData, name: string) {
   if (data.activeAnimations[name]) {
-    stop(data.activeAnimations[name]!)
+    stopAnimation(data.activeAnimations[name]!)
     data.activeAnimations[name] = undefined
   }
 }
