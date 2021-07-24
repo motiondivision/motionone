@@ -114,11 +114,11 @@
   "bundlesize": [
     {
       "path": "./dist/motion.min.js",
-      "maxSize": "6 kB"
+      "maxSize": "4.5 kB"
     },
     {
       "path": "./dist/size-animate-dom.js",
-      "maxSize": "1.7 kB"
+      "maxSize": "1.75 kB"
     },
     {
       "path": "./dist/size-spring.js",
