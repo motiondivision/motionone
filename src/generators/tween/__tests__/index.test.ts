@@ -39,4 +39,6 @@ describe("slowInterpolateNumbers", () => {
   })
 
   test.skip("custom offsets", () => {})
+
+  test.skip("custom easing", () => {})
 })

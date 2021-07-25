@@ -14,16 +14,16 @@ import { stopAnimation } from "./utils/stop-animation"
 import { convertEasing, convertEasingList, isEasingList } from "./utils/easing"
 import { isAnimationGenerator } from "../../generators"
 import { supports } from "./utils/feature-detection"
+import { createCssVariableRenderer, createStyleRenderer } from "./utils/apply"
+import { Animation } from "../../polyfill/Animation"
 
-/**
- * TODO:
- * - Detect WAAPI support and set default canAnimateNatively
- */
 export function animateValue(
   element: Element,
   name: string,
   keyframes: string | number | Array<string | number>,
-  {
+  options: AnimationOptions = {}
+) {
+  let {
     duration = 0.3,
     delay = 0,
     endDelay = 0,
@@ -31,11 +31,11 @@ export function animateValue(
     easing = "ease",
     direction,
     offset,
-  }: AnimationOptions = {}
-) {
+  } = options
   const data = getAnimationData(element)
-  let canAnimateNatively = true
-  let finalFrame = noop
+  let canAnimateNatively = supports.waapi()
+  let render: (v: any) => void = noop
+  const valueIsTransform = isTransform(name)
 
   keyframes = Array.isArray(keyframes) ? keyframes : [keyframes]
 
@@ -43,7 +43,7 @@ export function animateValue(
    * If this is an individual transform, we need to map its
    * key to a CSS variable and update the element's transform style
    */
-  if (isTransform(name)) {
+  if (valueIsTransform) {
     if (transformAlias[name]) name = transformAlias[name]
     addTransformToElement(element as HTMLElement, name)
     name = asTransformCssVar(name)
@@ -88,9 +88,7 @@ export function animateValue(
    * rather than directly onto the element.style object.
    */
   if (isCssVar(name)) {
-    finalFrame = () => {
-      ;(element as HTMLElement).style.setProperty(name, target as string)
-    }
+    render = createCssVariableRenderer(element, name)
 
     if (supports.cssRegisterProperty()) {
       registerCssVariable(name)
@@ -98,16 +96,15 @@ export function animateValue(
       canAnimateNatively = false
     }
   } else {
-    finalFrame = () => {
-      ;(element as HTMLElement).style[name] = target
-    }
+    render = createStyleRenderer(element, name)
   }
 
   /**
    * If we can animate this value with WAAPI, do so. Currently this only
    * feature detects CSS.registerProperty but could check WAAPI too.
    */
-  if (supports.waapi() && canAnimateNatively) {
+
+  if (canAnimateNatively) {
     if (!supports.partialKeyframes() && keyframes.length === 1) {
       const initialKeyframe = isCssVar(name)
         ? (element as HTMLElement).style.getPropertyValue(name)
@@ -133,11 +130,11 @@ export function animateValue(
 
     data.activeAnimations[name] = animation
 
-    animation.finished.then(finalFrame).catch(noop)
+    animation.finished.then(() => render(target)).catch(noop)
 
     return animation
   } else {
-    finalFrame()
+    render(target)
   }
 }
 
