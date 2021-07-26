@@ -3,7 +3,12 @@ import { Variants } from "../types"
 
 export function resolveVariant(
   definition?: MotionKeyframes | string,
+  inheritedDefinition?: string,
   variants: Variants = {}
 ): MotionKeyframes | undefined {
-  return typeof definition === "string" ? variants[definition] : definition
+  if (definition) {
+    return typeof definition === "string" ? variants[definition] : definition
+  } else if (inheritedDefinition) {
+    return variants[inheritedDefinition]
+  }
 }

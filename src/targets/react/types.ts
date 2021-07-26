@@ -35,6 +35,13 @@ export type MotionCSSProperties = CSSPropertiesWithTransform & CSSVariables
 
 export type Variants = { [key: string]: MotionKeyframes }
 
+export interface ViewportOptions {
+  root?: RefObject<Element>
+  once?: boolean
+  margin?: string
+  threshold?: number
+}
+
 export interface AnimatedProps {
   initial?: MotionCSSProperties | string
   style?: MotionKeyframes | string
@@ -42,16 +49,31 @@ export interface AnimatedProps {
   press?: MotionKeyframes | string
   exit?: MotionKeyframes | string
   inViewport?: MotionKeyframes | string
+  inherit?: boolean
   variants?: Variants
-  viewportMargin?: string
-  viewportThreshold?: number
-  viewport?: RefObject<Element>
-  enterViewportOnce?: boolean
+  viewport?: ViewportOptions
   options?: AnimationOptions
   onStart?: AnimationCallback
   onComplete?: AnimationCallback
   onViewportEnter?: (entry: IntersectionObserverEntry) => void
   onViewportLeave?: (entry: IntersectionObserverEntry) => void
+}
+
+export type VariantProps = {
+  initial?: boolean
+  style?: boolean
+  hover?: boolean
+  press?: boolean
+  exit?: boolean
+  inViewport?: boolean
+}
+
+export type AnimationContextProps = {
+  [K in keyof VariantProps]?: string
+}
+
+export type VariantActiveState = {
+  [K in keyof VariantProps]?: boolean
 }
 
 type UnionStringArray<T extends Readonly<string[]>> = T[number]

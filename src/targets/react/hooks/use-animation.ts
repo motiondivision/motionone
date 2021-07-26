@@ -1,9 +1,9 @@
-import { AnimationOptions, MotionKeyframes } from "../dom/types"
-import { AnimationCallback, MotionCSSProperties } from "../react/types"
+import { AnimationOptions, MotionKeyframes } from "../../dom/types"
+import { AnimationCallback, MotionCSSProperties } from "../types"
 import { RefObject, useEffect, useRef } from "react"
-import { animateValue } from "../dom/animate-value"
-import { noop } from "../../utils/noop"
-import { hasChanged } from "./utils/has-changed"
+import { animateValue } from "../../dom/animate-value"
+import { noop } from "../../../utils/noop"
+import { hasChanged } from "../utils/has-changed"
 
 export function useAnimation(
   ref: RefObject<HTMLElement>,
@@ -14,9 +14,8 @@ export function useAnimation(
   onComplete?: AnimationCallback
 ) {
   const prevTarget = useRef(initial)
-  useEffect(() => {
-    if (!target) return
 
+  useEffect(() => {
     const targetKeyframe: MotionKeyframes = {}
 
     const allKeys = new Set([
@@ -32,7 +31,6 @@ export function useAnimation(
        * TODO: If next is undefined, throw error or record a "base value"
        * to animate back down to
        */
-
       targetKeyframe[key] = next
     })
 
@@ -48,6 +46,7 @@ export function useAnimation(
         )
         animation && animations.push(animation)
       }
+
       Promise.all(animations.map((animation) => animation.finished))
         .then(() => onComplete?.(targetKeyframe))
         .catch(noop)

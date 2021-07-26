@@ -84,6 +84,7 @@ export interface AnimationControls {
   pause: VoidFunction
   stop: VoidFunction
   finish: VoidFunction
+  reverse: VoidFunction
   cancel: VoidFunction
   finished: Promise<any>
   currentTime: number | null

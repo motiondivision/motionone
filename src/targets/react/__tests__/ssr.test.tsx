@@ -48,6 +48,62 @@ function runTests(render: any) {
       `<div style="--motion-translateX:100px;transform:translateX(var(--motion-translateX))"></div>`
     )
   })
+
+  test("Filters out all props", () => {
+    const div = render(
+      <animated.div
+        hover={{ opacity: 1 }}
+        press={{ opacity: 1 }}
+        exit={{ opacity: 1 }}
+        inViewport={{ opacity: 1 }}
+        inherit={false}
+        variants={{}}
+        viewport={{ margin: "100px" }}
+        options={{ duration: 1 }}
+        onStart={() => {}}
+        onComplete={() => {}}
+        onViewportEnter={() => {}}
+        onViewportLeave={() => {}}
+      />
+    )
+
+    expect(div).toBe("<div></div>")
+  })
+
+  test("Renders initial and style as variants", () => {
+    const html = render(
+      <animated.div
+        initial="foo"
+        style="bar"
+        hover="litmus"
+        press="litmus"
+        inViewport="litmus"
+        exit="litmus"
+        variants={{
+          foo: { opacity: 1, background: "red" },
+          bar: { opacity: 0.5, width: "100px" },
+          litmus: { opacity: 0.75 },
+        }}
+      >
+        <animated.article
+          style={{ opacity: 1 }}
+          variants={{ foo: { opacity: 0.99 }, litmus: { background: "red" } }}
+        >
+          <animated.span variants={{ bar: { opacity: 0.25 } }}>
+            <animated.div variants={{ foo: { opacity: 0.2 } }}>
+              <animated.div
+                inherit={false}
+                variants={{ foo: { opacity: 0.3 } }}
+              ></animated.div>
+            </animated.div>
+          </animated.span>
+        </animated.article>
+      </animated.div>
+    )
+    expect(html).toBe(
+      `<div style="opacity:1;width:100px;background:red"><article style="opacity:0.99"><span><div style="opacity:0.2"><div></div></div></span></article></div>`
+    )
+  })
 }
 
 describe("render", () => {
