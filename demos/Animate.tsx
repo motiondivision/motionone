@@ -14,7 +14,10 @@ export const Box: React.FC<BoxProps> = ({}) => {
           onClick={() => setIsVisible(false)}
           className="container"
           initial={{ opacity: 0 }}
-          style={{ opacity: 1, scale: 1 }}
+          style={{ opacity: 0, scale: 1, marginTop: 1000 }}
+          inViewport={{ opacity: 1 }}
+          viewportMargin="100px"
+          viewportThreshold={1}
           hover={{ scale: 1.2 }}
           press={{ scale: 0.9 }}
           exit={{ scale: 0, opacity: 0 }}

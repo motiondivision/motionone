@@ -6,6 +6,7 @@ import {
   PropsWithoutRef,
   ReactHTML,
   RefAttributes,
+  RefObject,
   SVGAttributes,
 } from "react"
 import { AnimationOptions, MotionKeyframes } from "../dom/types"
@@ -38,9 +39,16 @@ export interface AnimatedProps {
   hover?: MotionKeyframes
   press?: MotionKeyframes
   exit?: MotionKeyframes
+  inViewport?: MotionKeyframes
+  viewportMargin?: string
+  viewportThreshold?: number
+  viewport?: RefObject<Element>
+  enterViewportOnce?: boolean
   options?: AnimationOptions
   onStart?: AnimationCallback
   onComplete?: AnimationCallback
+  onViewportEnter?: (entry: IntersectionObserverEntry) => void
+  onViewportLeave?: (entry: IntersectionObserverEntry) => void
 }
 
 type UnionStringArray<T extends Readonly<string[]>> = T[number]

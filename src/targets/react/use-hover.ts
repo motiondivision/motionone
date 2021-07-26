@@ -8,7 +8,7 @@ export function useHover(
   stylesToApply?: MotionKeyframes,
   { onPointerEnter, onPointerLeave }: AnimatedProps & HTMLProps<any> = {}
 ): HTMLProps<any> {
-  const setGestureState = useGestureState(target, stylesToApply)
+  const [, setGestureState] = useGestureState(target, stylesToApply)
 
   return stylesToApply
     ? {

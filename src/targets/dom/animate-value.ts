@@ -15,7 +15,6 @@ import { convertEasing, convertEasingList, isEasingList } from "./utils/easing"
 import { isAnimationGenerator } from "../../generators"
 import { supports } from "./utils/feature-detection"
 import { createCssVariableRenderer, createStyleRenderer } from "./utils/apply"
-import { Animation } from "../../polyfill/Animation"
 
 export function animateValue(
   element: Element,

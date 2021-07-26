@@ -4,6 +4,7 @@ import { useAnimation } from "./use-animation"
 import { useHover } from "./use-hover"
 import { usePress } from "./use-press"
 import { useExit } from "./use-exit"
+// import { useViewport } from "./use-viewport"
 import { convertKeyframesToStyles } from "./utils/keyframes"
 
 export function createAnimatedComponent<Props extends {}>(Component: string) {
@@ -15,12 +16,15 @@ export function createAnimatedComponent<Props extends {}>(Component: string) {
       hover,
       press,
       exit,
+      inViewport,
       onStart,
       onComplete,
       ...props
     }: Props & AnimatedProps,
     _externalRef: React.Ref<Element>
   ) {
+    const ref = useRef(null)
+
     /**
      * We only ever pass the initally-provided styles to React, animating
      * further updates ourselves.
@@ -31,9 +35,9 @@ export function createAnimatedComponent<Props extends {}>(Component: string) {
     const target = { ...initial, ...style }
     const hoverProps = useHover(target, hover, props)
     const pressProps = usePress(target, press, props)
+    // useViewport(ref, target, inViewport, props)
     const onExitComplete = useExit(target, exit)
 
-    const ref = useRef(null)
     useAnimation(
       ref,
       { ...style, ...initial },

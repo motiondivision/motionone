@@ -8,7 +8,7 @@ export function usePress(
   stylesToApply?: MotionKeyframes,
   { onPointerDown }: AnimatedProps & HTMLProps<any> = {}
 ): HTMLProps<any> {
-  const setGestureState = useGestureState(target, stylesToApply)
+  const [, setGestureState] = useGestureState(target, stylesToApply)
   if (!stylesToApply) return {}
 
   const onPointerUp = () => {

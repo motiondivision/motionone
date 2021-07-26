@@ -9,6 +9,7 @@
         display: flex;
         align-items: center;
         padding-left: 100px;
+        padding-top: 100vh;
       }
 
       #box {
@@ -27,7 +28,7 @@
       const box = document.getElementById("box")
       const animation = animate(
         box,
-        { x: [0, 200] },
+        { x: [0, 500], backgroundColor: "red" },
         {
           delay: 1,
           duration: 2,
