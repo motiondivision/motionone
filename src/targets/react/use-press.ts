@@ -5,10 +5,10 @@ import { useGestureState } from "./use-gesture-state"
 
 export function usePress(
   target: MotionKeyframes,
-  stylesToApply?: MotionKeyframes,
-  { onPointerDown }: AnimatedProps & HTMLProps<any> = {}
+  stylesToApply?: MotionKeyframes | string,
+  { onPointerDown, variants }: AnimatedProps & HTMLProps<any> = {}
 ): HTMLProps<any> {
-  const [, setGestureState] = useGestureState(target, stylesToApply)
+  const [, setGestureState] = useGestureState(target, stylesToApply, variants)
   if (!stylesToApply) return {}
 
   const onPointerUp = () => {

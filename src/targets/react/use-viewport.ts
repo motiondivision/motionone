@@ -6,8 +6,9 @@ import { useGestureState } from "./use-gesture-state"
 export function useViewport(
   ref: RefObject<Element>,
   target: MotionKeyframes,
-  stylesToApply?: MotionKeyframes,
+  stylesToApply?: MotionKeyframes | string,
   {
+    variants,
     viewport: root,
     viewportMargin: rootMargin,
     viewportThreshold: threshold,
@@ -18,7 +19,8 @@ export function useViewport(
 ) {
   const [isInViewport, setViewportState] = useGestureState(
     target,
-    stylesToApply
+    stylesToApply,
+    variants
   )
   let shouldObserve = !!stylesToApply || !!onViewportEnter || !!onViewportLeave
   if (enterViewportOnce && isInViewport) shouldObserve = false

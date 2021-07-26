@@ -1,10 +1,13 @@
 import { MotionKeyframes } from "../dom/types"
 import { usePresence } from "framer-motion"
-import { useEffect } from "react"
+import { HTMLProps, useEffect } from "react"
+import { AnimatedProps } from "./types"
+import { resolveVariant } from "./utils/variants"
 
 export function useExit(
   target: MotionKeyframes,
-  stylesToApply?: MotionKeyframes
+  stylesToApply?: MotionKeyframes | string,
+  { variants }: AnimatedProps & HTMLProps<any> = {}
 ) {
   const [isPresent, onExitComplete] = usePresence()
 
@@ -18,7 +21,7 @@ export function useExit(
   }, [isPresent])
 
   if (stylesToApply && !isPresent) {
-    Object.assign(target, stylesToApply)
+    Object.assign(target, resolveVariant(stylesToApply, variants))
     return onExitComplete
   }
 }

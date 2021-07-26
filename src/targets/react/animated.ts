@@ -4,8 +4,9 @@ import { useAnimation } from "./use-animation"
 import { useHover } from "./use-hover"
 import { usePress } from "./use-press"
 import { useExit } from "./use-exit"
-// import { useViewport } from "./use-viewport"
+import { useViewport } from "./use-viewport"
 import { convertKeyframesToStyles } from "./utils/keyframes"
+import { resolveVariant } from "./utils/variants"
 
 export function createAnimatedComponent<Props extends {}>(Component: string) {
   function Animated(
@@ -17,6 +18,7 @@ export function createAnimatedComponent<Props extends {}>(Component: string) {
       press,
       exit,
       inViewport,
+      variants,
       onStart,
       onComplete,
       ...props
@@ -30,25 +32,23 @@ export function createAnimatedComponent<Props extends {}>(Component: string) {
      * further updates ourselves.
      */
     const renderedStyle = useRef<null | MotionCSSProperties>(null)
-    renderedStyle.current ||= convertKeyframesToStyles({ ...style, ...initial })
+    const resolvedStyle = resolveVariant(style, variants)
+    const resolvedInitial = resolveVariant(initial as any, variants)
+    renderedStyle.current ||= convertKeyframesToStyles({
+      ...resolvedStyle,
+      ...resolvedInitial,
+    })
 
-    const target = { ...initial, ...style }
+    const target = { ...resolvedInitial, ...resolvedStyle }
     const hoverProps = useHover(target, hover, props)
     const pressProps = usePress(target, press, props)
-    // useViewport(ref, target, inViewport, props)
+    useViewport(ref, target, inViewport, props)
     const onExitComplete = useExit(target, exit)
 
-    useAnimation(
-      ref,
-      { ...style, ...initial },
-      target,
-      options,
-      onStart,
-      (animation) => {
-        onComplete && onComplete(animation)
-        onExitComplete && onExitComplete()
-      }
-    )
+    useAnimation(ref, { ...target }, target, options, onStart, (animation) => {
+      onComplete && onComplete(animation)
+      onExitComplete && onExitComplete()
+    })
 
     return createElement(
       Component,

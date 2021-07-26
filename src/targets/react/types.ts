@@ -33,13 +33,16 @@ export type CSSVariables = {
 
 export type MotionCSSProperties = CSSPropertiesWithTransform & CSSVariables
 
+export type Variants = { [key: string]: MotionKeyframes }
+
 export interface AnimatedProps {
-  initial?: MotionCSSProperties
-  style?: MotionKeyframes
-  hover?: MotionKeyframes
-  press?: MotionKeyframes
-  exit?: MotionKeyframes
-  inViewport?: MotionKeyframes
+  initial?: MotionCSSProperties | string
+  style?: MotionKeyframes | string
+  hover?: MotionKeyframes | string
+  press?: MotionKeyframes | string
+  exit?: MotionKeyframes | string
+  inViewport?: MotionKeyframes | string
+  variants?: Variants
   viewportMargin?: string
   viewportThreshold?: number
   viewport?: RefObject<Element>
