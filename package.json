@@ -114,7 +114,7 @@
   "bundlesize": [
     {
       "path": "./dist/size-animate-dom.js",
-      "maxSize": "1.75 kB"
+      "maxSize": "1.85 kB"
     },
     {
       "path": "./dist/size-spring.js",
