@@ -67,36 +67,3 @@ const controls = {
     return false
   },
 }
-
-/**
- *
- */
-// export function animateAll(
-//   elements: Element | Element[] | NodeListOf<Element> | string,
-//   keyframes: Keyframe,
-//   { delay = 0, onStart, onComplete, ...options }: AnimationOptions
-// ) {
-//   if (typeof elements === "string") {
-//     elements = document.querySelectorAll(elements)
-//   } else if (elements instanceof Element) {
-//     elements = [elements]
-//   }
-
-//   const animations = Array.from(elements).map((element, i) => {
-//     const elementOptions: ResolvedAnimationOptions = {}
-//     for (const key in options) {
-//       elementOptions[key] =
-//         typeof options[key] === "function" ? options[key](i) : options[key]
-//     }
-
-//     return animate(element, keyframes, elementOptions)
-//   })
-
-//   onStart?.()
-
-//   Promise.all(animations.map((animation) => animation.finished)).then(
-//     onComplete
-//   )
-
-//   return animations
-// }
