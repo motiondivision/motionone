@@ -8,31 +8,60 @@ import { stopAnimation } from "./utils/stop-animation"
 import { animateValue } from "./animate-value"
 import { getOptions } from "./utils/options"
 
+type AcceptedElements = Element | Element[] | NodeListOf<Element> | string
+
 interface AnimationState {
   animations: AnimationWithCommitStyles[]
   finished: Promise<any>
 }
 
 export function animate(
-  element: Element,
+  elements: AcceptedElements,
   keyframes: MotionKeyframes,
-  options: AnimationOptionsWithOverrides = {}
-) {
-  const state: Partial<AnimationState> = {
-    animations: [],
+  {
+    stagger = 0,
+    ...options
+  }: AnimationOptionsWithOverrides & { stagger?: number }
+): AnimationControls {
+  elements = resolveElements(elements)
+
+  const animations: AnimationWithCommitStyles[] = []
+  for (let i = 0; i < elements.length; i++) {
+    const element = elements[i]
+
+    for (const key in keyframes) {
+      const valueOptions = getOptions(options, key)
+      if (stagger) {
+        valueOptions.delay ||= 0
+        valueOptions.delay += stagger * i
+      }
+
+      const animation = animateValue(
+        element,
+        key,
+        keyframes[key]!,
+        valueOptions
+      )
+
+      animation && animations.push(animation as any)
+    }
   }
 
-  for (const key in keyframes) {
-    const valueOptions = getOptions(options, key)
-    const animation = animateValue(element, key, keyframes[key]!, valueOptions)
-    animation && state.animations!.push(animation as any)
-  }
-
-  state.finished = Promise.all(
-    state.animations!.map((animation) => animation.finished)
-  )
-
+  const state = {
+    animations,
+    finished: Promise.all(animations.map((animation) => animation.finished)),
+  } as any
   return new Proxy(state, controls) as AnimationControls
+}
+
+function resolveElements(elements: AcceptedElements): Element[] {
+  if (typeof elements === "string") {
+    elements = document.querySelectorAll(elements)
+  } else if (elements instanceof Element) {
+    elements = [elements]
+  }
+
+  return Array.from(elements)
 }
 
 const controls = {

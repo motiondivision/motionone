@@ -1,30 +1,41 @@
-import { HTMLProps, RefObject, useEffect } from "react"
-import { MotionKeyframes } from "../dom/types"
-import { AnimatedProps } from "./types"
+import { RefObject, useEffect } from "react"
+import { MotionKeyframes } from "../../dom/types"
+import {
+  AnimatedProps,
+  AnimationContextProps,
+  VariantActiveState,
+} from "../types"
 import { useGestureState } from "./use-gesture-state"
 
 export function useViewport(
   ref: RefObject<Element>,
   target: MotionKeyframes,
-  stylesToApply?: MotionKeyframes,
   {
-    viewport: root,
-    viewportMargin: rootMargin,
-    viewportThreshold: threshold,
-    enterViewportOnce = false,
+    inViewport,
+    variants,
+    viewport = {},
     onViewportEnter,
     onViewportLeave,
-  }: AnimatedProps & HTMLProps<any> = {}
+  }: AnimatedProps,
+  { inViewport: inheritedInViewport }: AnimationContextProps,
+  isVariantActive: VariantActiveState
 ) {
+  const { root, margin: rootMargin, once, threshold } = viewport
+
   const [isInViewport, setViewportState] = useGestureState(
     target,
-    stylesToApply
+    inViewport,
+    inheritedInViewport,
+    variants
   )
-  let shouldObserve = !!stylesToApply || !!onViewportEnter || !!onViewportLeave
-  if (enterViewportOnce && isInViewport) shouldObserve = false
+  isVariantActive.inViewport = isInViewport
+
+  let shouldObserve = !!inViewport || !!onViewportEnter || !!onViewportLeave
+  if (once && isInViewport) shouldObserve = false
 
   useEffect(() => {
     if (!shouldObserve || typeof IntersectionObserver === "undefined") return
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         setViewportState(entry.isIntersecting)
@@ -39,7 +50,7 @@ export function useViewport(
     observer.observe(ref.current!)
     return () => observer.disconnect()
   }, [
-    stylesToApply,
+    inViewport,
     onViewportEnter,
     onViewportLeave,
     root,

@@ -113,20 +113,16 @@
   },
   "bundlesize": [
     {
-      "path": "./dist/motion.min.js",
-      "maxSize": "4.5 kB"
-    },
-    {
       "path": "./dist/size-animate-dom.js",
       "maxSize": "1.75 kB"
     },
     {
       "path": "./dist/size-spring.js",
-      "maxSize": "1.5 kB"
+      "maxSize": "1 kB"
     },
     {
       "path": "./dist/size-react.js",
-      "maxSize": "3 kB"
+      "maxSize": "3.5 kB"
     }
   ]
 }

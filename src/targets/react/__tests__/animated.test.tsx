@@ -10,16 +10,7 @@ import { AnimatePresence } from "framer-motion"
 import "../../dom/__tests__/web-animations.min-edited"
 import * as React from "react"
 
-/**
- * Note: In these tests `style` is always set to a keyframe
- * array. This is a limitation with the current polyfill we
- * use in testing as it doesn't support partial keyframes.
- */
-
-/**
- * TODO:
- * When hover/press deactivate we animate to initial/style/hover
- */
+console.error = jest.fn()
 
 const duration = 0.001
 
@@ -206,7 +197,6 @@ describe("animated", () => {
   })
 
   test("Values animate back to style/initial/hover when press ends", async () => {
-    console.warn = jest.fn()
     const promise = new Promise((resolve, reject) => {
       const Component = () => (
         <animated.div
@@ -231,7 +221,6 @@ describe("animated", () => {
   })
 
   test("Animates out a component when its removed", async () => {
-    console.warn = jest.fn()
     const promise = new Promise<Element | null>((resolve) => {
       const Component = ({ isVisible }: { isVisible: boolean }) => {
         return (

@@ -80,6 +80,8 @@ export class Animation implements Omit<AnimationControls, "stop"> {
     this.reject(false)
   }
 
+  reverse() {}
+
   commitStyles() {
     this.tick(this.currentTime || 0)
   }
