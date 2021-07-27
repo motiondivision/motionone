@@ -50,7 +50,7 @@ export function createAnimatedComponent<Props extends {}>(Component: string) {
      */
     let inherited = useContext(AnimationContext)
     if (!inherit) inherited = {}
-    console.log(inherited)
+
     const resolvedStyle = resolveVariant(style, inherited.style, variants)
     const resolvedInitial = resolveVariant(
       initial as any,
