@@ -169,7 +169,7 @@ describe("animated", () => {
       setTimeout(() => {
         pointerLeave(container.firstChild as Element)
       }, 10)
-      setTimeout(() => reject(), 50)
+      setTimeout(() => reject(), 100)
     })
 
     return expect(promise).resolves.toEqual({ opacity: [0, 0.2] })
