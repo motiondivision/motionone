@@ -105,7 +105,7 @@ describe("animated", () => {
       const { rerender } = render(<Component opacity={[0, 0.8]} />)
       rerender(<Component opacity={[0, 0.9]} />)
 
-      setTimeout(() => reject(false), 50)
+      setTimeout(() => reject(false), 100)
     })
 
     return expect(promise).resolves.toEqual({ opacity: [0, 0.9] })
@@ -213,8 +213,8 @@ describe("animated", () => {
       pointerDown(container.firstChild as Element)
       setTimeout(() => {
         pointerUp(container.firstChild as Element)
-      }, 10)
-      setTimeout(() => reject(false), 300)
+      }, 50)
+      setTimeout(() => reject(false), 500)
     })
 
     return expect(promise).resolves.toEqual({ opacity: [0, 0.2] })
