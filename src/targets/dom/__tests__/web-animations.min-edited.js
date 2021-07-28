@@ -14,8 +14,7 @@
 
 /**
  * This is an edited version of the WAAPI polyfill
- * that adds support for value and offset arrays,
- * and the finished Promise.
+ * that adds support for value and offset arrays.
  */
 
 !(function () {
@@ -1170,15 +1169,6 @@
               (this._inEffect = this._effect._update(0)),
               (this._idle = !0),
               (this._currentTimePending = !1)
-
-            /**
-             * EDIT: Adding finished promise
-             */
-            this._cancelFinished = undefined
-            this.finished = new Promise((resolve, reject) => {
-              this._finishHandlers.push(resolve)
-              this._cancelFinished = undefined
-            })
           }),
             (b.Animation.prototype = {
               _ensureAlive: function () {
@@ -1314,10 +1304,6 @@
                   b.applyDirtiedAnimation(this))
               },
               cancel: function () {
-                /**
-                 * EDIT: Adding cancel callback  for finished Promise
-                 */
-                if (this._cancelFinished) this._cancelFinished()
                 this._inEffect &&
                   ((this._inEffect = !1),
                   (this._idle = !0),

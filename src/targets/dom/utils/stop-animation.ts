@@ -2,5 +2,9 @@ import { AnimationWithCommitStyles } from "../types"
 
 export function stopAnimation(animation: AnimationWithCommitStyles) {
   animation.commitStyles()
-  animation.cancel()
+
+  // Suppress error thrown by WAAPI
+  try {
+    animation.cancel()
+  } catch (e) {}
 }

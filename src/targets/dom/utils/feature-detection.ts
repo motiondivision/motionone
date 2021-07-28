@@ -1,3 +1,6 @@
+const testAnimation = (keyframes: PropertyIndexedKeyframes) =>
+  document.createElement("div").animate(keyframes, { duration: 0.001 })
+
 const featureTests = {
   cssRegisterProperty: () =>
     typeof CSS !== "undefined" &&
@@ -5,14 +8,13 @@ const featureTests = {
   waapi: () => Object.hasOwnProperty.call(Element.prototype, "animate"),
   partialKeyframes: () => {
     try {
-      document
-        .createElement("div")
-        .animate({ opacity: [1] }, { duration: 0.001 })
+      testAnimation({ opacity: [1] })
     } catch (e) {
       return false
     }
     return true
   },
+  finished: () => Boolean(testAnimation({ opacity: [0, 1] }).finished),
 }
 
 const results = {}
@@ -21,6 +23,7 @@ interface FeatureTests {
   cssRegisterProperty: () => boolean
   waapi: () => boolean
   partialKeyframes: () => boolean
+  finished: () => boolean
 }
 
 export const supports = Object.keys(featureTests).reduce((acc, key) => {

@@ -111,23 +111,38 @@ export function animateValue(
       keyframes.unshift(initialKeyframe)
     }
 
+    /**
+     * TODO: Delete delay and endDelay if they're zero
+     */
+    const animationOptions = {
+      delay: ms(delay),
+      duration: ms(duration),
+      endDelay: ms(endDelay),
+      easing: !isEasingList(easing) ? convertEasing(easing) : undefined,
+      direction,
+      iterations: repeat + 1,
+    }
+
     const animation = element.animate(
       {
         [name]: keyframes,
         offset,
         easing: isEasingList(easing) ? convertEasingList(easing) : undefined,
       } as PropertyIndexedKeyframes,
-      {
-        delay: ms(delay),
-        duration: ms(duration),
-        endDelay: ms(endDelay),
-        easing: !isEasingList(easing) ? convertEasing(easing) : undefined,
-        direction,
-        iterations: repeat + 1,
-      }
+      animationOptions
     ) as AnimationWithCommitStyles
 
     data.activeAnimations[name] = animation
+
+    /**
+     * Polyfill finished Promise in browsers that don't support it
+     */
+    if (!animation.finished) {
+      ;(animation as any).finished = new Promise((resolve, reject) => {
+        animation.onfinish = resolve
+        animation.oncancel = reject
+      })
+    }
 
     animation.finished.then(() => render(target)).catch(noop)
 
