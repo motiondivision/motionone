@@ -12,9 +12,9 @@ import {
 } from "./utils/transforms"
 import { stopAnimation } from "./utils/stop-animation"
 import { convertEasing, convertEasingList, isEasingList } from "./utils/easing"
-import { isAnimationGenerator } from "../../generators"
 import { supports } from "./utils/feature-detection"
 import { createCssVariableRenderer, createStyleRenderer } from "./utils/apply"
+import { Animation } from "../js/Animation"
 
 export function animateValue(
   element: Element,
@@ -54,32 +54,21 @@ export function animateValue(
    * Check if this is an animation pregenerator and generate keyframes
    * if so.
    */
-  if (isAnimationGenerator(easing)) {
-    const generatedAnimation = easing.generate(keyframes)
-    easing = "linear"
+  // if (isAnimationGenerator(easing)) {
+  //   const generatedAnimation = easing.generate(keyframes)
+  //   easing = "linear"
 
-    if (generatedAnimation !== false) {
-      keyframes = generatedAnimation.keyframes
-      duration = generatedAnimation.duration
-    }
-  }
+  //   if (generatedAnimation !== false) {
+  //     keyframes = generatedAnimation.keyframes
+  //     duration = generatedAnimation.duration
+  //   }
+  // }
 
   /**
-   * Convert numbers to default value types. Currently this only supports
-   * transforms but it could also support other value types.
+   * Get definition of value, this will be used to convert numerical
+   * keyframes into the default value type.
    */
   const definition = transformPropertyDefinitions.get(name)
-  if (definition && definition.toDefaultUnit) {
-    keyframes = keyframes.map((value) =>
-      typeof value === "number" ? definition.toDefaultUnit!(value) : value
-    )
-  }
-
-  /**
-   * Use the last keyframe as a target we apply to style at the end of the
-   * animation.
-   */
-  const target = keyframes[keyframes.length - 1]
 
   /**
    * If this is a CSS variable we need to register it with the browser
@@ -104,6 +93,16 @@ export function animateValue(
    */
 
   if (canAnimateNatively) {
+    /**
+     * Convert numbers to default value types. Currently this only supports
+     * transforms but it could also support other value types.
+     */
+    if (definition && definition.toDefaultUnit) {
+      keyframes = keyframes.map((value) =>
+        typeof value === "number" ? definition.toDefaultUnit!(value) : value
+      )
+    }
+
     if (!supports.partialKeyframes() && keyframes.length === 1) {
       const initialKeyframe = isCssVar(name)
         ? (element as HTMLElement).style.getPropertyValue(name)
@@ -144,11 +143,19 @@ export function animateValue(
       })
     }
 
+    const target = keyframes[keyframes.length - 1]
     animation.finished.then(() => render(target)).catch(noop)
 
     return animation
+  } else if (valueIsTransform && keyframes.every(isNumber)) {
+    return new Animation(render, keyframes, options)
   } else {
-    render(target)
+    const target = keyframes[keyframes.length - 1]
+    render(
+      definition && typeof target === "number"
+        ? definition.toDefaultUnit(target)
+        : target
+    )
   }
 }
 
@@ -158,3 +165,6 @@ function stopCurrentAnimation(data: AnimationData, name: string) {
     data.activeAnimations[name] = undefined
   }
 }
+
+const isNumber = (value: string | number): value is number =>
+  typeof value === "number"

@@ -29,7 +29,7 @@ export function convertKeyframesToStyles(
      * to this type.
      */
     const definition = transformPropertyDefinitions.get(key)
-    if (definition && definition.toDefaultUnit) {
+    if (definition) {
       initialKeyframe =
         typeof value === "number" ? definition.toDefaultUnit!(value) : value
     }

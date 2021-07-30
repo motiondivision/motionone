@@ -1,4 +1,5 @@
 import { addUniqueItem } from "../../../utils/array"
+import { noopReturn } from "../../../utils/noop"
 import { getAnimationData } from "../data"
 import { CssPropertyDefinition, CssPropertyDefinitionMap } from "../types"
 
@@ -36,6 +37,7 @@ const baseTransformProperties: CssPropertyDefinitionMap = {
   scale: {
     syntax: "<number>",
     initialValue: 1,
+    toDefaultUnit: noopReturn,
   },
   skew: rotation,
 }

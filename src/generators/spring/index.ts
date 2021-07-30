@@ -1,4 +1,4 @@
-import { AnimationGenerator } from "../../targets/dom/types"
+import { KeyframeGenerator } from "../../targets/dom/types"
 import { makeAnimatable } from "../../utils/value-types"
 import { createSpringGenerator } from "./create"
 
@@ -25,8 +25,8 @@ export const spring = (
   damping: number = 15,
   mass: number = 1,
   velocity?: number
-): AnimationGenerator => ({
-  isAnimationGenerator: true,
+): KeyframeGenerator => ({
+  isKeyframeGenerator: true,
   generate: (definition) => {
     if (definition.length > 2) return false
 

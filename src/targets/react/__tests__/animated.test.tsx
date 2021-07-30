@@ -66,7 +66,7 @@ describe("animated", () => {
       const { rerender } = render(<Component />)
       rerender(<Component />)
 
-      setTimeout(() => reject(false), 50)
+      setTimeout(() => reject(false), 100)
     })
 
     return expect(promise).resolves.toBe(true)

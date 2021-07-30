@@ -4,12 +4,12 @@ export type BezierDefinition = [number, number, number, number]
 
 export interface CSSStyleDeclarationWithTransform
   extends Omit<CSSStyleDeclaration, "direction"> {
-  x: number | string
-  y: number | string
+  x: number
+  y: number
   z: number
-  rotateX: number | string
-  rotateY: number | string
-  rotateZ: number | string
+  rotateX: number
+  rotateY: number
+  rotateZ: number
   scaleX: number
   scaleY: number
   scaleZ: number
@@ -63,7 +63,7 @@ export type SpringOptions = {
 
 export type KeyframeOptions = {
   duration?: number
-  easing?: Easing | Easing[] | AnimationGenerator
+  easing?: Easing | Easing[]
   offset?: number[]
 }
 
@@ -94,7 +94,7 @@ export interface AnimationControls {
 export interface CssPropertyDefinition {
   syntax: `<${string}>`
   initialValue: string | number
-  toDefaultUnit?: (v: number) => string
+  toDefaultUnit: (v: number) => string | number
 }
 
 export type CssPropertyDefinitionMap = { [key: string]: CssPropertyDefinition }
@@ -104,7 +104,7 @@ export interface PregeneratedAnimation {
   duration: number
 }
 
-export interface AnimationGenerator {
-  isAnimationGenerator: true
+export interface KeyframeGenerator {
+  isKeyframeGenerator: true
   generate: (keyframes: Array<string | number>) => false | PregeneratedAnimation
 }

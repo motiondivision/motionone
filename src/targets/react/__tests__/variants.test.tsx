@@ -273,7 +273,7 @@ describe("Variants", () => {
       pointerEnter(getByTestId("parent") as Element)
       pointerLeave(getByTestId("parent") as Element)
 
-      setTimeout(() => reject(false), 50)
+      setTimeout(() => reject(false), 100)
     })
 
     return expect(promise).resolves.toEqual(true)

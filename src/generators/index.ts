@@ -1,10 +1,10 @@
-import { AnimationGenerator, Easing } from "../targets/dom/types"
+import { KeyframeGenerator, Easing } from "../targets/dom/types"
 
-export function isAnimationGenerator(
-  easing?: Easing | Easing[] | AnimationGenerator
-): easing is AnimationGenerator {
+export function isKeyframeGenerator(
+  easing?: Easing | Easing[] | KeyframeGenerator
+): easing is KeyframeGenerator {
   return (
     typeof easing === "object" &&
-    (easing as AnimationGenerator).isAnimationGenerator
+    (easing as KeyframeGenerator).isKeyframeGenerator
   )
 }
