@@ -14,7 +14,7 @@ import { stopAnimation } from "./utils/stop-animation"
 import { convertEasing, convertEasingList, isEasingList } from "./utils/easing"
 import { supports } from "./utils/feature-detection"
 import { createCssVariableRenderer, createStyleRenderer } from "./utils/apply"
-import { Animation } from "../js/Animation"
+// import { animateNumber } from "../js/animate-number"
 
 export function animateValue(
   element: Element,
@@ -97,7 +97,7 @@ export function animateValue(
      * Convert numbers to default value types. Currently this only supports
      * transforms but it could also support other value types.
      */
-    if (definition && definition.toDefaultUnit) {
+    if (definition) {
       keyframes = keyframes.map((value) =>
         typeof value === "number" ? definition.toDefaultUnit!(value) : value
       )
@@ -148,7 +148,7 @@ export function animateValue(
 
     return animation
   } else if (valueIsTransform && keyframes.every(isNumber)) {
-    return new Animation(render, keyframes, options)
+    // return animateNumber(render, keyframes, options)
   } else {
     const target = keyframes[keyframes.length - 1]
     render(
