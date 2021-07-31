@@ -106,5 +106,5 @@ export interface PregeneratedAnimation {
 
 export interface KeyframeGenerator {
   isKeyframeGenerator: true
-  generate: (keyframes: Array<string | number>) => false | PregeneratedAnimation
+  generate: (keyframes: number[]) => false | PregeneratedAnimation
 }

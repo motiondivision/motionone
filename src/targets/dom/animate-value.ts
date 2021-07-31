@@ -11,10 +11,10 @@ import {
   transformPropertyDefinitions,
 } from "./utils/transforms"
 import { stopAnimation } from "./utils/stop-animation"
-import { convertEasing, convertEasingList, isEasingList } from "./utils/easing"
+import { convertEasing, isEasingList } from "./utils/easing"
 import { supports } from "./utils/feature-detection"
 import { createCssVariableRenderer, createStyleRenderer } from "./utils/apply"
-// import { animateNumber } from "../js/animate-number"
+import { animateNumber } from "../js/animate-number"
 
 export function animateValue(
   element: Element,
@@ -110,9 +110,6 @@ export function animateValue(
       keyframes.unshift(initialKeyframe)
     }
 
-    /**
-     * TODO: Delete delay and endDelay if they're zero
-     */
     const animationOptions = {
       delay: ms(delay),
       duration: ms(duration),
@@ -126,7 +123,7 @@ export function animateValue(
       {
         [name]: keyframes,
         offset,
-        easing: isEasingList(easing) ? convertEasingList(easing) : undefined,
+        easing: isEasingList(easing) ? easing.map(convertEasing) : undefined,
       } as PropertyIndexedKeyframes,
       animationOptions
     ) as AnimationWithCommitStyles
@@ -148,7 +145,11 @@ export function animateValue(
 
     return animation
   } else if (valueIsTransform && keyframes.every(isNumber)) {
-    // return animateNumber(render, keyframes, options)
+    if (definition) {
+      const applyStyle = render
+      render = (v: number) => applyStyle(definition.toDefaultUnit(v))
+    }
+    return animateNumber(render, keyframes, options)
   } else {
     const target = keyframes[keyframes.length - 1]
     render(

@@ -95,6 +95,7 @@ const sizeAnimateDom = Object.assign({}, es, {
     dir: undefined,
   }),
   plugins: minPlugins,
+  external: ["react", "react-dom"],
 })
 
 const sizeSpring = Object.assign({}, es, {
@@ -105,6 +106,7 @@ const sizeSpring = Object.assign({}, es, {
     dir: undefined,
   }),
   plugins: minPlugins,
+  external: ["react", "react-dom"],
 })
 
 export default [umd, umdProd, cjs, es, sizeAnimateDom, sizeSpring, sizeReact]

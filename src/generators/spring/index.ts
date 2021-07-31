@@ -1,5 +1,4 @@
 import { KeyframeGenerator } from "../../targets/dom/types"
-import { makeAnimatable } from "../../utils/value-types"
 import { createSpringGenerator } from "./create"
 
 /**
@@ -27,19 +26,8 @@ export const spring = (
   velocity?: number
 ): KeyframeGenerator => ({
   isKeyframeGenerator: true,
-  generate: (definition) => {
-    if (definition.length > 2) return false
-
-    const keyframes: Array<number | string> = []
-
-    const animatable = makeAnimatable(
-      definition.length === 1 ? 0 : definition[0],
-      definition[1] ?? definition[0]
-    )
-
-    if (animatable === false) return false
-
-    const { from, to, toValueType } = animatable
+  generate: (keyframes) => {
+    if (keyframes.length > 2) return false
 
     if (velocity === undefined) {
       // TODO generate initial velocity from existing animation
@@ -50,8 +38,8 @@ export const spring = (
       damping,
       mass,
       velocity,
-      from,
-      to,
+      from: keyframes[0],
+      to: keyframes[1],
     })
     let isComplete = false
     let numPregeneratedKeyframes = 0
@@ -61,7 +49,7 @@ export const spring = (
       numPregeneratedKeyframes++
 
       const { value, done } = generator.next(t)
-      keyframes.push(toValueType ? toValueType(value) : value)
+      keyframes.push(value)
 
       t += pregenerationResolution
 

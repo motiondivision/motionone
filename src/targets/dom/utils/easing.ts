@@ -11,7 +11,5 @@ export const isEasingList = (easing: Easing | Easing[]): easing is Easing[] =>
 export const convertEasing = (easing: Easing) =>
   isCubicBezier(easing) ? cubicBezierAsString(easing) : easing
 
-export const convertEasingList = (easing: Easing[]) => easing.map(convertEasing)
-
 export const cubicBezierAsString = ([a, b, c, d]: BezierDefinition) =>
   `cubic-bezier(${a}, ${b}, ${c}, ${d})`

@@ -67,9 +67,8 @@ order.forEach((name) => {
 /**
  * A function to use with Array.sort to sort transform keys by their default order.
  */
-export function compareTransformOrder(a: string, b: string) {
-  return transforms.indexOf(a) - transforms.indexOf(b)
-}
+export const compareTransformOrder = (a: string, b: string) =>
+  transforms.indexOf(a) - transforms.indexOf(b)
 
 /**
  * Provide a quick way to check if a string is the name of a transform
