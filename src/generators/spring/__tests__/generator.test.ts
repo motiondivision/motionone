@@ -1,4 +1,4 @@
-import { spring } from "../"
+// import { spring } from "../"
 
 // function sampleKeyframes(keyframes: any[]) {
 //   const sampled: any[] = []
@@ -16,24 +16,7 @@ describe("spring", () => {
   //   expect(output).toEqual(false)
   // })
 
-  test("Returns false if provided keyframes of a different type", () => {
-    const generator = spring()
-    expect(generator.generate([0, "#fff"])).toEqual(false)
-    // expect(
-    //   generator.generate(["rgba(0, 0, 0, 0)", "hsla(100%, 100, 100)"])
-    // ).toEqual(false)
-    // expect(generator.generate(["100px", "200%"])).toEqual(false)
-
-    // expect(generator.generate(["100px", "200px"])).not.toEqual(false)
-
-    // // Allow unitless strings
-    // expect(generator.generate([100, "200"])).not.toEqual(false)
-
-    // // Allow interpolation between 0 and string/unit type
-    // expect(generator.generate(["100", 0])).not.toEqual(false)
-    // expect(generator.generate(["100px", 0])).not.toEqual(false)
-    // expect(generator.generate(["0", "100px"])).not.toEqual(false)
-  })
+  test("", () => {})
 
   // test("It generates numerical springs when provided two keyframes", () => {
   //   const generator = spring()

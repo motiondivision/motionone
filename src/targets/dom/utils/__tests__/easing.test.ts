@@ -1,8 +1,8 @@
 import {
+  convertEasing,
   cubicBezierAsString,
   isCubicBezier,
   isEasingList,
-  convertEasingList,
 } from "../easing"
 
 describe("cubicBezierAsString", () => {
@@ -34,7 +34,7 @@ describe("isEasingList", () => {
 describe("convertEasingList", () => {
   test("Converts bezier array to string", () => {
     expect(
-      convertEasingList(["steps(5, start)", [0, 1, 2, 3], "linear"])
+      ["steps(5, start)", [0, 1, 2, 3], "linear"].map(convertEasing as any)
     ).toEqual(["steps(5, start)", "cubic-bezier(0, 1, 2, 3)", "linear"])
   })
 })
