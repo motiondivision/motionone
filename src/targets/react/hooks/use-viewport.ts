@@ -1,34 +1,32 @@
 import { RefObject, useEffect } from "react"
-import { MotionKeyframes } from "../../dom/types"
-import {
-  AnimatedProps,
-  AnimationContextProps,
-  VariantActiveState,
-} from "../types"
+import { AnimationOptionsWithOverrides, MotionKeyframes } from "../../dom/types"
+import { AnimatedProps, AnimationContextProps, PoseActiveState } from "../types"
 import { useGestureState } from "./use-gesture-state"
 
 export function useViewport(
   ref: RefObject<Element>,
   target: MotionKeyframes,
+  options: AnimationOptionsWithOverrides,
   {
     inViewport,
-    variants,
+    poses,
     viewport = {},
     onViewportEnter,
     onViewportLeave,
   }: AnimatedProps,
   { inViewport: inheritedInViewport }: AnimationContextProps,
-  isVariantActive: VariantActiveState
+  isPoseActive: PoseActiveState
 ) {
   const { root, margin: rootMargin, once, threshold } = viewport
 
   const [isInViewport, setViewportState] = useGestureState(
     target,
+    options,
     inViewport,
     inheritedInViewport,
-    variants
+    poses
   )
-  isVariantActive.inViewport = isInViewport
+  isPoseActive.inViewport = isInViewport
 
   let shouldObserve = !!inViewport || !!onViewportEnter || !!onViewportLeave
   if (once && isInViewport) shouldObserve = false

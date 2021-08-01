@@ -57,7 +57,7 @@ function runTests(render: any) {
         exit={{ opacity: 1 }}
         inViewport={{ opacity: 1 }}
         inherit={false}
-        variants={{}}
+        poses={{}}
         viewport={{ margin: "100px" }}
         options={{ duration: 1 }}
         onStart={() => {}}
@@ -70,7 +70,7 @@ function runTests(render: any) {
     expect(div).toBe("<div></div>")
   })
 
-  test("Renders initial and style as variants", () => {
+  test("Renders initial and style as poses", () => {
     const html = render(
       <animated.div
         initial="foo"
@@ -79,7 +79,7 @@ function runTests(render: any) {
         press="litmus"
         inViewport="litmus"
         exit="litmus"
-        variants={{
+        poses={{
           foo: { opacity: 1, background: "red" },
           bar: { opacity: 0.5, width: "100px" },
           litmus: { opacity: 0.75 },
@@ -87,13 +87,13 @@ function runTests(render: any) {
       >
         <animated.article
           style={{ opacity: 1 }}
-          variants={{ foo: { opacity: 0.99 }, litmus: { background: "red" } }}
+          poses={{ foo: { opacity: 0.99 }, litmus: { background: "red" } }}
         >
-          <animated.span variants={{ bar: { opacity: 0.25 } }}>
-            <animated.div variants={{ foo: { opacity: 0.2 } }}>
+          <animated.span poses={{ bar: { opacity: 0.25 } }}>
+            <animated.div poses={{ foo: { opacity: 0.2 } }}>
               <animated.div
                 inherit={false}
-                variants={{ foo: { opacity: 0.3 } }}
+                poses={{ foo: { opacity: 0.3 } }}
               ></animated.div>
             </animated.div>
           </animated.span>

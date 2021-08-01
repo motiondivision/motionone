@@ -1,15 +1,16 @@
-import { AnimationOptions, MotionKeyframes } from "../../dom/types"
+import { AnimationOptionsWithOverrides, MotionKeyframes } from "../../dom/types"
 import { AnimationCallback, MotionCSSProperties } from "../types"
 import { RefObject, useEffect, useRef } from "react"
 import { animateValue } from "../../dom/animate-value"
 import { noop } from "../../../utils/noop"
 import { hasChanged } from "../utils/has-changed"
+import { getOptions } from "../../dom/utils/options"
 
 export function useAnimation(
   ref: RefObject<HTMLElement>,
   initial: MotionKeyframes | MotionCSSProperties,
   target: MotionKeyframes,
-  options?: AnimationOptions,
+  options: AnimationOptionsWithOverrides,
   onStart?: AnimationCallback,
   onComplete?: AnimationCallback
 ) {
@@ -42,7 +43,7 @@ export function useAnimation(
           ref.current,
           key,
           targetKeyframe[key]!,
-          options
+          getOptions(options, key)
         )
         animation && animations.push(animation)
       }

@@ -1,31 +1,29 @@
 import { HTMLProps } from "react"
-import { MotionKeyframes } from "../../dom/types"
-import {
-  AnimatedProps,
-  AnimationContextProps,
-  VariantActiveState,
-} from "../types"
+import { AnimationOptionsWithOverrides, MotionKeyframes } from "../../dom/types"
+import { AnimatedProps, AnimationContextProps, PoseActiveState } from "../types"
 import { useGestureState } from "./use-gesture-state"
 
 export function useHover(
   target: MotionKeyframes,
+  options: AnimationOptionsWithOverrides,
   {
     hover,
     onPointerEnter,
     onPointerLeave,
-    variants,
+    poses,
   }: AnimatedProps & HTMLProps<any> = {},
   { hover: inheritedHover }: AnimationContextProps,
-  isVariantActive: VariantActiveState
+  isPoseActive: PoseActiveState
 ): HTMLProps<any> {
   const [isHoverActive, setHoverState] = useGestureState(
     target,
+    options,
     hover,
     inheritedHover,
-    variants
+    poses
   )
 
-  isVariantActive.hover = isHoverActive
+  isPoseActive.hover = isHoverActive
 
   return hover
     ? {

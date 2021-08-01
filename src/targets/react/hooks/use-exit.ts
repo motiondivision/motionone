@@ -1,12 +1,14 @@
-import { MotionKeyframes } from "../../dom/types"
+import { AnimationOptionsWithOverrides, MotionKeyframes } from "../../dom/types"
 import { usePresence } from "framer-motion"
 import { useEffect } from "react"
 import { AnimatedProps, AnimationContextProps } from "../types"
-import { resolveVariant } from "../utils/variants"
+import { resolvePose } from "../utils/poses"
+import { updateTargetAndOptions } from "../utils/update-target"
 
 export function useExit(
   target: MotionKeyframes,
-  { exit, variants }: AnimatedProps,
+  options: AnimationOptionsWithOverrides,
+  { exit, poses }: AnimatedProps,
   { exit: inheritedExit }: AnimationContextProps
 ) {
   const [isPresent, onExitComplete] = usePresence()
@@ -21,7 +23,11 @@ export function useExit(
   }, [isPresent])
 
   if (exit && !isPresent) {
-    Object.assign(target, resolveVariant(exit, inheritedExit, variants))
+    updateTargetAndOptions(
+      target,
+      options,
+      resolvePose(exit, inheritedExit, poses)
+    )
     return onExitComplete
   }
 }

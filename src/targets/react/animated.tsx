@@ -4,7 +4,7 @@ import {
   AnimatedProps,
   AnimationContextProps,
   MotionCSSProperties,
-  VariantActiveState,
+  PoseActiveState,
 } from "./types"
 import { useAnimation } from "./hooks/use-animation"
 import { useHover } from "./hooks/use-hover"
@@ -12,7 +12,7 @@ import { usePress } from "./hooks/use-press"
 import { useExit } from "./hooks/use-exit"
 import { useViewport } from "./hooks/use-viewport"
 import { convertKeyframesToStyles } from "./utils/keyframes"
-import { resolveVariant } from "./utils/variants"
+import { resolvePose } from "./utils/poses"
 import { AnimationContext } from "./context"
 
 export function createAnimatedComponent<Props extends {}>(Component: string) {
@@ -24,7 +24,7 @@ export function createAnimatedComponent<Props extends {}>(Component: string) {
     const ref = useRef(null)
 
     const {
-      options = {},
+      options: defaultOptions,
       style,
       initial,
       hover,
@@ -32,7 +32,7 @@ export function createAnimatedComponent<Props extends {}>(Component: string) {
       exit,
       inViewport,
       viewport,
-      variants,
+      poses,
       onStart,
       onComplete,
       inherit = true,
@@ -40,25 +40,27 @@ export function createAnimatedComponent<Props extends {}>(Component: string) {
     } = props
 
     /**
-     * Track throughout the render which variants are considered active and should
+     * Track throughout the render which poses are considered active and should
      * be passed to children.
      */
-    const isVariantActive: VariantActiveState = { initial: true, style: true }
+    const isPoseActive: PoseActiveState = { initial: true, style: true }
 
     /**
-     * Inherit variants from the parent context,
+     * Inherit poses from the parent context,
      */
     let inherited = useContext(AnimationContext)
     if (!inherit) inherited = {}
 
-    const resolvedStyle = resolveVariant(style, inherited.style, variants)
-    const resolvedInitial = resolveVariant(
+    const resolvedStyle = resolvePose(style, inherited.style, poses)
+    const resolvedInitial = resolvePose(
       initial as any,
       inherited.initial,
-      variants
+      poses
     )
     const initialTarget = { ...resolvedStyle, ...resolvedInitial }
     const target = { ...resolvedInitial, ...resolvedStyle }
+
+    const options = { ...defaultOptions, ...resolvedStyle?.options }
 
     /**
      * If we haven't created a style prop for SSR yet (this is the initial render)
@@ -74,10 +76,10 @@ export function createAnimatedComponent<Props extends {}>(Component: string) {
      * active, for example if there's a hover and press gesture active the press
      * gesture will take precedence.
      */
-    const hoverProps = useHover(target, props, inherited, isVariantActive)
-    const pressProps = usePress(target, props, inherited, isVariantActive)
-    useViewport(ref, target, props, inherited, isVariantActive)
-    const onExitComplete = useExit(target, props, inherited)
+    const hoverProps = useHover(target, options, props, inherited, isPoseActive)
+    const pressProps = usePress(target, options, props, inherited, isPoseActive)
+    useViewport(ref, target, options, props, inherited, isPoseActive)
+    const onExitComplete = useExit(target, options, props, inherited)
 
     /**
      * Compare our final calculated style target with the one from the previous render
@@ -102,7 +104,7 @@ export function createAnimatedComponent<Props extends {}>(Component: string) {
     const context: AnimationContextProps = variantProps.reduce((acc, key) => {
       acc[key] = undefined
       if (props[key]) {
-        if (typeof props[key] === "string" && isVariantActive[key]) {
+        if (typeof props[key] === "string" && isPoseActive[key]) {
           acc[key] = props[key]
         }
       } else if (inherited[key]) {

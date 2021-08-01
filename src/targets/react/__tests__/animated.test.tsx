@@ -72,6 +72,26 @@ describe("animated", () => {
     return expect(promise).resolves.toBe(true)
   })
 
+  test("Style props can accept options override", async () => {
+    const promise = new Promise((resolve, reject) => {
+      const Component = () => (
+        <animated.div
+          initial={{ opacity: 0.4 }}
+          style={{ opacity: [0, 0.8], options: { duration } }}
+          onComplete={() => resolve(true)}
+          options={{ duration: 100 }}
+        />
+      )
+
+      const { rerender } = render(<Component />)
+      rerender(<Component />)
+
+      setTimeout(() => reject(false), 100)
+    })
+
+    return expect(promise).resolves.toBe(true)
+  })
+
   test("Animation doesn't run on mount if initial and style define different values", async () => {
     const promise = new Promise((resolve, reject) => {
       const Component = () => (
@@ -151,6 +171,27 @@ describe("animated", () => {
     return expect(promise).resolves.toEqual({ opacity: 0.3 })
   })
 
+  test("Hover accepts options", async () => {
+    const promise = new Promise((resolve, reject) => {
+      const Component = () => (
+        <animated.div
+          hover={{ opacity: 0.3, options: { duration } }}
+          options={{ duration: 100 }}
+          style={{ opacity: 0 }}
+          onComplete={(animation) => resolve(animation)}
+        />
+      )
+
+      const { container, rerender } = render(<Component />)
+      rerender(<Component />)
+
+      pointerEnter(container.firstChild as Element)
+      setTimeout(() => reject(), 100)
+    })
+
+    return expect(promise).resolves.toEqual({ opacity: 0.3 })
+  })
+
   test("Values animate back to style/initial when hover ends", async () => {
     const promise = new Promise((resolve, reject) => {
       const Component = () => (
@@ -181,6 +222,27 @@ describe("animated", () => {
         <animated.div
           press={{ opacity: [0.2, 0.3] }}
           options={{ duration }}
+          style={{ opacity: [0, 0.2] }}
+          onComplete={(animation) => resolve(animation)}
+        />
+      )
+
+      const { container, rerender } = render(<Component />)
+      rerender(<Component />)
+
+      pointerDown(container.firstChild as Element)
+      setTimeout(() => reject(), 50)
+    })
+
+    return expect(promise).resolves.toEqual({ opacity: [0.2, 0.3] })
+  })
+
+  test("Press accepts options", async () => {
+    const promise = new Promise((resolve, reject) => {
+      const Component = () => (
+        <animated.div
+          press={{ opacity: [0.2, 0.3], options: { duration } }}
+          options={{ duration: 100 }}
           style={{ opacity: [0, 0.2] }}
           onComplete={(animation) => resolve(animation)}
         />

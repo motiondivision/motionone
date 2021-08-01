@@ -1,25 +1,23 @@
 import { HTMLProps } from "react"
-import { MotionKeyframes } from "../../dom/types"
-import {
-  AnimatedProps,
-  AnimationContextProps,
-  VariantActiveState,
-} from "../types"
+import { AnimationOptionsWithOverrides, MotionKeyframes } from "../../dom/types"
+import { AnimatedProps, AnimationContextProps, PoseActiveState } from "../types"
 import { useGestureState } from "./use-gesture-state"
 
 export function usePress(
   target: MotionKeyframes,
-  { press, onPointerDown, variants }: AnimatedProps & HTMLProps<any> = {},
+  options: AnimationOptionsWithOverrides,
+  { press, onPointerDown, poses }: AnimatedProps & HTMLProps<any> = {},
   { press: inheritedPress }: AnimationContextProps,
-  isVariantActive: VariantActiveState
+  isPoseActive: PoseActiveState
 ): HTMLProps<any> {
   const [isPressActive, setPressState] = useGestureState(
     target,
+    options,
     press,
     inheritedPress,
-    variants
+    poses
   )
-  isVariantActive.press = isPressActive
+  isPoseActive.press = isPressActive
 
   if (!press) return {}
 

@@ -9,8 +9,13 @@ import {
   RefObject,
   SVGAttributes,
 } from "react"
-import { AnimationOptions, MotionKeyframes } from "../dom/types"
+import {
+  AnimationOptions,
+  AnimationOptionsWithOverrides,
+  MotionKeyframes,
+} from "../dom/types"
 import { svgElements, htmlElements } from "./utils/supported-elements"
+
 export type AnimationCallback = (target: MotionKeyframes) => void
 
 export interface CSSPropertiesWithTransform extends CSSProperties {
@@ -31,9 +36,13 @@ export type CSSVariables = {
   [key: `--${string}`]: string | number
 }
 
+export type MotionKeyframesWithOptions = MotionKeyframes & {
+  options?: AnimationOptionsWithOverrides
+}
+
 export type MotionCSSProperties = CSSPropertiesWithTransform & CSSVariables
 
-export type Variants = { [key: string]: MotionKeyframes }
+export type Poses = { [key: string]: MotionKeyframesWithOptions }
 
 export interface ViewportOptions {
   root?: RefObject<Element>
@@ -44,13 +53,13 @@ export interface ViewportOptions {
 
 export interface AnimatedProps {
   initial?: MotionCSSProperties | string
-  style?: MotionKeyframes | string
-  hover?: MotionKeyframes | string
-  press?: MotionKeyframes | string
-  exit?: MotionKeyframes | string
-  inViewport?: MotionKeyframes | string
+  style?: MotionKeyframesWithOptions | string
+  hover?: MotionKeyframesWithOptions | string
+  press?: MotionKeyframesWithOptions | string
+  exit?: MotionKeyframesWithOptions | string
+  inViewport?: MotionKeyframesWithOptions | string
   inherit?: boolean
-  variants?: Variants
+  poses?: Poses
   viewport?: ViewportOptions
   options?: AnimationOptions
   onStart?: AnimationCallback
@@ -59,7 +68,7 @@ export interface AnimatedProps {
   onViewportLeave?: (entry: IntersectionObserverEntry) => void
 }
 
-export type VariantProps = {
+export type PoseProps = {
   initial?: boolean
   style?: boolean
   hover?: boolean
@@ -69,11 +78,11 @@ export type VariantProps = {
 }
 
 export type AnimationContextProps = {
-  [K in keyof VariantProps]?: string
+  [K in keyof PoseProps]?: string
 }
 
-export type VariantActiveState = {
-  [K in keyof VariantProps]?: boolean
+export type PoseActiveState = {
+  [K in keyof PoseProps]?: boolean
 }
 
 type UnionStringArray<T extends Readonly<string[]>> = T[number]
