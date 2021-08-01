@@ -7,14 +7,15 @@
   "module": "dist/es/index.js",
   "types": "types/index.d.ts",
   "license": "MIT",
-  "repository": "https://github.com/mattgperry/motion",
+  "repository": "https://github.com/motiondivision/motion",
   "sideEffects": false,
   "keywords": [
     "motion",
     "animation",
     "bezier",
     "cubic bezier",
-    "easing"
+    "easing",
+    "waapi"
   ],
   "scripts": {
     "build": "rm -rf lib dist types && tsc -p . && rollup -c && bundlesize",
