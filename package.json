@@ -131,7 +131,7 @@
     },
     {
       "path": "./dist/size-react.js",
-      "maxSize": "4.1 kB"
+      "maxSize": "4.2 kB"
     }
   ]
 }
