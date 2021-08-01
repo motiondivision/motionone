@@ -145,6 +145,12 @@ export function animateStyle(
 
     return animation
   } else if (valueIsTransform && keyframes.every(isNumber)) {
+    if (keyframes.length === 1) {
+      keyframes.unshift(
+        parseFloat(getComputedStyle(element).getPropertyValue(name) || "0")
+      )
+    }
+
     if (definition) {
       const applyStyle = render
       render = (v: number) => applyStyle(definition.toDefaultUnit(v))
