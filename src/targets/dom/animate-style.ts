@@ -16,7 +16,7 @@ import { supports } from "./utils/feature-detection"
 import { createCssVariableRenderer, createStyleRenderer } from "./utils/apply"
 import { animateNumber } from "../js/animate-number"
 
-export function animateValue(
+export function animateStyle(
   element: Element,
   name: string,
   keyframes: string | number | Array<string | number>,

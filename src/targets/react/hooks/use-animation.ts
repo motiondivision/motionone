@@ -1,7 +1,7 @@
 import { AnimationOptionsWithOverrides, MotionKeyframes } from "../../dom/types"
 import { AnimationCallback, MotionCSSProperties } from "../types"
 import { RefObject, useEffect, useRef } from "react"
-import { animateValue } from "../../dom/animate-value"
+import { animateStyle } from "../../dom/animate-style"
 import { noop } from "../../../utils/noop"
 import { hasChanged } from "../utils/has-changed"
 import { getOptions } from "../../dom/utils/options"
@@ -39,7 +39,7 @@ export function useAnimation(
       onStart?.(targetKeyframe)
       const animations = []
       for (const key in targetKeyframe) {
-        const animation = animateValue(
+        const animation = animateStyle(
           ref.current,
           key,
           targetKeyframe[key]!,

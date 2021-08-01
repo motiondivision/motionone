@@ -24,7 +24,7 @@
     <div id="box"></div>
     <script src="../../dist/motion.umd.js"></script>
     <script>
-      const { animate, animateValue } = Motion
+      const { animate, animateStyle } = Motion
       const box = document.getElementById("box")
       const animation = animate(
         box,
@@ -61,11 +61,11 @@
       //   )
       // })
 
-      // animateValue(document.getElementById("box"), "translateX", 360, {
+      // animateStyle(document.getElementById("box"), "translateX", 360, {
       //   duration: 1,
       // })
       // setTimeout(() => {
-      //   animateValue(document.getElementById("box"), "rotate", 360, {
+      //   animateStyle(document.getElementById("box"), "rotate", 360, {
       //     duration: 1,
       //   })
       // }, 1000)

@@ -5,7 +5,7 @@ import {
   MotionKeyframes,
 } from "./types"
 import { stopAnimation } from "./utils/stop-animation"
-import { animateValue } from "./animate-value"
+import { animateStyle } from "./animate-style"
 import { getOptions } from "./utils/options"
 
 type AcceptedElements = Element | Element[] | NodeListOf<Element> | string
@@ -36,7 +36,7 @@ export function animate(
         valueOptions.delay += stagger * i
       }
 
-      const animation = animateValue(
+      const animation = animateStyle(
         element,
         key,
         keyframes[key]!,
