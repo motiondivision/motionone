@@ -23,3 +23,4 @@ A huge thank you to all sponsors of this project, with a special shoutout to:
 - [Vlad Gorodetsky](https://github.com/bai)
 - [Alex Frazer](https://github.com/AlexFrazer)
 - [Derek Reynolds](https://github.com/derekr)
+- [Martin Pitt](https://github.com/Martin-Pitt)
