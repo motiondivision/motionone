@@ -1,6 +1,8 @@
 *
 **/*
 !dist/**
-!src/**
 !types/**
+!react/**
+!vue/**
+!svelte/**
 !LICENSE.md
