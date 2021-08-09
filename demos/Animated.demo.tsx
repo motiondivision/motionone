@@ -1,17 +1,17 @@
 import React from "react"
 import { Story, Meta } from "@storybook/react"
 
-import { Box, BoxProps } from "./Timeline"
+import { InViewport, InViewportProps } from "./Animated"
 
 export default {
-  title: "Timeline/Box",
-  component: Box,
+  title: "Animated/inViewport",
+  component: InViewport,
   argTypes: {
     backgroundColor: { control: "color" },
   },
 } as Meta
 
-const Template: Story<BoxProps> = (args) => <Box {...args} />
+const Template: Story<InViewport> = (args) => <InViewport {...args} />
 
 export const Primary = Template.bind({})
 Primary.args = {}

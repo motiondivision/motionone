@@ -21,7 +21,7 @@ export function animate(
   {
     stagger = 0,
     ...options
-  }: AnimationOptionsWithOverrides & { stagger?: number }
+  }: AnimationOptionsWithOverrides & { stagger?: number } = {}
 ): AnimationControls {
   elements = resolveElements(elements)
 

@@ -35,6 +35,8 @@ export function createAnimatedComponent<Props extends {}>(Component: string) {
       poses,
       onStart,
       onComplete,
+      onViewportEnter,
+      onViewportLeave,
       inherit = true,
       ...forwardProps
     } = props

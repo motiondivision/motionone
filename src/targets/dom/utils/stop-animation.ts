@@ -4,10 +4,9 @@ export interface WithCommitStyles {
 }
 
 export function stopAnimation(animation: WithCommitStyles) {
-  animation.commitStyles()
-
   // Suppress error thrown by WAAPI
   try {
+    animation.commitStyles()
     animation.cancel()
   } catch (e) {}
 }
