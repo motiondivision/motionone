@@ -1,5 +1,9 @@
 import { AnimationData, getAnimationData } from "./data"
-import { AnimationOptions, AnimationWithCommitStyles } from "./types"
+import {
+  AnimationOptions,
+  AnimationWithCommitStyles,
+  ValueKeyframesDefinition,
+} from "./types"
 import { isCssVar, registerCssVariable } from "./utils/css-var"
 import { noop } from "../../utils/noop"
 import { ms } from "./utils/time"
@@ -15,11 +19,13 @@ import { convertEasing, isEasingList } from "./utils/easing"
 import { supports } from "./utils/feature-detection"
 import { createCssVariableRenderer, createStyleRenderer } from "./utils/apply"
 import { animateNumber } from "../js/animate-number"
+import { hydrateKeyframes } from "./utils/keyframes"
+import { style } from "./style"
 
 export function animateStyle(
   element: Element,
   name: string,
-  keyframes: string | number | Array<string | number>,
+  keyframesDefinition: ValueKeyframesDefinition,
   options: AnimationOptions = {}
 ) {
   let {
@@ -36,7 +42,9 @@ export function animateStyle(
   let render: (v: any) => void = noop
   const valueIsTransform = isTransform(name)
 
-  keyframes = Array.isArray(keyframes) ? keyframes : [keyframes]
+  keyframesDefinition = Array.isArray(keyframesDefinition)
+    ? keyframesDefinition
+    : [keyframesDefinition]
 
   /**
    * If this is an individual transform, we need to map its
@@ -49,20 +57,6 @@ export function animateStyle(
   }
 
   stopCurrentAnimation(data, name)
-
-  /**
-   * Check if this is an animation pregenerator and generate keyframes
-   * if so.
-   */
-  // if (isAnimationGenerator(easing)) {
-  //   const generatedAnimation = easing.generate(keyframes)
-  //   easing = "linear"
-
-  //   if (generatedAnimation !== false) {
-  //     keyframes = generatedAnimation.keyframes
-  //     duration = generatedAnimation.duration
-  //   }
-  // }
 
   /**
    * Get definition of value, this will be used to convert numerical
@@ -88,10 +82,15 @@ export function animateStyle(
   }
 
   /**
+   * Replace null values with the previous keyframe value, or read
+   * it from the DOM if it's the first keyframe.
+   */
+  let keyframes = hydrateKeyframes(keyframesDefinition, element, name)
+
+  /**
    * If we can animate this value with WAAPI, do so. Currently this only
    * feature detects CSS.registerProperty but could check WAAPI too.
    */
-
   if (canAnimateNatively) {
     /**
      * Convert numbers to default value types. Currently this only supports
@@ -147,15 +146,25 @@ export function animateStyle(
   } else if (valueIsTransform && keyframes.every(isNumber)) {
     if (keyframes.length === 1) {
       keyframes.unshift(
-        parseFloat(getComputedStyle(element).getPropertyValue(name) || "0")
+        style.get(element, name) || definition?.initialValue || 0
       )
     }
+
+    /**
+     * Transform styles are currently only accepted as numbers of
+     * their default value type, so here we loop through and map
+     * them to numbers.
+     */
+    keyframes = keyframes.map((value) =>
+      typeof value === "string" ? parseFloat(value) : value
+    )
 
     if (definition) {
       const applyStyle = render
       render = (v: number) => applyStyle(definition.toDefaultUnit(v))
     }
-    return animateNumber(render, keyframes, options)
+
+    return animateNumber(render, keyframes as any, options)
   } else {
     const target = keyframes[keyframes.length - 1]
     render(

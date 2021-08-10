@@ -2,7 +2,7 @@ import {
   AnimationControls,
   AnimationOptionsWithOverrides,
   AnimationWithCommitStyles,
-  MotionKeyframes,
+  MotionKeyframesDefinition,
 } from "./types"
 import { stopAnimation } from "./utils/stop-animation"
 import { animateStyle } from "./animate-style"
@@ -17,7 +17,7 @@ interface AnimationState {
 
 export function animate(
   elements: AcceptedElements,
-  keyframes: MotionKeyframes,
+  keyframes: MotionKeyframesDefinition,
   {
     stagger = 0,
     ...options
