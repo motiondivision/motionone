@@ -1,4 +1,5 @@
 import {
+  AcceptedElements,
   AnimationControls,
   AnimationOptionsWithOverrides,
   AnimationWithCommitStyles,
@@ -7,8 +8,7 @@ import {
 import { stopAnimation } from "./utils/stop-animation"
 import { animateStyle } from "./animate-style"
 import { getOptions } from "./utils/options"
-
-type AcceptedElements = Element | Element[] | NodeListOf<Element> | string
+import { resolveElements } from "./utils/resolve-elements"
 
 interface AnimationState {
   animations: AnimationWithCommitStyles[]
@@ -54,17 +54,7 @@ export function animate(
   return new Proxy(state, controls) as AnimationControls
 }
 
-function resolveElements(elements: AcceptedElements): Element[] {
-  if (typeof elements === "string") {
-    elements = document.querySelectorAll(elements)
-  } else if (elements instanceof Element) {
-    elements = [elements]
-  }
-
-  return Array.from(elements)
-}
-
-const controls = {
+export const controls = {
   get: (target: AnimationState, key: string) => {
     switch (key) {
       case "finished":

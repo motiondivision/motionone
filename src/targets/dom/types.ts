@@ -1,5 +1,11 @@
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
+export type AcceptedElements =
+  | Element
+  | Element[]
+  | NodeListOf<Element>
+  | string
+
 export type BezierDefinition = [number, number, number, number]
 
 export interface CSSStyleDeclarationWithTransform

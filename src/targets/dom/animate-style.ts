@@ -21,6 +21,7 @@ import { createCssVariableRenderer, createStyleRenderer } from "./utils/apply"
 import { animateNumber } from "../js/animate-number"
 import { hydrateKeyframes } from "./utils/keyframes"
 import { style } from "./style"
+import { defaults } from "./utils/defaults"
 
 export function animateStyle(
   element: Element,
@@ -28,12 +29,13 @@ export function animateStyle(
   keyframesDefinition: ValueKeyframesDefinition,
   options: AnimationOptions = {}
 ) {
+  // TODO: Merge in defaults
   let {
-    duration = 0.3,
-    delay = 0,
-    endDelay = 0,
-    repeat = 0,
-    easing = "ease",
+    duration = defaults.duration,
+    delay = defaults.delay,
+    endDelay = defaults.endDelay,
+    repeat = defaults.repeat,
+    easing = defaults.easing,
     direction,
     offset,
   } = options
@@ -103,10 +105,7 @@ export function animateStyle(
     }
 
     if (!supports.partialKeyframes() && keyframes.length === 1) {
-      const initialKeyframe = isCssVar(name)
-        ? (element as HTMLElement).style.getPropertyValue(name)
-        : getComputedStyle(element)[name]
-      keyframes.unshift(initialKeyframe)
+      keyframes.unshift(style.get(element, name))
     }
 
     const animationOptions = {

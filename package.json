@@ -126,6 +126,10 @@
       "maxSize": "3.15 kB"
     },
     {
+      "path": "./dist/size-timeline-dom.js",
+      "maxSize": "3.5 kB"
+    },
+    {
       "path": "./dist/size-spring.js",
       "maxSize": "0.6 kB"
     },

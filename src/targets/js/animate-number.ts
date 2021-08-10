@@ -1,4 +1,5 @@
-import { AnimationControls, AnimationOptions } from "../dom/types"
+import { AnimationControls, AnimationOptions, Easing } from "../dom/types"
+import { defaults } from "../dom/utils/defaults"
 import { isEasingList } from "../dom/utils/easing"
 import { ms } from "../dom/utils/time"
 import { getEasingFunction } from "./easing/get-function"
@@ -26,13 +27,14 @@ export class Animation implements Omit<AnimationControls, "stop"> {
   constructor(
     output: (v: number) => void,
     keyframes: number[],
+    // TODO Merge in defaults
     {
-      easing = "ease",
-      duration = 0.3,
-      delay = 0,
-      endDelay = 0,
+      easing = defaults.easing as Easing,
+      duration = defaults.duration,
+      delay = defaults.delay,
+      endDelay = defaults.endDelay,
       offset,
-      repeat = 0,
+      repeat = defaults.repeat,
       direction = "normal",
     }: AnimationOptions
   ) {
