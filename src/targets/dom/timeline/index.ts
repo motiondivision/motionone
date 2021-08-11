@@ -100,6 +100,10 @@ export function createAnimationsFromTimeline(
         } = valueOptions
         const targetTime = currentTime + duration
 
+        if (offset.length === 1 && offset[0] === 0) {
+          offset[1] = 1
+        }
+
         /**
          * Fill out if offset if fewer offsets than keyframes
          */
@@ -141,6 +145,7 @@ export function createAnimationsFromTimeline(
       valueSequence.sort(compareByTime)
       const keyframes = []
       const options = {
+        duration: totalDuration,
         offset: [] as number[],
         easing: [] as Easing[],
       }
@@ -150,9 +155,9 @@ export function createAnimationsFromTimeline(
         keyframes.push(value)
         options.offset.push(progress(0, totalDuration, at))
         options.easing.push(easing || defaults.easing)
-
-        animationDefinitions.push([element, key, keyframes, options])
       }
+
+      animationDefinitions.push([element, key, keyframes, options])
     }
   })
 

@@ -12,7 +12,30 @@ describe("createAnimationsFromTimeline", () => {
     ])
 
     expect(animations.length).toBe(1)
-    expect(animations).toEqual([[a, "opacity", [null, 1], { duration: 1 }]])
+    expect(animations).toEqual([
+      [
+        a,
+        "opacity",
+        [null, 1],
+        { duration: 1, easing: ["ease", "ease"], offset: [0, 1] },
+      ],
+    ])
+  })
+
+  test("It creates a single animation with defaults", () => {
+    const animations = createAnimationsFromTimeline([
+      [a, { opacity: 1 }, { duration: 1 }],
+    ])
+
+    expect(animations.length).toBe(1)
+    expect(animations).toEqual([
+      [
+        a,
+        "opacity",
+        [null, 1],
+        { duration: 1, easing: ["ease", "ease"], offset: [0, 1] },
+      ],
+    ])
   })
 
   test("It sequences one animation after another", () => {})

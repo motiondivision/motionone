@@ -45,16 +45,6 @@ export function animateStyle(
   const valueIsTransform = isTransform(name)
 
   /**
-   * Replace null values with the previous keyframe value, or read
-   * it from the DOM if it's the first keyframe.
-   */
-  let keyframes = hydrateKeyframes(
-    keyframesList(keyframesDefinition),
-    element,
-    name
-  )
-
-  /**
    * If this is an individual transform, we need to map its
    * key to a CSS variable and update the element's transform style
    */
@@ -64,13 +54,27 @@ export function animateStyle(
     name = asTransformCssVar(name)
   }
 
-  stopCurrentAnimation(data, name)
-
   /**
    * Get definition of value, this will be used to convert numerical
    * keyframes into the default value type.
    */
   const definition = transformPropertyDefinitions.get(name)
+
+  /**
+   * Replace null values with the previous keyframe value, or read
+   * it from the DOM if it's the first keyframe.
+   *
+   * TODO: This needs to come after the valueIsTransform
+   * check so it can correctly read the underlying value.
+   * Should make a test for this.
+   */
+  let keyframes = hydrateKeyframes(
+    keyframesList(keyframesDefinition),
+    element,
+    name
+  )
+
+  stopCurrentAnimation(data, name)
 
   /**
    * If this is a CSS variable we need to register it with the browser
