@@ -19,7 +19,7 @@ import { convertEasing, isEasingList } from "./utils/easing"
 import { supports } from "./utils/feature-detection"
 import { createCssVariableRenderer, createStyleRenderer } from "./utils/apply"
 import { animateNumber } from "../js/animate-number"
-import { hydrateKeyframes } from "./utils/keyframes"
+import { hydrateKeyframes, keyframesList } from "./utils/keyframes"
 import { style } from "./style"
 import { defaults } from "./utils/defaults"
 
@@ -44,9 +44,15 @@ export function animateStyle(
   let render: (v: any) => void = noop
   const valueIsTransform = isTransform(name)
 
-  keyframesDefinition = Array.isArray(keyframesDefinition)
-    ? keyframesDefinition
-    : [keyframesDefinition]
+  /**
+   * Replace null values with the previous keyframe value, or read
+   * it from the DOM if it's the first keyframe.
+   */
+  let keyframes = hydrateKeyframes(
+    keyframesList(keyframesDefinition),
+    element,
+    name
+  )
 
   /**
    * If this is an individual transform, we need to map its
@@ -82,12 +88,6 @@ export function animateStyle(
   } else {
     render = createStyleRenderer(element, name)
   }
-
-  /**
-   * Replace null values with the previous keyframe value, or read
-   * it from the DOM if it's the first keyframe.
-   */
-  let keyframes = hydrateKeyframes(keyframesDefinition, element, name)
 
   /**
    * If we can animate this value with WAAPI, do so. Currently this only

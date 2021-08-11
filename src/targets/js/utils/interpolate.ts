@@ -1,22 +1,10 @@
-import { mix, progress, wrap } from "popmotion"
+import { mix, progress } from "popmotion"
 import { noopReturn } from "../../../utils/noop"
 import { EasingFunction } from "../types"
+import { getEasingForSegment } from "./get-easing"
+import { defaultOffset, fillOffset } from "./offset"
 
 const clampProgress = (p: number) => Math.min(1, Math.max(p, 0))
-
-export function fillOffset(offset: number[], remaining: number) {
-  const min = offset[offset.length - 1]
-  for (let i = 1; i <= remaining; i++) {
-    const offsetProgress = progress(0, remaining, i)
-    offset.push(mix(min, 1, offsetProgress))
-  }
-}
-
-export function defaultOffset(length: number): number[] {
-  const offset = [0]
-  fillOffset(offset, length - 1)
-  return offset
-}
 
 export function slowInterpolateNumbers(
   output: number[],
@@ -41,13 +29,8 @@ export function slowInterpolateNumbers(
     }
 
     let progressInRange = clampProgress(progress(input[i], input[i + 1], t))
-
-    if (Array.isArray(easing)) {
-      const easingIndex = wrap(0, easing.length - 1, i)
-      progressInRange = easing[easingIndex](progressInRange)
-    } else {
-      progressInRange = easing(progressInRange)
-    }
+    const segmentEasing = getEasingForSegment(easing, i)
+    progressInRange = segmentEasing(progressInRange)
 
     return mix(output[i], output[i + 1], progressInRange)
   }

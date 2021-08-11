@@ -14,6 +14,10 @@ console.error = jest.fn()
 
 const duration = 0.001
 
+/**
+ * TODO: Where first/last value is null
+ */
+
 describe("animated", () => {
   test("Types are correct", async () => {
     const promise = new Promise((resolve) => {

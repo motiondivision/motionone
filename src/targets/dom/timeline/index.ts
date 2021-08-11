@@ -1,62 +1,129 @@
-import { controls } from "../animate"
+import { progress } from "popmotion"
+import { defaultOffset, fillOffset } from "../../js/utils/offset"
 import { animateStyle } from "../animate-style"
-import { AnimationControls, AnimationWithCommitStyles } from "../types"
+import {
+  AnimationOptions,
+  AnimationWithCommitStyles,
+  Easing,
+  ValueKeyframesDefinition,
+} from "../types"
+import { createAnimationControls } from "../utils/controls"
 import { defaults } from "../utils/defaults"
+import { keyframesList } from "../utils/keyframes"
 import { getOptions } from "../utils/options"
 import { resolveElements } from "../utils/resolve-elements"
-import { TimelineDefinition } from "./types"
+import { ElementSequence, TimelineDefinition, ValueSequence } from "./types"
 import { calcNextTime } from "./utils/calc-time"
+import { addKeyframes } from "./utils/edit"
+import { compareByTime } from "./utils/sort"
 
-interface ElementSequence {
-  [key: string]: ValueSequence
-}
-
-type AbsoluteKeyframe = [string | number, number]
-
-type ValueSequence = AbsoluteKeyframe[]
+type AnimateStyleDefinition = [
+  Element,
+  string,
+  ValueKeyframesDefinition,
+  AnimationOptions
+]
 
 export function timeline(...definition: TimelineDefinition) {
   const animations: AnimationWithCommitStyles[] = []
+
+  const animationDefinitions = createAnimationsFromTimeline(definition)
+  for (let i = 0; i < animationDefinitions.length; i++) {
+    const animation = animateStyle(...animationDefinitions[i])
+    animation && animations.push(animation as any)
+  }
+
+  return createAnimationControls(animations)
+}
+
+export function createAnimationsFromTimeline(
+  definition: TimelineDefinition
+): AnimateStyleDefinition[] {
+  const animationDefinitions: AnimateStyleDefinition[] = []
   const elementSequences = new Map<Element, ElementSequence>()
+  const elementCache = {}
   const timeLabels = new Map<string, number>()
+
   let currentTime = 0
   let totalDuration = 0
 
-  // Build the timeline
+  /**
+   * Build the timeline by mapping over the definition array and converting
+   * the definitions into keyframes and offsets with absolute time values.
+   * These will later get converted into relative offsets in a second pass.
+   */
   for (let i = 0; i < definition.length; i++) {
     const [elementDefinition, keyframes, options = {}, nextTime] = definition[i]
 
-    if (nextTime) {
+    /**
+     * If a relative or absolute time value has been specified we need to resolve
+     * it in relation to the currentTime.
+     */
+    if (nextTime !== undefined) {
       currentTime = calcNextTime(currentTime, nextTime, timeLabels)
     }
 
+    /**
+     * Keep track of the maximum duration in this definition. This will be
+     * applied to currentTime once the definition has been parsed.
+     */
     let maxDuration = 0
 
-    // TODO: This code has a lot in common with animate
-    // TODO: This can be safely cached within the timeline definition
-    const elements = resolveElements(elementDefinition)
+    /**
+     * Find all the elements specified in the definition and parse value
+     * keyframes from their timeline definitions.
+     *
+     * TODO:
+     *  - This code has a lot in common with animate, can it be DRYer to
+     *    save on size? Perhaps computationally more expensive but overall
+     *    cheaper, it could be possible for animate to call timeline simply as:
+     *    timeline([elementDefinition, keyframes, options])
+     *    Though this would increase minimum bundlesize.
+     */
+    const elements = resolveElements(elementDefinition, elementCache)
     for (
       let elementsIndex = 0;
       elementsIndex < elements.length;
       elementsIndex++
     ) {
-      const element = elements[i]
+      const element = elements[elementsIndex]
       const elementSequence = getElementSequence(element, elementSequences)
 
       for (const key in keyframes) {
-        const valueOptions = getOptions(options, key)
         const valueSequence = getValueSequence(key, elementSequence)
-        const duration = valueOptions.duration ?? defaults.duration
+        const valueKeyframes = keyframesList(keyframes[key]!)
+        const valueOptions = getOptions(options, key)
+        const {
+          duration = defaults.duration,
+          easing = defaults.easing,
+          offset = defaultOffset(valueKeyframes.length),
+        } = valueOptions
         const targetTime = currentTime + duration
 
         /**
-         * TODO:
-         *  - If this is a single target, we want to set null at 0 and target at 1
-         *  - If this is a simple array syntax we probably want to map 0-1 offsets throughout
-         * the range between currentTime and targetTime
-         * -  Get easing from valueOptions
+         * Fill out if offset if fewer offsets than keyframes
          */
-        valueSequence.push([keyframes[key]! as string, targetTime])
+        const remainder = length - valueKeyframes.length
+        remainder > 0 && fillOffset(offset, remainder)
+
+        /**
+         * If only one value has been set, ie [1], push a null to the start of
+         * the keyframe array. This will let us mark a keyframe at this point
+         * that will later be hydrated with the previous value.
+         */
+        valueKeyframes.length === 1 && valueKeyframes.unshift(null)
+
+        /**
+         * Add keyframes, mapping offsets to absolute time.
+         */
+        addKeyframes(
+          valueSequence,
+          valueKeyframes,
+          easing,
+          offset,
+          currentTime,
+          targetTime
+        )
 
         maxDuration = Math.max(duration, maxDuration)
         totalDuration = Math.max(targetTime, totalDuration)
@@ -68,37 +135,28 @@ export function timeline(...definition: TimelineDefinition) {
 
   // Loop over all element timelines and all values
   // Create animations and offsets based on value @ times
-  elementSequences.forEach((sequence, element) => {
-    for (const key in sequence) {
-      const valueSequence = sequence[key]
+  elementSequences.forEach((valueSequences, element) => {
+    for (const key in valueSequences) {
+      const valueSequence = valueSequences[key]
       valueSequence.sort(compareByTime)
       const keyframes = []
-      const offsets = []
-      // TODO: Loop backwards through keyframes - if encounter null,
-      // take next (previous) value, or leave as null if at index 0
-      // Then support null in animateStyle
+      const options = {
+        offset: [] as number[],
+        easing: [] as Easing[],
+      }
+
       for (let i = 0; i < valueSequence.length; i++) {
-        const [value, absoluteOffset] = valueSequence[i]
+        const { at, value, easing } = valueSequence[i]
         keyframes.push(value)
-        offsets.push(absoluteOffset)
-        // TODO Get easing
-        const animation = animateStyle(
-          element,
-          key,
-          keyframes
-          // valueOptions
-        )
-        animation && animations.push(animation as any)
+        options.offset.push(progress(0, totalDuration, at))
+        options.easing.push(easing || defaults.easing)
+
+        animationDefinitions.push([element, key, keyframes, options])
       }
     }
   })
 
-  // TODO Duplication with animate
-  const state = {
-    animations,
-    finished: Promise.all(animations.map((animation) => animation.finished)),
-  } as any
-  return new Proxy(state, controls) as AnimationControls
+  return animationDefinitions
 }
 
 function getElementSequence(
@@ -116,6 +174,3 @@ function getValueSequence(
   if (!sequences[name]) sequences[name] = []
   return sequences[name]
 }
-
-const compareByTime = (a: AbsoluteKeyframe, b: AbsoluteKeyframe): number =>
-  a[1] - b[1]

@@ -116,6 +116,11 @@ const sizeAnimateDom = createSizeBuild({
   output: "dist/size-animate-dom.js",
 })
 
+const sizeAnimateStyle = createSizeBuild({
+  input: "lib/targets/dom/animate-style.js",
+  output: "dist/size-animate-style.js",
+})
+
 const sizeTimelineDom = createSizeBuild({
   input: "lib/targets/dom/timeline/index.js",
   output: "dist/size-timeline-dom.js",
@@ -132,6 +137,7 @@ export default [
   umdProd,
   sizeAnimateDom,
   sizeTimelineDom,
+  sizeAnimateStyle,
   sizeSpring,
   sizeReact,
 ]
