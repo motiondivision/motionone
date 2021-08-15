@@ -29,7 +29,6 @@ export function animateStyle(
   keyframesDefinition: ValueKeyframesDefinition,
   options: AnimationOptions = {}
 ) {
-  console.log(name, keyframesDefinition, options)
   // TODO: Merge in defaults
   let {
     duration = defaults.duration,

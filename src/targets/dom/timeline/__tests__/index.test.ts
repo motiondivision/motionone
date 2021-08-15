@@ -1,4 +1,5 @@
 import { createAnimationsFromTimeline } from "../"
+import { stagger } from "../../../../utils/stagger"
 
 describe("createAnimationsFromTimeline", () => {
   const a = document.createElement("div")
@@ -215,7 +216,7 @@ describe("createAnimationsFromTimeline", () => {
 
   test("It creates multiple animations, staggered", () => {
     const animations = createAnimationsFromTimeline([
-      [[a, b, c], { x: 1 }, { stagger: 1, duration: 1 }],
+      [[a, b, c], { x: 1 }, { delay: stagger(1), duration: 1 }],
       [a, { opacity: 1 }, { duration: 1 }],
     ])
 

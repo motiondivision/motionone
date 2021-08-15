@@ -1,4 +1,5 @@
 import { progress } from "popmotion"
+import { resolveOption } from "../../../utils/stagger"
 import { defaultOffset, fillOffset } from "../../js/utils/offset"
 import { animateStyle } from "../animate-style"
 import {
@@ -32,10 +33,13 @@ export type TimelineOptions = PlaybackOptions & {
   defaultOptions?: AnimationOptionsWithOverrides
 }
 
-export function timeline(definition: TimelineDefinition) {
+export function timeline(
+  definition: TimelineDefinition,
+  options: TimelineOptions = {}
+) {
   const animations: AnimationWithCommitStyles[] = []
 
-  const animationDefinitions = createAnimationsFromTimeline(definition)
+  const animationDefinitions = createAnimationsFromTimeline(definition, options)
   for (let i = 0; i < animationDefinitions.length; i++) {
     const animation = animateStyle(...animationDefinitions[i])
     animation && animations.push(animation as any)
@@ -83,7 +87,8 @@ export function createAnimationsFromTimeline(
      * keyframes from their timeline definitions.
      */
     const elements = resolveElements(elementDefinition, elementCache)
-    for (let elementIndex = 0; elementIndex < elements.length; elementIndex++) {
+    const numElements = elements.length
+    for (let elementIndex = 0; elementIndex < numElements; elementIndex++) {
       const element = elements[elementIndex]
       const elementSequence = getElementSequence(element, elementSequences)
 
@@ -97,7 +102,8 @@ export function createAnimationsFromTimeline(
           offset = defaultOffset(valueKeyframes.length),
         } = valueOptions
 
-        const delay = (options.stagger || 0) * elementIndex
+        const delay =
+          resolveOption(options.delay, elementIndex, numElements) || 0
         const startTime = currentTime + delay
         const targetTime = startTime + duration
 

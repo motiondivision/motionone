@@ -1,3 +1,4 @@
+import { OptionResolver } from "../../utils/stagger"
 import { NextTime } from "./timeline/types"
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
@@ -108,8 +109,11 @@ export interface AnimationWithCommitStyles extends Animation {
   commitStyles: () => void
 }
 
-export type AnimationListOptions = AnimationOptionsWithOverrides & {
-  stagger?: number
+export type AnimationListOptions = Omit<
+  AnimationOptionsWithOverrides,
+  "delay"
+> & {
+  delay?: number | OptionResolver<number>
   at?: NextTime
 }
 

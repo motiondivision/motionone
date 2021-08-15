@@ -9,24 +9,23 @@ import { animateStyle } from "./animate-style"
 import { getOptions } from "./utils/options"
 import { resolveElements } from "./utils/resolve-elements"
 import { createAnimationControls } from "./utils/controls"
+import { resolveOption } from "../../utils/stagger"
 
 export function animate(
   elements: AcceptedElements,
   keyframes: MotionKeyframesDefinition,
-  { stagger = 0, ...options }: AnimationListOptions = {}
+  options: AnimationListOptions = {}
 ): AnimationControls {
   elements = resolveElements(elements)
 
   const animations: AnimationWithCommitStyles[] = []
-  for (let i = 0; i < elements.length; i++) {
+  const numElements = elements.length
+  for (let i = 0; i < numElements; i++) {
     const element = elements[i]
 
     for (const key in keyframes) {
       const valueOptions = getOptions(options, key)
-      if (stagger) {
-        valueOptions.delay ||= 0
-        valueOptions.delay += stagger * i
-      }
+      valueOptions.delay = resolveOption(valueOptions.delay, i, numElements)
 
       const animation = animateStyle(
         element,
