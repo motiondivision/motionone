@@ -3,8 +3,11 @@ import { defaultOffset, fillOffset } from "../../js/utils/offset"
 import { animateStyle } from "../animate-style"
 import {
   AnimationOptions,
+  AnimationOptionsWithOverrides,
   AnimationWithCommitStyles,
   Easing,
+  PlaybackOptions,
+  UnresolvedValueKeyframe,
   ValueKeyframesDefinition,
 } from "../types"
 import { createAnimationControls } from "../utils/controls"
@@ -24,7 +27,12 @@ type AnimateStyleDefinition = [
   AnimationOptions
 ]
 
-export function timeline(...definition: TimelineDefinition) {
+export type TimelineOptions = PlaybackOptions & {
+  duration?: number
+  defaultOptions?: AnimationOptionsWithOverrides
+}
+
+export function timeline(definition: TimelineDefinition) {
   const animations: AnimationWithCommitStyles[] = []
 
   const animationDefinitions = createAnimationsFromTimeline(definition)
@@ -37,7 +45,8 @@ export function timeline(...definition: TimelineDefinition) {
 }
 
 export function createAnimationsFromTimeline(
-  definition: TimelineDefinition
+  definition: TimelineDefinition,
+  { defaultOptions = {}, ...timelineOptions }: TimelineOptions = {}
 ): AnimateStyleDefinition[] {
   const animationDefinitions: AnimateStyleDefinition[] = []
   const elementSequences = new Map<Element, ElementSequence>()
@@ -53,14 +62,14 @@ export function createAnimationsFromTimeline(
    * These will later get converted into relative offsets in a second pass.
    */
   for (let i = 0; i < definition.length; i++) {
-    const [elementDefinition, keyframes, options = {}, nextTime] = definition[i]
+    const [elementDefinition, keyframes, options = {}] = definition[i]
 
     /**
      * If a relative or absolute time value has been specified we need to resolve
      * it in relation to the currentTime.
      */
-    if (nextTime !== undefined) {
-      currentTime = calcNextTime(currentTime, nextTime, timeLabels)
+    if (options.at !== undefined) {
+      currentTime = calcNextTime(currentTime, options.at, timeLabels)
     }
 
     /**
@@ -72,21 +81,10 @@ export function createAnimationsFromTimeline(
     /**
      * Find all the elements specified in the definition and parse value
      * keyframes from their timeline definitions.
-     *
-     * TODO:
-     *  - This code has a lot in common with animate, can it be DRYer to
-     *    save on size? Perhaps computationally more expensive but overall
-     *    cheaper, it could be possible for animate to call timeline simply as:
-     *    timeline([elementDefinition, keyframes, options])
-     *    Though this would increase minimum bundlesize.
      */
     const elements = resolveElements(elementDefinition, elementCache)
-    for (
-      let elementsIndex = 0;
-      elementsIndex < elements.length;
-      elementsIndex++
-    ) {
-      const element = elements[elementsIndex]
+    for (let elementIndex = 0; elementIndex < elements.length; elementIndex++) {
+      const element = elements[elementIndex]
       const elementSequence = getElementSequence(element, elementSequences)
 
       for (const key in keyframes) {
@@ -94,11 +92,14 @@ export function createAnimationsFromTimeline(
         const valueKeyframes = keyframesList(keyframes[key]!)
         const valueOptions = getOptions(options, key)
         const {
-          duration = defaults.duration,
-          easing = defaults.easing,
+          duration = defaultOptions.duration || defaults.duration,
+          easing = defaultOptions.easing || defaults.easing,
           offset = defaultOffset(valueKeyframes.length),
         } = valueOptions
-        const targetTime = currentTime + duration
+
+        const delay = (options.stagger || 0) * elementIndex
+        const startTime = currentTime + delay
+        const targetTime = startTime + duration
 
         if (offset.length === 1 && offset[0] === 0) {
           offset[1] = 1
@@ -125,11 +126,11 @@ export function createAnimationsFromTimeline(
           valueKeyframes,
           easing,
           offset,
-          currentTime,
+          startTime,
           targetTime
         )
 
-        maxDuration = Math.max(duration, maxDuration)
+        maxDuration = Math.max(delay + duration, maxDuration)
         totalDuration = Math.max(targetTime, totalDuration)
       }
     }
@@ -137,27 +138,55 @@ export function createAnimationsFromTimeline(
     currentTime += maxDuration
   }
 
-  // Loop over all element timelines and all values
-  // Create animations and offsets based on value @ times
+  /**
+   * For every element and value combination create a new animation.
+   */
   elementSequences.forEach((valueSequences, element) => {
     for (const key in valueSequences) {
       const valueSequence = valueSequences[key]
-      valueSequence.sort(compareByTime)
-      const keyframes = []
-      const options = {
-        duration: totalDuration,
-        offset: [] as number[],
-        easing: [] as Easing[],
-      }
 
+      /**
+       * Arrange all the keyframes in ascending time order.
+       */
+      valueSequence.sort(compareByTime)
+
+      const keyframes: UnresolvedValueKeyframe[] = []
+      const valueOffset: number[] = []
+      const valueEasing: Easing[] = []
+
+      /**
+       * For each keyframe, translate absolute times into
+       * relative offsets based on the total duration of the timeline.
+       */
       for (let i = 0; i < valueSequence.length; i++) {
         const { at, value, easing } = valueSequence[i]
         keyframes.push(value)
-        options.offset.push(progress(0, totalDuration, at))
-        options.easing.push(easing || defaults.easing)
+        valueOffset.push(progress(0, totalDuration, at))
+        valueEasing.push(easing || defaults.easing)
       }
 
-      animationDefinitions.push([element, key, keyframes, options])
+      /**
+       * If the generated animation doesn't end on the final keyframe,
+       * provide one with a null wildcard value. This will ensure it
+       * stays static until the end of the animation.
+       */
+      if (valueOffset[valueOffset.length - 1] !== 1) {
+        valueOffset.push(1)
+        keyframes.push(null)
+      }
+
+      animationDefinitions.push([
+        element,
+        key,
+        keyframes,
+        {
+          ...defaultOptions,
+          duration: totalDuration,
+          easing: valueEasing,
+          offset: valueOffset,
+          ...timelineOptions,
+        },
+      ])
     }
   })
 

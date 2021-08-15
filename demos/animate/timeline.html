@@ -17,15 +17,27 @@
         border-radius: 10px;
         background-color: #73d99f;
       }
+
+      .ball {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: #09f;
+      }
     </style>
   </head>
   <body>
     <div id="box"></div>
+    <div class="ball"></div>
+    <div class="ball"></div>
+    <div class="ball"></div>
     <script src="../../dist/motion.umd.js"></script>
     <script>
       const { timeline } = Motion
-      const box = document.getElementById("box")
-      const animation = timeline(["#box", { rotate: 360 }, { duration: 1 }])
+      const animation = timeline(
+        ["#box", { rotate: 360 }, { duration: 1 }],
+        [".ball", { x: 300 }, { duration: 1 }]
+      )
 
       animation.finished.catch((e) => console.log(e))
     </script>

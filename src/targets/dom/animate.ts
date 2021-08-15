@@ -1,7 +1,7 @@
 import {
   AcceptedElements,
   AnimationControls,
-  AnimationOptionsWithOverrides,
+  AnimationListOptions,
   AnimationWithCommitStyles,
   MotionKeyframesDefinition,
 } from "./types"
@@ -13,10 +13,7 @@ import { createAnimationControls } from "./utils/controls"
 export function animate(
   elements: AcceptedElements,
   keyframes: MotionKeyframesDefinition,
-  {
-    stagger = 0,
-    ...options
-  }: AnimationOptionsWithOverrides & { stagger?: number } = {}
+  { stagger = 0, ...options }: AnimationListOptions = {}
 ): AnimationControls {
   elements = resolveElements(elements)
 

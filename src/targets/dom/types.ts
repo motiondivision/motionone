@@ -1,3 +1,5 @@
+import { NextTime } from "./timeline/types"
+
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 export type AcceptedElements =
@@ -93,16 +95,22 @@ export type KeyframeOptions = {
   offset?: number[]
 }
 
-export type AnimationOptions = SpringOptions &
-  KeyframeOptions & {
-    delay?: number
-    endDelay?: number
-    repeat?: number
-    direction?: "normal" | "reverse" | "alternate" | "alternate-reverse"
-  }
+export type PlaybackOptions = {
+  delay?: number
+  endDelay?: number
+  repeat?: number
+  direction?: "normal" | "reverse" | "alternate" | "alternate-reverse"
+}
+
+export type AnimationOptions = SpringOptions & KeyframeOptions & PlaybackOptions
 
 export interface AnimationWithCommitStyles extends Animation {
   commitStyles: () => void
+}
+
+export type AnimationListOptions = AnimationOptionsWithOverrides & {
+  stagger?: number
+  at?: NextTime
 }
 
 export interface AnimationControls {

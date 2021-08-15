@@ -1,14 +1,13 @@
 import {
   AcceptedElements,
-  AnimationOptionsWithOverrides,
+  AnimationListOptions,
   Easing,
-  MotionKeyframes,
+  MotionKeyframesDefinition,
 } from "../types"
 
 export type TimelineSegment =
-  | [AcceptedElements, MotionKeyframes]
-  | [AcceptedElements, MotionKeyframes, AnimationOptionsWithOverrides]
-  | [AcceptedElements, MotionKeyframes, AnimationOptionsWithOverrides, NextTime]
+  | [AcceptedElements, MotionKeyframesDefinition]
+  | [AcceptedElements, MotionKeyframesDefinition, AnimationListOptions]
 
 export type TimelineDefinition = TimelineSegment[]
 

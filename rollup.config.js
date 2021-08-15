@@ -2,7 +2,6 @@ import fs from "fs"
 import resolve from "@rollup/plugin-node-resolve"
 import { terser } from "rollup-plugin-terser"
 import replace from "@rollup/plugin-replace"
-import commonjs from "@rollup/plugin-commonjs"
 import pkg from "./package.json"
 
 const config = {
