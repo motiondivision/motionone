@@ -1,19 +1,43 @@
 import { Easing } from "../targets/dom/types"
+import { getEasingFunction } from "../targets/js/easing/get-function"
 import { EasingFunction } from "../targets/js/types"
 
+export type From = "first" | "last" | "center" | number
+
 export type StaggerOptions = {
+  start?: number
+  from?: From
   easing?: EasingFunction | Easing
-  direction?: "normal" | "reverse"
 }
 
 export type OptionResolver<T> = (i: number, total: number) => T
 
 export function stagger(
-  duration: number,
-  _options: StaggerOptions = {}
+  duration: number = 0.1,
+  { start = 0, from = 0, easing }: StaggerOptions = {}
 ): OptionResolver<number> {
-  return (i: number, _total: number) => {
-    return duration * i
+  return (i: number, total: number) => {
+    const fromIndex =
+      typeof from === "number" ? from : getFromIndex(from, total)
+    const distance = Math.abs(fromIndex - i)
+    let delay = duration * distance
+
+    if (easing) {
+      const maxDelay = total * i
+      const easingFunction = getEasingFunction(easing)
+      delay = easingFunction(delay / maxDelay) * maxDelay
+    }
+
+    return start + delay
+  }
+}
+
+export function getFromIndex(from: From, total: number) {
+  if (from === "first") {
+    return 0
+  } else {
+    const lastIndex = total - 1
+    return from === "last" ? lastIndex : lastIndex / 2
   }
 }
 

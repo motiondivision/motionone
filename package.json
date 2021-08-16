@@ -131,7 +131,7 @@
     },
     {
       "path": "./dist/size-timeline-dom.js",
-      "maxSize": "3.5 kB"
+      "maxSize": "3.8 kB"
     },
     {
       "path": "./dist/size-spring.js",
@@ -139,7 +139,7 @@
     },
     {
       "path": "./dist/size-react.js",
-      "maxSize": "4.3 kB"
+      "maxSize": "4.4 kB"
     }
   ]
 }
