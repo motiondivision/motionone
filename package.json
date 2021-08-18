@@ -123,7 +123,15 @@
   "bundlesize": [
     {
       "path": "./dist/size-animate-dom.js",
-      "maxSize": "3.15 kB"
+      "maxSize": "3.2 kB"
+    },
+    {
+      "path": "./dist/size-animate-style.js",
+      "maxSize": "2.7 kB"
+    },
+    {
+      "path": "./dist/size-timeline-dom.js",
+      "maxSize": "3.8 kB"
     },
     {
       "path": "./dist/size-spring.js",
@@ -131,7 +139,7 @@
     },
     {
       "path": "./dist/size-react.js",
-      "maxSize": "4.3 kB"
+      "maxSize": "4.4 kB"
     }
   ]
 }

@@ -2,6 +2,11 @@ import * as React from "react"
 import { renderToString, renderToStaticMarkup } from "react-dom/server"
 import { animated } from ".."
 
+/**
+ * TODO:
+ * - When first is null, style shouldn't be hydrated
+ */
+
 function runTests(render: any) {
   test("Doesn't throw", () => {
     render(

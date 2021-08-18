@@ -14,3 +14,8 @@ export function hydrateKeyframes(
 
   return keyframes as ValueKeyframe[]
 }
+
+export const keyframesList = (
+  keyframes: UnresolvedValueKeyframe | UnresolvedValueKeyframe[]
+): UnresolvedValueKeyframe[] =>
+  Array.isArray(keyframes) ? keyframes : [keyframes]

@@ -19,8 +19,9 @@ import { convertEasing, isEasingList } from "./utils/easing"
 import { supports } from "./utils/feature-detection"
 import { createCssVariableRenderer, createStyleRenderer } from "./utils/apply"
 import { animateNumber } from "../js/animate-number"
-import { hydrateKeyframes } from "./utils/keyframes"
+import { hydrateKeyframes, keyframesList } from "./utils/keyframes"
 import { style } from "./style"
+import { defaults } from "./utils/defaults"
 
 export function animateStyle(
   element: Element,
@@ -28,12 +29,13 @@ export function animateStyle(
   keyframesDefinition: ValueKeyframesDefinition,
   options: AnimationOptions = {}
 ) {
+  // TODO: Merge in defaults
   let {
-    duration = 0.3,
-    delay = 0,
-    endDelay = 0,
-    repeat = 0,
-    easing = "ease",
+    duration = defaults.duration,
+    delay = defaults.delay,
+    endDelay = defaults.endDelay,
+    repeat = defaults.repeat,
+    easing = defaults.easing,
     direction,
     offset,
   } = options
@@ -41,10 +43,6 @@ export function animateStyle(
   let canAnimateNatively = supports.waapi()
   let render: (v: any) => void = noop
   const valueIsTransform = isTransform(name)
-
-  keyframesDefinition = Array.isArray(keyframesDefinition)
-    ? keyframesDefinition
-    : [keyframesDefinition]
 
   /**
    * If this is an individual transform, we need to map its
@@ -56,13 +54,27 @@ export function animateStyle(
     name = asTransformCssVar(name)
   }
 
-  stopCurrentAnimation(data, name)
-
   /**
    * Get definition of value, this will be used to convert numerical
    * keyframes into the default value type.
    */
   const definition = transformPropertyDefinitions.get(name)
+
+  /**
+   * Replace null values with the previous keyframe value, or read
+   * it from the DOM if it's the first keyframe.
+   *
+   * TODO: This needs to come after the valueIsTransform
+   * check so it can correctly read the underlying value.
+   * Should make a test for this.
+   */
+  let keyframes = hydrateKeyframes(
+    keyframesList(keyframesDefinition),
+    element,
+    name
+  )
+
+  stopCurrentAnimation(data, name)
 
   /**
    * If this is a CSS variable we need to register it with the browser
@@ -82,12 +94,6 @@ export function animateStyle(
   }
 
   /**
-   * Replace null values with the previous keyframe value, or read
-   * it from the DOM if it's the first keyframe.
-   */
-  let keyframes = hydrateKeyframes(keyframesDefinition, element, name)
-
-  /**
    * If we can animate this value with WAAPI, do so. Currently this only
    * feature detects CSS.registerProperty but could check WAAPI too.
    */
@@ -103,10 +109,7 @@ export function animateStyle(
     }
 
     if (!supports.partialKeyframes() && keyframes.length === 1) {
-      const initialKeyframe = isCssVar(name)
-        ? (element as HTMLElement).style.getPropertyValue(name)
-        : getComputedStyle(element)[name]
-      keyframes.unshift(initialKeyframe)
+      keyframes.unshift(style.get(element, name))
     }
 
     const animationOptions = {

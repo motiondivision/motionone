@@ -159,7 +159,7 @@ describe("Poses", () => {
       rerender(<Component opacity={1} />)
       rerender(<Component opacity={1} />)
 
-      setTimeout(() => reject(false), 50)
+      setTimeout(() => reject(false), 100)
     })
 
     return expect(promise).resolves.toEqual(true)
@@ -377,7 +377,7 @@ describe("Poses", () => {
       rerender(<Component />)
       pointerDown(getByTestId("parent") as Element)
 
-      setTimeout(() => reject(false), 50)
+      setTimeout(() => reject(false), 100)
     })
 
     return expect(promise).resolves.toEqual(true)

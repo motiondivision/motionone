@@ -6,6 +6,11 @@
     "!**/node_modules/**",
     "!**/__tests__/**"
   ],
+  "coveragePathIgnorePatterns": [
+    "src/targets/react/utils/supported-elements.ts",
+    "src/index.ts",
+    "src/react-entry.ts"
+  ],
   "setupFilesAfterEnv": ["<rootDir>/../jest.setup.tsx"],
   "coverageDirectory": "<rootDir>/../coverage",
   "testMatch": ["**/__tests__/**/*.test.(js|ts)?(x)"],

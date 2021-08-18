@@ -2,7 +2,6 @@ import fs from "fs"
 import resolve from "@rollup/plugin-node-resolve"
 import { terser } from "rollup-plugin-terser"
 import replace from "@rollup/plugin-replace"
-import commonjs from "@rollup/plugin-commonjs"
 import pkg from "./package.json"
 
 const config = {
@@ -116,9 +115,28 @@ const sizeAnimateDom = createSizeBuild({
   output: "dist/size-animate-dom.js",
 })
 
+const sizeAnimateStyle = createSizeBuild({
+  input: "lib/targets/dom/animate-style.js",
+  output: "dist/size-animate-style.js",
+})
+
+const sizeTimelineDom = createSizeBuild({
+  input: "lib/targets/dom/timeline/index.js",
+  output: "dist/size-timeline-dom.js",
+})
+
 const sizeSpring = createSizeBuild({
   input: "lib/generators/spring/index.js",
   output: "dist/size-spring.js",
 })
 
-export default [dist, umd, umdProd, sizeAnimateDom, sizeSpring, sizeReact]
+export default [
+  dist,
+  umd,
+  umdProd,
+  sizeAnimateDom,
+  sizeTimelineDom,
+  sizeAnimateStyle,
+  sizeSpring,
+  sizeReact,
+]
