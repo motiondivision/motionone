@@ -27,14 +27,21 @@ describe("addKeyframes", () => {
   test("Adds keyframes to sequence", () => {
     const sequence: ValueSequence = [{ value: 1, at: 50 }]
 
-    addKeyframes(sequence, [1, 2, 3, 4], "linear", [0, 0.1, 0.5, 1], 500, 1000)
+    addKeyframes(
+      sequence,
+      [1, 2, 3, 4],
+      [0, 1, 2, 3],
+      [0, 0.1, 0.5, 1],
+      500,
+      1000
+    )
 
     expect(sequence).toEqual([
       { value: 1, at: 50 },
-      { value: 1, at: 500, easing: "linear" },
-      { value: 2, at: 550, easing: "linear" },
-      { value: 3, at: 750, easing: "linear" },
-      { value: 4, at: 1000, easing: "linear" },
+      { value: 1, at: 500, easing: [0, 1, 2, 3] },
+      { value: 2, at: 550, easing: [0, 1, 2, 3] },
+      { value: 3, at: 750, easing: [0, 1, 2, 3] },
+      { value: 4, at: 1000, easing: [0, 1, 2, 3] },
     ])
 
     addKeyframes(
@@ -48,8 +55,8 @@ describe("addKeyframes", () => {
 
     expect(sequence).toEqual([
       { value: 1, at: 50 },
-      { value: 3, at: 750, easing: "linear" },
-      { value: 4, at: 1000, easing: "linear" },
+      { value: 3, at: 750, easing: [0, 1, 2, 3] },
+      { value: 4, at: 1000, easing: [0, 1, 2, 3] },
       { value: 5, at: 400, easing: "ease-in" },
       { value: 6, at: 500, easing: "ease-in-out" },
       { value: 7, at: 600, easing: "ease-in" },

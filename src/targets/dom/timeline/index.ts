@@ -57,6 +57,7 @@ export function createAnimationsFromTimeline(
   const elementCache = {}
   const timeLabels = new Map<string, number>()
 
+  let prevTime = 0
   let currentTime = 0
   let totalDuration = 0
 
@@ -73,7 +74,7 @@ export function createAnimationsFromTimeline(
      * it in relation to the currentTime.
      */
     if (options.at !== undefined) {
-      currentTime = calcNextTime(currentTime, options.at, timeLabels)
+      currentTime = calcNextTime(currentTime, options.at, prevTime, timeLabels)
     }
 
     /**
@@ -141,6 +142,7 @@ export function createAnimationsFromTimeline(
       }
     }
 
+    prevTime = currentTime
     currentTime += maxDuration
   }
 

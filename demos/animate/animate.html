@@ -9,7 +9,7 @@
         display: flex;
         align-items: center;
         padding-left: 100px;
-        padding-top: 100vh;
+        padding-top: 10px;
       }
 
       #box {
@@ -28,9 +28,9 @@
       const box = document.getElementById("box")
       const animation = animate(
         box,
-        { scale: 2, rotate: 180 },
+        { transform: "scale(2)" },
         {
-          delay: 1,
+          // delay: 0.001,
           duration: 2,
           // endDelay: 1,
           // fill: "forwards",

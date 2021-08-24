@@ -11,7 +11,7 @@ export type TimelineSegment =
 
 export type TimelineDefinition = TimelineSegment[]
 
-export type NextTime = number | `+${number}` | `-${number}` | `${string}`
+export type NextTime = number | "<" | `+${number}` | `-${number}` | `${string}`
 
 export interface ElementSequence {
   [key: string]: ValueSequence

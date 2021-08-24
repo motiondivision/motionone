@@ -9,7 +9,11 @@ describe("createAnimationsFromTimeline", () => {
 
   test("It creates a single animation", () => {
     const animations = createAnimationsFromTimeline([
-      [a, { opacity: 1 }, { duration: 1, easing: ["ease"], offset: [0, 1] }],
+      [
+        a,
+        { opacity: 1 },
+        { duration: 1, easing: [0, 1, 2, 3], offset: [0, 1] },
+      ],
     ])
 
     expect(animations.length).toBe(1)
@@ -18,7 +22,14 @@ describe("createAnimationsFromTimeline", () => {
         a,
         "opacity",
         [null, 1],
-        { duration: 1, easing: ["ease", "ease"], offset: [0, 1] },
+        {
+          duration: 1,
+          easing: [
+            [0, 1, 2, 3],
+            [0, 1, 2, 3],
+          ],
+          offset: [0, 1],
+        },
       ],
     ])
   })
@@ -132,6 +143,36 @@ describe("createAnimationsFromTimeline", () => {
           duration: 2,
           easing: ["ease", "ease"],
           offset: [0.75, 1],
+        },
+      ],
+    ])
+  })
+
+  test("It adds moves the playhead back to the previous animation", () => {
+    const animations = createAnimationsFromTimeline([
+      [a, { x: 100 }, { duration: 1 }],
+      [b, { y: 500 }, { duration: 0.5, at: "<" }],
+    ])
+
+    expect(animations).toEqual([
+      [
+        a,
+        "x",
+        [null, 100],
+        {
+          duration: 1,
+          easing: ["ease", "ease"],
+          offset: [0, 1],
+        },
+      ],
+      [
+        b,
+        "y",
+        [null, 500, null],
+        {
+          duration: 1,
+          easing: ["ease", "ease"],
+          offset: [0, 0.5, 1],
         },
       ],
     ])
@@ -306,6 +347,29 @@ describe("createAnimationsFromTimeline", () => {
         "opacity",
         [null, 1],
         { duration: 2, easing: ["ease-in-out", "ease-in-out"], offset: [0, 1] },
+      ],
+    ])
+  })
+
+  test("It correctly passes easing cubic bezier array to children", () => {
+    const animations = createAnimationsFromTimeline(
+      [[a, { opacity: 1 }, { offset: [0, 1] }]],
+      { defaultOptions: { duration: 2, easing: [0, 1, 2, 3] } }
+    )
+
+    expect(animations).toEqual([
+      [
+        a,
+        "opacity",
+        [null, 1],
+        {
+          duration: 2,
+          easing: [
+            [0, 1, 2, 3],
+            [0, 1, 2, 3],
+          ],
+          offset: [0, 1],
+        },
       ],
     ])
   })
