@@ -45,13 +45,6 @@ export function animateStyle(
   const valueIsTransform = isTransform(name)
 
   /**
-   * This fixes a bug in WKWebView (used in iOS apps) where compositor values
-   * like opacity and transform won't start animating for a long time after the
-   * animation starts, even while other values like color do.
-   */
-  delay = Math.max(0.00001, delay)
-
-  /**
    * If this is an individual transform, we need to map its
    * key to a CSS variable and update the element's transform style
    */
@@ -151,6 +144,13 @@ export function animateStyle(
 
     const target = keyframes[keyframes.length - 1]
     animation.finished.then(() => render(target)).catch(noop)
+
+    /**
+     * This fixes a bug in WKWebView (used in iOS apps) where compositor values
+     * like opacity and transform won't start animating for a long time after the
+     * animation starts, even while other values like color do.
+     */
+    animation.playbackRate = 1.000001
 
     return animation
   } else if (valueIsTransform && keyframes.every(isNumber)) {
