@@ -1,6 +1,6 @@
 {
   "name": "motion",
-  "version": "10.0.0-rc.1",
+  "version": "10.0.0-rc.2",
   "description": "The Motion library for the web",
   "author": "Matt Perry",
   "main": "dist/main.cjs.js",
