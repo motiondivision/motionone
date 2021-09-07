@@ -29,7 +29,6 @@ export function animateStyle(
   keyframesDefinition: ValueKeyframesDefinition,
   options: AnimationOptions = {}
 ) {
-  // TODO: Merge in defaults
   let {
     duration = defaults.duration,
     delay = defaults.delay,
@@ -38,6 +37,7 @@ export function animateStyle(
     easing = defaults.easing,
     direction,
     offset,
+    allowWebkitAcceleration = false,
   } = options
   const data = getAnimationData(element)
   let canAnimateNatively = supports.waapi()
@@ -146,11 +146,15 @@ export function animateStyle(
     animation.finished.then(() => render(target)).catch(noop)
 
     /**
-     * This fixes a bug in WKWebView (used in iOS apps) where compositor values
-     * like opacity and transform won't start animating for a long time after the
-     * animation starts, even while other values like color do.
+     * This forces Webkit to run animations on the main thread by exploiting
+     * this condition:
+     * https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/platform/graphics/ca/GraphicsLayerCA.cpp?rev=281238#L1099
+     *
+     * This fixes Webkit's timing bugs, like accelerated animations falling
+     * out of sync with main thread animations and massive delays in starting
+     * accelerated animations in WKWebView.
      */
-    animation.playbackRate = 1.000001
+    if (!allowWebkitAcceleration) animation.playbackRate = 1.000001
 
     return animation
   } else if (valueIsTransform && keyframes.every(isNumber)) {

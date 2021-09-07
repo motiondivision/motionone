@@ -103,7 +103,9 @@ export type PlaybackOptions = {
   direction?: "normal" | "reverse" | "alternate" | "alternate-reverse"
 }
 
-export type AnimationOptions = SpringOptions & KeyframeOptions & PlaybackOptions
+export type AnimationOptions = SpringOptions &
+  KeyframeOptions &
+  PlaybackOptions & { allowWebkitAcceleration?: boolean }
 
 export interface AnimationWithCommitStyles extends Animation {
   commitStyles: () => void
