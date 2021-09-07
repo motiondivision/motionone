@@ -127,11 +127,11 @@
     },
     {
       "path": "./dist/size-animate-style.js",
-      "maxSize": "2.7 kB"
+      "maxSize": "2.3 kB"
     },
     {
       "path": "./dist/size-timeline-dom.js",
-      "maxSize": "3.8 kB"
+      "maxSize": "3.85 kB"
     },
     {
       "path": "./dist/size-spring.js",
