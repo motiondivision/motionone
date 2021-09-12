@@ -1,20 +1,16 @@
-# Motion Concept C
+# Motion One
 
-A concept animation library for the web. The primary design goals are:
+A new animation library, built on the Web Animations API for the smallest filesize and the fastest performance.
 
-1. Minimize bundlesize - currently **3.2b** (vs Anime.js @ 7 and Greensock @ 25).
-2. Improve [WebAnimations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API) DX
-3. Subvert WAAPI's technical limitations (springs, individual transforms etc) by re-evaluating trade-offs.
-
-[Learn more](https://github.com/motiondivision/motion/discussions/1)
-
-## 💬 Discussion
-
-As a sponsor, your feedback and thoughts will be crucial to helping guide the development of the API. [Join the discussion!](https://github.com/motiondivision/motion/discussions)
+[Learn more](https://motion.dev)
 
 ## 📚 Documentation
 
-Full docs are available for sponsors at [motion.dev](https://motion.dev).
+Full docs are available at [motion.dev](https://motion.dev).
+
+## 💬 Discussion
+
+As a sponsor, your feedback and thoughts are be crucial to helping guide the development of the API. [Join the discussion!](https://github.com/motiondivision/motion/discussions)
 
 ## 🙌 Sponsors
 
