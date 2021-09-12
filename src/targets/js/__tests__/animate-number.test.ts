@@ -302,38 +302,39 @@ describe("animateNumber", () => {
 
   test("Can be paused and played", async () => {
     const output: number[] = []
+    mockTimeFrom(1)
     const animation = animateNumber(
       (v) => {
         output.push(v)
 
-        if (output.length === 3) {
-          mockReadTime(200)
+        if (output.length === 6) {
+          mockReadTime(1300)
           animation.pause()
         }
 
-        if (output.length === 6) {
-          mockReadTime(400)
+        if (output.length === 8) {
+          mockTimeFrom(1.5)
+          mockReadTime(1500)
           animation.play()
         }
       },
       [0, 1],
       {
-        duration: 0.4,
+        duration: 0.2,
         easing: "linear",
+        repeat: 1,
       }
     )
     await animation.finished
     expect(output).toEqual([
-      0.125,
       0.25,
-      0.37499999999999994,
       0.5,
-      0.5,
-      0.5,
-      0.5,
-      0.625,
       0.7499999999999999,
-      0.8749999999999999,
+      1,
+      0.25,
+      0.4999999999999998,
+      0.4999999999999998,
+      0.4999999999999998,
       1,
     ])
   })

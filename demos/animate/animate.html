@@ -4,10 +4,12 @@
     <style>
       body {
         min-height: 100vh;
+        width: 100%;
         padding: 0;
         margin: 0;
         display: flex;
         align-items: center;
+        justify-content: center;
         padding-left: 100px;
         padding-top: 10px;
       }
@@ -28,7 +30,7 @@
       const box = document.getElementById("box")
       const animation = animate(
         box,
-        { transform: "scale(2)" },
+        { x: [-120, 120] },
         {
           // delay: 0.001,
           duration: 2,
@@ -46,6 +48,29 @@
           // // offset: [0, 0.2, 1],
         }
       )
+
+      const mix = (from, to, progress) =>
+        -progress * from + progress * to + from
+
+      const pause = () => {
+        animation.pause()
+        scheduleResume()
+      }
+
+      const resume = () => {
+        animation.play()
+        schedulePause()
+      }
+
+      const scheduleResume = () => {
+        stutterTimeout = setTimeout(resume, mix(200, 500, Math.random()))
+      }
+
+      const schedulePause = () => {
+        stutterTimeout = setTimeout(pause, mix(700, 1500, Math.random()))
+      }
+
+      schedulePause()
 
       animation.finished.catch((e) => console.log(e))
 

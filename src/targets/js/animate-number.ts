@@ -56,10 +56,11 @@ export class Animation implements Omit<AnimationControls, "stop"> {
         return
       }
 
-      let t = this.pauseTime
-        ? this.pauseTime
-        : (timestamp - this.startTime) * this.rate
+      if (this.pauseTime) {
+        timestamp = this.pauseTime
+      }
 
+      let t = (timestamp - this.startTime) * this.rate
       this.t = t
 
       // Convert to seconds
