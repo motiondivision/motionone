@@ -341,6 +341,7 @@ describe("animateNumber", () => {
 
   test("Can set currentTime while paused", async () => {
     const output: number[] = []
+    let currentTime = 0
     const animation = animateNumber(
       (v) => {
         output.push(v)
@@ -351,6 +352,7 @@ describe("animateNumber", () => {
         }
 
         if (output.length === 4) {
+          currentTime = animation.currentTime
           animation.currentTime = 0.1
         }
 
@@ -381,6 +383,7 @@ describe("animateNumber", () => {
       0.8749999999999999,
       1,
     ])
+    expect(currentTime).toBe(0.2)
   })
 
   test("stopAnimation is compatible", async () => {

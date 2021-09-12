@@ -61,13 +61,14 @@ export class Animation implements Omit<AnimationControls, "stop"> {
       }
 
       let t = (timestamp - this.startTime) * this.rate
-      this.t = t
 
       // Convert to seconds
       t /= 1000
 
       // Rebase on delay
       t = Math.max(t - delay, 0)
+
+      this.t = t
 
       const progress = t / duration
 
@@ -153,11 +154,11 @@ export class Animation implements Omit<AnimationControls, "stop"> {
   }
 
   commitStyles() {
-    this.cancelT = this.t
+    this.cancelT = this.t * 1000
   }
 
   get currentTime() {
-    return this.currentTime
+    return this.t
   }
 
   set currentTime(t: number) {

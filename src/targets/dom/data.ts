@@ -1,8 +1,8 @@
-import { AnimationWithCommitStyles } from "./types"
+import { BasicAnimationControls } from "./types"
 
 export interface AnimationData {
   activeTransforms: string[]
-  activeAnimations: { [key: string]: AnimationWithCommitStyles | undefined }
+  activeAnimations: { [key: string]: BasicAnimationControls | undefined }
 }
 
 const data = new WeakMap<Element, AnimationData>()

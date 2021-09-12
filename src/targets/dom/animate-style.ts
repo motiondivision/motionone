@@ -1,7 +1,7 @@
 import { AnimationData, getAnimationData } from "./data"
 import {
   AnimationOptions,
-  AnimationWithCommitStyles,
+  BasicAnimationControls,
   ValueKeyframesDefinition,
 } from "./types"
 import { isCssVar, registerCssVariable } from "./utils/css-var"
@@ -28,7 +28,7 @@ export function animateStyle(
   name: string,
   keyframesDefinition: ValueKeyframesDefinition,
   options: AnimationOptions = {}
-) {
+): BasicAnimationControls | undefined {
   let {
     duration = defaults.duration,
     delay = defaults.delay,
@@ -93,6 +93,8 @@ export function animateStyle(
     render = createStyleRenderer(element, name)
   }
 
+  let animation: any
+
   /**
    * If we can animate this value with WAAPI, do so. Currently this only
    * feature detects CSS.registerProperty but could check WAAPI too.
@@ -121,22 +123,20 @@ export function animateStyle(
       iterations: repeat + 1,
     }
 
-    const animation = element.animate(
+    animation = element.animate(
       {
         [name]: keyframes,
         offset,
         easing: isEasingList(easing) ? easing.map(convertEasing) : undefined,
       } as PropertyIndexedKeyframes,
       animationOptions
-    ) as AnimationWithCommitStyles
-
-    data.activeAnimations[name] = animation
+    )
 
     /**
      * Polyfill finished Promise in browsers that don't support it
      */
     if (!animation.finished) {
-      ;(animation as any).finished = new Promise((resolve, reject) => {
+      animation.finished = new Promise((resolve, reject) => {
         animation.onfinish = resolve
         animation.oncancel = reject
       })
@@ -155,8 +155,6 @@ export function animateStyle(
      * accelerated animations in WKWebView.
      */
     if (!allowWebkitAcceleration) animation.playbackRate = 1.000001
-
-    return animation
   } else if (valueIsTransform && keyframes.every(isNumber)) {
     if (keyframes.length === 1) {
       keyframes.unshift(
@@ -178,7 +176,7 @@ export function animateStyle(
       render = (v: number) => applyStyle(definition.toDefaultUnit(v))
     }
 
-    return animateNumber(render, keyframes as any, options)
+    animation = animateNumber(render, keyframes as any, options)
   } else {
     const target = keyframes[keyframes.length - 1]
     render(
@@ -187,6 +185,10 @@ export function animateStyle(
         : target
     )
   }
+
+  data.activeAnimations[name] = animation
+
+  return animation
 }
 
 function stopCurrentAnimation(data: AnimationData, name: string) {

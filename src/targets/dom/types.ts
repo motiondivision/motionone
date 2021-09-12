@@ -111,6 +111,13 @@ export interface AnimationWithCommitStyles extends Animation {
   commitStyles: () => void
 }
 
+export interface BasicAnimationControls {
+  pause: () => void
+  play: () => void
+  commitStyles: () => void
+  cancel: () => void
+}
+
 export type AnimationListOptions = Omit<
   AnimationOptionsWithOverrides,
   "delay"
