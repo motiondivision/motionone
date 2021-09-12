@@ -253,7 +253,7 @@ describe("animateNumber", () => {
     // is in milliseconds
     animation.currentTime = 100
     await animation.finished
-    expect(output).toEqual([0.9604030423986841, , 1])
+    expect(output).toEqual([0.9604030423986841, 1])
   })
 
   test("Can set rate", async () => {
