@@ -1,5 +1,6 @@
 import { AnimationControls, AnimationWithCommitStyles } from "../types"
 import { stopAnimation } from "./stop-animation"
+import { ms } from "./time"
 
 interface AnimationState {
   animations: AnimationWithCommitStyles[]
@@ -38,7 +39,7 @@ export const controls = {
   set: (target: AnimationState, key: string, value: number) => {
     switch (key) {
       case "currentTime":
-        value = value * 1000
+        value = ms(value)
       case "currentTime":
       case "playbackRate":
         for (let i = 0; i < target.animations.length; i++) {

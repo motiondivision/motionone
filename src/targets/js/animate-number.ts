@@ -1,7 +1,6 @@
 import { AnimationControls, AnimationOptions, Easing } from "../dom/types"
 import { defaults } from "../dom/utils/defaults"
 import { isEasingList } from "../dom/utils/easing"
-import { ms } from "../dom/utils/time"
 import { getEasingFunction } from "./easing/get-function"
 import { slowInterpolateNumbers } from "./utils/interpolate"
 
@@ -62,13 +61,13 @@ export class Animation implements Omit<AnimationControls, "stop"> {
 
       let t = (timestamp - this.startTime) * this.rate
 
+      this.t = t
+
       // Convert to seconds
       t /= 1000
 
       // Rebase on delay
       t = Math.max(t - delay, 0)
-
-      this.t = t
 
       const progress = t / duration
 
@@ -154,7 +153,7 @@ export class Animation implements Omit<AnimationControls, "stop"> {
   }
 
   commitStyles() {
-    this.cancelT = this.t * 1000
+    this.cancelT = this.t
   }
 
   get currentTime() {
@@ -163,9 +162,9 @@ export class Animation implements Omit<AnimationControls, "stop"> {
 
   set currentTime(t: number) {
     if (this.pauseTime || this.rate === 0) {
-      this.pauseTime = ms(t)
+      this.pauseTime = t
     } else {
-      this.startTime = performance.now() - ms(t) / this.rate
+      this.startTime = performance.now() - t / this.rate
     }
   }
 

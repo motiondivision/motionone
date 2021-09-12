@@ -250,9 +250,10 @@ describe("animateNumber", () => {
     const animation = animateNumber((v) => output.push(v), [0, 1], {
       duration: 0.2,
     })
-    animation.currentTime = 0.1
+    // is in milliseconds
+    animation.currentTime = 100
     await animation.finished
-    expect(output).toEqual([0.9604030423986841, 1])
+    expect(output).toEqual([0.9604030423986841, , 1])
   })
 
   test("Can set rate", async () => {
@@ -353,7 +354,7 @@ describe("animateNumber", () => {
 
         if (output.length === 4) {
           currentTime = animation.currentTime
-          animation.currentTime = 0.1
+          animation.currentTime = 100
         }
 
         if (output.length === 6) {
@@ -383,7 +384,7 @@ describe("animateNumber", () => {
       0.8749999999999999,
       1,
     ])
-    expect(currentTime).toBe(0.2)
+    expect(currentTime).toBe(200)
   })
 
   test("stopAnimation is compatible", async () => {
