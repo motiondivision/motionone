@@ -48,7 +48,7 @@ export function useAnimation(
         animation && animations.push(animation)
       }
 
-      Promise.all(animations.map((animation) => animation.finished))
+      Promise.all(animations.map((animation: any) => animation.finished))
         .then(() => onComplete?.(targetKeyframe))
         .catch(noop)
     }
