@@ -17,7 +17,6 @@ import {
 import { stopAnimation } from "./utils/stop-animation"
 import { convertEasing, isEasingList } from "./utils/easing"
 import { supports } from "./utils/feature-detection"
-import { createCssVariableRenderer, createStyleRenderer } from "./utils/apply"
 import { animateNumber } from "../js/animate-number"
 import { hydrateKeyframes, keyframesList } from "./utils/keyframes"
 import { style } from "./style"
@@ -41,18 +40,14 @@ export function animateStyle(
   } = options
   const data = getAnimationData(element)
   let canAnimateNatively = supports.waapi()
-  let render: (v: any) => void = noop
   const valueIsTransform = isTransform(name)
+  name = getValueName(name)
 
   /**
    * If this is an individual transform, we need to map its
    * key to a CSS variable and update the element's transform style
    */
-  if (valueIsTransform) {
-    if (transformAlias[name]) name = transformAlias[name]
-    addTransformToElement(element as HTMLElement, name)
-    name = asTransformCssVar(name)
-  }
+  valueIsTransform && addTransformToElement(element as HTMLElement, name)
 
   /**
    * Get definition of value, this will be used to convert numerical
@@ -82,18 +77,16 @@ export function animateStyle(
    * rather than directly onto the element.style object.
    */
   if (isCssVar(name)) {
-    render = createCssVariableRenderer(element, name)
-
     if (supports.cssRegisterProperty()) {
       registerCssVariable(name)
     } else {
       canAnimateNatively = false
     }
-  } else {
-    render = createStyleRenderer(element, name)
   }
 
   let animation: any
+
+  const render = (value: string | number) => style.set(element, name, value)
 
   /**
    * If we can animate this value with WAAPI, do so. Currently this only
