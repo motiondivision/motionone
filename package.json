@@ -7,7 +7,7 @@
   "module": "dist/main.es.js",
   "types": "types/index.d.ts",
   "license": "MIT",
-  "repository": "https://github.com/motiondivision/motion",
+  "repository": "https://github.com/motionone/motion",
   "sideEffects": false,
   "keywords": [
     "motion",
