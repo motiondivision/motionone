@@ -8,7 +8,7 @@ Full docs are available at [motion.dev](https://motion.dev).
 
 ## 💬 Discussion
 
-As a sponsor, your feedback and thoughts are be crucial to helping guide the development of the API. [Join the discussion!](https://github.com/motionone/motion/discussions)
+As a sponsor, your feedback and thoughts are be crucial to helping guide the development of the API. [Join the discussion!](https://github.com/motiondivision/motion/discussions)
 
 ## 🙌 Sponsors
 
