@@ -70,7 +70,6 @@ describe("animate", () => {
 
     return new Promise<void>((resolve) => {
       animation.finished.then(() => {
-        console.log("finished fire")
         expect(div).toHaveStyle("opacity: 0.5")
         resolve()
       })
@@ -84,7 +83,6 @@ describe("animate", () => {
     const animation = animate(div, { opacity: 0.5 }, { duration: 10 })
     return new Promise<void>((resolve) => {
       animation.finished.catch(() => {
-        console.log("animation canceled")
         expect(div).toHaveStyle("opacity: 0.2")
         resolve()
       })

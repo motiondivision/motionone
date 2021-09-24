@@ -1,27 +1,26 @@
+import { noop } from "../../../utils/noop"
 import { AnimationControls, AnimationWithCommitStyles } from "../types"
 import { stopAnimation } from "./stop-animation"
 import { ms } from "./time"
 
 interface AnimationState {
   animations: AnimationWithCommitStyles[]
-  finished: Promise<any>
+  finished?: Promise<any>
 }
 
-export function createAnimationControls(
+export const createAnimationControls = (
   animations: AnimationWithCommitStyles[]
-) {
-  // TODO Duplication with animate
-  const state = {
-    animations,
-    finished: Promise.all(animations.map((animation) => animation.finished)),
-  } as any
-  return new Proxy(state, controls) as AnimationControls
-}
+) => new Proxy({ animations } as any, controls) as AnimationControls
 
 export const controls = {
   get: (target: AnimationState, key: string) => {
     switch (key) {
       case "finished":
+        if (!target.finished) {
+          target.finished = Promise.all(
+            target.animations.map(selectFinished)
+          ).catch(noop)
+        }
         return target.finished
       case "currentTime":
         // TODO Find first active animation
@@ -50,3 +49,5 @@ export const controls = {
     return false
   },
 }
+
+const selectFinished = (animation: Animation) => animation.finished
