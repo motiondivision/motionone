@@ -282,16 +282,21 @@
         tween: function (dot) {
           let delay = checkTardyAndGetDelay(dot),
             angle = Math.random() * Math.PI * 2
-          gsap.set(dot, { x: 0, y: 0, scale: 1, force3D: false })
+          gsap.set(dot, {
+            x: 0,
+            y: 0,
+            scale: 1,
+            force3D: false,
+            willChange: "transform",
+          })
           gsap.to(dot, {
             transform: `translateX(${Math.cos(angle) * radius}px) translateY(${
               Math.sin(angle) * radius
-            }px) scale(32)`,
+            }px) scale(32) translateZ(0)`,
             duration: duration,
             delay: delay,
+            repeat: Infinity,
             ease: "cubic.in",
-            onComplete: tests.gsap_transform.tween,
-            onCompleteParams: [dot],
           })
         },
         stop: function (dot) {
@@ -377,7 +382,7 @@
           var delay = checkTardyAndGetDelay(dot)
           dot.style.cssText = startingCSS
           dot.style.willChange = "transform"
-          console.log("transform tween")
+
           let angle = Math.random() * Math.PI * 2,
             anim = Motion.animate(
               dot,
@@ -394,9 +399,6 @@
               }
             )
           dot.anim = anim
-          // anim.finished.then(() => {
-          //   if (inProgress) tests.motion_transform.tween(dot)
-          // })
         },
         stop: function (dot) {
           dot.anim.cancel()
@@ -575,14 +577,21 @@
           "%)"
       }
 
-      document.getElementById("block").addEventListener("click", () => {
-        const timeStart = performance.now()
-        let jank = true
-        while (jank) {
-          if (performance.now() - timeStart > 2000) {
-            jank = false
+      const block = document.getElementById("block")
+      block.addEventListener("click", () => {
+        block.style.opacity = 0.4
+        const opacity = block.style.opacity
+
+        setTimeout(() => {
+          const timeStart = performance.now()
+          let jank = true
+          while (jank) {
+            if (performance.now() - timeStart > 2000) {
+              jank = false
+            }
           }
-        }
+          block.style.opacity = 1
+        }, 50)
       })
     </script>
   </body>
