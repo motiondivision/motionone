@@ -1,4 +1,4 @@
-import { createAnimationsFromTimeline } from "../"
+import { createAnimationsFromTimeline, timeline } from "../"
 import { stagger } from "../../../../utils/stagger"
 
 describe("createAnimationsFromTimeline", () => {
@@ -372,5 +372,28 @@ describe("createAnimationsFromTimeline", () => {
         },
       ],
     ])
+  })
+})
+
+describe("timeline", () => {
+  it("Correctly returns duration as calculated from animations", () => {
+    const div = document.createElement("div")
+    const controls = timeline([
+      [div, { opacity: 0 }, { duration: 1 }],
+      [div, { opacity: 1 }, { duration: 2 }],
+    ])
+    expect(controls.duration).toEqual(3)
+  })
+
+  it("Correctly returns duration as defined in options", () => {
+    const div = document.createElement("div")
+    const controls = timeline(
+      [
+        [div, { opacity: 0 }, { duration: 1 }],
+        [div, { opacity: 1 }, { duration: 2 }],
+      ],
+      { duration: 1 }
+    )
+    expect(controls.duration).toEqual(1)
   })
 })

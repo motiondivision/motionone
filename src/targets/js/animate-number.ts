@@ -4,7 +4,7 @@ import { isEasingList } from "../dom/utils/easing"
 import { getEasingFunction } from "./easing/get-function"
 import { slowInterpolateNumbers } from "./utils/interpolate"
 
-export class Animation implements Omit<AnimationControls, "stop"> {
+export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
   private resolve: (value: any) => void
 
   private reject: (value: any) => void

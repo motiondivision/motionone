@@ -8,7 +8,10 @@ export interface WithCommitStyles {
 export function stopAnimation(animation: BasicAnimationControls) {
   // Suppress error thrown by WAAPI
   try {
-    animation.commitStyles()
+    /**
+     * commitStyles has overhead so we only want to commit and cancel
+     */
+    animation.playState !== "finished" && animation.commitStyles()
     animation.cancel()
   } catch (e) {}
 }

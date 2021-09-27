@@ -10,6 +10,7 @@ import { getOptions } from "./utils/options"
 import { resolveElements } from "./utils/resolve-elements"
 import { createAnimationControls } from "./utils/controls"
 import { resolveOption } from "../../utils/stagger"
+import { defaults } from "./utils/defaults"
 
 export function animate(
   elements: AcceptedElements,
@@ -38,5 +39,8 @@ export function animate(
     }
   }
 
-  return createAnimationControls(animations)
+  return createAnimationControls(
+    animations,
+    options.duration ?? defaults.duration
+  )
 }

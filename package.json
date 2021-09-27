@@ -17,7 +17,7 @@
     "waapi"
   ],
   "scripts": {
-    "build": "rm -rf lib dist types && tsc -p . && rollup -c && bundlesize",
+    "build": "rm -rf lib dist types && tsc -p . && rollup -c && npm run measure",
     "test": "jest --coverage --config jest.config.json --maxWorkers=2",
     "test-react": "",
     "test-react-ssr": "jest --coverage --config jest.config.react-ssr.json --maxWorkers=2",
@@ -89,6 +89,7 @@
     "concurrently": "^6.2.0",
     "convert-tsconfig-paths-to-webpack-aliases": "^0.9.2",
     "cypress": "^7.6.0",
+    "gsap": "^3.7.1",
     "husky": "=4",
     "jest": "^26.6.3",
     "jest-watch-typeahead": "^0.6.1",

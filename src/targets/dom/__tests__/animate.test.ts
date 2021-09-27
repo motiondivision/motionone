@@ -98,4 +98,11 @@ describe("animate", () => {
     animation.currentTime = 50
     expect(animation.currentTime).toBe(50)
   })
+
+  test("duration gets the duration of the animation", async () => {
+    const div = document.createElement("div")
+    const animation = animate(div, { opacity: 0.5 }, { duration: 10 })
+
+    expect(animation.duration).toBe(10)
+  })
 })

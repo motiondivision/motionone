@@ -188,6 +188,13 @@ export function animateStyle(
 
   data.activeAnimations[name] = animation
 
+  /**
+   * When an animation finishes, delete the reference to the previous animation.
+   */
+  animation.finished
+    .then(() => (data.activeAnimations[name] = undefined))
+    .catch(noop)
+
   return animation
 }
 

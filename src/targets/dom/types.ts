@@ -111,11 +111,14 @@ export interface AnimationWithCommitStyles extends Animation {
   commitStyles: () => void
 }
 
+export type PlayState = "idle" | "running" | "paused" | "finished"
+
 export interface BasicAnimationControls {
   pause: () => void
   play: () => void
   commitStyles: () => void
   cancel: () => void
+  playState: PlayState
 }
 
 export type AnimationListOptions = Omit<
@@ -135,6 +138,7 @@ export interface AnimationControls {
   cancel: VoidFunction
   finished: Promise<any>
   currentTime: number | null
+  duration: number
   playbackRate: number
 }
 

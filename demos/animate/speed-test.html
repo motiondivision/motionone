@@ -1,0 +1,589 @@
+<!-- Adapted from https://codepen.io/GreenSock/pen/srfxA -->
+<html>
+  <head>
+    <title>Speed test</title>
+    <style>
+      body {
+        background-color: black;
+        margin: 0;
+        padding: 0;
+        color: #eee;
+        font-family: Signika Negative, sans-serif;
+        font-weight: 300;
+        font-size: 1.15em;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+      }
+      h1 {
+        font-weight: 400;
+        font-size: 2em;
+        line-height: 1em;
+        margin-bottom: 0.1em;
+        color: white;
+      }
+      a,
+      a:hover,
+      a:visited {
+        color: #71b200;
+        font-weight: 700;
+      }
+      #controls {
+        display: table-row;
+        background-color: #555;
+        background: linear-gradient(to bottom, #777 0%, #444 100%);
+        padding: 10px 10px 10px 5px;
+        z-index: 1000;
+      }
+      #controls form li {
+        display: table-cell;
+        padding: 12px 6px 10px 6px;
+        vertical-align: middle;
+        text-shadow: 1px 1px 1px #000;
+      }
+      #instructions {
+        width: 82%;
+        margin-left: 8%;
+        padding-top: 1em;
+        line-height: 1.5em;
+        color: #ccc;
+        pointer-events: auto;
+      }
+      #demo {
+        display: table;
+        width: 100%;
+        height: 100%;
+      }
+      #field {
+        position: relative;
+        display: table-cell;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: -100;
+        border-top: 1px solid #777;
+      }
+      #start {
+        color: black;
+        border-radius: 6px;
+        padding: 5px 18px;
+        border: 2px solid black;
+        background: #9af600;
+        background: linear-gradient(to bottom, #9af600 0%, #71b200 100%);
+        cursor: pointer;
+        text-shadow: none;
+        font-weight: 400;
+      }
+      #block {
+        color: white;
+        border-radius: 6px;
+        padding: 5px 18px;
+        border: 2px solid black;
+        background: #ff1231;
+        background: linear-gradient(to bottom, #ff2965 0%, #ff1231 100%);
+        cursor: pointer;
+        text-shadow: none;
+        font-weight: 400;
+      }
+      #controls #fps {
+        text-shadow: none;
+        background-color: #ccc;
+        padding: 6px;
+        margin-right: 14px;
+        color: #cc0000;
+        border-radius: 5px;
+        border-color: #000000;
+        border-style: solid;
+        border-width: 1px;
+        font-size: 24px;
+      }
+      #form {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      strong {
+        color: white;
+      }
+      #container div {
+        will-change: transform;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="demo">
+      <div id="controls">
+        <form id="form">
+          <li style="padding-left: 16px">
+            Engine:
+            <select id="engine" size="1">
+              <option value="gsap">GSAP</option>
+              <option value="motion">Motion One</option>
+            </select>
+          </li>
+          <li>
+            Properties:
+            <select id="properties" size="1">
+              <option value="transform">Transform</option>
+              <option value="transforms">
+                Independent transforms (x/y/scale)
+              </option>
+              <option value="normal">Top/left/width/height</option>
+            </select>
+          </li>
+          <li>
+            Dots:
+            <select id="dotQuantity" size="1">
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="200">200</option>
+              <option value="300">300</option>
+              <option value="400">400</option>
+              <option value="500" selected="selected">500</option>
+              <option value="750">750</option>
+              <option value="1000">1000</option>
+              <option value="1500">1500</option>
+              <option value="2000">2000</option>
+              <option value="2500">2500</option>
+              <option value="3000">3000</option>
+            </select>
+          </li>
+          <li style="vertical-align: bottom"><div id="start">START</div></li>
+          <li style="vertical-align: bottom"><div id="block">Block JS</div></li>
+          <li id="tardy" style="flex-grow: 3; color: #fcd000"></li>
+          <li id="fps">-- fps</li>
+        </form>
+      </div>
+      <div id="field">
+        <div id="instructions">
+          <h1>Animation Speed Test</h1>
+          <p>
+            Compare the animation performance of
+            <a href="https://greensock.com/">GSAP</a> (GreenSock Animation
+            Platform) and <a href="https://motion.dev/">Motion One</a>. Select
+            the options above and click "START". Crank up the number of dots
+            until you see jerky behavior or clumps/rings. Also notice which
+            properties animate faster: "top", "left", "width" and "height" or
+            "transform: translate(...) scale(...)". You may be surprised.
+          </p>
+          <p>
+            If any animation completes <strong>more than 150ms</strong> later
+            than it was supposed to, it will be logged and shown in orange text
+            next to the START/STOP button along with the average amount of time
+            they blew past their schedued end time. This is important because
+            some engines may have an illusion of being smoother but in reality
+            their internal timing mechanisms are drifting and everything is
+            slowing down, thus there's less movement between each frame. For
+            example, a tween that's supposed to take 750ms may actually end up
+            taking 10,000ms to complete.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../dist/motion.umd.js"></script>
+    <script src="../../node_modules/gsap/dist/gsap.js"></script>
+    <script>
+      var $start = document.querySelector("#start"),
+        $dotQtyInput = document.querySelector("#dotQuantity"),
+        $engineInput = document.querySelector("#engine"),
+        $propertiesInput = document.querySelector("#properties"),
+        $instructions = document.querySelector("#instructions"),
+        $field = document.querySelector("#field"),
+        $inputs = document.querySelectorAll("select"),
+        fps = document.getElementById("fps"),
+        inProgress = false,
+        tests = {},
+        tardy = document.getElementById("tardy"),
+        ticker = gsap.ticker,
+        count = 0,
+        tardyTotal = 0,
+        tardyCount = 0,
+        lastTardyReport = 0,
+        duration,
+        radius,
+        centerX,
+        centerY,
+        dots,
+        rawDots,
+        currentTest,
+        startingCSS,
+        prevUpdate,
+        startTime,
+        startFrame,
+        fpsActive
+
+      //GSAP normal (top/left/width/height)
+      tests.gsap_normal = {
+        milliseconds: false,
+        wrapDot: function (dot) {
+          return dot //no wrapping necessary
+        },
+        tween: function (dot) {
+          let delay = checkTardyAndGetDelay(dot),
+            angle = Math.random() * Math.PI * 2
+          dot.style.cssText = startingCSS
+          gsap.to(dot, {
+            left: Math.cos(angle) * radius + centerX,
+            top: Math.sin(angle) * radius + centerY,
+            width: 32,
+            height: 32,
+            duration: duration,
+            delay: delay,
+            ease: "cubic.in",
+            onComplete: tests.gsap_normal.tween,
+            onCompleteParams: [dot],
+          })
+        },
+        stop: function (dot) {
+          gsap.killTweensOf(dot)
+        },
+        nativeSize: false,
+      }
+
+      //GSAP transforms (translate()/scale())
+      tests.gsap_transforms = {
+        milliseconds: false,
+        wrapDot: function (dot) {
+          return dot //no wrapping necessary
+        },
+        tween: function (dot) {
+          let delay = checkTardyAndGetDelay(dot),
+            angle = Math.random() * Math.PI * 2
+          gsap.set(dot, { x: 0, y: 0, scale: 1, force3D: false })
+          gsap.to(dot, {
+            x: Math.cos(angle) * radius,
+            y: Math.sin(angle) * radius,
+            duration: duration,
+            scaleX: 32,
+            scaleY: 32,
+            delay: delay,
+            ease: "cubic.in",
+            onComplete: tests.gsap_transforms.tween,
+            onCompleteParams: [dot],
+          })
+        },
+        stop: function (dot) {
+          gsap.killTweensOf(dot)
+        },
+        nativeSize: false,
+      }
+
+      tests.gsap_transform = {
+        milliseconds: false,
+        wrapDot: function (dot) {
+          return dot //no wrapping necessary
+        },
+        tween: function (dot) {
+          let delay = checkTardyAndGetDelay(dot),
+            angle = Math.random() * Math.PI * 2
+          gsap.set(dot, { x: 0, y: 0, scale: 1, force3D: false })
+          gsap.to(dot, {
+            transform: `translateX(${Math.cos(angle) * radius}px) translateY(${
+              Math.sin(angle) * radius
+            }px) scale(32)`,
+            duration: duration,
+            delay: delay,
+            ease: "cubic.in",
+            onComplete: tests.gsap_transform.tween,
+            onCompleteParams: [dot],
+          })
+        },
+        stop: function (dot) {
+          gsap.killTweensOf(dot)
+        },
+        nativeSize: false,
+      }
+
+      // motion
+      tests.motion_normal = {
+        milliseconds: false,
+        wrapDot: function (dot) {
+          return dot //no wrapping necessary
+        },
+        tween: function (dot) {
+          var delay = checkTardyAndGetDelay(dot)
+          dot.style.cssText = startingCSS
+          let angle = Math.random() * Math.PI * 2,
+            anim = Motion.animate(
+              dot,
+              {
+                left: Math.cos(angle) * radius + centerX + "px",
+                top: Math.sin(angle) * radius + centerY + "px",
+                width: "32px",
+                height: "32px",
+              },
+              {
+                delay: delay,
+                duration: duration,
+                easing: [0.55, 0.055, 0.675, 0.19],
+              }
+            )
+          dot.anim = anim
+          anim.finished.then(() => {
+            if (inProgress) tests.motion_normal.tween(dot)
+          })
+        },
+        stop: function (dot) {
+          dot.anim.cancel()
+        },
+        nativeSize: false,
+      }
+
+      tests.motion_transforms = {
+        milliseconds: false,
+        wrapDot: function (dot) {
+          return dot //no wrapping necessary
+        },
+        tween: function (dot) {
+          var delay = checkTardyAndGetDelay(dot)
+          dot.style.cssText = startingCSS
+          let angle = Math.random() * Math.PI * 2,
+            anim = Motion.animate(
+              dot,
+              {
+                x: Math.cos(angle) * radius + "px",
+                y: Math.sin(angle) * radius + "px",
+                scale: 32,
+              },
+              {
+                delay: delay,
+                duration: duration,
+                easing: [0.55, 0.055, 0.675, 0.19],
+              }
+            )
+          dot.anim = anim
+          anim.finished.then(() => {
+            if (inProgress) tests.motion_transforms.tween(dot)
+          })
+        },
+        stop: function (dot) {
+          dot.anim.cancel()
+        },
+        nativeSize: false,
+      }
+
+      tests.motion_transform = {
+        milliseconds: false,
+        wrapDot: function (dot) {
+          return dot //no wrapping necessary
+        },
+        tween: function (dot) {
+          var delay = checkTardyAndGetDelay(dot)
+          dot.style.cssText = startingCSS
+          dot.style.willChange = "transform"
+          console.log("transform tween")
+          let angle = Math.random() * Math.PI * 2,
+            anim = Motion.animate(
+              dot,
+              {
+                transform: `translateX(${
+                  Math.cos(angle) * radius
+                }px) translateY(${Math.sin(angle) * radius}px) scale(32)`,
+              },
+              {
+                delay: delay,
+                duration: duration,
+                easing: [0.55, 0.055, 0.675, 0.19],
+                repeat: Infinity,
+              }
+            )
+          dot.anim = anim
+          // anim.finished.then(() => {
+          //   if (inProgress) tests.motion_transform.tween(dot)
+          // })
+        },
+        stop: function (dot) {
+          dot.anim.cancel()
+        },
+        nativeSize: false,
+      }
+
+      function toggleTest() {
+        var i, size
+        inProgress = !inProgress
+
+        if (inProgress) {
+          $inputs.forEach((input) => input.setAttribute("disabled", true))
+          $field.style.pointerEvents = "none"
+          $start.innerHTML = " STOP "
+          $start.style.background = "#C00"
+
+          //setTimeout(() => {
+          startTime = prevUpdate = ticker.time
+          startFrame = ticker.frame
+          tardyTotal = tardyCount = count = 0
+          //}, 2);
+          tardy.innerHTML = "Overdue animations: 0% (0ms average, 0%)"
+          fps.innerHTML = "-- fps"
+          fps.style.backgroundColor = "#FFFFFF"
+          fps.style.borderColor = fps.style.color = "#FF0000"
+          fps.style.borderWidth = "3px"
+          fps.style.paddingTop = fps.style.paddingBottom = "4px"
+          gsap.delayedCall(1, activateFPS) //wait a little bit to allow the dots to fill the screen before starting to report the FPS
+
+          gsap.to($instructions, {
+            autoAlpha: 0,
+            duration: 0.7,
+            overwrite: true,
+          })
+          currentTest = tests[$engineInput.value + "_" + $propertiesInput.value]
+          size = currentTest.nativeSize ? "16px" : "1px"
+          centerX = $field.offsetWidth / 2
+          centerY = $field.offsetHeight / 2
+
+          startingCSS =
+            "position:absolute; left:" +
+            centerX +
+            "px; top:" +
+            centerY +
+            "px; width:" +
+            size +
+            "; height:" +
+            size +
+            ";"
+
+          radius = Math.sqrt(centerX * centerX + centerY * centerY)
+          duration = currentTest.milliseconds ? 750 : 0.75
+          //we wait a millisecond before creating the dots and starting to animate them so that the UI renders first (making the "start" button say "stop"), otherwise users could be confused when there's a long pause when you choose Zepto and transforms due to the fact that it can take a while for the browser to put all the dots on their own layers.
+          setTimeout(function () {
+            createDots()
+            i = dots.length
+            while (--i > -1) {
+              currentTest.tween(dots[i])
+            }
+          }, 1)
+        } else {
+          $start.innerHTML = " START "
+          $start.style.backgroundColor = "#9af600"
+          $start.style.background =
+            "linear-gradient(to bottom, #9af600 0%,#71B200 100%"
+          gsap.to($instructions, { autoAlpha: 1, duration: 0.7, delay: 0.2 })
+          $inputs.forEach((input) => input.removeAttribute("disabled"))
+          $field.style.pointerEvents = "auto"
+          //stop the tweens and remove the dots.
+          i = dots.length
+          while (--i > -1) {
+            currentTest.stop(dots[i])
+            $field.removeChild(rawDots[i]) //removes dot(s)
+          }
+          dots = null
+          rawDots = null
+
+          fps.style.backgroundColor = "#CCCCCC"
+          fps.style.color = "#CC0000"
+          fps.style.borderColor = "#000000"
+          fps.style.borderWidth = "1px"
+          fps.style.paddingTop = fps.style.paddingBottom = "6px"
+          fpsActive = false
+          gsap.killTweensOf(activateFPS)
+          //clearInterval(fpsIntervalID);
+          gsap.ticker.remove(activateFPS)
+        }
+      }
+
+      function createDots() {
+        var i = parseInt($dotQtyInput.value),
+          dot
+        dots = []
+        rawDots = []
+        while (--i > -1) {
+          dot = document.createElement("img")
+          dot.src = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/dot.png"
+          dot.width = 1
+          dot.height = 1
+          dot.id = "dot" + i
+          dot.style.cssText = startingCSS
+          $field.appendChild(dot)
+          rawDots.push(dot)
+          dots.push(currentTest.wrapDot(dot))
+        }
+      }
+
+      $start.addEventListener("click", toggleTest)
+
+      function activateFPS() {
+        fpsActive = true
+        frames = 0
+        lastUpdate = getTime()
+        //originally we used setInterval() to keep things generic, but certain browsers got REALLY slow, updating requestAnimationFrame() far more frequently under stress, so I switched to GSAP's ticker to make things more consistent (which actually makes the other engines look BETTER, not worse).
+        //fpsIntervalID = setInterval(updateFPS, 10);
+        gsap.ticker.add(updateFPS)
+      }
+
+      var getTime =
+          Date.now ||
+          function () {
+            return new Date().getTime()
+          },
+        lastUpdate,
+        frames,
+        fpsIntervalID
+
+      function updateFPS() {
+        frames++
+        var elapsed = getTime() - lastUpdate
+        if (fpsActive && elapsed > 1000) {
+          fps.innerHTML = Number((frames / elapsed) * 1000).toFixed(1) + " fps"
+          lastUpdate += elapsed
+          frames = 0
+        }
+      }
+
+      function checkTardyAndGetDelay(dot) {
+        var delay = Math.random() * duration,
+          now = Date.now()
+        if (now - dot.due > 150) {
+          //if the animation is more than 150ms late, consider it overdue and report it.
+          reportTardy(now - dot.due)
+        } else if (tardyCount && now - lastTardyReport > 1500) {
+          //make sure the tally is updated at least every second.
+          var average = Math.round(tardyTotal / tardyCount)
+          tardy.innerHTML =
+            "Overdue animations: " +
+            Math.ceil((tardyCount * 100) / count) +
+            "% (" +
+            average +
+            "ms average, " +
+            Math.round((average * 100) / 750) +
+            "%)"
+          lastTardyReport = now
+        }
+        dot.due =
+          now + (delay + duration) * (currentTest.milliseconds ? 1 : 1000)
+        count++
+        return delay
+      }
+
+      function reportTardy(amount) {
+        tardyTotal += amount
+        tardyCount++
+        lastTardyReport = Date.now()
+        var average = Math.round(tardyTotal / tardyCount)
+        tardy.innerHTML =
+          "Overdue animations: " +
+          Math.ceil((tardyCount * 100) / count) +
+          "% (" +
+          average +
+          "ms average, " +
+          Math.round((average * 100) / 750) +
+          "%)"
+      }
+
+      document.getElementById("block").addEventListener("click", () => {
+        const timeStart = performance.now()
+        let jank = true
+        while (jank) {
+          if (performance.now() - timeStart > 2000) {
+            jank = false
+          }
+        }
+      })
+    </script>
+  </body>
+</html>

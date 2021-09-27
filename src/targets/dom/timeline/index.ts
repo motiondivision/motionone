@@ -45,7 +45,11 @@ export function timeline(
     animation && animations.push(animation as any)
   }
 
-  return createAnimationControls(animations)
+  return createAnimationControls(
+    animations,
+    // Get the duration from the first animation definition
+    animationDefinitions[0]?.[3].duration ?? defaults.duration
+  )
 }
 
 export function createAnimationsFromTimeline(

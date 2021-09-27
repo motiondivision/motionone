@@ -4,17 +4,35 @@ import { stopAnimation } from "./stop-animation"
 import { ms } from "./time"
 
 interface AnimationState {
+  duration: number
   animations: AnimationWithCommitStyles[]
   finished?: Promise<any>
 }
 
 export const createAnimationControls = (
-  animations: AnimationWithCommitStyles[]
-) => new Proxy({ animations } as any, controls) as AnimationControls
+  animations: AnimationWithCommitStyles[],
+  duration: number
+) => new Proxy({ animations, duration } as any, controls) as AnimationControls
+
+/**
+ * TODO:
+ * Currently this returns the first animation, ideally it would return
+ * the first active animation.
+ */
+const getActiveAnimation = (
+  state: AnimationState
+): AnimationWithCommitStyles | undefined => state.animations[0]
 
 export const controls = {
   get: (target: AnimationState, key: string) => {
     switch (key) {
+      case "duration":
+        return target.duration
+      case "currentTime":
+        let time = getActiveAnimation(target)?.[key] || 0
+        return time ? time / 1000 : 0
+      case "playbackRate":
+        return getActiveAnimation(target)?.[key]
       case "finished":
         if (!target.finished) {
           target.finished = Promise.all(
@@ -22,13 +40,6 @@ export const controls = {
           ).catch(noop)
         }
         return target.finished
-      case "currentTime":
-        // TODO Find first active animation
-        const duration = target.animations[0]?.[key] || 0
-        return duration ? duration / 1000 : 0
-      case "playbackRate":
-        // TODO Find first active animation
-        return target.animations[0]?.[key]
       case "stop":
         return () => target.animations.forEach(stopAnimation)
       default:
