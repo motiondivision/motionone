@@ -1,5 +1,5 @@
 import { cubicBezier } from "./cubic-bezier"
-import { steps } from "popmotion"
+import { steps } from "./steps"
 import { noopReturn } from "../../../utils/noop"
 import { Easing } from "../../dom/types"
 import { EasingFunction } from "../types"

@@ -121,6 +121,12 @@ export function animateStyle(
       easing: !isEasingList(easing) ? convertEasing(easing) : undefined,
       direction,
       iterations: repeat + 1,
+
+      /**
+       * This allows `currentTime` to be set as `duration`. Otherwise, the animation
+       * effect is considered finished and is removed entirely.
+       */
+      fill: "forwards" as FillMode,
     }
 
     animation = element.animate(

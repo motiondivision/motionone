@@ -1,4 +1,4 @@
-import { mix } from "popmotion"
+import { mix } from "../../../../utils/mix"
 import { removeItem } from "../../../../utils/array"
 import { getEasingForSegment } from "../../../js/utils/get-easing"
 import { Easing, UnresolvedValueKeyframe } from "../../types"

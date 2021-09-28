@@ -36,7 +36,7 @@
           duration: 2,
           // endDelay: 1,
           // fill: "forwards",
-          repeat: Infinity,
+          // repeat: Infinity,
           // duration: 1,
           // delay: 1,
           // stiffness: 200,
@@ -49,71 +49,33 @@
         }
       )
 
-      const mix = (from, to, progress) =>
-        -progress * from + progress * to + from
+      animation.pause()
+      animation.currentTime = 2 // - 0.00001
 
-      const pause = () => {
-        animation.pause()
-        scheduleResume()
-      }
+      // const mix = (from, to, progress) =>
+      //   -progress * from + progress * to + from
 
-      const resume = () => {
-        animation.play()
-        schedulePause()
-      }
+      // const pause = () => {
+      //   animation.pause()
+      //   scheduleResume()
+      // }
 
-      const scheduleResume = () => {
-        stutterTimeout = setTimeout(resume, mix(200, 500, Math.random()))
-      }
+      // const resume = () => {
+      //   animation.play()
+      //   schedulePause()
+      // }
 
-      const schedulePause = () => {
-        stutterTimeout = setTimeout(pause, mix(700, 1500, Math.random()))
-      }
+      // const scheduleResume = () => {
+      //   stutterTimeout = setTimeout(resume, mix(200, 500, Math.random()))
+      // }
 
-      schedulePause()
+      // const schedulePause = () => {
+      //   stutterTimeout = setTimeout(pause, mix(700, 1500, Math.random()))
+      // }
 
-      animation.finished.catch((e) => console.log(e))
+      // schedulePause()
 
-      // box.addEventListener("mouseenter", () => {
-      //   animate(box, { scale: 2 }, { duration: 0.3 }).finished.catch((e) =>
-      //     console.log(1, e)
-      //   )
-      // })
-
-      // box.addEventListener("mouseleave", () => {
-      //   animate(box, { scale: 1 }, { duration: 0.3 }).finished.catch((e) =>
-      //     console.log(2, e)
-      //   )
-      // })
-
-      // animateStyle(document.getElementById("box"), "translateX", 360, {
-      //   duration: 1,
-      // })
-      // setTimeout(() => {
-      //   animateStyle(document.getElementById("box"), "rotate", 360, {
-      //     duration: 1,
-      //   })
-      // }, 1000)
-
-      // const animation = animate(
-      //   document.getElementById("box"),
-      //   {
-      //     transform: "translateX(200px)",
-      //   },
-      //   {
-      //     duration: 2,
-      //     repeat: 2,
-      //     onStart: () => {
-      //       console.log("animation start")
-      //       setTimeout(() => {
-      //         animate(document.getElementById("box"), {
-      //           transform: "translateX(0px)",
-      //         })
-      //       }, 1000)
-      //     },
-      //     onCancel: () => console.log("animation cancel"),
-      //   }
-      // )
+      // animation.finished.catch((e) => console.log(e))
     </script>
   </body>
 </html>

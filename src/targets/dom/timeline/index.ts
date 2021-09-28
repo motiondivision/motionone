@@ -1,4 +1,4 @@
-import { progress } from "popmotion"
+import { progress } from "../../../utils/progress"
 import { resolveOption } from "../../../utils/stagger"
 import { defaultOffset, fillOffset } from "../../js/utils/offset"
 import { animateStyle } from "../animate-style"

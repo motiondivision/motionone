@@ -95,8 +95,23 @@ describe("animate", () => {
     const animation = animate(div, { opacity: 0.5 }, { duration: 10 })
 
     expect(animation.currentTime).toBe(0)
-    animation.currentTime = 50
-    expect(animation.currentTime).toBe(50)
+    animation.currentTime = 5
+    expect(animation.currentTime).toBe(5)
+  })
+
+  test("currentTime can be set to duration", async () => {
+    const div = document.createElement("div")
+    div.style.opacity = "0"
+    const animation = animate(div, { opacity: 0.5 }, { duration: 1 })
+    animation.pause()
+    animation.currentTime = 1
+
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
+        expect(div).toHaveStyle("opacity: 0.5")
+        resolve()
+      }, 50)
+    })
   })
 
   test("duration gets the duration of the animation", async () => {

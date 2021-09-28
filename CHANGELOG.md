@@ -2,6 +2,16 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.1.1] [2021-09-28]
+
+### Fixed
+
+- **Scrub to end:** Setting `currentTime` to `duration` was removing the animation effect. This has been fixed by setting `fill: "forwards"` on the WAAPI animation. This won't affect memory consumption as animations are flattened into styles and removed on finish. ([Issue (sponsors only)](https://github.com/motiondivision/motion/issues/21))
+
+### Changed
+
+- **Removed Popmotion dependency:** Reduced the number of dependencies by moving Popmotion utilities inside Motion One. Filesize remains unaffected in most environments but will be lower in Skypack and other distributors that don't support tree-shaking.
+
 ## [10.1.0] [2021-09-27]
 
 ### New

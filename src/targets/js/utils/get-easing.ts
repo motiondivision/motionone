@@ -1,4 +1,4 @@
-import { wrap } from "popmotion"
+import { wrap } from "../../../utils/wrap"
 import { isEasingList } from "../../dom/utils/easing"
 
 export function getEasingForSegment<T>(easing: T | T[], i: number) {

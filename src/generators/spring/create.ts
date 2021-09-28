@@ -1,4 +1,4 @@
-import { velocityPerSecond } from "popmotion"
+import { velocityPerSecond } from "../../utils/velocity-per-second"
 import { AnimationGenerator } from "../types"
 
 const defaultStiffness = 100.0

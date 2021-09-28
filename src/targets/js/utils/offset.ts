@@ -1,4 +1,5 @@
-import { mix, progress } from "popmotion"
+import { mix } from "../../../utils/mix"
+import { progress } from "../../../utils/progress"
 
 export function fillOffset(offset: number[], remaining: number) {
   const min = offset[offset.length - 1]

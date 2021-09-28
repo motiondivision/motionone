@@ -51,7 +51,6 @@
   },
   "dependencies": {
     "framer-motion": "^4.1.17",
-    "popmotion": "^9.3.5",
     "tslib": "^2.3.0"
   },
   "peerDependencies": {

@@ -1,5 +1,6 @@
-import { mix, progress } from "popmotion"
+import { mix } from "../../../utils/mix"
 import { noopReturn } from "../../../utils/noop"
+import { progress } from "../../../utils/progress"
 import { EasingFunction } from "../types"
 import { getEasingForSegment } from "./get-easing"
 import { defaultOffset, fillOffset } from "./offset"
