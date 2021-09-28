@@ -136,7 +136,7 @@
     },
     {
       "path": "./dist/size-timeline-dom.js",
-      "maxSize": "3.9 kB"
+      "maxSize": "3.95 kB"
     },
     {
       "path": "./dist/size-spring.js",
