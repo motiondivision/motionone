@@ -6,7 +6,7 @@ Motion One adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- **Scrub to end:** Setting `currentTime` to `duration` was removing the animation effect. This has been fixed by setting `fill: "forwards"` on the WAAPI animation. This won't affect memory consumption as animations are flattened into styles and removed on finish. ([Issue (sponsors only)](https://github.com/motiondivision/motion/issues/21))
+- **Scrub to end:** Setting `currentTime` to `duration` was removing the animation effect. This has been fixed by setting `fill: "forwards"` on the WAAPI animation. This won't affect memory consumption as animations are flattened into styles and removed on finish. [Issue (sponsors only)](https://github.com/motiondivision/motion/issues/21)
 
 ### Changed
 
