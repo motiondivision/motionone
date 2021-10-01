@@ -105,7 +105,9 @@ export type PlaybackOptions = {
 
 export type AnimationOptions = SpringOptions &
   KeyframeOptions &
-  PlaybackOptions & { allowWebkitAcceleration?: boolean }
+  PlaybackOptions & {
+    allowWebkitAcceleration?: boolean
+  }
 
 export interface AnimationWithCommitStyles extends Animation {
   commitStyles: () => void

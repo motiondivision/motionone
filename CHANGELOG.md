@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.1.2] [2021-10-02]
+
+### Fixed
+
+- **Fill both:** Previously, if a timeline animation had a delay and an initially-defined first keyframe (`opacity: [0, 1]`) the animation would start from its rendered style to that first keyframe. Now, the initial keyframe gets stretched to the very start of the whole animation by setting `fill: "both"`. [Issue (sponsors only)](https://github.com/motiondivision/motion/issues/20)
+
 ## [10.1.1] [2021-09-28]
 
 ### Fixed
