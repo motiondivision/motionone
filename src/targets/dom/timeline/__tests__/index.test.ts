@@ -54,8 +54,8 @@ describe("createAnimationsFromTimeline", () => {
     const animations = createAnimationsFromTimeline([
       [
         a,
-        { x: [100, 200, 300] },
-        { duration: 0.5, offset: [0.5, 0.7, 1], easing: "linear" },
+        { x: [100, 100, 200, 300] },
+        { duration: 0.5, offset: [0, 0.5, 0.7, 1], easing: "linear" },
       ],
     ])
 
@@ -63,11 +63,11 @@ describe("createAnimationsFromTimeline", () => {
       [
         a,
         "x",
-        [100, 200, 300],
+        [100, 100, 200, 300],
         {
           duration: 0.5,
-          easing: ["linear", "linear", "linear"],
-          offset: [0.5, 0.7, 1],
+          easing: ["linear", "linear", "linear", "linear"],
+          offset: [0, 0.5, 0.7, 1],
         },
       ],
     ])
@@ -108,11 +108,11 @@ describe("createAnimationsFromTimeline", () => {
       [
         b,
         "y",
-        [null, 500, null],
+        [null, null, 500, null],
         {
           duration: 2,
-          easing: ["ease", "ease"],
-          offset: [0.25, 0.5, 1],
+          easing: ["linear", "ease", "ease"],
+          offset: [0, 0.25, 0.5, 1],
         },
       ],
     ])
@@ -138,11 +138,11 @@ describe("createAnimationsFromTimeline", () => {
       [
         b,
         "y",
-        [null, 500],
+        [null, null, 500],
         {
           duration: 2,
-          easing: ["ease", "ease"],
-          offset: [0.75, 1],
+          easing: ["linear", "ease", "ease"],
+          offset: [0, 0.75, 1],
         },
       ],
     ])
@@ -228,11 +228,11 @@ describe("createAnimationsFromTimeline", () => {
       [
         b,
         "y",
-        [null, 500],
+        [null, null, 500],
         {
           duration: 2,
-          easing: ["ease", "ease"],
-          offset: [0.75, 1],
+          easing: ["linear", "ease", "ease"],
+          offset: [0, 0.75, 1],
         },
       ],
     ])
@@ -244,7 +244,7 @@ describe("createAnimationsFromTimeline", () => {
       [b, { y: 1 }, { duration: 0.5 }],
     ])
     expect(animations[0]?.[3]?.duration).toBe(2.5)
-    expect(animations[2]?.[3]?.offset?.[0]).toBe(0.8)
+    expect(animations[2]?.[3]?.offset?.[1]).toBe(0.8)
   })
 
   test("It creates multiple animations for multiple targets", () => {
@@ -271,20 +271,32 @@ describe("createAnimationsFromTimeline", () => {
       [
         a,
         "opacity",
-        [null, 1],
-        { duration: 4, easing: ["ease", "ease"], offset: [0.75, 1] },
+        [null, null, 1],
+        {
+          duration: 4,
+          easing: ["linear", "ease", "ease"],
+          offset: [0, 0.75, 1],
+        },
       ],
       [
         b,
         "x",
-        [null, 1, null],
-        { duration: 4, easing: ["ease", "ease"], offset: [0.25, 0.5, 1] },
+        [null, null, 1, null],
+        {
+          duration: 4,
+          easing: ["linear", "ease", "ease"],
+          offset: [0, 0.25, 0.5, 1],
+        },
       ],
       [
         c,
         "x",
-        [null, 1, null],
-        { duration: 4, easing: ["ease", "ease"], offset: [0.5, 0.75, 1] },
+        [null, null, 1, null],
+        {
+          duration: 4,
+          easing: ["linear", "ease", "ease"],
+          offset: [0, 0.5, 0.75, 1],
+        },
       ],
     ])
   })

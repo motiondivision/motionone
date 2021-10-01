@@ -33,20 +33,37 @@
     <div class="ball"></div>
     <script src="../../dist/motion.umd.js"></script>
     <script>
-      const { timeline, stagger } = Motion
-      const animation = timeline(
-        [
-          ["#box", { rotate: 360, scale: 1.3 }, { duration: 1 }],
-          [".ball", { x: 300 }, { duration: 1, delay: stagger(0.3) }],
-        ],
-        {
-          duration: 2,
-          repeat: Infinity,
-          direction: "alternate",
-        }
-      )
+      const { timeline, animate, stagger } = Motion
 
-      animation.finished.catch((e) => console.log(e))
+      const sequence = [
+        [
+          ".ball",
+          {
+            opacity: [0, 1],
+          },
+          {
+            duration: 1,
+            delay: stagger(0.5),
+            easing: "ease-in-out",
+          },
+        ],
+      ]
+
+      const motionTimeline = timeline(sequence)
+
+      // const animation = timeline(
+      //   [
+      //     ["#box", { rotate: 360, scale: 1.3 }, { duration: 1 }],
+      //     [".ball", { x: 300 }, { duration: 1, delay: stagger(0.3) }],
+      //   ],
+      //   {
+      //     duration: 2,
+      //     repeat: Infinity,
+      //     direction: "alternate",
+      //   }
+      // )
+
+      // animation.finished.catch((e) => console.log(e))
     </script>
   </body>
 </html>

@@ -178,7 +178,18 @@ export function createAnimationsFromTimeline(
       }
 
       /**
-       * If the generated animation doesn't end on the final keyframe,
+       * If the first keyframe doesn't land on offset: 0
+       * provide one by duplicating the initial keyframe. This ensures
+       * it snaps to the first keyframe when the animation starts.
+       */
+      if (valueOffset[0] !== 0) {
+        valueOffset.unshift(0)
+        keyframes.unshift(keyframes[0])
+        valueEasing.unshift("linear")
+      }
+
+      /**
+       * If the last keyframe doesn't land on offset: 1
        * provide one with a null wildcard value. This will ensure it
        * stays static until the end of the animation.
        */
