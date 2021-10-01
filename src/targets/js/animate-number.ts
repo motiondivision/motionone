@@ -21,7 +21,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
 
   private cancelT = 0
 
-  private playState: AnimationPlayState = "idle"
+  playState: AnimationPlayState = "idle"
 
   constructor(
     output: (v: number) => void,
