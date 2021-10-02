@@ -144,7 +144,15 @@ export function animateStyle(
     }
 
     const target = keyframes[keyframes.length - 1]
-    animation.finished.then(() => render(target)).catch(noop)
+    animation.finished
+      .then(() => {
+        // Apply styles to target
+        render(target)
+
+        // Ensure fill modes don't persist
+        animation.cancel()
+      })
+      .catch(noop)
 
     /**
      * This forces Webkit to run animations on the main thread by exploiting
