@@ -41,6 +41,7 @@ export function animate(
 
   return createAnimationControls(
     animations,
+    // TODO: Remove this in case duration is dynamically generated
     options.duration ?? defaults.duration
   )
 }

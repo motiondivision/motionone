@@ -1,5 +1,6 @@
-import { velocityPerSecond } from "../../utils/velocity-per-second"
-import { AnimationGenerator } from "../types"
+import { velocityPerSecond } from "../../../../utils/velocity-per-second"
+import { AnimationGenerator } from "../../types"
+import { SpringOptions } from "./types"
 
 const defaultStiffness = 100.0
 const defaultDamping = 10.0
@@ -16,14 +17,14 @@ export const calcAngularFreq = (undampedFreq: number, dampingRatio: number) =>
 
 export const createSpringGenerator = ({
   stiffness = defaultStiffness,
-  damping = 10.0,
-  mass = 1.0,
+  damping = defaultDamping,
+  mass = defaultMass,
   from = 0,
   to = 1,
   velocity = 0.0,
   restSpeed = 2,
-  restDelta = 0.1,
-} = {}): AnimationGenerator => {
+  restDistance = 0.1,
+}: SpringOptions = {}): AnimationGenerator => {
   velocity = velocity ? -(velocity / 1000) : 0.0
   const dampingRatio = calcDampingRatio(stiffness, damping, mass)
   const initialDelta = to - from
@@ -61,7 +62,7 @@ export const createSpringGenerator = ({
         t === 0 ? velocity : calcVelocity(resolveSpring, t, state.value)
       const isBelowVelocityThreshold = Math.abs(state.velocity) <= restSpeed
       const isBelowDisplacementThreshold =
-        Math.abs(to - state.value) <= restDelta
+        Math.abs(to - state.value) <= restDistance
       state.done = isBelowVelocityThreshold && isBelowDisplacementThreshold
 
       return state

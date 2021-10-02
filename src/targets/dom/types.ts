@@ -1,4 +1,5 @@
 import { OptionResolver } from "../../utils/stagger"
+import { AnimationGenerator } from "../js/types"
 import { NextTime } from "./timeline/types"
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
@@ -70,6 +71,15 @@ export type VariableKeyframesDefinition = {
 export type MotionKeyframesDefinition = StyleKeyframesDefinition &
   VariableKeyframesDefinition
 
+export type CustomEasing = {
+  isCustomEasing: true
+  createVelocityEasing: (
+    from: number,
+    to: number,
+    velocity: number
+  ) => AnimationGenerator
+}
+
 export type Easing =
   | "linear"
   | "ease"
@@ -80,6 +90,7 @@ export type Easing =
   | "steps-end"
   | `steps(${number}, ${"start" | "end"})`
   | BezierDefinition
+  | CustomEasing
 
 export type SpringOptions = {
   stiffness?: number
@@ -151,13 +162,3 @@ export interface CssPropertyDefinition {
 }
 
 export type CssPropertyDefinitionMap = { [key: string]: CssPropertyDefinition }
-
-export interface PregeneratedAnimation {
-  keyframes: Array<string | number>
-  duration: number
-}
-
-export interface KeyframeGenerator {
-  isKeyframeGenerator: true
-  generate: (keyframes: number[]) => false | PregeneratedAnimation
-}

@@ -15,7 +15,7 @@ import {
   transformPropertyDefinitions,
 } from "./utils/transforms"
 import { stopAnimation } from "./utils/stop-animation"
-import { convertEasing, isEasingList } from "./utils/easing"
+import { convertEasing, isCustomEasing, isEasingList } from "./utils/easing"
 import { supports } from "./utils/feature-detection"
 import { createCssVariableRenderer, createStyleRenderer } from "./utils/apply"
 import { animateNumber } from "../js/animate-number"
@@ -29,6 +29,7 @@ export function animateStyle(
   keyframesDefinition: ValueKeyframesDefinition,
   options: AnimationOptions = {}
 ): BasicAnimationControls | undefined {
+  let animation: any
   let {
     duration = defaults.duration,
     delay = defaults.delay,
@@ -54,6 +55,8 @@ export function animateStyle(
     name = asTransformCssVar(name)
   }
 
+  stopCurrentAnimation(data, name)
+
   /**
    * Get definition of value, this will be used to convert numerical
    * keyframes into the default value type.
@@ -74,7 +77,27 @@ export function animateStyle(
     name
   )
 
-  stopCurrentAnimation(data, name)
+  // TODO: Move this logic to spring
+  if (isCustomEasing(easing)) {
+    if (keyframes.length === 1 && typeof keyframes[0] === "number") {
+      console.log("velocity spring!")
+      const velocity = 1000
+      const velocityEasing = easing.createVelocityEasing(0, 200, velocity)
+      easing = "linear"
+    }
+    /**
+     * If this is a single keyframe, with just a number:
+     *  - We can attempt a velocity based spring!
+     *  - Get velocity from current animation
+     *  - Generate custom spring from from/to/velocity
+     *  - Get duration of custom spring
+     *  - Set easing to linear
+     * If this is a single keyframe, with a string:
+     *  - Get duration of default spring
+     *  - Generate linear-easing (in supported browsers)
+     *  - Or set easing to "ease"
+     */
+  }
 
   /**
    * If this is a CSS variable we need to register it with the browser
@@ -92,8 +115,6 @@ export function animateStyle(
   } else {
     render = createStyleRenderer(element, name)
   }
-
-  let animation: any
 
   /**
    * If we can animate this value with WAAPI, do so. Currently this only
@@ -123,7 +144,7 @@ export function animateStyle(
       iterations: repeat + 1,
       fill: "both" as FillMode,
     }
-
+    console.log(keyframes, animationOptions, offset)
     animation = element.animate(
       {
         [name]: keyframes,
