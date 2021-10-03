@@ -28,13 +28,14 @@
     <script>
       const { animate, spring } = Motion
       const box = document.getElementById("box")
+
       const animation = animate(
         box,
-        { x: 500, rotate: 45, opacity: 0 },
+        { x: 500 },
         {
-          // easing: spring(),
+          easing: spring(),
           // delay: 0.001,
-          // duration: 2,
+          duration: 2,
           // endDelay: 1,
           // fill: "forwards",
           // repeat: Infinity,

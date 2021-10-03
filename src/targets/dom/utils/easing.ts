@@ -8,7 +8,9 @@ export const isCubicBezier = (
 export const isEasingList = (easing: Easing | Easing[]): easing is Easing[] =>
   Array.isArray(easing) && typeof easing[0] !== "number"
 
-export const isCustomEasing = (easing: Easing): easing is CustomEasing =>
+export const isCustomEasing = (
+  easing: Easing | Easing[] | CustomEasing
+): easing is CustomEasing =>
   typeof easing === "object" && (easing as CustomEasing).isCustomEasing
 
 export const convertEasing = (easing: Easing) =>

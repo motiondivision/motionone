@@ -1,5 +1,6 @@
-import { AnimationData, getAnimationData } from "./data"
+import { getAnimationData } from "./data"
 import {
+  AnimationData,
   AnimationOptions,
   BasicAnimationControls,
   ValueKeyframesDefinition,
@@ -77,26 +78,11 @@ export function animateStyle(
     name
   )
 
-  // TODO: Move this logic to spring
   if (isCustomEasing(easing)) {
-    if (keyframes.length === 1 && typeof keyframes[0] === "number") {
-      console.log("velocity spring!")
-      const velocity = 1000
-      const velocityEasing = easing.createVelocityEasing(0, 200, velocity)
-      easing = "linear"
-    }
-    /**
-     * If this is a single keyframe, with just a number:
-     *  - We can attempt a velocity based spring!
-     *  - Get velocity from current animation
-     *  - Generate custom spring from from/to/velocity
-     *  - Get duration of custom spring
-     *  - Set easing to linear
-     * If this is a single keyframe, with a string:
-     *  - Get duration of default spring
-     *  - Generate linear-easing (in supported browsers)
-     *  - Or set easing to "ease"
-     */
+    const custom = easing.getAnimationSettings(element, name, keyframes, data)
+    keyframes = custom.keyframes ?? keyframes
+    easing = custom.easing
+    duration = custom.duration ?? duration
   }
 
   /**
@@ -144,7 +130,7 @@ export function animateStyle(
       iterations: repeat + 1,
       fill: "both" as FillMode,
     }
-    console.log(keyframes, animationOptions, offset)
+
     animation = element.animate(
       {
         [name]: keyframes,
@@ -206,7 +192,7 @@ export function animateStyle(
       render = (v: number) => applyStyle(definition.toDefaultUnit(v))
     }
 
-    animation = animateNumber(render, keyframes as any, options)
+    animation = animateNumber(render, keyframes as any, { ...options, easing })
   } else {
     const target = keyframes[keyframes.length - 1]
     render(

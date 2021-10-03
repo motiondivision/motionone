@@ -1,9 +1,4 @@
-import { BasicAnimationControls } from "./types"
-
-export interface AnimationData {
-  activeTransforms: string[]
-  activeAnimations: { [key: string]: BasicAnimationControls | undefined }
-}
+import { AnimationData } from "./types"
 
 const data = new WeakMap<Element, AnimationData>()
 

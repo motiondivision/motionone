@@ -2,6 +2,11 @@ import { OptionResolver } from "../../utils/stagger"
 import { AnimationGenerator } from "../js/types"
 import { NextTime } from "./timeline/types"
 
+export interface AnimationData {
+  activeTransforms: string[]
+  activeAnimations: { [key: string]: BasicAnimationControls | undefined }
+}
+
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 export type AcceptedElements =
@@ -71,6 +76,12 @@ export type VariableKeyframesDefinition = {
 export type MotionKeyframesDefinition = StyleKeyframesDefinition &
   VariableKeyframesDefinition
 
+export type CustomAnimationSettings = {
+  easing: Easing
+  keyframes?: number[]
+  duration?: number
+}
+
 export type CustomEasing = {
   isCustomEasing: true
   createVelocityEasing: (
@@ -78,6 +89,12 @@ export type CustomEasing = {
     to: number,
     velocity: number
   ) => AnimationGenerator
+  getAnimationSettings: (
+    element: Element,
+    name: string,
+    keyframes: ValueKeyframe[],
+    data?: AnimationData
+  ) => CustomAnimationSettings
 }
 
 export type Easing =
@@ -90,20 +107,10 @@ export type Easing =
   | "steps-end"
   | `steps(${number}, ${"start" | "end"})`
   | BezierDefinition
-  | CustomEasing
-
-export type SpringOptions = {
-  stiffness?: number
-  damping?: number
-  mass?: number
-  velocity?: number
-  restSpeed?: number
-  restDelta?: number
-}
 
 export type KeyframeOptions = {
   duration?: number
-  easing?: Easing | Easing[]
+  easing?: CustomEasing | Easing | Easing[]
   offset?: number[]
 }
 
@@ -114,8 +121,7 @@ export type PlaybackOptions = {
   direction?: "normal" | "reverse" | "alternate" | "alternate-reverse"
 }
 
-export type AnimationOptions = SpringOptions &
-  KeyframeOptions &
+export type AnimationOptions = KeyframeOptions &
   PlaybackOptions & {
     allowWebkitAcceleration?: boolean
   }

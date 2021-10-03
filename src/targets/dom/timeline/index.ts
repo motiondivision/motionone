@@ -101,10 +101,9 @@ export function createAnimationsFromTimeline(
         const valueSequence = getValueSequence(key, elementSequence)
         const valueKeyframes = keyframesList(keyframes[key]!)
         const valueOptions = getOptions(options, key)
-        const {
+        let {
           duration = defaultOptions.duration || defaults.duration,
           easing = defaultOptions.easing || defaults.easing,
-          offset = defaultOffset(valueKeyframes.length),
         } = valueOptions
 
         const delay =
@@ -112,6 +111,16 @@ export function createAnimationsFromTimeline(
         const startTime = currentTime + delay
         const targetTime = startTime + duration
 
+        /**
+         *
+         */
+        let { offset = defaultOffset(valueKeyframes.length) } = valueOptions
+
+        /**
+         * If there's only one offset of 0, fill in a second with length 1
+         *
+         * TODO: Ensure there's a test that covers this removal
+         */
         if (offset.length === 1 && offset[0] === 0) {
           offset[1] = 1
         }
@@ -135,7 +144,7 @@ export function createAnimationsFromTimeline(
         addKeyframes(
           valueSequence,
           valueKeyframes,
-          easing,
+          easing as Easing | Easing[],
           offset,
           startTime,
           targetTime

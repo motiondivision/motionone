@@ -23,9 +23,9 @@ export const createSpringGenerator = ({
   to = 1,
   velocity = 0.0,
   restSpeed = 2,
-  restDistance = 0.1,
+  restDistance = 0.5,
 }: SpringOptions = {}): AnimationGenerator => {
-  velocity = velocity ? -(velocity / 1000) : 0.0
+  velocity = velocity ? velocity / 1000 : 0.0
   const dampingRatio = calcDampingRatio(stiffness, damping, mass)
   const initialDelta = to - from
   const undampedAngularFreq = Math.sqrt(stiffness / mass) / 1000
