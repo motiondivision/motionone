@@ -79,10 +79,10 @@ export function animateStyle(
   )
 
   if (isCustomEasing(easing)) {
-    const custom = easing.getAnimationSettings(element, name, keyframes, data)
-    keyframes = custom.keyframes ?? keyframes
+    const custom = easing.createAnimation(element, name, keyframes, data)
     easing = custom.easing
-    duration = custom.duration ?? duration
+    if (custom.keyframes) keyframes = custom.keyframes
+    if (custom.duration) duration = custom.duration
   }
 
   /**

@@ -11,7 +11,8 @@ export const isEasingList = (easing: Easing | Easing[]): easing is Easing[] =>
 export const isCustomEasing = (
   easing: Easing | Easing[] | CustomEasing
 ): easing is CustomEasing =>
-  typeof easing === "object" && (easing as CustomEasing).isCustomEasing
+  typeof easing === "object" &&
+  Boolean((easing as CustomEasing).createAnimation)
 
 export const convertEasing = (easing: Easing) =>
   isCubicBezier(easing) ? cubicBezierAsString(easing) : easing

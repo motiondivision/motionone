@@ -1,5 +1,4 @@
 import { OptionResolver } from "../../utils/stagger"
-import { AnimationGenerator } from "../js/types"
 import { NextTime } from "./timeline/types"
 
 export interface AnimationData {
@@ -83,13 +82,7 @@ export type CustomAnimationSettings = {
 }
 
 export type CustomEasing = {
-  isCustomEasing: true
-  createVelocityEasing: (
-    from: number,
-    to: number,
-    velocity: number
-  ) => AnimationGenerator
-  getAnimationSettings: (
+  createAnimation: (
     element: Element,
     name: string,
     keyframes: ValueKeyframe[],

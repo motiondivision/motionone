@@ -20,9 +20,7 @@ export function spring(options: SpringOptions = {}): CustomEasing {
 
   // TODO These are the same
   return {
-    isCustomEasing: true,
-    createVelocityEasing: getSpring,
-    getAnimationSettings: (element, name, keyframes, _data) => {
+    createAnimation: (element, name, keyframes, _data) => {
       const settings: CustomAnimationSettings = { easing: "ease" }
       let spring: AnimationGenerator | undefined
 
