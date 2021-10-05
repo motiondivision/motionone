@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.2.0] [2021-10-05]
+
+### New
+
+- **Springs:** Animate transforms with realistic spring simulations and automatic velocity transfer.
+
 ## [10.1.3] [2021-10-01]
 
 ### Fixed

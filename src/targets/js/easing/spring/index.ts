@@ -15,12 +15,19 @@ export function spring(options: SpringOptions = {}): CustomEasing {
   const springCache = new Map<string, any>()
   const keyframesCache = new WeakMap<AnimationGenerator, KeyframesMetadata>()
 
-  const getSpring = (from = 0, to = 100, velocity = 0) => {
-    const key = `${from}-${to}-${velocity}`
+  const getSpring = (from = 0, to = 100, velocity = 0, isScale = false) => {
+    const key = `${from}-${to}-${velocity}-${isScale}`
     if (!springCache.has(key)) {
       springCache.set(
         key,
-        createSpringGenerator({ from, to, velocity, ...options })
+        createSpringGenerator({
+          from,
+          to,
+          velocity,
+          restSpeed: isScale ? 0.05 : 2,
+          restDistance: isScale ? 0.01 : 0.5,
+          ...options,
+        })
       )
     }
 
@@ -69,7 +76,12 @@ export function spring(options: SpringOptions = {}): CustomEasing {
               : parseFloat(getOrigin())
             : (unresolvedOrigin as number)
 
-        spring = getSpring(origin as number, target, velocity)
+        spring = getSpring(
+          origin as number,
+          target,
+          velocity,
+          name?.includes("scale")
+        )
         const keyframesMetadata = getKeyframes(spring, origin, target)
         settings = { ...keyframesMetadata, easing: "linear" }
       } else {
