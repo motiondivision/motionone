@@ -1,5 +1,6 @@
-import { AnimationData, getAnimationData } from "./data"
+import { getAnimationData } from "./data"
 import {
+  AnimationData,
   AnimationOptions,
   BasicAnimationControls,
   ValueKeyframesDefinition,
@@ -15,7 +16,7 @@ import {
   transformPropertyDefinitions,
 } from "./utils/transforms"
 import { stopAnimation } from "./utils/stop-animation"
-import { convertEasing, isEasingList } from "./utils/easing"
+import { convertEasing, isCustomEasing, isEasingList } from "./utils/easing"
 import { supports } from "./utils/feature-detection"
 import { createCssVariableRenderer, createStyleRenderer } from "./utils/apply"
 import { animateNumber } from "../js/animate-number"
@@ -29,6 +30,7 @@ export function animateStyle(
   keyframesDefinition: ValueKeyframesDefinition,
   options: AnimationOptions = {}
 ): BasicAnimationControls | undefined {
+  let animation: any
   let {
     duration = defaults.duration,
     delay = defaults.delay,
@@ -74,7 +76,18 @@ export function animateStyle(
     name
   )
 
-  stopCurrentAnimation(data, name)
+  if (isCustomEasing(easing)) {
+    const custom = easing.createAnimation(
+      keyframes,
+      () => style.get(element, name),
+      valueIsTransform,
+      name,
+      data
+    )
+    easing = custom.easing
+    if (custom.keyframes) keyframes = custom.keyframes
+    if (custom.duration) duration = custom.duration
+  }
 
   /**
    * If this is a CSS variable we need to register it with the browser
@@ -93,7 +106,12 @@ export function animateStyle(
     render = createStyleRenderer(element, name)
   }
 
-  let animation: any
+  /**
+   * Stop the current animation, if any, after we have the
+   * opportunity to use its data to generate velocity for
+   * the subsequent animation.
+   */
+  stopCurrentAnimation(data, name)
 
   /**
    * If we can animate this value with WAAPI, do so. Currently this only
@@ -185,7 +203,7 @@ export function animateStyle(
       render = (v: number) => applyStyle(definition.toDefaultUnit(v))
     }
 
-    animation = animateNumber(render, keyframes as any, options)
+    animation = animateNumber(render, keyframes as any, { ...options, easing })
   } else {
     const target = keyframes[keyframes.length - 1]
     render(
@@ -200,9 +218,7 @@ export function animateStyle(
   /**
    * When an animation finishes, delete the reference to the previous animation.
    */
-  animation?.finished
-    .then(() => (data.activeAnimations[name] = undefined))
-    .catch(noop)
+  animation?.finished.then(() => clearData(data, name)).catch(noop)
 
   return animation
 }
@@ -210,8 +226,12 @@ export function animateStyle(
 function stopCurrentAnimation(data: AnimationData, name: string) {
   if (data.activeAnimations[name]) {
     stopAnimation(data.activeAnimations[name]!)
-    data.activeAnimations[name] = undefined
+    clearData(data, name)
   }
+}
+
+function clearData(data: AnimationData, name: string) {
+  data.activeGenerators[name] = data.activeAnimations[name] = undefined
 }
 
 const isNumber = (value: string | number): value is number =>

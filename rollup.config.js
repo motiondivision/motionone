@@ -126,7 +126,7 @@ const sizeTimelineDom = createSizeBuild({
 })
 
 const sizeSpring = createSizeBuild({
-  input: "lib/generators/spring/index.js",
+  input: "lib/targets/js/easing/spring/index.js",
   output: "dist/size-spring.js",
 })
 

@@ -1,6 +1,6 @@
 import { getEasingFunction } from "../get-function"
-import { cubicBezier } from "../cubic-bezier"
-import { steps } from "../steps"
+import { cubicBezier } from "../../cubic-bezier"
+import { steps } from "../../steps"
 
 const namedEasings = {
   ease: cubicBezier(0.25, 0.1, 0.25, 1.0),

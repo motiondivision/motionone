@@ -1,7 +1,7 @@
 import { AnimationControls, AnimationOptions, Easing } from "../dom/types"
 import { defaults } from "../dom/utils/defaults"
-import { isEasingList } from "../dom/utils/easing"
-import { getEasingFunction } from "./easing/get-function"
+import { isCustomEasing, isEasingList } from "../dom/utils/easing"
+import { getEasingFunction } from "./easing/utils/get-function"
 import { slowInterpolateNumbers } from "./utils/interpolate"
 
 export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
@@ -26,18 +26,24 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
   constructor(
     output: (v: number) => void,
     keyframes: number[],
-    // TODO Merge in defaults
     {
       easing = defaults.easing as Easing,
       duration = defaults.duration,
       delay = defaults.delay,
       endDelay = defaults.endDelay,
-      offset,
       repeat = defaults.repeat,
+      offset,
       direction = "normal",
     }: AnimationOptions
   ) {
     const totalDuration = duration * (repeat + 1)
+
+    if (isCustomEasing(easing)) {
+      // const customAnimationOptions = easing.getAnimationSettings(keyframes)
+      // keyframes = customAnimationOptions.keyframes
+      easing = "ease" //customAnimationOptions.easing
+      //duration = customAnimationOptions.duration ?? duration
+    }
 
     const interpolate = slowInterpolateNumbers(
       keyframes,

@@ -19,6 +19,7 @@
         height: 100px;
         border-radius: 10px;
         background-color: #73d99f;
+        opacity: 0;
       }
     </style>
   </head>
@@ -26,31 +27,32 @@
     <div id="box"></div>
     <script src="../../dist/motion.umd.js"></script>
     <script>
-      const { animate, animateStyle } = Motion
+      const { animate, spring } = Motion
       const box = document.getElementById("box")
-      const animation = animate(
-        box,
-        { x: [-120, 120] },
-        {
-          // delay: 0.001,
-          duration: 2,
-          // endDelay: 1,
-          // fill: "forwards",
-          // repeat: Infinity,
-          // duration: 1,
-          // delay: 1,
-          // stiffness: 200,
-          // damping: 10,
-          // direction: "alternate",
-          // repeat: Infinity,
-          // easing: "linear",
-          // x: { easing: ["ease-in", "linear"] },
-          // // offset: [0, 0.2, 1],
-        }
-      )
 
-      animation.pause()
-      animation.currentTime = 2 // - 0.00001
+      setTimeout(() => {
+        const animation = animate(
+          box,
+          { scale: 0.5, opacity: [0, 1] },
+          {
+            easing: spring({ velocity: 100 }),
+            // delay: 0.001,
+            duration: 2,
+            // endDelay: 1,
+            // fill: "forwards",
+            // repeat: Infinity,
+            // duration: 1,
+            // delay: 1,
+            // stiffness: 200,
+            // damping: 10,
+            // direction: "alternate",
+            // repeat: Infinity,
+            // easing: "linear",
+            // x: { easing: ["ease-in", "linear"] },
+            // // offset: [0, 0.2, 1],
+          }
+        )
+      }, 1000)
 
       // const mix = (from, to, progress) =>
       //   -progress * from + progress * to + from

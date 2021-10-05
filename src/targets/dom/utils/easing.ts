@@ -1,4 +1,4 @@
-import { BezierDefinition, Easing } from "../types"
+import { BezierDefinition, CustomEasing, Easing } from "../types"
 
 export const isCubicBezier = (
   easing: Easing | Easing[]
@@ -7,6 +7,12 @@ export const isCubicBezier = (
 
 export const isEasingList = (easing: Easing | Easing[]): easing is Easing[] =>
   Array.isArray(easing) && typeof easing[0] !== "number"
+
+export const isCustomEasing = (
+  easing: Easing | Easing[] | CustomEasing
+): easing is CustomEasing =>
+  typeof easing === "object" &&
+  Boolean((easing as CustomEasing).createAnimation)
 
 export const convertEasing = (easing: Easing) =>
   isCubicBezier(easing) ? cubicBezierAsString(easing) : easing

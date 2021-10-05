@@ -1,5 +1,12 @@
 import { OptionResolver } from "../../utils/stagger"
+import { AnimationGenerator } from "../js/types"
 import { NextTime } from "./timeline/types"
+
+export interface AnimationData {
+  activeTransforms: string[]
+  activeAnimations: { [key: string]: BasicAnimationControls | undefined }
+  activeGenerators: { [key: string]: AnimationGenerator | undefined }
+}
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
@@ -70,6 +77,22 @@ export type VariableKeyframesDefinition = {
 export type MotionKeyframesDefinition = StyleKeyframesDefinition &
   VariableKeyframesDefinition
 
+export type CustomAnimationSettings = {
+  easing: Easing
+  keyframes?: number[]
+  duration?: number
+}
+
+export type CustomEasing = {
+  createAnimation: (
+    keyframes: UnresolvedValueKeyframe[],
+    getOrigin: () => string,
+    isTransform: boolean,
+    name?: string,
+    data?: AnimationData
+  ) => CustomAnimationSettings
+}
+
 export type Easing =
   | "linear"
   | "ease"
@@ -81,18 +104,9 @@ export type Easing =
   | `steps(${number}, ${"start" | "end"})`
   | BezierDefinition
 
-export type SpringOptions = {
-  stiffness?: number
-  damping?: number
-  mass?: number
-  velocity?: number
-  restSpeed?: number
-  restDelta?: number
-}
-
 export type KeyframeOptions = {
   duration?: number
-  easing?: Easing | Easing[]
+  easing?: CustomEasing | Easing | Easing[]
   offset?: number[]
 }
 
@@ -103,8 +117,7 @@ export type PlaybackOptions = {
   direction?: "normal" | "reverse" | "alternate" | "alternate-reverse"
 }
 
-export type AnimationOptions = SpringOptions &
-  KeyframeOptions &
+export type AnimationOptions = KeyframeOptions &
   PlaybackOptions & {
     allowWebkitAcceleration?: boolean
   }
@@ -151,13 +164,3 @@ export interface CssPropertyDefinition {
 }
 
 export type CssPropertyDefinitionMap = { [key: string]: CssPropertyDefinition }
-
-export interface PregeneratedAnimation {
-  keyframes: Array<string | number>
-  duration: number
-}
-
-export interface KeyframeGenerator {
-  isKeyframeGenerator: true
-  generate: (keyframes: number[]) => false | PregeneratedAnimation
-}

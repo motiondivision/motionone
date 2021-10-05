@@ -1,5 +1,5 @@
 import { Easing } from "../targets/dom/types"
-import { getEasingFunction } from "../targets/js/easing/get-function"
+import { getEasingFunction } from "../targets/js/easing/utils/get-function"
 import { EasingFunction } from "../targets/js/types"
 
 export type From = "first" | "last" | "center" | number
