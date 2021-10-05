@@ -58,7 +58,7 @@ describe("Poses", () => {
       const { rerender, getByTestId } = render(<Component />)
       rerender(<Component />)
 
-      setTimeout(() => reject(false), 50)
+      setTimeout(() => reject(false), 100)
     })
 
     return expect(promise).resolves.toEqual(true)
@@ -108,7 +108,7 @@ describe("Poses", () => {
       const { rerender, getByTestId } = render(<Component />)
       rerender(<Component />)
 
-      setTimeout(() => reject(false), 100)
+      setTimeout(() => reject(false), 140)
     })
 
     return expect(promise).resolves.toEqual(true)

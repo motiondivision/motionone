@@ -1,9 +1,11 @@
 import { OptionResolver } from "../../utils/stagger"
+import { AnimationGenerator } from "../js/types"
 import { NextTime } from "./timeline/types"
 
 export interface AnimationData {
   activeTransforms: string[]
   activeAnimations: { [key: string]: BasicAnimationControls | undefined }
+  activeGenerators: { [key: string]: AnimationGenerator | undefined }
 }
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
@@ -83,9 +85,9 @@ export type CustomAnimationSettings = {
 
 export type CustomEasing = {
   createAnimation: (
-    element: Element,
-    name: string,
-    keyframes: ValueKeyframe[],
+    keyframes: UnresolvedValueKeyframe[],
+    getOrigin: () => string,
+    name?: string,
     data?: AnimationData
   ) => CustomAnimationSettings
 }

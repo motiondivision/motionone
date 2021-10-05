@@ -56,8 +56,6 @@ export function animateStyle(
     name = asTransformCssVar(name)
   }
 
-  stopCurrentAnimation(data, name)
-
   /**
    * Get definition of value, this will be used to convert numerical
    * keyframes into the default value type.
@@ -79,7 +77,12 @@ export function animateStyle(
   )
 
   if (isCustomEasing(easing)) {
-    const custom = easing.createAnimation(element, name, keyframes, data)
+    const custom = easing.createAnimation(
+      keyframes,
+      () => style.get(element, name),
+      name,
+      data
+    )
     easing = custom.easing
     if (custom.keyframes) keyframes = custom.keyframes
     if (custom.duration) duration = custom.duration
@@ -101,6 +104,13 @@ export function animateStyle(
   } else {
     render = createStyleRenderer(element, name)
   }
+
+  /**
+   * Stop the current animation, if any, after we have the
+   * opportunity to use its data to generate velocity for
+   * the subsequent animation.
+   */
+  stopCurrentAnimation(data, name)
 
   /**
    * If we can animate this value with WAAPI, do so. Currently this only
@@ -207,9 +217,7 @@ export function animateStyle(
   /**
    * When an animation finishes, delete the reference to the previous animation.
    */
-  animation?.finished
-    .then(() => (data.activeAnimations[name] = undefined))
-    .catch(noop)
+  animation?.finished.then(() => clearData(data, name)).catch(noop)
 
   return animation
 }
@@ -217,8 +225,12 @@ export function animateStyle(
 function stopCurrentAnimation(data: AnimationData, name: string) {
   if (data.activeAnimations[name]) {
     stopAnimation(data.activeAnimations[name]!)
-    data.activeAnimations[name] = undefined
+    clearData(data, name)
   }
+}
+
+function clearData(data: AnimationData, name: string) {
+  data.activeGenerators[name] = data.activeAnimations[name] = undefined
 }
 
 const isNumber = (value: string | number): value is number =>

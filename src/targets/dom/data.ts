@@ -7,6 +7,7 @@ export function getAnimationData(element: Element): AnimationData {
     data.set(element, {
       activeTransforms: [],
       activeAnimations: {},
+      activeGenerators: {},
     })
   }
 

@@ -20,12 +20,6 @@ describe("animate", () => {
         "--css-var": {
           direction: "alternate",
         },
-        stiffness: 1,
-        damping: 1,
-        mass: 1,
-        velocity: 1,
-        restSpeed: 1,
-        restDelta: 1,
         direction: "alternate",
         easing: "steps(2, start)",
         offset: [0],
