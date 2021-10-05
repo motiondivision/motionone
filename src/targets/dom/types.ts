@@ -87,6 +87,7 @@ export type CustomEasing = {
   createAnimation: (
     keyframes: UnresolvedValueKeyframe[],
     getOrigin: () => string,
+    isTransform: boolean,
     name?: string,
     data?: AnimationData
   ) => CustomAnimationSettings

@@ -5,15 +5,15 @@ import {
   CustomAnimationSettings,
   CustomEasing,
 } from "../../../.."
-import { AnimationGenerator } from "../../types"
+import { AnimationGenerator, AnimationGeneratorState } from "../../types"
 import {
-  calcKeyframesDuration,
   pregenerateKeyframes,
+  KeyframesMetadata,
 } from "../utils/pregenerate-keyframes"
 
 export function spring(options: SpringOptions = {}): CustomEasing {
   const springCache = new Map<string, any>()
-  const keyframesCache = new WeakMap<AnimationGenerator, number[]>()
+  const keyframesCache = new WeakMap<AnimationGenerator, KeyframesMetadata>()
 
   const getSpring = (from = 0, to = 100, velocity = 0) => {
     const key = `${from}-${to}-${velocity}`
@@ -27,52 +27,58 @@ export function spring(options: SpringOptions = {}): CustomEasing {
     return springCache.get(key) as AnimationGenerator
   }
 
-  const getKeyframes = (generator: AnimationGenerator, target: number) => {
+  const getKeyframes = (
+    generator: AnimationGenerator,
+    origin: number,
+    target: number
+  ) => {
     if (!keyframesCache.has(generator)) {
-      keyframesCache.set(generator, pregenerateKeyframes(generator, target))
+      keyframesCache.set(
+        generator,
+        pregenerateKeyframes(generator, origin, target)
+      )
     }
 
-    return keyframesCache.get(generator) as number[]
+    return keyframesCache.get(generator) as KeyframesMetadata
   }
 
   return {
-    createAnimation: (keyframes, getOrigin, name, data) => {
+    createAnimation: (keyframes, getOrigin, canUseRealSpring, name, data) => {
       let settings: CustomAnimationSettings
       let spring: AnimationGenerator
       const numKeyframes = keyframes.length
 
       let shouldUseRealSpring =
-        numKeyframes <= 2 && keyframes.every(isNumberOrNull)
+        canUseRealSpring && numKeyframes <= 2 && keyframes.every(isNumberOrNull)
 
       if (shouldUseRealSpring) {
+        const prevAnimationState =
+          name && data && getPreviousAnimationState(name, data)
         const velocity =
-          name &&
-          data &&
-          // [number] || [null, number]
+          prevAnimationState &&
           (numKeyframes === 1 || (numKeyframes === 2 && keyframes[0] === null))
-            ? getVelocityFromAnimation(name, data)
+            ? prevAnimationState.velocity
             : 0
 
         const target = keyframes[numKeyframes - 1] as number
         const unresolvedOrigin = numKeyframes === 1 ? null : keyframes[0]
         const origin =
-          unresolvedOrigin === null ? parseFloat(getOrigin()) : unresolvedOrigin
+          unresolvedOrigin === null
+            ? prevAnimationState
+              ? prevAnimationState.value
+              : parseFloat(getOrigin())
+            : (unresolvedOrigin as number)
 
         spring = getSpring(origin as number, target, velocity)
-        const generatedKeyframes = getKeyframes(spring, target)
-        settings = {
-          easing: "linear",
-          keyframes: generatedKeyframes,
-          duration: calcKeyframesDuration(generatedKeyframes),
-        }
+        const keyframesMetadata = getKeyframes(spring, origin, target)
+        settings = { ...keyframesMetadata, easing: "linear" }
       } else {
         spring = getSpring(0, 100)
-        const generatedKeyframes = getKeyframes(spring, 100)
+        const keyframesMetadata = getKeyframes(spring, 0, 100)
 
         settings = {
           easing: "ease",
-          // TODO Replace this with target reached duration
-          duration: calcKeyframesDuration(generatedKeyframes),
+          duration: keyframesMetadata.overshootDuration,
         }
       }
 
@@ -81,17 +87,15 @@ export function spring(options: SpringOptions = {}): CustomEasing {
   }
 }
 
-function getVelocityFromAnimation(name: string, data: AnimationData) {
-  let velocity = 0
-
+function getPreviousAnimationState(
+  name: string,
+  data: AnimationData
+): AnimationGeneratorState | undefined {
   const animation = data.activeAnimations[name]
   const generator = data.activeGenerators[name]
   if (animation && generator) {
-    const state = generator.next((animation as any).currentTime)
-    velocity = state.velocity
+    return generator.next((animation as any).currentTime)
   }
-
-  return velocity
 }
 
 const isNumberOrNull = (value: null | number | string) =>

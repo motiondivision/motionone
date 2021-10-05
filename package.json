@@ -140,7 +140,7 @@
     },
     {
       "path": "./dist/size-spring.js",
-      "maxSize": "1 kB"
+      "maxSize": "0.9 kB"
     },
     {
       "path": "./dist/size-react.js",

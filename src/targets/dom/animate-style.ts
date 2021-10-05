@@ -80,6 +80,7 @@ export function animateStyle(
     const custom = easing.createAnimation(
       keyframes,
       () => style.get(element, name),
+      valueIsTransform,
       name,
       data
     )
