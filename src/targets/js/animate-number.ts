@@ -38,11 +38,9 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
   ) {
     const totalDuration = duration * (repeat + 1)
 
+    // TODO: This isn't currently supported but keeps TypeScript happy
     if (isCustomEasing(easing)) {
-      // const customAnimationOptions = easing.getAnimationSettings(keyframes)
-      // keyframes = customAnimationOptions.keyframes
-      easing = "ease" //customAnimationOptions.easing
-      //duration = customAnimationOptions.duration ?? duration
+      easing = "ease"
     }
 
     const interpolate = slowInterpolateNumbers(

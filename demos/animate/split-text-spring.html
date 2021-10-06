@@ -1,0 +1,88 @@
+<html>
+  <head>
+    <title></title>
+    <style>
+      @font-face {
+        font-family: "obviously-wide";
+        src: url("https://use.typekit.net/af/e19c14/00000000000000007735ca09/30/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3")
+            format("woff2"),
+          url("https://use.typekit.net/af/e19c14/00000000000000007735ca09/30/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3")
+            format("woff"),
+          url("https://use.typekit.net/af/e19c14/00000000000000007735ca09/30/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3")
+            format("opentype");
+        font-display: auto;
+        font-style: normal;
+        font-weight: 700;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+        min-height: 90vh;
+        background: #d90234;
+      }
+
+      body {
+        height: 90vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+
+      * {
+        font-family: obviously-wide, sans-serif;
+        font-weight: 700;
+        color: #3e0113;
+        font-size: 48px;
+        line-height: 44px;
+      }
+
+      h1 {
+        display: inline-block;
+      }
+
+      span {
+        display: inline-block;
+        transform: scaleY(0.2);
+        transform-origin: 50% 47px;
+        letter-spacing: -15px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>
+      <span>S</span>
+      <span>p</span>
+      <span>r</span>
+      <span>i</span>
+      <span>n</span>
+      <span>g</span><br />
+      <span>a</span>
+      <span>n</span>
+      <span>i</span>
+      <span>m</span>
+      <span>a</span>
+      <span>t</span>
+      <span>i</span>
+      <span>o</span>
+      <span>n</span>
+      <span>s</span>
+    </h1>
+    <script src="../../dist/motion.umd.js"></script>
+    <script>
+      const { animate, spring, stagger } = Motion
+      animate(
+        "span",
+        { scaleY: [0.2, 1] },
+        {
+          easing: spring({ stiffness: 200 }),
+          delay: stagger(0.05, { easing: "ease-out" }),
+        }
+      )
+    </script>
+  </body>
+</html>

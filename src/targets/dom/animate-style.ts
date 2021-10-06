@@ -203,7 +203,11 @@ export function animateStyle(
       render = (v: number) => applyStyle(definition.toDefaultUnit(v))
     }
 
-    animation = animateNumber(render, keyframes as any, { ...options, easing })
+    animation = animateNumber(render, keyframes as any, {
+      ...options,
+      duration,
+      easing,
+    })
   } else {
     const target = keyframes[keyframes.length - 1]
     render(
