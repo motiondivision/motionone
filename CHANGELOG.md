@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.2.1] [2021-10-06]
+
+### Fixed
+
+- Ensuring `duration` is always passed correctly to the independent transform polyfill.
+
 ## [10.2.0] [2021-10-05]
 
 ### New
