@@ -26,7 +26,7 @@ import { defaults } from "./utils/defaults"
 
 export function animateStyle(
   element: Element,
-  name: string,
+  unmappedName: string,
   keyframesDefinition: ValueKeyframesDefinition,
   options: AnimationOptions = {}
 ): BasicAnimationControls | undefined {
@@ -44,17 +44,26 @@ export function animateStyle(
   const data = getAnimationData(element)
   let canAnimateNatively = supports.waapi()
   let render: (v: any) => void = noop
-  const valueIsTransform = isTransform(name)
+  const valueIsTransform = isTransform(unmappedName)
 
   /**
    * If this is an individual transform, we need to map its
    * key to a CSS variable and update the element's transform style
    */
+  let name = unmappedName
   if (valueIsTransform) {
     if (transformAlias[name]) name = transformAlias[name]
     addTransformToElement(element as HTMLElement, name)
     name = asTransformCssVar(name)
   }
+
+  /**
+   * This commits the current styles so they can be subsequently
+   * read. TODO: Could this be a source of layout thrashing?
+   * Perhaps what would be better is stopping all the animations
+   * in `animate` or `timeline`
+   */
+  stopCurrentAnimation(data, name)
 
   /**
    * Get definition of value, this will be used to convert numerical
@@ -108,13 +117,6 @@ export function animateStyle(
   } else {
     render = createStyleRenderer(element, name)
   }
-
-  /**
-   * Stop the current animation, if any, after we have the
-   * opportunity to use its data to generate velocity for
-   * the subsequent animation.
-   */
-  stopCurrentAnimation(data, name)
 
   /**
    * If we can animate this value with WAAPI, do so. Currently this only
@@ -233,7 +235,6 @@ export function animateStyle(
 function stopCurrentAnimation(data: AnimationData, name: string) {
   if (data.activeAnimations[name]) {
     stopAnimation(data.activeAnimations[name]!)
-    clearData(data, name)
   }
 }
 
