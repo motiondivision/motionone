@@ -27,15 +27,15 @@
     <div id="box"></div>
     <script src="../../dist/motion.umd.js"></script>
     <script>
-      const { animate, spring } = Motion
+      const { animate, spring, glide } = Motion
       const box = document.getElementById("box")
 
       setTimeout(() => {
         const animation = animate(
           box,
-          { scale: 0.5, opacity: [0, 1] },
+          { x: 100, opacity: [0, 1] },
           {
-            easing: spring({ velocity: 100 }),
+            easing: glide({ velocity: 500, max: 200 }),
             // delay: 0.001,
             duration: 2,
             // endDelay: 1,

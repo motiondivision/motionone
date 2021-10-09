@@ -1,0 +1,109 @@
+<html>
+  <head>
+    <title></title>
+    <style>
+      @font-face {
+        font-family: "obviously-wide";
+        src: url("https://use.typekit.net/af/e19c14/00000000000000007735ca09/30/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3")
+            format("woff2"),
+          url("https://use.typekit.net/af/e19c14/00000000000000007735ca09/30/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3")
+            format("woff"),
+          url("https://use.typekit.net/af/e19c14/00000000000000007735ca09/30/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3")
+            format("opentype");
+        font-display: auto;
+        font-style: normal;
+        font-weight: 700;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+        min-height: 90vh;
+        background: #00e6c3;
+      }
+
+      body {
+        height: 90vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+
+      * {
+        font-family: obviously-wide, sans-serif;
+        font-weight: 700;
+        color: #1f665b;
+        font-size: 64px;
+        line-height: 44px;
+      }
+
+      h1 {
+        display: inline-block;
+      }
+
+      span {
+        display: inline-block;
+        letter-spacing: -30px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>
+      <span>G</span>
+      <span>l</span>
+      <span>i</span>
+      <span>d</span>
+      <span>e</span>
+    </h1>
+    <script src="../../dist/motion.umd.js"></script>
+    <script>
+      const { animate, glide, spring, stagger } = Motion
+
+      const degreesToRadians = (degrees) => (degrees * Math.PI) / 180
+
+      const pointFromVector = (origin, angle, distance) => {
+        angle = degreesToRadians(angle)
+
+        return {
+          x: distance * Math.cos(angle) + origin.x,
+          y: distance * Math.sin(angle) + origin.y,
+        }
+      }
+
+      const letters = document.querySelectorAll("span")
+
+      const neg = { velocity: 400, max: 0 }
+      const pos = { velocity: -400, min: 0 }
+
+      letters.forEach((element, i) => {
+        const point = pointFromVector({ x: 0, y: 0 }, 66 * i, 400)
+
+        animate(
+          element,
+          { x: [point.x, 0], y: [point.y, 0] },
+          {
+            delay: 2,
+            x: {
+              easing: glide({ velocity: -point.x }),
+            },
+            y: {
+              easing: glide({ velocity: -point.y }),
+            },
+          }
+        )
+      })
+
+      setTimeout(() => {
+        animate(
+          "span",
+          { x: 0, y: 0 },
+          { easing: spring({ stiffness: 1000, damping: 40 }) }
+        )
+      }, 4000)
+    </script>
+  </body>
+</html>

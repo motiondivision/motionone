@@ -77,6 +77,9 @@ export function animateStyle(
   )
 
   if (isCustomEasing(easing)) {
+    // TODO style.get() isn't correctly reading the style if
+    // we're interupting the animation because it hasn't
+    // been commited yet
     const custom = easing.createAnimation(
       keyframes,
       () => style.get(element, name),
@@ -85,8 +88,8 @@ export function animateStyle(
       data
     )
     easing = custom.easing
-    if (custom.keyframes) keyframes = custom.keyframes
-    if (custom.duration) duration = custom.duration
+    if (custom.keyframes !== undefined) keyframes = custom.keyframes
+    if (custom.duration !== undefined) duration = custom.duration
   }
 
   /**
