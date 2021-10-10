@@ -1,13 +1,5 @@
-import {
-  AnimationData,
-  CustomAnimationSettings,
-  CustomEasing,
-} from "../../../.."
-import {
-  AnimationGenerator,
-  AnimationGeneratorFactory,
-  AnimationGeneratorState,
-} from "../../types"
+import { CustomAnimationSettings, CustomEasing } from "../../../.."
+import { AnimationGenerator, AnimationGeneratorFactory } from "../../types"
 import {
   KeyframesMetadata,
   pregenerateKeyframes,
@@ -66,14 +58,13 @@ export function createGeneratorEasing<Options extends {} = {}>(
 
         if (shouldUseGenerator) {
           const prevAnimationState =
-            name && data && getPreviousAnimationState(name, data)
+            name && data && data.prevGeneratorState[name]
           const velocity =
             prevAnimationState &&
             (numKeyframes === 1 ||
               (numKeyframes === 2 && keyframes[0] === null))
               ? prevAnimationState.velocity
               : 0
-
           const target = keyframes[numKeyframes - 1] as number
           const unresolvedOrigin = numKeyframes === 1 ? null : keyframes[0]
           const origin =
@@ -110,17 +101,6 @@ export function createGeneratorEasing<Options extends {} = {}>(
         return settings
       },
     }
-  }
-}
-
-function getPreviousAnimationState(
-  name: string,
-  data: AnimationData
-): AnimationGeneratorState | undefined {
-  const animation = data.activeAnimations[name]
-  const generator = data.activeGenerators[name]
-  if (animation && generator) {
-    return generator.next((animation as any).currentTime)
   }
 }
 

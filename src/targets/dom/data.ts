@@ -8,6 +8,7 @@ export function getAnimationData(element: Element): AnimationData {
       activeTransforms: [],
       activeAnimations: {},
       activeGenerators: {},
+      prevGeneratorState: {},
     })
   }
 

@@ -10,12 +10,9 @@ import { noop } from "../../utils/noop"
 import { ms } from "./utils/time"
 import {
   addTransformToElement,
-  asTransformCssVar,
   isTransform,
-  transformAlias,
   transformPropertyDefinitions,
 } from "./utils/transforms"
-import { stopAnimation } from "./utils/stop-animation"
 import { convertEasing, isCustomEasing, isEasingList } from "./utils/easing"
 import { supports } from "./utils/feature-detection"
 import { createCssVariableRenderer, createStyleRenderer } from "./utils/apply"
@@ -23,10 +20,11 @@ import { animateNumber } from "../js/animate-number"
 import { hydrateKeyframes, keyframesList } from "./utils/keyframes"
 import { style } from "./style"
 import { defaults } from "./utils/defaults"
+import { getStyleName } from "./utils/get-style-name"
 
 export function animateStyle(
   element: Element,
-  unmappedName: string,
+  key: string,
   keyframesDefinition: ValueKeyframesDefinition,
   options: AnimationOptions = {}
 ): BasicAnimationControls | undefined {
@@ -44,26 +42,14 @@ export function animateStyle(
   const data = getAnimationData(element)
   let canAnimateNatively = supports.waapi()
   let render: (v: any) => void = noop
-  const valueIsTransform = isTransform(unmappedName)
+  const valueIsTransform = isTransform(key)
 
   /**
    * If this is an individual transform, we need to map its
    * key to a CSS variable and update the element's transform style
    */
-  let name = unmappedName
-  if (valueIsTransform) {
-    if (transformAlias[name]) name = transformAlias[name]
-    addTransformToElement(element as HTMLElement, name)
-    name = asTransformCssVar(name)
-  }
-
-  /**
-   * This commits the current styles so they can be subsequently
-   * read. TODO: Could this be a source of layout thrashing?
-   * Perhaps what would be better is stopping all the animations
-   * in `animate` or `timeline`
-   */
-  stopCurrentAnimation(data, name)
+  valueIsTransform && addTransformToElement(element as HTMLElement, key)
+  const name = getStyleName(key)
 
   /**
    * Get definition of value, this will be used to convert numerical
@@ -86,9 +72,6 @@ export function animateStyle(
   )
 
   if (isCustomEasing(easing)) {
-    // TODO style.get() isn't correctly reading the style if
-    // we're interupting the animation because it hasn't
-    // been commited yet
     const custom = easing.createAnimation(
       keyframes,
       () => style.get(element, name),
@@ -232,14 +215,10 @@ export function animateStyle(
   return animation
 }
 
-function stopCurrentAnimation(data: AnimationData, name: string) {
-  if (data.activeAnimations[name]) {
-    stopAnimation(data.activeAnimations[name]!)
-  }
-}
-
 function clearData(data: AnimationData, name: string) {
-  data.activeGenerators[name] = data.activeAnimations[name] = undefined
+  data.prevGeneratorState[name] = undefined
+  data.activeGenerators[name] = undefined
+  data.activeAnimations[name] = undefined
 }
 
 const isNumber = (value: string | number): value is number =>

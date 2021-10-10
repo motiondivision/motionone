@@ -90,6 +90,9 @@ describe("spring", () => {
       activeGenerators: {
         x: existingSpring,
       },
+      prevGeneratorState: {
+        x: { ...existingSpring.next(300) },
+      },
     }
 
     const origin = 362.59753425757185
@@ -134,6 +137,9 @@ describe("spring", () => {
       activeGenerators: {
         x: existingSpring,
       },
+      prevGeneratorState: {
+        x: { ...existingSpring.next(300) },
+      },
     }
 
     const origin = 362.59753425757185
@@ -177,6 +183,9 @@ describe("spring", () => {
       },
       activeGenerators: {
         x: existingSpring,
+      },
+      prevGeneratorState: {
+        x: { ...existingSpring.next(300) },
       },
     }
 
@@ -311,6 +320,9 @@ describe("spring", () => {
       activeGenerators: {
         x: existingSpring,
       },
+      prevGeneratorState: {
+        x: { ...existingSpring.next(300) },
+      },
     }
 
     const origin = 362.59753425757185
@@ -355,6 +367,9 @@ describe("spring", () => {
       },
       activeGenerators: {
         x: existingSpring,
+      },
+      prevGeneratorState: {
+        x: { ...existingSpring.next(300) },
       },
     }
 

@@ -5,7 +5,7 @@ describe("createGlideGenerator", () => {
   test("Runs animations with default values ", () => {
     const generator = createGlideGenerator({})
 
-    expect(pregenerateKeyframes(generator).keyframes).toEqual([0])
+    expect(pregenerateKeyframes(generator).keyframes).toEqual([0, 0])
   })
 
   test("Runs animation", () => {

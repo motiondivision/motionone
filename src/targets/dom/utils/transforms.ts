@@ -77,6 +77,7 @@ const transformLookup = new Set(transforms)
 export const isTransform = (name: string) => transformLookup.has(name)
 
 export const addTransformToElement = (element: HTMLElement, name: string) => {
+  if (transformAlias[name]) name = transformAlias[name]
   const { activeTransforms } = getAnimationData(element)
   addUniqueItem(activeTransforms, name)
 
