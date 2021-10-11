@@ -1,14 +1,14 @@
 import { isCssVar } from "./utils/css-var"
-import { transformPropertyDefinitions } from "./utils/transforms"
+import { transformDefinitions } from "./utils/transforms"
 
 export const style = {
-  get: (element: Element, name: string) => {
+  get: (element: Element, name: string): string | undefined => {
     let value = isCssVar(name)
       ? (element as HTMLElement).style.getPropertyValue(name)
       : getComputedStyle(element)[name]
 
     if (!value && value !== 0) {
-      const definition = transformPropertyDefinitions.get(name)
+      const definition = transformDefinitions.get(name)
       if (definition) value = definition.initialValue
     }
 

@@ -48,6 +48,7 @@
       span {
         display: inline-block;
         letter-spacing: -30px;
+        will-change: transform;
       }
     </style>
   </head>
@@ -85,22 +86,32 @@
           {
             delay: 2,
             x: {
-              easing: glide({ velocity: -point.x }),
+              easing: glide({
+                friction: 100,
+                velocity: -point.x * 1.35,
+                // min: point.x > 0 ? 0 : undefined,
+                // max: point.x > 0 ? undefined : 0,
+              }),
             },
             y: {
-              easing: glide({ velocity: -point.y }),
+              easing: glide({
+                friction: 100,
+                velocity: -point.y * 1.35,
+                // min: point.y > 0 ? 0 : undefined,
+                // max: point.y > 0 ? undefined : 0,
+              }),
             },
           }
         )
       })
 
-      setTimeout(() => {
-        // animate(
-        //   "span",
-        //   { x: 0, y: 0 },
-        //   { easing: spring({ stiffness: 1000, damping: 40 }) }
-        // )
-      }, 4000)
+      // setTimeout(() => {
+      //   animate(
+      //     "span",
+      //     { x: 0, y: 0 },
+      //     { easing: spring({ stiffness: 800, damping: 35 }) }
+      //   )
+      // }, 4000)
     </script>
   </body>
 </html>

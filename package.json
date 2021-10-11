@@ -126,7 +126,7 @@
     },
     {
       "path": "./dist/size-animate-style.js",
-      "maxSize": "2.8 kB"
+      "maxSize": "2.9 kB"
     },
     {
       "path": "./dist/size-timeline-dom.js",

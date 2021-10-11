@@ -84,10 +84,10 @@ describe("spring", () => {
     })
 
     const data = {
-      activeAnimations: {
+      animations: {
         x: { currentTime: 300 },
       },
-      activeGenerators: {
+      generators: {
         x: existingSpring,
       },
       prevGeneratorState: {
@@ -131,10 +131,10 @@ describe("spring", () => {
     })
 
     const data = {
-      activeAnimations: {
+      animations: {
         x: { currentTime: 300 },
       },
-      activeGenerators: {
+      generators: {
         x: existingSpring,
       },
       prevGeneratorState: {
@@ -178,10 +178,10 @@ describe("spring", () => {
     })
 
     const data = {
-      activeAnimations: {
+      animations: {
         x: { currentTime: 300 },
       },
-      activeGenerators: {
+      generators: {
         x: existingSpring,
       },
       prevGeneratorState: {
@@ -314,10 +314,10 @@ describe("spring", () => {
     })
 
     const data = {
-      activeAnimations: {
+      animations: {
         x: { currentTime: 300 },
       },
-      activeGenerators: {
+      generators: {
         x: existingSpring,
       },
       prevGeneratorState: {
@@ -362,10 +362,10 @@ describe("spring", () => {
     })
 
     const data = {
-      activeAnimations: {
+      animations: {
         x: { currentTime: 300 },
       },
-      activeGenerators: {
+      generators: {
         x: existingSpring,
       },
       prevGeneratorState: {

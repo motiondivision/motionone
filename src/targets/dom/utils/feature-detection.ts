@@ -26,10 +26,10 @@ interface FeatureTests {
   finished: () => boolean
 }
 
-export const supports = Object.keys(featureTests).reduce((acc, key) => {
-  acc[key] = () => {
+export const supports = {} as FeatureTests
+for (const key in featureTests) {
+  supports[key] = () => {
     if (results[key] === undefined) results[key] = featureTests[key]()
     return results[key]
   }
-  return acc
-}, {}) as FeatureTests
+}

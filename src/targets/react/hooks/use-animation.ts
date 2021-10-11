@@ -5,7 +5,6 @@ import { animateStyle } from "../../dom/animate-style"
 import { noop } from "../../../utils/noop"
 import { hasChanged } from "../utils/has-changed"
 import { getOptions } from "../../dom/utils/options"
-import { stopElementAnimation } from "../../dom/utils/stop-animation"
 
 export function useAnimation(
   ref: RefObject<HTMLElement>,
@@ -38,11 +37,7 @@ export function useAnimation(
 
     if (Object.keys(targetKeyframe).length && ref.current) {
       onStart?.(targetKeyframe)
-      const animations = []
-
-      for (const key in targetKeyframe) {
-        stopElementAnimation(ref.current, key)
-      }
+      const animationFactories = []
 
       for (const key in targetKeyframe) {
         const animation = animateStyle(
@@ -51,8 +46,12 @@ export function useAnimation(
           targetKeyframe[key]!,
           getOptions(options, key)
         )
-        animation && animations.push(animation)
+        animationFactories.push(animation)
       }
+
+      const animations = animationFactories
+        .map((factory) => factory())
+        .filter(Boolean)
 
       Promise.all(animations.map((animation: any) => animation.finished))
         .then(() => onComplete?.(targetKeyframe))

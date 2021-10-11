@@ -42,10 +42,7 @@ const baseTransformProperties: CssPropertyDefinitionMap = {
   skew: rotation,
 }
 
-export const transformPropertyDefinitions = new Map<
-  string,
-  CssPropertyDefinition
->()
+export const transformDefinitions = new Map<string, CssPropertyDefinition>()
 
 export const asTransformCssVar = (name: string) => `--motion-${name}`
 
@@ -57,7 +54,7 @@ order.forEach((name) => {
   axes.forEach((axis) => {
     transforms.push(name + axis)
 
-    transformPropertyDefinitions.set(
+    transformDefinitions.set(
       asTransformCssVar(name + axis),
       baseTransformProperties[name]
     )
@@ -77,15 +74,17 @@ const transformLookup = new Set(transforms)
 export const isTransform = (name: string) => transformLookup.has(name)
 
 export const addTransformToElement = (element: HTMLElement, name: string) => {
+  // Map x to translateX etc
   if (transformAlias[name]) name = transformAlias[name]
-  const { activeTransforms } = getAnimationData(element)
-  addUniqueItem(activeTransforms, name)
 
-  element.style.transform = buildTransformTemplate(activeTransforms)
+  const { transforms } = getAnimationData(element)
+  addUniqueItem(transforms, name)
+
+  element.style.transform = buildTransformTemplate(transforms)
 }
 
-export const buildTransformTemplate = (activeTransforms: string[]): string =>
-  activeTransforms
+export const buildTransformTemplate = (transforms: string[]): string =>
+  transforms
     .sort(compareTransformOrder)
     .reduce(transformListToString, "")
     .trim()

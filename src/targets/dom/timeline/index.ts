@@ -5,18 +5,16 @@ import { animateStyle } from "../animate-style"
 import {
   AnimationOptions,
   AnimationOptionsWithOverrides,
-  AnimationWithCommitStyles,
   Easing,
   PlaybackOptions,
   UnresolvedValueKeyframe,
   ValueKeyframesDefinition,
 } from "../types"
-import { createAnimationControls } from "../utils/controls"
+import { createAnimations } from "../utils/controls"
 import { defaults } from "../utils/defaults"
 import { keyframesList } from "../utils/keyframes"
 import { getOptions } from "../utils/options"
 import { resolveElements } from "../utils/resolve-elements"
-import { stopElementAnimation } from "../utils/stop-animation"
 import { ElementSequence, TimelineDefinition, ValueSequence } from "./types"
 import { calcNextTime } from "./utils/calc-time"
 import { addKeyframes } from "./utils/edit"
@@ -41,22 +39,14 @@ export function timeline(
   const animationDefinitions = createAnimationsFromTimeline(definition, options)
 
   /**
-   * Stop existing animations. We do this as a batch before
-   * starting the new animations to prevent layout thrashing.
-   */
-  animationDefinitions.forEach(([element, key]) => {
-    stopElementAnimation(element, key)
-  })
-
-  /**
    * Create and start animations
    */
-  const animations = animationDefinitions
+  const animationFactories = animationDefinitions
     .map((definition) => animateStyle(...definition))
     .filter(Boolean)
 
-  return createAnimationControls(
-    animations as AnimationWithCommitStyles[],
+  return createAnimations(
+    animationFactories,
     // Get the duration from the first animation definition
     animationDefinitions[0]?.[3].duration ?? defaults.duration
   )

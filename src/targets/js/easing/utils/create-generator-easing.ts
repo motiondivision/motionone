@@ -95,7 +95,7 @@ export function createGeneratorEasing<Options extends {} = {}>(
 
         // TODO Add test for this
         if (generator && data && name) {
-          data.activeGenerators[name] = generator
+          data.generators[name] = generator
         }
 
         return settings

@@ -2,6 +2,16 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.3.0] [2021-12-05]
+
+### New
+
+- **Glide:** Animate transforms with realistic [glide](https://motion.dev/dom/glide) that can be used to mimic momentum scroll.
+
+### Fixed
+
+- Fixing a bug where sometimes velocity wasn't being correctly passed to the next animation.
+
 ## [10.2.1] [2021-10-06]
 
 ### Fixed

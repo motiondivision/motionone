@@ -76,7 +76,7 @@ export const createSpringGenerator = ({
 }
 
 const sampleT = 5 // ms
-function calcVelocity(
+export function calcVelocity(
   resolveValue: (v: number) => number,
   t: number,
   current: number

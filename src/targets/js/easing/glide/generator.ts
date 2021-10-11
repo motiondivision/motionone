@@ -1,20 +1,23 @@
 import { GlideOptions } from "./types"
-import { createSpringGenerator } from "../spring/generator"
+import { calcVelocity, createSpringGenerator } from "../spring/generator"
 import { AnimationGenerator, AnimationGeneratorState } from "../../types"
+import { ms } from "../../../dom/utils/time"
 
 export const createGlideGenerator = ({
   from = 0,
   velocity = 0.0,
   power = 0.8,
-  timeConstant = 350,
+  decay = 0.325,
   bounceDamping,
   bounceStiffness,
-  modifyTarget,
+  changeTarget,
   min,
   max,
   restDistance = 0.5,
   restSpeed,
 }: GlideOptions) => {
+  decay = ms(decay)
+
   const state: AnimationGeneratorState = {
     value: from,
     target: from,
@@ -35,7 +38,7 @@ export const createGlideGenerator = ({
 
   let amplitude = power * velocity
   const ideal = from + amplitude
-  const target = modifyTarget === undefined ? ideal : modifyTarget(ideal)
+  const target = changeTarget === undefined ? ideal : changeTarget(ideal)
   state.target = target
 
   /**
@@ -44,10 +47,17 @@ export const createGlideGenerator = ({
    */
   if (target !== ideal) amplitude = target - from
 
-  const friction = (t: number) => {
-    const delta = -amplitude * Math.exp(-t / timeConstant)
+  const calcDelta = (t: number) => -amplitude * Math.exp(-t / decay)
+
+  const calcLatest = (t: number) => target + calcDelta(t)
+
+  const applyFriction = (t: number) => {
+    const delta = calcDelta(t)
+    const latest = calcLatest(t)
     state.done = Math.abs(delta) <= restDistance
-    state.value = state.done ? target : target + delta
+    state.value = state.done ? target : latest
+    state.velocity =
+      t === 0 ? velocity : calcVelocity(calcLatest, t, state.value)
   }
 
   /**
@@ -63,6 +73,7 @@ export const createGlideGenerator = ({
     if (!isOutOfBounds(state.value)) return
 
     timeReachedBoundary = t
+
     spring = createSpringGenerator({
       from: state.value,
       to: nearestBoundary(state.value),
@@ -87,7 +98,7 @@ export const createGlideGenerator = ({
       let hasUpdatedFrame = false
       if (!spring && timeReachedBoundary === undefined) {
         hasUpdatedFrame = true
-        friction(t)
+        applyFriction(t)
         checkCatchBoundary(t)
       }
 
@@ -100,7 +111,7 @@ export const createGlideGenerator = ({
         return spring!.next(t - timeReachedBoundary)
       } else {
         state.hasReachedTarget = false
-        !hasUpdatedFrame && friction(t)
+        !hasUpdatedFrame && applyFriction(t)
         return state
       }
     },
