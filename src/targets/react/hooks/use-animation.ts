@@ -37,7 +37,8 @@ export function useAnimation(
 
     if (Object.keys(targetKeyframe).length && ref.current) {
       onStart?.(targetKeyframe)
-      const animations = []
+      const animationFactories = []
+
       for (const key in targetKeyframe) {
         const animation = animateStyle(
           ref.current,
@@ -45,8 +46,12 @@ export function useAnimation(
           targetKeyframe[key]!,
           getOptions(options, key)
         )
-        animation && animations.push(animation)
+        animationFactories.push(animation)
       }
+
+      const animations = animationFactories
+        .map((factory) => factory())
+        .filter(Boolean)
 
       Promise.all(animations.map((animation: any) => animation.finished))
         .then(() => onComplete?.(targetKeyframe))

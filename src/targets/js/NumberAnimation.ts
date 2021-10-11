@@ -4,7 +4,8 @@ import { isCustomEasing, isEasingList } from "../dom/utils/easing"
 import { getEasingFunction } from "./easing/utils/get-function"
 import { slowInterpolateNumbers } from "./utils/interpolate"
 
-export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
+export class NumberAnimation
+  implements Omit<AnimationControls, "stop" | "duration"> {
   private resolve: (value: any) => void
 
   private reject: (value: any) => void
@@ -25,7 +26,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
 
   constructor(
     output: (v: number) => void,
-    keyframes: number[],
+    keyframes: number[] = [0, 1],
     {
       easing = defaults.easing as Easing,
       duration = defaults.duration,
@@ -34,14 +35,16 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
       repeat = defaults.repeat,
       offset,
       direction = "normal",
-    }: AnimationOptions
+    }: AnimationOptions = {}
   ) {
     const totalDuration = duration * (repeat + 1)
 
-    // TODO: This isn't currently supported but keeps TypeScript happy
-    if (isCustomEasing(easing)) {
-      easing = "ease"
-    }
+    /**
+     * We don't currently support custom easing (spring, glide etc) in NumberAnimation
+     * (although this is completely possible), so this will have been hydrated by
+     * animateStyle.
+     */
+    if (isCustomEasing(easing)) easing = "ease"
 
     const interpolate = slowInterpolateNumbers(
       keyframes,
@@ -52,16 +55,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
     )
 
     this.tick = (timestamp: number) => {
-      if (this.playState === "finished") {
-        const latest = interpolate(1)
-        output(latest)
-        this.resolve(latest)
-        return
-      }
-
-      if (this.pauseTime) {
-        timestamp = this.pauseTime
-      }
+      if (this.pauseTime) timestamp = this.pauseTime
 
       let t = (timestamp - this.startTime) * this.rate
 
@@ -73,21 +67,46 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
       // Rebase on delay
       t = Math.max(t - delay, 0)
 
+      /**
+       * If this animation has finished, set the current time
+       * to the total duration.
+       */
+      if (this.playState === "finished") t = totalDuration
+
+      /**
+       * Get the current progress (0-1) of the animation. If t is >
+       * than duration we'll get values like 2.5 (midway through the
+       * third iteration)
+       */
       const progress = t / duration
 
       // TODO progress += iterationStart
+
+      /**
+       * Get the current iteration (0 indexed). For instance the floor of
+       * 2.5 is 2.
+       */
       let currentIteration = Math.floor(progress)
+
+      /**
+       * Get the current progress of the iteration by taking the remainder
+       * so 2.5 is 0.5 through iteration 2
+       */
       let iterationProgress = progress % 1.0
 
       if (!iterationProgress && progress >= 1) {
         iterationProgress = 1
       }
 
-      if (iterationProgress === 1) {
-        currentIteration--
-      }
+      /**
+       * If iteration progress is 1 we count that as the end
+       * of the previous iteration.
+       */
+      iterationProgress === 1 && currentIteration--
 
-      // Reverse progress
+      /**
+       * Reverse progress if we're not running in "normal" direction
+       */
       const iterationIsOdd = currentIteration % 2
       if (
         direction === "reverse" ||
@@ -97,16 +116,16 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
         iterationProgress = 1 - iterationProgress
       }
 
-      const interpolationIsFinished = t >= totalDuration
-      const interpolationProgress = interpolationIsFinished
-        ? 1
-        : Math.min(iterationProgress, 1)
+      const latest = interpolate(
+        t >= totalDuration ? 1 : Math.min(iterationProgress, 1)
+      )
 
-      const latest = interpolate(interpolationProgress)
       output(latest)
 
-      const isFinished = t >= totalDuration + endDelay
-      if (isFinished) {
+      const isAnimationFinished =
+        this.playState === "finished" || t >= totalDuration + endDelay
+
+      if (isAnimationFinished) {
         this.playState = "finished"
         this.resolve(latest)
       } else if (this.playState !== "idle") {
@@ -179,12 +198,4 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
   set playbackRate(rate) {
     this.rate = rate
   }
-}
-
-export function animateNumber(
-  output: (v: number) => void,
-  keyframes: number[] = [0, 1],
-  options: AnimationOptions = {}
-): Animation {
-  return new Animation(output, keyframes, options)
 }

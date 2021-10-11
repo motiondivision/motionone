@@ -1,14 +1,14 @@
 import {
   AcceptedElements,
   AnimationControls,
+  AnimationFactory,
   AnimationListOptions,
-  AnimationWithCommitStyles,
   MotionKeyframesDefinition,
 } from "./types"
 import { animateStyle } from "./animate-style"
 import { getOptions } from "./utils/options"
 import { resolveElements } from "./utils/resolve-elements"
-import { createAnimationControls } from "./utils/controls"
+import { createAnimations } from "./utils/controls"
 import { resolveOption } from "../../utils/stagger"
 import { defaults } from "./utils/defaults"
 
@@ -18,9 +18,12 @@ export function animate(
   options: AnimationListOptions = {}
 ): AnimationControls {
   elements = resolveElements(elements)
-
-  const animations: AnimationWithCommitStyles[] = []
   const numElements = elements.length
+
+  /**
+   * Create and start new animations
+   */
+  const animationFactories: AnimationFactory[] = []
   for (let i = 0; i < numElements; i++) {
     const element = elements[i]
 
@@ -35,13 +38,21 @@ export function animate(
         valueOptions
       )
 
-      animation && animations.push(animation as any)
+      animationFactories.push(animation)
     }
   }
 
-  return createAnimationControls(
-    animations,
-    // TODO: Remove this in case duration is dynamically generated
+  return createAnimations(
+    animationFactories,
+    /**
+     * TODO:
+     * If easing is set to spring or glide, duration will be dynamically
+     * generated. Ideally we would dynamically generate this from
+     * animation.effect.getComputedTiming().duration but this isn't
+     * supported in iOS13 or our number polyfill. Perhaps it's possible
+     * to Proxy animations returned from animateStyle that has duration
+     * as a getter.
+     */
     options.duration ?? defaults.duration
   )
 }

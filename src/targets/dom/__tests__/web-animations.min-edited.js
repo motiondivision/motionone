@@ -1365,10 +1365,7 @@
               },
               _targetAnimations: function () {
                 var a = this._effect._target
-                return (
-                  a._activeAnimations || (a._activeAnimations = []),
-                  a._activeAnimations
-                )
+                return a._animations || (a._animations = []), a._animations
               },
               _markTarget: function () {
                 var a = this._targetAnimations()

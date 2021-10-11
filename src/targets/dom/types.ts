@@ -1,11 +1,12 @@
 import { OptionResolver } from "../../utils/stagger"
-import { AnimationGenerator } from "../js/types"
+import { AnimationGenerator, AnimationGeneratorState } from "../js/types"
 import { NextTime } from "./timeline/types"
 
 export interface AnimationData {
-  activeTransforms: string[]
-  activeAnimations: { [key: string]: BasicAnimationControls | undefined }
-  activeGenerators: { [key: string]: AnimationGenerator | undefined }
+  transforms: string[]
+  animations: { [key: string]: BasicAnimationControls | undefined }
+  generators: { [key: string]: AnimationGenerator | undefined }
+  prevGeneratorState: { [key: string]: AnimationGeneratorState | undefined }
 }
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
@@ -164,3 +165,5 @@ export interface CssPropertyDefinition {
 }
 
 export type CssPropertyDefinitionMap = { [key: string]: CssPropertyDefinition }
+
+export type AnimationFactory = () => BasicAnimationControls | undefined

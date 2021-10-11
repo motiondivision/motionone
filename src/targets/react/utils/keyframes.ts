@@ -1,10 +1,11 @@
+import { isNumber } from "../../../utils/is-number"
 import { MotionKeyframes } from "../../dom/types"
 import {
   asTransformCssVar,
   buildTransformTemplate,
   isTransform,
   transformAlias,
-  transformPropertyDefinitions,
+  transformDefinitions,
 } from "../../dom/utils/transforms"
 import { MotionCSSProperties } from "../types"
 
@@ -28,10 +29,11 @@ export function convertKeyframesToStyles(
      * If this is a number and we have a default value type, convert the number
      * to this type.
      */
-    const definition = transformPropertyDefinitions.get(key)
+    const definition = transformDefinitions.get(key)
     if (definition) {
-      initialKeyframe =
-        typeof value === "number" ? definition.toDefaultUnit!(value) : value
+      initialKeyframe = isNumber(value)
+        ? definition.toDefaultUnit!(value)
+        : value
     }
 
     initialKeyframes[key] = initialKeyframe

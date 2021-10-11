@@ -16,11 +16,7 @@ describe("spring", () => {
       to: target,
     })
 
-    const expectedKeyframes = pregenerateKeyframes(
-      expectedSpring,
-      origin,
-      target
-    ).keyframes
+    const expectedKeyframes = pregenerateKeyframes(expectedSpring).keyframes
 
     expect(animation.keyframes).toEqual(expectedKeyframes)
     expect(animation.easing).toEqual("linear")
@@ -50,11 +46,7 @@ describe("spring", () => {
       to: target,
     })
 
-    const expectedKeyframes = pregenerateKeyframes(
-      expectedSpring,
-      origin,
-      target
-    ).keyframes
+    const expectedKeyframes = pregenerateKeyframes(expectedSpring).keyframes
 
     expect(animation.keyframes).toEqual(expectedKeyframes)
     expect(animation.easing).toEqual("linear")
@@ -75,11 +67,7 @@ describe("spring", () => {
       to: target,
     })
 
-    const expectedKeyframes = pregenerateKeyframes(
-      expectedSpring,
-      origin,
-      target
-    ).keyframes
+    const expectedKeyframes = pregenerateKeyframes(expectedSpring).keyframes
 
     expect(readFn).not.toBeCalled()
     expect(animation.keyframes).toEqual(expectedKeyframes)
@@ -96,11 +84,14 @@ describe("spring", () => {
     })
 
     const data = {
-      activeAnimations: {
+      animations: {
         x: { currentTime: 300 },
       },
-      activeGenerators: {
+      generators: {
         x: existingSpring,
+      },
+      prevGeneratorState: {
+        x: { ...existingSpring.next(300) },
       },
     }
 
@@ -125,11 +116,7 @@ describe("spring", () => {
       velocity: 1031.01858338282,
     })
 
-    const expectedKeyframes = pregenerateKeyframes(
-      expectedSpring,
-      origin,
-      target
-    ).keyframes
+    const expectedKeyframes = pregenerateKeyframes(expectedSpring).keyframes
     expect(animation.keyframes).toEqual(expectedKeyframes)
     expect(animation.easing).toEqual("linear")
     expect(animation.duration).toEqual(0.71)
@@ -144,11 +131,14 @@ describe("spring", () => {
     })
 
     const data = {
-      activeAnimations: {
+      animations: {
         x: { currentTime: 300 },
       },
-      activeGenerators: {
+      generators: {
         x: existingSpring,
+      },
+      prevGeneratorState: {
+        x: { ...existingSpring.next(300) },
       },
     }
 
@@ -173,11 +163,7 @@ describe("spring", () => {
       velocity: 1031.01858338282,
     })
 
-    const expectedKeyframes = pregenerateKeyframes(
-      expectedSpring,
-      origin,
-      target
-    ).keyframes
+    const expectedKeyframes = pregenerateKeyframes(expectedSpring).keyframes
     expect(animation.keyframes).toEqual(expectedKeyframes)
     expect(animation.easing).toEqual("linear")
     expect(animation.duration).toEqual(0.71)
@@ -192,11 +178,14 @@ describe("spring", () => {
     })
 
     const data = {
-      activeAnimations: {
+      animations: {
         x: { currentTime: 300 },
       },
-      activeGenerators: {
+      generators: {
         x: existingSpring,
+      },
+      prevGeneratorState: {
+        x: { ...existingSpring.next(300) },
       },
     }
 
@@ -222,11 +211,7 @@ describe("spring", () => {
       velocity: 0,
     })
 
-    const expectedKeyframes = pregenerateKeyframes(
-      expectedSpring,
-      origin,
-      target
-    ).keyframes
+    const expectedKeyframes = pregenerateKeyframes(expectedSpring).keyframes
     expect(animation.keyframes).toEqual(expectedKeyframes)
     expect(animation.easing).toEqual("linear")
     expect(animation.duration).toEqual(0.59)
@@ -246,7 +231,7 @@ describe("spring", () => {
       to: 100,
     })
 
-    const keyframesMetadata = pregenerateKeyframes(expectedSpring, 0, 100)
+    const keyframesMetadata = pregenerateKeyframes(expectedSpring)
 
     expect(animation.keyframes).toEqual(undefined)
     expect(animation.easing).toEqual("ease")
@@ -267,7 +252,7 @@ describe("spring", () => {
       to: 100,
     })
 
-    const keyframesMetadata = pregenerateKeyframes(expectedSpring, 0, 100)
+    const keyframesMetadata = pregenerateKeyframes(expectedSpring)
 
     expect(animation.keyframes).toEqual(undefined)
     expect(animation.easing).toEqual("ease")
@@ -292,7 +277,7 @@ describe("spring", () => {
       to: 100,
     })
 
-    const keyframesMetadata = pregenerateKeyframes(expectedSpring, 0, 100)
+    const keyframesMetadata = pregenerateKeyframes(expectedSpring)
 
     expect(animation.keyframes).toEqual(undefined)
     expect(animation.easing).toEqual("ease")
@@ -313,7 +298,7 @@ describe("spring", () => {
       to: 100,
     })
 
-    const keyframesMetadata = pregenerateKeyframes(expectedSpring, 0, 100)
+    const keyframesMetadata = pregenerateKeyframes(expectedSpring)
 
     expect(animation.keyframes).toEqual(undefined)
     expect(animation.easing).toEqual("ease")
@@ -329,11 +314,14 @@ describe("spring", () => {
     })
 
     const data = {
-      activeAnimations: {
+      animations: {
         x: { currentTime: 300 },
       },
-      activeGenerators: {
+      generators: {
         x: existingSpring,
+      },
+      prevGeneratorState: {
+        x: { ...existingSpring.next(300) },
       },
     }
 
@@ -358,11 +346,7 @@ describe("spring", () => {
       velocity: 10000,
     })
 
-    const expectedKeyframes = pregenerateKeyframes(
-      expectedSpring,
-      origin,
-      target
-    )
+    const expectedKeyframes = pregenerateKeyframes(expectedSpring)
     expect(animation.keyframes).toEqual(expectedKeyframes.keyframes)
     expect(animation.easing).toEqual("linear")
     expect(animation.duration).toEqual(expectedKeyframes.duration)
@@ -378,11 +362,14 @@ describe("spring", () => {
     })
 
     const data = {
-      activeAnimations: {
+      animations: {
         x: { currentTime: 300 },
       },
-      activeGenerators: {
+      generators: {
         x: existingSpring,
+      },
+      prevGeneratorState: {
+        x: { ...existingSpring.next(300) },
       },
     }
 
@@ -407,11 +394,7 @@ describe("spring", () => {
       velocity: 10000,
     })
 
-    const expectedKeyframes = pregenerateKeyframes(
-      expectedSpring,
-      origin,
-      target
-    )
+    const expectedKeyframes = pregenerateKeyframes(expectedSpring)
     expect(animation.keyframes).toEqual(expectedKeyframes.keyframes)
     expect(animation.easing).toEqual("linear")
     expect(animation.duration).toEqual(expectedKeyframes.duration)

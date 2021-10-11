@@ -1,18 +1,31 @@
 import { noop } from "../../../utils/noop"
-import { AnimationControls, AnimationWithCommitStyles } from "../types"
+import {
+  AnimationControls,
+  AnimationFactory,
+  AnimationWithCommitStyles,
+} from "../types"
 import { stopAnimation } from "./stop-animation"
 import { ms } from "./time"
 
 interface AnimationState {
-  duration: number
   animations: AnimationWithCommitStyles[]
+  duration: number
   finished?: Promise<any>
 }
 
-export const createAnimationControls = (
-  animations: AnimationWithCommitStyles[],
+const createAnimation = (factory: AnimationFactory) => factory()
+
+export const createAnimations = (
+  animationFactory: AnimationFactory[],
   duration: number
-) => new Proxy({ animations, duration } as any, controls) as AnimationControls
+) =>
+  new Proxy(
+    {
+      animations: animationFactory.map(createAnimation).filter(Boolean),
+      duration,
+    } as any,
+    controls
+  ) as AnimationControls
 
 /**
  * TODO:

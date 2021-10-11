@@ -1,5 +1,5 @@
 import { stopAnimation } from "../../dom/utils/stop-animation"
-import { animateNumber } from "../animate-number"
+import { NumberAnimation } from "../NumberAnimation"
 
 function mockReadTime(ms: number) {
   jest.spyOn(window.performance, "now").mockImplementation(() => ms)
@@ -28,7 +28,7 @@ afterEach(() => {
 describe("animateNumber", () => {
   test("Animates numbers", async () => {
     const output: number[] = []
-    const animation = animateNumber((v) => output.push(v), [0, 1], {
+    const animation = new NumberAnimation((v) => output.push(v), [0, 1], {
       duration: 0.1,
     })
     await animation.finished
@@ -37,7 +37,7 @@ describe("animateNumber", () => {
 
   test("Respects duration", async () => {
     const output: number[] = []
-    const animation = animateNumber((v) => output.push(v), [-500, 500], {
+    const animation = new NumberAnimation((v) => output.push(v), [-500, 500], {
       duration: 0.2,
     })
     await animation.finished
@@ -51,7 +51,7 @@ describe("animateNumber", () => {
 
   test("Respects delay", async () => {
     const output: number[] = []
-    const animation = animateNumber((v) => output.push(v), [0, 1], {
+    const animation = new NumberAnimation((v) => output.push(v), [0, 1], {
       duration: 0.2,
       delay: 0.1,
     })
@@ -69,7 +69,7 @@ describe("animateNumber", () => {
 
   test("Respects endDelay", async () => {
     const output: number[] = []
-    const animation = animateNumber((v) => output.push(v), [0, 1], {
+    const animation = new NumberAnimation((v) => output.push(v), [0, 1], {
       duration: 0.2,
       delay: 0.1,
       endDelay: 0.2,
@@ -91,7 +91,7 @@ describe("animateNumber", () => {
 
   test("Respects offset", async () => {
     const output: number[] = []
-    const animation = animateNumber((v) => output.push(v), [0, 1], {
+    const animation = new NumberAnimation((v) => output.push(v), [0, 1], {
       duration: 0.2,
       delay: 0.1,
       offset: [0.5],
@@ -110,7 +110,7 @@ describe("animateNumber", () => {
 
   test("Respects ease", async () => {
     const output: number[] = []
-    const animation = animateNumber((v) => output.push(v), [0, 1], {
+    const animation = new NumberAnimation((v) => output.push(v), [0, 1], {
       duration: 0.2,
       easing: "linear",
     })
@@ -120,7 +120,7 @@ describe("animateNumber", () => {
 
   test("Respects repeat", async () => {
     const output: number[] = []
-    const animation = animateNumber((v) => output.push(v), [0, 1], {
+    const animation = new NumberAnimation((v) => output.push(v), [0, 1], {
       duration: 0.2,
       delay: 0.2,
       repeat: 2,
@@ -156,7 +156,7 @@ describe("animateNumber", () => {
    */
   test("Respects direction reverse", async () => {
     const output: number[] = []
-    const animation = animateNumber((v) => output.push(v), [0, 1], {
+    const animation = new NumberAnimation((v) => output.push(v), [0, 1], {
       duration: 0.2,
       delay: 0.2,
       repeat: 1,
@@ -186,7 +186,7 @@ describe("animateNumber", () => {
 
   test("Respects direction alternate", async () => {
     const output: number[] = []
-    const animation = animateNumber((v) => output.push(v), [0, 1], {
+    const animation = new NumberAnimation((v) => output.push(v), [0, 1], {
       duration: 0.2,
       delay: 0.2,
       repeat: 1,
@@ -216,7 +216,7 @@ describe("animateNumber", () => {
 
   test("Respects direction alternate-reverse", async () => {
     const output: number[] = []
-    const animation = animateNumber((v) => output.push(v), [0, 1], {
+    const animation = new NumberAnimation((v) => output.push(v), [0, 1], {
       duration: 0.2,
       delay: 0.2,
       repeat: 1,
@@ -247,7 +247,7 @@ describe("animateNumber", () => {
   test("Can set currentTime", async () => {
     mockTimeFrom(1)
     const output: number[] = []
-    const animation = animateNumber((v) => output.push(v), [0, 1], {
+    const animation = new NumberAnimation((v) => output.push(v), [0, 1], {
       duration: 0.2,
     })
     // is in milliseconds
@@ -258,7 +258,7 @@ describe("animateNumber", () => {
 
   test("Can set rate", async () => {
     const output: number[] = []
-    const animation = animateNumber((v) => output.push(v), [0, 1], {
+    const animation = new NumberAnimation((v) => output.push(v), [0, 1], {
       duration: 0.1,
     })
     animation.playbackRate = 0.5
@@ -271,10 +271,22 @@ describe("animateNumber", () => {
     ])
   })
 
-  test("Can finish", async () => {
+  test("Can manually finish", async () => {
     const output: number[] = []
-    const animation = animateNumber((v) => output.push(v), [0, 1], {
+    const animation = new NumberAnimation((v) => output.push(v), [0, 1], {
       duration: 0.1,
+    })
+    animation.finish()
+    await animation.finished
+    expect(output).toEqual([1])
+  })
+
+  test("Can manually finish with delay", async () => {
+    const output: number[] = []
+    const animation = new NumberAnimation((v) => output.push(v), [0, 1], {
+      duration: 0.1,
+      delay: 0.1,
+      endDelay: 0.1,
     })
     animation.finish()
     await animation.finished
@@ -283,7 +295,7 @@ describe("animateNumber", () => {
 
   test("Can cancel", async () => {
     const output: number[] = []
-    const animation = animateNumber((v) => output.push(v), [0, 1], {
+    const animation = new NumberAnimation((v) => output.push(v), [0, 1], {
       duration: 0.1,
     })
     animation.cancel()
@@ -304,7 +316,7 @@ describe("animateNumber", () => {
   test("Can be paused and played", async () => {
     const output: number[] = []
     mockTimeFrom(1)
-    const animation = animateNumber(
+    const animation = new NumberAnimation(
       (v) => {
         output.push(v)
 
@@ -343,7 +355,7 @@ describe("animateNumber", () => {
   test("Can set currentTime while paused", async () => {
     const output: number[] = []
     let currentTime = 0
-    const animation = animateNumber(
+    const animation = new NumberAnimation(
       (v) => {
         output.push(v)
 
@@ -389,7 +401,7 @@ describe("animateNumber", () => {
 
   test("stopAnimation is compatible", async () => {
     const output: number[] = []
-    const animation = animateNumber(
+    const animation = new NumberAnimation(
       (v) => {
         output.push(v)
 

@@ -7,34 +7,34 @@ export interface KeyframesMetadata {
 }
 
 const timeStep = 10
-const maxDuration = 3000
+const maxDuration = 10000
 export function pregenerateKeyframes(
-  generator: AnimationGenerator,
-  origin: number,
-  target: number
+  generator: AnimationGenerator
 ): KeyframesMetadata {
-  const keyframes: number[] = []
   let overshootDuration: number | undefined = undefined
-  let timestamp = 0
+  let timestamp = timeStep
   let state = generator.next(0)
+  const keyframes: number[] = [state.value]
 
   while (!state.done && timestamp < maxDuration) {
     state = generator.next(timestamp)
-    keyframes.push(state.done ? target : state.value)
+    keyframes.push(state.done ? state.target : state.value)
 
-    if (overshootDuration === undefined) {
-      if (
-        (origin < target && state.value >= target) ||
-        (origin > target && state.value <= target)
-      ) {
-        overshootDuration = timestamp
-      }
+    if (overshootDuration === undefined && state.hasReachedTarget) {
+      overshootDuration = timestamp
     }
 
     timestamp += timeStep
   }
 
   const duration = timestamp - timeStep
+
+  /**
+   * If generating an animation that didn't actually move,
+   * generate a second keyframe so we have an origin and target.
+   */
+  if (keyframes.length === 1) keyframes.push(state.value)
+
   return {
     keyframes,
     duration: duration / 1000,

@@ -5,13 +5,12 @@ import { animateStyle } from "../animate-style"
 import {
   AnimationOptions,
   AnimationOptionsWithOverrides,
-  AnimationWithCommitStyles,
   Easing,
   PlaybackOptions,
   UnresolvedValueKeyframe,
   ValueKeyframesDefinition,
 } from "../types"
-import { createAnimationControls } from "../utils/controls"
+import { createAnimations } from "../utils/controls"
 import { defaults } from "../utils/defaults"
 import { keyframesList } from "../utils/keyframes"
 import { getOptions } from "../utils/options"
@@ -37,16 +36,17 @@ export function timeline(
   definition: TimelineDefinition,
   options: TimelineOptions = {}
 ) {
-  const animations: AnimationWithCommitStyles[] = []
-
   const animationDefinitions = createAnimationsFromTimeline(definition, options)
-  for (let i = 0; i < animationDefinitions.length; i++) {
-    const animation = animateStyle(...animationDefinitions[i])
-    animation && animations.push(animation as any)
-  }
 
-  return createAnimationControls(
-    animations,
+  /**
+   * Create and start animations
+   */
+  const animationFactories = animationDefinitions
+    .map((definition) => animateStyle(...definition))
+    .filter(Boolean)
+
+  return createAnimations(
+    animationFactories,
     // Get the duration from the first animation definition
     animationDefinitions[0]?.[3].duration ?? defaults.duration
   )

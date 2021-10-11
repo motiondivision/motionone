@@ -1,12 +1,12 @@
+import { isNumber } from "../../../utils/is-number"
 import { BezierDefinition, CustomEasing, Easing } from "../types"
 
 export const isCubicBezier = (
   easing: Easing | Easing[]
-): easing is BezierDefinition =>
-  Array.isArray(easing) && typeof easing[0] === "number"
+): easing is BezierDefinition => Array.isArray(easing) && isNumber(easing[0])
 
 export const isEasingList = (easing: Easing | Easing[]): easing is Easing[] =>
-  Array.isArray(easing) && typeof easing[0] !== "number"
+  Array.isArray(easing) && !isNumber(easing[0])
 
 export const isCustomEasing = (
   easing: Easing | Easing[] | CustomEasing

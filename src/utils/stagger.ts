@@ -1,6 +1,7 @@
 import { Easing } from "../targets/dom/types"
 import { getEasingFunction } from "../targets/js/easing/utils/get-function"
 import { EasingFunction } from "../targets/js/types"
+import { isNumber } from "./is-number"
 
 export type From = "first" | "last" | "center" | number
 
@@ -17,8 +18,7 @@ export function stagger(
   { start = 0, from = 0, easing }: StaggerOptions = {}
 ): OptionResolver<number> {
   return (i: number, total: number) => {
-    const fromIndex =
-      typeof from === "number" ? from : getFromIndex(from, total)
+    const fromIndex = isNumber(from) ? from : getFromIndex(from, total)
     const distance = Math.abs(fromIndex - i)
     let delay = duration * distance
 
