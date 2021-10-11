@@ -22,7 +22,7 @@
         margin: 0;
         padding: 0;
         min-height: 90vh;
-        background: #00e6c3;
+        background: #00ffdb;
       }
 
       body {
@@ -76,11 +76,8 @@
 
       const letters = document.querySelectorAll("span")
 
-      const neg = { velocity: 400, max: 0 }
-      const pos = { velocity: -400, min: 0 }
-
       letters.forEach((element, i) => {
-        const point = pointFromVector({ x: 0, y: 0 }, 66 * i, 400)
+        const point = pointFromVector({ x: 0, y: 0 }, (360 / 5) * i, 450)
 
         animate(
           element,
@@ -98,11 +95,11 @@
       })
 
       setTimeout(() => {
-        animate(
-          "span",
-          { x: 0, y: 0 },
-          { easing: spring({ stiffness: 1000, damping: 40 }) }
-        )
+        // animate(
+        //   "span",
+        //   { x: 0, y: 0 },
+        //   { easing: spring({ stiffness: 1000, damping: 40 }) }
+        // )
       }, 4000)
     </script>
   </body>
