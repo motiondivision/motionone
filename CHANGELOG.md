@@ -2,7 +2,13 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
-## [10.3.0] [2021-12-05]
+## [10.3.1] [2021-10-12]
+
+### Fixed
+
+- Fixing a bug in `stagger` and `animate`.
+
+## [10.3.0] [2021-10-11]
 
 ### New
 
