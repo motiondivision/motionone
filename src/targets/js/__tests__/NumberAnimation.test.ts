@@ -406,6 +406,7 @@ describe("animateNumber", () => {
         output.push(v)
 
         if (output.length === 4) {
+          mockReadTime(200)
           stopAnimation(animation)
         }
       },

@@ -7,6 +7,7 @@ export interface WithCommitStyles {
 
 export function stopAnimation(animation?: BasicAnimationControls) {
   if (!animation) return
+
   // Suppress error thrown by WAAPI
   try {
     /**
