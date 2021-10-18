@@ -1,4 +1,5 @@
 import { animate } from "../animate"
+import { style } from "../style"
 import "./web-animations.min-edited.js"
 
 /**
@@ -113,5 +114,22 @@ describe("animate", () => {
     const animation = animate(div, { opacity: 0.5 }, { duration: 10 })
 
     expect(animation.duration).toBe(10)
+  })
+
+  test("Interrupt polyfilled transforms", async () => {
+    const div = document.createElement("div")
+    animate(div, { x: 300 }, { duration: 1 })
+
+    const promise = new Promise<string | undefined>((resolve) => {
+      setTimeout(() => {
+        const animation = animate(div, { x: 0 }, { duration: 1 })
+        setTimeout(() => {
+          animation.stop()
+          resolve(style.get(div, "--motion-translateX"))
+        }, 50)
+      }, 100)
+    })
+
+    return expect(promise).resolves.not.toBe("0px")
   })
 })

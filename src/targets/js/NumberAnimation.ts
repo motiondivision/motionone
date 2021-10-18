@@ -20,7 +20,7 @@ export class NumberAnimation
 
   private t = 0
 
-  private cancelT = 0
+  private cancelTimestamp = 0
 
   playState: AnimationPlayState = "idle"
 
@@ -167,7 +167,7 @@ export class NumberAnimation
 
   cancel() {
     this.playState = "idle"
-    this.tick(this.cancelT)
+    this.tick(this.cancelTimestamp)
     this.reject(false)
   }
 
@@ -176,7 +176,7 @@ export class NumberAnimation
   }
 
   commitStyles() {
-    this.cancelT = this.t
+    this.cancelTimestamp = performance.now()
   }
 
   get currentTime() {
