@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.3.2] [2021-10-18]
+
+### Fixed
+
+- Fixing animation interruption for independent transform animations in Safari and Firefox. [Issue (sponsors only)](https://github.com/motiondivision/motion/issues/27)
+
 ## [10.3.1] [2021-10-12]
 
 ### Fixed
