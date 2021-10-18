@@ -19,7 +19,6 @@
         height: 100px;
         border-radius: 10px;
         background-color: #73d99f;
-        opacity: 0;
       }
     </style>
   </head>
@@ -30,28 +29,10 @@
       const { animate, spring, glide } = Motion
       const box = document.getElementById("box")
 
+      animate(box, { x: 500 }, { duration: 2 })
+
       setTimeout(() => {
-        const animation = animate(
-          box,
-          { x: 100, opacity: [0, 1] },
-          {
-            easing: glide({ velocity: 500, max: 200 }),
-            // delay: 0.001,
-            duration: 2,
-            // endDelay: 1,
-            // fill: "forwards",
-            // repeat: Infinity,
-            // duration: 1,
-            // delay: 1,
-            // stiffness: 200,
-            // damping: 10,
-            // direction: "alternate",
-            // repeat: Infinity,
-            // easing: "linear",
-            // x: { easing: ["ease-in", "linear"] },
-            // // offset: [0, 0.2, 1],
-          }
-        )
+        animate(box, { x: 0 }, { duration: 2 })
       }, 1000)
 
       // const mix = (from, to, progress) =>
