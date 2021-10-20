@@ -1,5 +1,9 @@
 import { createAnimationsFromTimeline, timeline } from "../"
 import { stagger } from "../../../../utils/stagger"
+import { spring } from "../../../js/easing/spring"
+import { createSpringGenerator } from "../../../js/easing/spring/generator"
+import { pregenerateKeyframes } from "../../../js/easing/utils/pregenerate-keyframes"
+import { defaultOffset } from "../../../js/utils/offset"
 
 describe("createAnimationsFromTimeline", () => {
   const a = document.createElement("div")
@@ -384,6 +388,66 @@ describe("createAnimationsFromTimeline", () => {
         },
       ],
     ])
+  })
+
+  test("It correctly creates keyframes from ease: spring with explicit origin", () => {
+    const config = { stiffness: 800, damping: 20 }
+    const origin = 50
+    const target = 100
+    const animations = createAnimationsFromTimeline([
+      [a, { x: [origin, target], opacity: [0, 1] }, { easing: spring(config) }],
+    ])
+
+    const expectedSpring = createSpringGenerator({
+      ...config,
+      from: origin,
+      to: target,
+    })
+
+    const expectedKeyframes = pregenerateKeyframes(expectedSpring).keyframes
+
+    animations[0][3]!.offset = animations[0][3]!.offset!.map((v) =>
+      parseFloat(v.toFixed(4))
+    ) as any
+
+    expect(animations).toEqual([
+      [
+        a,
+        "x",
+        expectedKeyframes,
+        {
+          duration: 0.48,
+          easing: defaultOffset(49).fill("linear" as any),
+          offset: defaultOffset(49).map((value) =>
+            parseFloat(value.toFixed(4))
+          ),
+        },
+      ],
+      [
+        a,
+        "opacity",
+        [0, 1, null],
+        {
+          duration: 0.48,
+          easing: ["ease", "ease"],
+          offset: [0, 0.16666666666666669, 1],
+        },
+      ],
+    ])
+  })
+
+  test("It throws when provided a spring with 1 keyframe", () => {
+    expect(() =>
+      createAnimationsFromTimeline([[a, { x: 100 }, { easing: spring() }]])
+    ).toThrow()
+  })
+
+  test("It throws when provided a spring with more than 2 keyframes", () => {
+    expect(() =>
+      createAnimationsFromTimeline([
+        [a, { x: [100, 200, 300] }, { easing: spring() }],
+      ])
+    ).toThrow()
   })
 })
 

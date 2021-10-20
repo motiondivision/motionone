@@ -1,3 +1,4 @@
+import { invariant } from "hey-listen"
 import { progress } from "../../../utils/progress"
 import { resolveOption } from "../../../utils/stagger"
 import { defaultOffset, fillOffset } from "../../js/utils/offset"
@@ -12,9 +13,11 @@ import {
 } from "../types"
 import { createAnimations } from "../utils/controls"
 import { defaults } from "../utils/defaults"
+import { isCustomEasing } from "../utils/easing"
 import { keyframesList } from "../utils/keyframes"
 import { getOptions } from "../utils/options"
 import { resolveElements } from "../utils/resolve-elements"
+import { isTransform } from "../utils/transforms"
 import { ElementSequence, TimelineDefinition, ValueSequence } from "./types"
 import { calcNextTime } from "./utils/calc-time"
 import { addKeyframes } from "./utils/edit"
@@ -99,12 +102,33 @@ export function createAnimationsFromTimeline(
 
       for (const key in keyframes) {
         const valueSequence = getValueSequence(key, elementSequence)
-        const valueKeyframes = keyframesList(keyframes[key]!)
+        let valueKeyframes = keyframesList(keyframes[key]!)
         const valueOptions = getOptions(options, key)
         let {
           duration = defaultOptions.duration || defaults.duration,
           easing = defaultOptions.easing || defaults.easing,
         } = valueOptions
+
+        if (isCustomEasing(easing)) {
+          const valueIsTransform = isTransform(key)
+
+          invariant(
+            valueKeyframes.length === 2 || !valueIsTransform,
+            "spring must be provided 2 keyframes within timeline"
+          )
+
+          const custom = easing.createAnimation(
+            valueKeyframes,
+            // TODO We currently only support explicit keyframes
+            // so this doesn't currently read from the DOM
+            () => "0",
+            valueIsTransform
+          )
+
+          easing = custom.easing
+          if (custom.keyframes !== undefined) valueKeyframes = custom.keyframes
+          if (custom.duration !== undefined) duration = custom.duration
+        }
 
         const delay =
           resolveOption(options.delay, elementIndex, numElements) || 0

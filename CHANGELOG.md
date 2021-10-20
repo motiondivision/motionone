@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.4.0] [2021-10-18]
+
+### Added
+
+- **Spring and glide in timeline:** `timeline` now supports animations with `ease: spring()` and `ease: glide()`.
+
 ## [10.3.2] [2021-10-18]
 
 ### Fixed

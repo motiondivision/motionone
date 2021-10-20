@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "framer-motion": "^4.1.17",
+    "hey-listen": "^1.0.8",
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
@@ -130,7 +131,7 @@
     },
     {
       "path": "./dist/size-timeline-dom.js",
-      "maxSize": "4.1 kB"
+      "maxSize": "4.2 kB"
     },
     {
       "path": "./dist/size-spring.js",
