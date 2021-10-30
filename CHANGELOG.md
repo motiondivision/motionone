@@ -12,7 +12,7 @@ Motion One adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Fixing animation interruption for independent transform animations in Safari and Firefox. [Issue (sponsors only)](https://github.com/motiondivision/motion/issues/27)
+- Fixing animation interruption for independent transform animations in Safari and Firefox. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/27)
 
 ## [10.3.1] [2021-10-12]
 
@@ -52,13 +52,13 @@ Motion One adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- **Fill both:** Previously, if an animation had a delay and an initially-defined first keyframe (`opacity: [0, 1]`) the animation would start from its rendered style to that first keyframe. Now, the initial keyframe gets stretched to the very start of the whole animation by setting `fill: "both"`. [Issue (sponsors only)](https://github.com/motiondivision/motion/issues/20)
+- **Fill both:** Previously, if an animation had a delay and an initially-defined first keyframe (`opacity: [0, 1]`) the animation would start from its rendered style to that first keyframe. Now, the initial keyframe gets stretched to the very start of the whole animation by setting `fill: "both"`. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/20)
 
 ## [10.1.1] [2021-09-28]
 
 ### Fixed
 
-- **Scrub to end:** Setting `currentTime` to `duration` was removing the animation effect. This has been fixed by setting `fill: "forwards"` on the WAAPI animation. This won't affect memory consumption as animations are flattened into styles and removed on finish. [Issue (sponsors only)](https://github.com/motiondivision/motion/issues/21)
+- **Scrub to end:** Setting `currentTime` to `duration` was removing the animation effect. This has been fixed by setting `fill: "forwards"` on the WAAPI animation. This won't affect memory consumption as animations are flattened into styles and removed on finish. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/21)
 
 ### Changed
 
