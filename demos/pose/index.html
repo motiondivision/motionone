@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <title></title>
+    <style>
+      body {
+        min-height: 100vh;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-top: 100vh;
+      }
+
+      #box {
+        width: 100px;
+        height: 100px;
+        border-radius: 10px;
+        background-color: #73d99f;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="box"></div>
+    <script src="../../dist/motion.umd.js"></script>
+    <script>
+      const { pose } = Motion
+      const box = document.getElementById("box")
+
+      pose(
+        box,
+        {
+          hover: { scale: 1.2 },
+          press: { scale: 0.9 },
+          inView: { backgroundColor: "red", options: { duration: 0.5 } },
+        },
+        {
+          onAnimationStart: () => console.log("animation start"),
+          onAnimationEnd: () => console.log("animation end"),
+          onHoverStart: () => console.log("hover start"),
+          onHoverEnd: () => console.log("hover end"),
+          onPressStart: () => console.log("press start"),
+          onPressEnd: () => console.log("press end"),
+          onViewEnter: () => console.log("view enter"),
+          onViewLeave: () => console.log("view leave"),
+        }
+      )
+    </script>
+  </body>
+</html>
