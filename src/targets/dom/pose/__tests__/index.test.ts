@@ -5,6 +5,7 @@ import {
 } from "../../../../../jest.setup"
 import { style } from "../../style"
 import { pose } from "../index"
+import { fireEvent } from "@testing-library/dom"
 import "../../__tests__/web-animations.min-edited.js"
 
 describe("pose()", () => {
@@ -301,7 +302,67 @@ describe("pose()", () => {
     expect(element).toHaveStyle("opacity: 0.75")
   })
 
-  // test("Animate from press to hover when press ends", async () => {})
+  test("Animate from press to hover when press ends", async () => {
+    const element = document.createElement("div")
+    element.style.opacity = "1"
 
-  // test("Animate from press to style when press ends", async () => {})
+    await new Promise<void>((resolve) => {
+      pose(
+        element,
+        {
+          hover: { opacity: 0.5 },
+          press: { opacity: 0.75 },
+        },
+        { duration: 0.01 }
+      )
+
+      pointerEnter(element)
+
+      requestAnimationFrame(() => {
+        pointerDown(element)
+
+        setTimeout(() => {
+          fireEvent.pointerUp(window)
+          setTimeout(() => {
+            resolve()
+          }, 50)
+        }, 10)
+      })
+    })
+
+    expect(element).toHaveStyle("opacity: 0.5")
+  })
+
+  test("Animate from press to style when press ends and hover is inactive", async () => {
+    const element = document.createElement("div")
+    element.style.opacity = "1"
+
+    await new Promise<void>((resolve) => {
+      pose(
+        element,
+        {
+          hover: { opacity: 0.5 },
+          press: { opacity: 0.75 },
+        },
+        { duration: 0.01 }
+      )
+
+      pointerEnter(element)
+
+      requestAnimationFrame(() => {
+        pointerDown(element)
+
+        setTimeout(() => {
+          pointerLeave(element)
+          fireEvent.pointerUp(window)
+
+          setTimeout(() => {
+            resolve()
+          }, 50)
+        }, 10)
+      })
+    })
+
+    expect(element).toHaveStyle("opacity: 1")
+  })
 })
