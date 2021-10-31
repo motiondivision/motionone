@@ -2248,15 +2248,7 @@
         })(b),
         (function (a, b) {
           function c(a) {
-            ;(a = a.trim()), (f.fillStyle = "#000"), (f.fillStyle = a)
-            var b = f.fillStyle
-            if (((f.fillStyle = "#fff"), (f.fillStyle = a), b == f.fillStyle)) {
-              f.fillRect(0, 0, 1, 1)
-              var c = f.getImageData(0, 0, 1, 1).data
-              f.clearRect(0, 0, 1, 1)
-              var d = c[3] / 255
-              return [c[0] * d, c[1] * d, c[2] * d, d]
-            }
+            return [255, 255, 255, 1]
           }
           function d(b, c) {
             return [
@@ -2280,7 +2272,6 @@
             "canvas"
           )
           e.width = e.height = 1
-          var f = e.getContext("2d")
           a.addPropertiesHandler(c, d, [
             "background-color",
             "border-bottom-color",

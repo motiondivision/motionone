@@ -10,6 +10,16 @@ export type Poses = {
   [key: string]: PoseDefinition
 }
 
+export interface Poser {
+  update: (poses: Poses, options: PoserOptions) => void
+  clear: () => void
+}
+
+export type PoserOptions = AnimationOptionsWithOverrides & {
+  onAnimationStart?: (targetPose: Pose) => void
+  onAnimationComplete?: (targetPose: Pose) => void
+}
+
 export type GestureStateHandler = {
   enable: () => void
   disable: () => void

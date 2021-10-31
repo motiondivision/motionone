@@ -3,22 +3,32 @@ import { getOptions } from "../utils/options"
 import { hover } from "./hover"
 import { inView } from "./in-view"
 import { press } from "./press"
-import { GestureHandler, GestureSubscriptions, Poses, Pose } from "./types"
+import {
+  GestureHandler,
+  GestureSubscriptions,
+  Poses,
+  Pose,
+  PoserOptions,
+  Poser,
+} from "./types"
 import { animateStyle } from "../animate-style"
 import { AnimationFactory } from "../types"
 import { noop } from "../../../utils/noop"
 import { style } from "../style"
 import { getPose } from "./utils/get-pose"
 
-const gestures = { inView, hover, press }
+const gestures = { style: () => () => {}, inView, hover, press }
 const gestureNames = Object.keys(gestures)
-const gesturePriority = [inView, hover, press]
+const gesturePriority = [style, inView, hover, press]
 const numGestures = gesturePriority.length
 
-export function pose(element: Element, poses: Poses) {
-  let target: Pose = getPose("initial", poses) || {}
-  const baseTarget: Pose = { ...target }
-
+export function createPoser(
+  element: Element,
+  poses: Poses,
+  options: PoserOptions = {}
+): Poser {
+  let target: Pose = {}
+  const baseTarget: Pose = {}
   const activeGestures = gestureNames.map(() => false)
   const gestureSubscriptions: GestureSubscriptions = {}
 
@@ -37,9 +47,7 @@ export function pose(element: Element, poses: Poses) {
         if (key === "options") continue
 
         target[key] = gesturePose[key]
-        if (gesturePose.options) {
-          animationOptions[key] = getOptions(gesturePose.options, key)
-        }
+        animationOptions[key] = getOptions(gesturePose.options ?? options, key)
       }
     }
 
@@ -54,11 +62,17 @@ export function pose(element: Element, poses: Poses) {
       if (target[key] === undefined) {
         target[key] = baseTarget[key]
       }
-      if (hasChanged(target[key], prevTarget[key])) {
+
+      if (hasChanged(prevTarget[key], target[key])) {
         baseTarget[key] ??= style.get(element, key) as string
 
         animationFactories.push(
-          animateStyle(element, key, target[key], animationOptions[key])
+          animateStyle(
+            element,
+            key,
+            target[key],
+            animationOptions[key] || options
+          )
         )
       }
     })
@@ -67,8 +81,14 @@ export function pose(element: Element, poses: Poses) {
       .map((factory) => factory())
       .filter(Boolean)
 
+    if (!animations.length) return
+
+    const { onAnimationStart, onAnimationComplete } = options
+    onAnimationStart?.(target)
     Promise.all(animations.map((animation: any) => animation.finished))
-      .then(() => {})
+      .then(() => {
+        onAnimationComplete?.(target)
+      })
       .catch(noop)
   }
 
@@ -93,17 +113,37 @@ export function pose(element: Element, poses: Poses) {
     }
   }
 
+  setGesture("style", true)()
   updateGestures()
 
   return {
-    update: (newPoses: Poses) => {
+    update: (newPoses: Poses, newOptions: PoserOptions) => {
       poses = newPoses
+      options = newOptions
       updateGestures()
+      updateTarget()
     },
-    clean() {
+    clear() {
       for (const key in gestureSubscriptions) {
         gestureSubscriptions[key]?.()
       }
     },
+  }
+}
+
+const cache = new WeakMap<Element, Poser>()
+export function pose(
+  element: Element,
+  poses: Poses,
+  options: PoserOptions = {}
+) {
+  if (cache.has(element)) {
+    const poser = cache.get(element)!
+    poser.update(poses, options)
+    return poser
+  } else {
+    const poser = createPoser(element, poses, options)
+    cache.set(element, poser)
+    return poser
   }
 }

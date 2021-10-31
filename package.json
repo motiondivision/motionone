@@ -79,7 +79,6 @@
     "@types/react-dom": "^17.0.9",
     "babel-loader": "^8.2.2",
     "bundlesize": "^0.18.1",
-    "canvas": "^2.8.0",
     "concurrently": "^6.2.0",
     "convert-tsconfig-paths-to-webpack-aliases": "^0.9.2",
     "cypress": "^7.6.0",
