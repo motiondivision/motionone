@@ -12,15 +12,23 @@ import {
   Poser,
 } from "./types"
 import { animateStyle } from "../animate-style"
-import { AnimationFactory } from "../types"
+import { AcceptedElements, AnimationFactory } from "../types"
 import { noop } from "../../../utils/noop"
 import { style } from "../style"
 import { getPose } from "./utils/get-pose"
+import { resolveElements } from "../utils/resolve-elements"
+import { poseEvent } from "./utils/events"
 
 const gestures = { style: () => () => {}, inView, hover, press }
 const gestureNames = Object.keys(gestures)
 const gesturePriority = [style, inView, hover, press]
 const numGestures = gesturePriority.length
+
+/**
+ * TODO:
+ * -  Allowing both callbacks and selectors feels like a bad idea.
+ *    Probably better to allow custom events?
+ */
 
 export function createPoser(
   element: Element,
@@ -83,12 +91,9 @@ export function createPoser(
 
     if (!animations.length) return
 
-    const { onAnimationStart, onAnimationComplete } = options
-    onAnimationStart?.(target)
+    element.dispatchEvent(poseEvent("posestart", target))
     Promise.all(animations.map((animation: any) => animation.finished))
-      .then(() => {
-        onAnimationComplete?.(target)
-      })
+      .then(() => element.dispatchEvent(poseEvent("posecomplete", target)))
       .catch(noop)
   }
 
@@ -133,17 +138,17 @@ export function createPoser(
 
 const cache = new WeakMap<Element, Poser>()
 export function pose(
-  element: Element,
+  elements: AcceptedElements,
   poses: Poses,
   options: PoserOptions = {}
 ) {
-  if (cache.has(element)) {
-    const poser = cache.get(element)!
-    poser.update(poses, options)
-    return poser
-  } else {
-    const poser = createPoser(element, poses, options)
-    cache.set(element, poser)
-    return poser
-  }
+  resolveElements(elements).forEach((element) => {
+    if (cache.has(element)) {
+      const poser = cache.get(element)!
+      poser.update(poses, options)
+    } else {
+      const poser = createPoser(element, poses, options)
+      cache.set(element, poser)
+    }
+  })
 }

@@ -15,10 +15,7 @@ export interface Poser {
   clear: () => void
 }
 
-export type PoserOptions = AnimationOptionsWithOverrides & {
-  onAnimationStart?: (targetPose: Pose) => void
-  onAnimationComplete?: (targetPose: Pose) => void
-}
+export type PoserOptions = AnimationOptionsWithOverrides
 
 export type GestureStateHandler = {
   enable: () => void
@@ -38,4 +35,36 @@ export interface GestureSubscriptions {
 
 export interface Target {
   [key: string]: string | number
+}
+
+export type PoseEventNames =
+  | "posestart"
+  | "posecomplete"
+  | "hoverstart"
+  | "hoverend"
+  | "pressstart"
+  | "pressend"
+  | "viewenter"
+  | "viewleave"
+
+type PoseEvent = CustomEvent<{
+  target: Pose
+}>
+
+type ViewEvent = CustomEvent<{
+  isVisible: boolean
+  amount: "none" | "some" | "all"
+}>
+
+declare global {
+  interface GlobalEventHandlersEventMap {
+    posestart: PoseEvent
+    posecomplete: PoseEvent
+    hoverstart: PointerEvent
+    hoverend: PointerEvent
+    pressstart: PointerEvent
+    pressend: PointerEvent
+    viewenter: ViewEvent
+    viewleave: ViewEvent
+  }
 }

@@ -23,11 +23,8 @@ describe("pose()", () => {
     expect(style.get(element, "scale")).toBe(1)
 
     await new Promise<void>((resolve) => {
-      pose(
-        element,
-        { style: { scale: 2 } },
-        { onAnimationComplete: () => resolve() }
-      )
+      pose(element, { style: { scale: 2 } })
+      element.addEventListener("posecomplete", () => resolve())
     })
 
     expect(style.get(element, "scale")).toBe("2")
@@ -38,11 +35,8 @@ describe("pose()", () => {
     const element = document.createElement("div")
 
     const promise = new Promise((resolve, reject) => {
-      pose(
-        element,
-        { style: { opacity: 0.5 } },
-        { duration: 0.1, onAnimationComplete: () => resolve(true) }
-      )
+      pose(element, { style: { opacity: 0.5 } }, { duration: 0.1 })
+      element.addEventListener("posecomplete", () => resolve(true))
 
       setTimeout(reject, 200)
     })
@@ -55,11 +49,10 @@ describe("pose()", () => {
     const element = document.createElement("div")
 
     const promise = new Promise((resolve, reject) => {
-      pose(
-        element,
-        { style: { opacity: 0.5 } },
-        { duration: 0.1, onAnimationStart: (target) => resolve(target) }
+      element.addEventListener("posestart", ({ detail }) =>
+        resolve(detail.target)
       )
+      pose(element, { style: { opacity: 0.5 } }, { duration: 0.1 })
 
       setTimeout(reject, 200)
     })
@@ -76,8 +69,9 @@ describe("pose()", () => {
       pose(
         element,
         { style: { opacity: 1, options: { duration: 0.1 } } },
-        { duration: 1, onAnimationComplete: resolve }
+        { duration: 1 }
       )
+      element.addEventListener("posecomplete", () => resolve(true))
       setTimeout(reject, 500)
     })
 
@@ -87,13 +81,10 @@ describe("pose()", () => {
   test("New poses trigger animations if different", async () => {
     const element = document.createElement("div")
 
-    await new Promise((onAnimationComplete) => {
+    await new Promise((resolve) => {
       pose(element, { style: { opacity: 1 } })
-      pose(
-        element,
-        { style: { opacity: 0.5 } },
-        { duration: 0.01, onAnimationComplete }
-      )
+      pose(element, { style: { opacity: 0.5 } }, { duration: 0.01 })
+      element.addEventListener("posecomplete", () => resolve(true))
     })
 
     expect(element).toHaveStyle("opacity: 0.5")
@@ -104,12 +95,8 @@ describe("pose()", () => {
 
     const promise = new Promise((resolve, reject) => {
       pose(element, { style: { opacity: 1 } })
-      pose(
-        element,
-        { style: { opacity: 1 } },
-        { duration: 0.01, onAnimationComplete: reject }
-      )
-
+      pose(element, { style: { opacity: 1 } }, { duration: 0.01 })
+      element.addEventListener("posecomplete", reject)
       setTimeout(() => resolve(true), 100)
     })
 
@@ -121,23 +108,16 @@ describe("pose()", () => {
     element.style.opacity = "0.5"
 
     await new Promise<void>((resolve, reject) => {
-      pose(
-        element,
-        {
-          style: { opacity: 1, scale: 2 },
-        },
-        {
-          duration: 0.01,
-          onAnimationComplete: () => {
-            expect(element).toHaveStyle("opacity: 1; --motion-scale: 2")
-            pose(
-              element,
-              {},
-              { duration: 0.01, onAnimationComplete: () => resolve() }
-            )
-          },
-        }
-      )
+      pose(element, { style: { opacity: 1, scale: 2 } }, { duration: 0.01 })
+
+      function nextAnimation() {
+        element.removeEventListener("posecomplete", nextAnimation)
+        element.addEventListener("posecomplete", () => resolve())
+        expect(element).toHaveStyle("opacity: 1; --motion-scale: 2")
+        pose(element, {}, { duration: 0.01 })
+      }
+
+      element.addEventListener("posecomplete", nextAnimation)
 
       setTimeout(reject, 200)
     })
@@ -149,16 +129,8 @@ describe("pose()", () => {
     const element = document.createElement("div")
 
     await new Promise((resolve) => {
-      pose(
-        element,
-        {
-          hover: { opacity: 0.5 },
-        },
-        {
-          duration: 0.01,
-          onAnimationComplete: resolve,
-        }
-      )
+      element.addEventListener("posecomplete", resolve)
+      pose(element, { hover: { opacity: 0.5 } }, { duration: 0.01 })
 
       pointerEnter(element)
     })
@@ -170,26 +142,38 @@ describe("pose()", () => {
     const element = document.createElement("div")
 
     await new Promise((resolve) => {
-      pose(
-        element,
-        {
-          hover: { opacity: 0.5 },
-        },
-        { duration: 0.01 }
-      )
+      pose(element, { hover: { opacity: 0.5 } }, { duration: 0.01 })
 
       pointerEnter(element)
 
       requestAnimationFrame(() => {
-        pose(
-          element,
-          { hover: { opacity: 0.75 } },
-          { duration: 0.01, onAnimationComplete: resolve }
-        )
+        pose(element, { hover: { opacity: 0.75 } }, { duration: 0.01 })
+        element.addEventListener("posecomplete", resolve)
       })
     })
 
     expect(element).toHaveStyle("opacity: 0.75")
+  })
+
+  test("Hover fires hoverstart event when hover is triggered", async () => {
+    const element = document.createElement("div")
+
+    await new Promise((resolve) => {
+      element.addEventListener("hoverstart", resolve)
+      pose(element, { hover: { opacity: 1 } })
+      pointerEnter(element)
+    })
+  })
+
+  test("Hover fires hoverend event when hover is triggered", async () => {
+    const element = document.createElement("div")
+
+    await new Promise((resolve) => {
+      element.addEventListener("hoverend", resolve)
+      pose(element, { hover: { opacity: 1 } })
+      pointerEnter(element)
+      pointerLeave(element)
+    })
   })
 
   test("Animate from hover when hover ends", async () => {
@@ -197,6 +181,10 @@ describe("pose()", () => {
     element.style.opacity = "1"
 
     await new Promise<void>((resolve) => {
+      element.addEventListener("posecomplete", ({ detail }) => {
+        if (detail.target.opacity === "1") resolve()
+      })
+
       pose(
         element,
         {
@@ -204,9 +192,6 @@ describe("pose()", () => {
         },
         {
           duration: 0.01,
-          onAnimationComplete: (target) => {
-            if (target.opacity === "1") resolve()
-          },
         }
       )
 
@@ -229,11 +214,10 @@ describe("pose()", () => {
           pressed: { scale: 0.5 },
           press: "pressed",
         },
-        {
-          duration: 0.01,
-          onAnimationComplete: resolve,
-        }
+        { duration: 0.01 }
       )
+
+      element.addEventListener("posecomplete", resolve)
 
       pointerDown(element)
     })
@@ -241,26 +225,38 @@ describe("pose()", () => {
     expect(element).toHaveStyle("--motion-scale: 0.5")
   })
 
+  test("Press fires pressstart event when press is triggered", async () => {
+    const element = document.createElement("div")
+
+    await new Promise((resolve) => {
+      element.addEventListener("pressstart", resolve)
+      pose(element, { press: { opacity: 1 } })
+      pointerDown(element)
+    })
+  })
+
+  test("Press fires pressend event when press is triggered", async () => {
+    const element = document.createElement("div")
+
+    await new Promise((resolve) => {
+      element.addEventListener("pressend", resolve)
+      pose(element, { press: { opacity: 1 } })
+      pointerDown(element)
+      fireEvent.pointerUp(window)
+    })
+  })
+
   test("Animate to new press pose while press is active", async () => {
     const element = document.createElement("div")
 
     await new Promise((resolve) => {
-      pose(
-        element,
-        {
-          press: { opacity: 0.5 },
-        },
-        { duration: 0.01 }
-      )
+      pose(element, { press: { opacity: 0.5 } }, { duration: 0.01 })
 
       pointerDown(element)
 
       requestAnimationFrame(() => {
-        pose(
-          element,
-          { press: { opacity: 0.75 } },
-          { duration: 0.01, onAnimationComplete: resolve }
-        )
+        pose(element, { press: { opacity: 0.75 } }, { duration: 0.01 })
+        element.addEventListener("posecomplete", resolve)
       })
     })
 
