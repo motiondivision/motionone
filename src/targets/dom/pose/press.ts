@@ -1,18 +1,25 @@
 import { GestureHandler, GestureStateHandler } from "./types"
+import { dispatchPointerEvent } from "./utils/events"
 
 export const press: GestureHandler = (
   element: Element,
   { enable, disable }: GestureStateHandler
 ) => {
-  const onPointerDown = () => {
+  const onPointerUp = (event: PointerEvent) => {
+    disable()
+    dispatchPointerEvent(element, "pressend", event)
+  }
+
+  const onPointerDown = (event: PointerEvent) => {
     enable()
-    window.addEventListener("pointerup", disable)
+    dispatchPointerEvent(element, "pressstart", event)
+    window.addEventListener("pointerup", onPointerUp)
   }
 
   element.addEventListener("pointerdown", onPointerDown)
 
   return () => {
     element.removeEventListener("pointerdown", onPointerDown)
-    window.removeEventListener("pointerup", disable)
+    window.removeEventListener("pointerup", onPointerUp)
   }
 }

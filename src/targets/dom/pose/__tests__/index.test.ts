@@ -8,6 +8,14 @@ import { pose } from "../index"
 import { fireEvent } from "@testing-library/dom"
 import "../../__tests__/web-animations.min-edited.js"
 
+/**
+ * TODO:
+ *  - Gesture handlers only fire if poses set or [gesture]Events: true
+ *  - Hover only on pointer events not touch
+ *  - Press only on single finger
+ *  - Mock IntersectionObserver for inView events
+ */
+
 describe("pose()", () => {
   test("Types are correct", () => {
     const element = document.createElement("div")

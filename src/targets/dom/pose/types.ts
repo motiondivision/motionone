@@ -51,6 +51,10 @@ type PoseEvent = CustomEvent<{
   target: Pose
 }>
 
+type CustomPointerEvent = CustomEvent<{
+  originalEvent: PointerEvent
+}>
+
 type ViewEvent = CustomEvent<{
   isVisible: boolean
   amount: "none" | "some" | "all"
@@ -60,10 +64,10 @@ declare global {
   interface GlobalEventHandlersEventMap {
     posestart: PoseEvent
     posecomplete: PoseEvent
-    hoverstart: PointerEvent
-    hoverend: PointerEvent
-    pressstart: PointerEvent
-    pressend: PointerEvent
+    hoverstart: CustomPointerEvent
+    hoverend: CustomPointerEvent
+    pressstart: CustomPointerEvent
+    pressend: CustomPointerEvent
     viewenter: ViewEvent
     viewleave: ViewEvent
   }
