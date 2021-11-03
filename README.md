@@ -15,5 +15,6 @@ A huge thank you to all sponsors of this project, with a special shoutout to:
 - [Martin Pitt](https://github.com/Martin-Pitt)
 - [Ryan Yogan](https://github.com/ryanyogan)
 - [Mihael Konjević](https://github.com/retro)
+- [impactvelocity](https://github.com/impactvelocity)
 
 [Become a sponsor](https://github.com/sponsors/mattgperry) and get access to the private Motion One repo. File issues, read the changelog and source code, and join discussions that help shape the future of the API.
