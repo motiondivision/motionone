@@ -56,8 +56,7 @@ type CustomPointerEvent = CustomEvent<{
 }>
 
 type ViewEvent = CustomEvent<{
-  isVisible: boolean
-  amount: "none" | "some" | "all"
+  originalEntry: IntersectionObserverEntry
 }>
 
 declare global {

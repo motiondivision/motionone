@@ -12,3 +12,13 @@ export function dispatchPointerEvent(
     new CustomEvent(name, { detail: { originalEvent: event } })
   )
 }
+
+export function dispatchViewEvent(
+  element: Element,
+  name: PoseEventNames,
+  entry: IntersectionObserverEntry
+) {
+  element.dispatchEvent(
+    new CustomEvent(name, { detail: { originalEntry: entry } })
+  )
+}

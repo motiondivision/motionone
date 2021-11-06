@@ -24,17 +24,22 @@ const gestureNames = Object.keys(gestures)
 const gesturePriority = [style, inView, hover, press]
 const numGestures = gesturePriority.length
 
-/**
- * TODO:
- * -  Allowing both callbacks and selectors feels like a bad idea.
- *    Probably better to allow custom events?
- */
+function processAnimations() {
+  // Loop over all scheduled posers
+  // Create animations
+  // Execute animations
+}
 
+let id = 0
 export function createPoser(
-  element: Element,
+  element: HTMLElement | SVGElement,
   poses: Poses,
   options: PoserOptions = {}
 ): Poser {
+  const poserId = `${id++}`
+  const childrenSelector = `[data-pose]:not([data-pose="${poserId}"] [data-pose] [data-pose])`
+  element.dataset.pose = poserId
+
   let target: Pose = {}
   const baseTarget: Pose = {}
   const activeGestures = gestureNames.map(() => false)
@@ -84,6 +89,8 @@ export function createPoser(
         )
       }
     })
+
+    const children = element.querySelectorAll(childrenSelector)
 
     const animations = animationFactories
       .map((factory) => factory())
@@ -147,7 +154,7 @@ export function pose(
       const poser = cache.get(element)!
       poser.update(poses, options)
     } else {
-      const poser = createPoser(element, poses, options)
+      const poser = createPoser(element as HTMLElement, poses, options)
       cache.set(element, poser)
     }
   })

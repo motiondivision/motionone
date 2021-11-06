@@ -8,6 +8,7 @@ export const press: GestureHandler = (
   const onPointerUp = (event: PointerEvent) => {
     disable()
     dispatchPointerEvent(element, "pressend", event)
+    window.removeEventListener("pointerup", onPointerUp)
   }
 
   const onPointerDown = (event: PointerEvent) => {

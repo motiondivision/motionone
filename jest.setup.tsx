@@ -3,13 +3,29 @@ import { getByTestId } from "@testing-library/dom"
 import { fireEvent, render as testRender, act } from "@testing-library/react"
 import * as React from "react"
 
+class FakePointerEvent extends Event {
+  pointerType: "mouse"
+
+  constructor(type: any, props: any) {
+    super(type, props)
+    this.pointerType = props.pointerType || "mouse"
+  }
+}
+
+global.PointerEvent = FakePointerEvent as any
+
 export const click = (element: Element) =>
   act(() => {
     fireEvent.click(element)
   })
-export const pointerEnter = (element: Element) =>
+export const pointerEnter = (element: Element, type?: "mouse" | "touch") =>
   act(() => {
-    fireEvent.pointerEnter(element)
+    fireEvent.pointerEnter(
+      element,
+      !type
+        ? undefined
+        : new FakePointerEvent("pointerenter", { pointerType: type })
+    )
   })
 export const pointerLeave = (element: Element) =>
   act(() => {
