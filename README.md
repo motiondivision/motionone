@@ -13,7 +13,6 @@ A huge thank you to all sponsors of this project, with a special shoutout to:
 - [Alex Frazer](https://github.com/AlexFrazer)
 - [Derek Reynolds](https://github.com/derekr)
 - [Martin Pitt](https://github.com/Martin-Pitt)
-- [Ryan Yogan](https://github.com/ryanyogan)
 - [Mihael Konjević](https://github.com/retro)
 - [impactvelocity](https://github.com/impactvelocity)
 
