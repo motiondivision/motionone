@@ -3,7 +3,7 @@ import { progress } from "../../utils/progress"
 import { resolveOption } from "../../utils/stagger"
 import { defaultOffset, fillOffset } from "../../js/utils/offset"
 import { animateStyle } from "../animate-style"
-import {
+import type {
   AnimationOptions,
   AnimationOptionsWithOverrides,
   Easing,
@@ -18,7 +18,11 @@ import { keyframesList } from "../utils/keyframes"
 import { getOptions } from "../utils/options"
 import { resolveElements } from "../utils/resolve-elements"
 import { isTransform } from "../utils/transforms"
-import { ElementSequence, TimelineDefinition, ValueSequence } from "./types"
+import type {
+  ElementSequence,
+  TimelineDefinition,
+  ValueSequence,
+} from "./types"
 import { calcNextTime } from "./utils/calc-time"
 import { addKeyframes } from "./utils/edit"
 import { compareByTime } from "./utils/sort"

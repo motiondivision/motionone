@@ -1,8 +1,8 @@
+import type { Easing, UnresolvedValueKeyframe } from "../../types"
+import type { ValueSequence } from "../types"
 import { mix } from "../../../utils/mix"
 import { removeItem } from "../../../utils/array"
 import { getEasingForSegment } from "../../../js/utils/get-easing"
-import { Easing, UnresolvedValueKeyframe } from "../../types"
-import { ValueSequence } from "../types"
 
 export function eraseKeyframes(
   sequence: ValueSequence,

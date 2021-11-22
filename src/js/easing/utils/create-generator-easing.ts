@@ -1,5 +1,5 @@
-import { CustomAnimationSettings, CustomEasing } from "../../.."
-import { AnimationGenerator, AnimationGeneratorFactory } from "../../types"
+import type { CustomAnimationSettings, CustomEasing } from "../../.."
+import type { AnimationGenerator, AnimationGeneratorFactory } from "../../types"
 import {
   KeyframesMetadata,
   pregenerateKeyframes,

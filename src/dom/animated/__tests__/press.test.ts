@@ -1,10 +1,6 @@
 import { fireEvent } from "@testing-library/dom"
 import { pose } from ".."
-import {
-  pointerDown,
-  pointerEnter,
-  pointerLeave,
-} from "../../../../../jest.setup"
+import { pointerDown, pointerEnter, pointerLeave } from "../../../../jest.setup"
 import "../../__tests__/web-animations.min-edited.js"
 
 /**

@@ -1,4 +1,4 @@
-import { mix } from "../../../../../utils/mix"
+import { mix } from "../../../../utils/mix"
 import { AnimationGenerator, EasingFunction } from "../../../types"
 import { hasReachedTarget } from "../has-reached-target"
 import { pregenerateKeyframes } from "../pregenerate-keyframes"

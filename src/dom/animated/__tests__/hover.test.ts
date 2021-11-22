@@ -1,5 +1,5 @@
 import { pose } from ".."
-import { pointerEnter, pointerLeave } from "../../../../../jest.setup"
+import { pointerEnter, pointerLeave } from "../../../../jest.setup"
 import "../../__tests__/web-animations.min-edited.js"
 
 describe("hover", () => {

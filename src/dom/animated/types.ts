@@ -1,4 +1,4 @@
-import { AnimationOptionsWithOverrides, MotionKeyframes } from "../types"
+import type { AnimationOptionsWithOverrides, MotionKeyframes } from "../types"
 
 export interface AnimatedElement {
   mount: (element: Element) => void

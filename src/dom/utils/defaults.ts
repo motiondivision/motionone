@@ -1,4 +1,4 @@
-import { Easing } from "../types"
+import type { Easing } from "../types"
 
 export const defaults = {
   duration: 0.3,

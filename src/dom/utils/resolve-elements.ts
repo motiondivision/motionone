@@ -1,4 +1,4 @@
-import { AcceptedElements } from "../types"
+import type { AcceptedElements } from "../types"
 
 export function resolveElements(
   elements: AcceptedElements,

@@ -1,7 +1,7 @@
+import type { CssPropertyDefinition, CssPropertyDefinitionMap } from "../types"
 import { addUniqueItem } from "../../utils/array"
 import { noopReturn } from "../../utils/noop"
 import { getAnimationData } from "../data"
-import { CssPropertyDefinition, CssPropertyDefinitionMap } from "../types"
 
 /**
  * A list of all transformable axes. We'll use this list to generated a version

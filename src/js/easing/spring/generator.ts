@@ -1,7 +1,7 @@
+import type { AnimationGenerator, AnimationGeneratorState } from "../../types"
+import type { SpringOptions } from "./types"
 import { velocityPerSecond } from "../../../utils/velocity-per-second"
-import { AnimationGenerator, AnimationGeneratorState } from "../../types"
 import { hasReachedTarget } from "../utils/has-reached-target"
-import { SpringOptions } from "./types"
 
 const defaultStiffness = 100.0
 const defaultDamping = 10.0

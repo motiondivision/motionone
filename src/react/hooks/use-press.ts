@@ -1,6 +1,13 @@
-import { HTMLProps } from "react"
-import { AnimationOptionsWithOverrides, MotionKeyframes } from "../../dom/types"
-import { AnimatedProps, AnimationContextProps, PoseActiveState } from "../types"
+import type { HTMLProps } from "react"
+import type {
+  AnimationOptionsWithOverrides,
+  MotionKeyframes,
+} from "../../dom/types"
+import type {
+  AnimatedProps,
+  AnimationContextProps,
+  PoseActiveState,
+} from "../types"
 import { useGestureState } from "./use-gesture-state"
 
 export function usePress(

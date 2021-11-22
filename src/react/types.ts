@@ -1,4 +1,4 @@
-import {
+import type {
   CSSProperties,
   DetailedHTMLFactory,
   ForwardRefExoticComponent,
@@ -9,12 +9,12 @@ import {
   RefObject,
   SVGAttributes,
 } from "react"
-import {
+import type {
   AnimationOptions,
   AnimationOptionsWithOverrides,
   MotionKeyframes,
 } from "../dom/types"
-import { svgElements, htmlElements } from "./utils/supported-elements"
+import type { svgElements, htmlElements } from "./utils/supported-elements"
 
 export type AnimationCallback = (target: MotionKeyframes) => void
 

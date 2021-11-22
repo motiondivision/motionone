@@ -1,8 +1,8 @@
+import type { Easing } from "../../../dom/types"
+import type { EasingFunction } from "../../types"
 import { cubicBezier } from "../cubic-bezier"
 import { steps } from "../steps"
 import { noopReturn } from "../../../utils/noop"
-import { Easing } from "../../../dom/types"
-import { EasingFunction } from "../../types"
 
 const namedEasings = {
   ease: cubicBezier(0.25, 0.1, 0.25, 1.0),

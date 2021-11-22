@@ -1,4 +1,4 @@
-import { AnimationGenerator } from "../../types"
+import type { AnimationGenerator } from "../../types"
 
 export interface KeyframesMetadata {
   keyframes: number[]

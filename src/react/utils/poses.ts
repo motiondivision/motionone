@@ -1,4 +1,4 @@
-import { MotionKeyframesWithOptions, Poses } from "../types"
+import type { MotionKeyframesWithOptions, Poses } from "../types"
 
 export function resolvePose(
   definition?: MotionKeyframesWithOptions | string,

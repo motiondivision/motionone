@@ -1,6 +1,9 @@
-import { AnimationOptionsWithOverrides, MotionKeyframes } from "../../dom/types"
+import type {
+  AnimationOptionsWithOverrides,
+  MotionKeyframes,
+} from "../../dom/types"
+import type { MotionKeyframesWithOptions } from "../types"
 import { getOptions } from "../../dom/utils/options"
-import { MotionKeyframesWithOptions } from "../types"
 
 export function updateTargetAndOptions(
   target: MotionKeyframes,

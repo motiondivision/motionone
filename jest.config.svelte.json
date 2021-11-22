@@ -1,0 +1,21 @@
+{
+  "rootDir": "src/svelte",
+  "collectCoverageFrom": [
+    "**/*.{js,jsx,ts,tsx,svelte}",
+    "!**/node_modules/**",
+    "!**/__tests__/**"
+  ],
+  "coveragePathIgnorePatterns": [
+    "src/targets/react/utils/supported-elements.ts",
+    "src/index.ts",
+    "src/react-entry.ts"
+  ],
+  "coverageDirectory": "<rootDir>/../coverage",
+  "testMatch": ["**/__tests__/**/*.test.(js|ts)?(x)"],
+  "testEnvironment": "jsdom",
+  "transform": {
+    "^.+\\.svelte$": ["svelte-jester", { "preprocess": true }],
+    "^.+\\.ts$": "ts-jest"
+  },
+  "moduleFileExtensions": ["js", "ts", "svelte"]
+}

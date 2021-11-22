@@ -1,9 +1,9 @@
 import { hasChanged } from "./utils/has-changed"
 import { getOptions } from "../utils/options"
-import { hover } from "./hover"
-import { inView } from "./in-view"
-import { press } from "./press"
-import {
+import { hover } from "./gestures/hover"
+import { inView } from "./gestures/in-view"
+import { press } from "./gestures/press"
+import type {
   GestureHandler,
   GestureSubscriptions,
   Poses,
@@ -12,7 +12,7 @@ import {
   Poser,
 } from "./types"
 import { animateStyle } from "../animate-style"
-import { AcceptedElements, AnimationFactory } from "../types"
+import type { AcceptedElements, AnimationFactory } from "../types"
 import { noop } from "../../utils/noop"
 import { style } from "../style"
 import { getPose } from "./utils/get-pose"

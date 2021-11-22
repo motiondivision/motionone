@@ -3,6 +3,8 @@ import resolve from "@rollup/plugin-node-resolve"
 import { terser } from "rollup-plugin-terser"
 import replace from "@rollup/plugin-replace"
 import pkg from "./package.json"
+import autoPreprocess from "svelte-preprocess"
+import typescript from "@rollup/plugin-typescript"
 
 const config = {
   input: "lib/index.js",
@@ -46,6 +48,7 @@ const umdProd = Object.assign({}, umd, {
 const distEntries = {
   main: "lib/index.js",
   react: "lib/react-entry.js",
+  svelte: "lib/svelte-entry.js",
 }
 
 const dist = {
@@ -94,44 +97,57 @@ const dist = {
   ],
 }
 
-const createSizeBuild = ({ input, output }) => ({
+const createSizeBuild = ({ input, output }, plugins = []) => ({
   input,
   output: {
     format: "es",
     exports: "named",
     file: output,
   },
-  plugins: [resolve(), terser({ output: { comments: false } })],
+  plugins: [resolve(), ...plugins, terser({ output: { comments: false } })],
   external: [...Object.keys(pkg.peerDependencies || {})],
 })
 
 const sizeReact = createSizeBuild({
-  input: "lib/targets/react/index.js",
+  input: "lib/react/index.js",
   output: "dist/size-react.js",
 })
 
+const sizeSvelte = createSizeBuild(
+  {
+    input: "src/svelte/index.js",
+    output: "dist/size-svelte.js",
+  },
+  [
+    svelte({
+      preprocess: autoPreprocess(),
+    }),
+    typescript({ sourceMap: !production }),
+  ]
+)
+
 const sizeAnimateDom = createSizeBuild({
-  input: "lib/targets/dom/animate.js",
+  input: "lib/dom/animate.js",
   output: "dist/size-animate-dom.js",
 })
 
 const sizeAnimateStyle = createSizeBuild({
-  input: "lib/targets/dom/animate-style.js",
+  input: "lib/dom/animate-style.js",
   output: "dist/size-animate-style.js",
 })
 
 const sizeTimelineDom = createSizeBuild({
-  input: "lib/targets/dom/timeline/index.js",
+  input: "lib/dom/timeline/index.js",
   output: "dist/size-timeline-dom.js",
 })
 
 const sizePoseDom = createSizeBuild({
-  input: "lib/targets/dom/pose/index.js",
+  input: "lib/dom/pose/index.js",
   output: "dist/size-pose-dom.js",
 })
 
 const sizeSpring = createSizeBuild({
-  input: "lib/targets/js/easing/spring/index.js",
+  input: "lib/js/easing/spring/index.js",
   output: "dist/size-spring.js",
 })
 
@@ -145,4 +161,5 @@ export default [
   sizeAnimateStyle,
   sizeSpring,
   sizeReact,
+  sizeSvelte,
 ]

@@ -1,4 +1,4 @@
-import { AnimationControls, AnimationOptions, Easing } from "../dom/types"
+import type { AnimationControls, AnimationOptions, Easing } from "../dom/types"
 import { defaults } from "../dom/utils/defaults"
 import { isCustomEasing, isEasingList } from "../dom/utils/easing"
 import { getEasingFunction } from "./easing/utils/get-function"

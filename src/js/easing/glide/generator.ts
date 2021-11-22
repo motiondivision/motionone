@@ -1,6 +1,6 @@
-import { GlideOptions } from "./types"
+import type { GlideOptions } from "./types"
+import type { AnimationGenerator, AnimationGeneratorState } from "../../types"
 import { calcVelocity, createSpringGenerator } from "../spring/generator"
-import { AnimationGenerator, AnimationGeneratorState } from "../../types"
 import { ms } from "../../../dom/utils/time"
 
 export const createGlideGenerator = ({

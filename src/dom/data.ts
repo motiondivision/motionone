@@ -1,4 +1,4 @@
-import { AnimationData } from "./types"
+import type { AnimationData } from "./types"
 
 const data = new WeakMap<Element, AnimationData>()
 

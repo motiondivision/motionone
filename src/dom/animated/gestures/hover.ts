@@ -1,5 +1,5 @@
-import { GestureHandler, GestureStateHandler } from "./types"
-import { dispatchPointerEvent } from "./utils/events"
+import type { GestureHandler, GestureStateHandler } from "../types"
+import { dispatchPointerEvent } from "../utils/events"
 
 const mouseEvent = (
   element: Element,

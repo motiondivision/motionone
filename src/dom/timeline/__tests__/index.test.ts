@@ -1,9 +1,9 @@
 import { createAnimationsFromTimeline, timeline } from "../"
-import { stagger } from "../../../../utils/stagger"
 import { spring } from "../../../js/easing/spring"
 import { createSpringGenerator } from "../../../js/easing/spring/generator"
 import { pregenerateKeyframes } from "../../../js/easing/utils/pregenerate-keyframes"
 import { defaultOffset } from "../../../js/utils/offset"
+import { stagger } from "../../../utils/stagger"
 
 describe("createAnimationsFromTimeline", () => {
   const a = document.createElement("div")

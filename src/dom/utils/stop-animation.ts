@@ -1,4 +1,4 @@
-import { BasicAnimationControls } from "../types"
+import type { BasicAnimationControls } from "../types"
 
 export interface WithCommitStyles {
   commitStyles: VoidFunction

@@ -1,5 +1,5 @@
+import type { AnimatedDOMComponents } from "./types"
 import { createAnimatedComponent } from "./animated"
-import { AnimatedDOMComponents } from "./types"
 
 const components = new Map<string, any>()
 export const animated = new Proxy(

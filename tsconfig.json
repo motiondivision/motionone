@@ -1,9 +1,10 @@
 {
+  "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
     "target": "ES6",
     "module": "ESNext",
     "moduleResolution": "node",
-    "isolatedModules": false,
+    "isolatedModules": true,
     "importHelpers": true,
     "jsx": "react",
     "esModuleInterop": true,
@@ -27,7 +28,13 @@
     "removeComments": false,
     "lib": ["es2017", "dom"],
     "skipLibCheck": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "react": ["node_modules/react"],
+      "react-dom": ["node_modules/react-dom"],
+      "svelte": ["node_modules/svelte"]
+    }
   },
   "compileOnSave": false,
   "buildOnSave": false,
@@ -45,8 +52,9 @@
     "dist",
     "temp",
     "api",
-    "cypress"
+    "cypress",
+    "__sapper__/*",
+    "public/*"
   ],
-
   "filesGlob": ["./src/**/*.ts"]
 }

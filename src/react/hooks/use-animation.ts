@@ -1,5 +1,8 @@
-import { AnimationOptionsWithOverrides, MotionKeyframes } from "../../dom/types"
-import { AnimationCallback, MotionCSSProperties } from "../types"
+import type {
+  AnimationOptionsWithOverrides,
+  MotionKeyframes,
+} from "../../dom/types"
+import type { AnimationCallback, MotionCSSProperties } from "../types"
 import { RefObject, useEffect, useRef } from "react"
 import { animateStyle } from "../../dom/animate-style"
 import { noop } from "../../utils/noop"

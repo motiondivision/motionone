@@ -1,5 +1,5 @@
+import type { BezierDefinition, CustomEasing, Easing } from "../types"
 import { isNumber } from "../../utils/is-number"
-import { BezierDefinition, CustomEasing, Easing } from "../types"
 
 export const isCubicBezier = (
   easing: Easing | Easing[]

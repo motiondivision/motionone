@@ -1,4 +1,4 @@
-import { GlideOptions } from "./types"
+import type { GlideOptions } from "./types"
 import { createGlideGenerator } from "./generator"
 import { createGeneratorEasing } from "../utils/create-generator-easing"
 

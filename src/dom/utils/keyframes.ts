@@ -1,4 +1,4 @@
-import { UnresolvedValueKeyframe, ValueKeyframe } from "../types"
+import type { UnresolvedValueKeyframe, ValueKeyframe } from "../types"
 
 export function hydrateKeyframes(
   keyframes: UnresolvedValueKeyframe[],

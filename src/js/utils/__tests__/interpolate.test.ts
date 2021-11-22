@@ -1,4 +1,4 @@
-import { noopReturn } from "../../../../utils/noop"
+import { noopReturn } from "../../../utils/noop"
 import { slowInterpolateNumbers } from "../interpolate"
 
 describe("slowInterpolateNumbers", () => {

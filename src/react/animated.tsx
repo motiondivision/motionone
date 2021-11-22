@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useRef, useContext, useMemo, createElement, forwardRef } from "react"
-import {
+import type {
   AnimatedProps,
   AnimationContextProps,
   MotionCSSProperties,

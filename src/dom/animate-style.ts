@@ -1,5 +1,5 @@
 import { getAnimationData } from "./data"
-import {
+import type {
   AnimationFactory,
   AnimationOptions,
   ValueKeyframesDefinition,

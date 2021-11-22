@@ -1,7 +1,10 @@
-import { AnimationOptionsWithOverrides, MotionKeyframes } from "../../dom/types"
+import type {
+  AnimationOptionsWithOverrides,
+  MotionKeyframes,
+} from "../../dom/types"
+import type { AnimatedProps, AnimationContextProps } from "../types"
 import { usePresence } from "framer-motion"
 import { useEffect } from "react"
-import { AnimatedProps, AnimationContextProps } from "../types"
 import { resolvePose } from "../utils/poses"
 import { updateTargetAndOptions } from "../utils/update-target"
 

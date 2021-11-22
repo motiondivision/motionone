@@ -1,6 +1,9 @@
+import type {
+  AnimationOptionsWithOverrides,
+  MotionKeyframes,
+} from "../../dom/types"
+import type { Poses } from "../types"
 import { Dispatch, SetStateAction, useState } from "react"
-import { AnimationOptionsWithOverrides, MotionKeyframes } from "../../dom/types"
-import { Poses } from "../types"
 import { resolvePose } from "../utils/poses"
 import { updateTargetAndOptions } from "../utils/update-target"
 

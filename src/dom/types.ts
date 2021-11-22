@@ -1,6 +1,6 @@
-import { OptionResolver } from "../utils/stagger"
-import { AnimationGenerator, AnimationGeneratorState } from "../js/types"
-import { NextTime } from "./timeline/types"
+import type { OptionResolver } from "../utils/stagger"
+import type { AnimationGenerator, AnimationGeneratorState } from "../js/types"
+import type { NextTime } from "./timeline/types"
 
 export interface AnimationData {
   transforms: string[]

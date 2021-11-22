@@ -1,5 +1,5 @@
-import { GestureHandler, GestureStateHandler } from "./types"
-import { dispatchViewEvent } from "./utils/events"
+import type { GestureHandler, GestureStateHandler } from "../types"
+import { dispatchViewEvent } from "../utils/events"
 
 export const inView: GestureHandler = (
   element: Element,

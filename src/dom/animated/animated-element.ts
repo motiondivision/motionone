@@ -1,10 +1,10 @@
-import { gestures } from "./gestures"
-import {
+import type {
   GestureSubscriptions,
   PoserOptions,
   Poses,
   AnimatedElement,
 } from "./types"
+import { gestures } from "./gestures"
 
 const statePriority = ["style", ...Object.keys(gestures)]
 

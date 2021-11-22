@@ -1,4 +1,4 @@
-import {
+import type {
   AcceptedElements,
   AnimationControls,
   AnimationFactory,
