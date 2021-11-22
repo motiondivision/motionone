@@ -33,10 +33,10 @@
     </div>
     <script src="../../dist/motion.umd.js"></script>
     <script>
-      const { pose, spring } = Motion
+      const { animated, spring } = Motion
       const box = document.getElementById("box")
 
-      pose(
+      animated(
         box,
         {
           hover: { scale: 1.2 },
@@ -50,11 +50,11 @@
         { easing: spring() }
       )
 
-      pose("#child", {
+      animated("#child", {
         active: { scale: 2 },
       })
 
-      pose("#grandchild", {
+      animated("#grandchild", {
         active: { scale: 2 },
       })
     </script>

@@ -1,2 +1,2 @@
-export { animated } from "./targets/react/index"
-export * from "./targets/react/types"
+export { animated } from "./react/index"
+export * from "./react/types"
