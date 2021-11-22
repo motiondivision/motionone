@@ -1,7 +1,6 @@
 export { animate } from "./dom/animate.js"
 export { animateStyle } from "./dom/animate-style.js"
 export { timeline } from "./dom/timeline/index.js"
-export { animated } from "./dom/animated/index.js"
 export { stagger } from "./utils/stagger.js"
 export { spring } from "./js/easing/spring/index.js"
 export { glide } from "./js/easing/glide/index.js"

@@ -1,14 +1,38 @@
 import { render } from "@testing-library/svelte"
-import Box from "./Box.svelte"
+import Motion from "../Motion.svelte"
 
-describe("motion", () => {
+function renderBox(props: any) {
+  const { getByTestId } = render(Motion, { "data-testid": "box", ...props })
+  return getByTestId("box")
+}
+
+describe("Motion", () => {
   test("Render", () => {
-    const { getByTestId } = render(Box)
-    expect(getByTestId("box")).toBeTruthy()
+    expect(renderBox({})).toBeTruthy()
   })
 
-  test("Accepts hover", async () => {
-    const { getByTestId } = render(Box, { hover: { scale: 1.2 } })
-    expect(getByTestId("box")).toBeTruthy()
+  test("Accepts style", async () => {
+    const box = renderBox({ style: "background-color: red" })
+    expect(box).toHaveStyle("background-color: red")
+  })
+
+  test("Renders initial as style", async () => {
+    const box = renderBox({
+      initial: { scale: 1.2, color: "green" },
+      style: "background-color: red",
+    })
+
+    expect(box).toHaveStyle(
+      "background-color: red; color: green; transform: scale(var(--motion-scale)); --motion-scale: 1.2"
+    )
+  })
+
+  test("Rerenders style", async () => {
+    const { getByTestId, rerender } = render(Motion, {
+      "data-testid": "box",
+      style: "background-color: red",
+    })
+    rerender({ "data-testid": "box", style: "background-color: green" })
+    expect(getByTestId("box")).toHaveStyle("background-color: green; ")
   })
 })

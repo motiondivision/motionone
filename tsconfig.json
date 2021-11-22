@@ -1,5 +1,4 @@
 {
-  "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
     "target": "ES6",
     "module": "ESNext",
@@ -30,6 +29,7 @@
     "skipLibCheck": true,
     "downlevelIteration": true,
     "forceConsistentCasingInFileNames": true,
+    "types": ["svelte", "jest"],
     "paths": {
       "react": ["node_modules/react"],
       "react-dom": ["node_modules/react-dom"],

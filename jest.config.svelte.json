@@ -10,8 +10,9 @@
     "src/index.ts",
     "src/react-entry.ts"
   ],
-  "coverageDirectory": "<rootDir>/../coverage",
+  "coverageDirectory": "<rootDir>/../../coverage/svelte",
   "testMatch": ["**/__tests__/**/*.test.(js|ts)?(x)"],
+  "setupFilesAfterEnv": ["<rootDir>/../../jest.setup.svelte.ts"],
   "testEnvironment": "jsdom",
   "transform": {
     "^.+\\.svelte$": ["svelte-jester", { "preprocess": true }],
