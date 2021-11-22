@@ -1,7 +1,4 @@
-<script>
-  import { motion } from "../Motion.svelte"
-
-  export let hover = undefined
+<script type="ts">
 </script>
 
-<div data-testid="box" use:motion={{ hover }} />
+<div />
