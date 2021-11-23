@@ -20,5 +20,6 @@
     "jest-watch-typeahead/filename",
     "jest-watch-typeahead/testname"
   ],
+  "moduleDirectories": ["node_modules"],
   "testEnvironment": "jsdom"
 }

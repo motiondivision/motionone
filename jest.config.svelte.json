@@ -1,4 +1,5 @@
 {
+  "preset": "ts-jest",
   "rootDir": "src/svelte",
   "collectCoverageFrom": [
     "**/*.{js,jsx,ts,tsx,svelte}",

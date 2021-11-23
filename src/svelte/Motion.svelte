@@ -1,17 +1,62 @@
 <script type="ts">
+  import { setContext, getContext, onMount, afterUpdate } from "svelte"
+  import { contextKey } from "./utils/context"
   import { createStyleString } from "../dom/utils/style-string"
+  import { createAnimationState } from "../dom/state"
+  import type {
+    AnimationState,
+    Variants,
+    VariantDefinition,
+  } from "../dom/state/types"
 
-  export let initial = undefined
+  const parentState = getContext<AnimationState | undefined>(contextKey)
 
-  export let hover = undefined
+  let element: Element
 
-  export let press = undefined
+  export let initial: VariantDefinition | undefined = undefined
 
-  export let inView = undefined
+  export let hover: VariantDefinition | undefined = undefined
+
+  export let press: VariantDefinition | undefined = undefined
+
+  export let inView: VariantDefinition | undefined = undefined
+
+  export let variants: Variants | undefined = undefined
 
   export let style = ""
 
-  const initialStyle = createStyleString(initial)
+  const state = createAnimationState(
+    {
+      initial,
+      hover,
+      press,
+      inView,
+      variants,
+    },
+    parentState
+  )
+
+  const initialStyle = createStyleString(state.getTarget())
+
+  onMount(() => {
+    state.mount(element)
+    return () => state.unmount()
+  })
+
+  afterUpdate(() => {
+    console.log(element)
+    state.update({
+      initial,
+      hover,
+      press,
+      inView,
+      variants,
+    })
+  })
+
+  setContext(contextKey, state)
 </script>
 
-<div {...$$restProps} style="{style}; {initialStyle}" />
+<div bind:this={element} {...$$restProps} style="{style}; {initialStyle}">
+  <slot />
+</div>

@@ -1,10 +1,15 @@
+import svelte from "rollup-plugin-svelte"
 import fs from "fs"
 import resolve from "@rollup/plugin-node-resolve"
 import { terser } from "rollup-plugin-terser"
 import replace from "@rollup/plugin-replace"
 import pkg from "./package.json"
-import autoPreprocess from "svelte-preprocess"
+import sveltePreprocess from "svelte-preprocess"
+import css from "rollup-plugin-css-only"
 import typescript from "@rollup/plugin-typescript"
+import commonjs from "@rollup/plugin-commonjs"
+
+const production = !process.env.ROLLUP_WATCH
 
 const config = {
   input: "lib/index.js",
@@ -48,7 +53,6 @@ const umdProd = Object.assign({}, umd, {
 const distEntries = {
   main: "lib/index.js",
   react: "lib/react-entry.js",
-  svelte: "lib/svelte-entry.js",
 }
 
 const dist = {
@@ -97,6 +101,58 @@ const dist = {
   ],
 }
 
+const distSvelte = {
+  input: "src/svelte-entry.ts",
+  output: {
+    sourcemap: true,
+    format: "es",
+    file: "dist/svelte.js",
+  },
+  plugins: [
+    svelte({
+      preprocess: sveltePreprocess({ sourceMap: !production }),
+      compilerOptions: {
+        // enable run-time checks when not in production
+        dev: !production,
+      },
+    }),
+    // we'll extract any component CSS out into
+    // a separate file - better for performance
+    css({ output: "bundle.css" }),
+
+    typescript({
+      sourceMap: !production,
+      inlineSources: !production,
+    }),
+
+    // If you have external dependencies installed from
+    // npm, you'll most likely need these plugins. In
+    // some cases you'll need additional configuration -
+    // consult the documentation for details:
+    // https://github.com/rollup/plugins/tree/master/packages/commonjs
+    resolve({
+      browser: true,
+      dedupe: ["svelte"],
+    }),
+    commonjs(),
+
+    // // In dev mode, call `npm run start` once
+    // // the bundle has been generated
+    // !production && serve(),
+
+    // // Watch the `public` directory and refresh the
+    // // browser on changes when not in production
+    // !production && livereload("public"),
+
+    // // If we're building for production (npm run build
+    // // instead of npm run dev), minify
+    // production && terser(),
+  ],
+  watch: {
+    clearScreen: false,
+  },
+}
+
 const createSizeBuild = ({ input, output }, plugins = []) => ({
   input,
   output: {
@@ -113,19 +169,6 @@ const sizeReact = createSizeBuild({
   output: "dist/size-react.js",
 })
 
-const sizeSvelte = createSizeBuild(
-  {
-    input: "src/svelte/index.js",
-    output: "dist/size-svelte.js",
-  },
-  [
-    svelte({
-      preprocess: autoPreprocess(),
-    }),
-    typescript({ sourceMap: !production }),
-  ]
-)
-
 const sizeAnimateDom = createSizeBuild({
   input: "lib/dom/animate.js",
   output: "dist/size-animate-dom.js",
@@ -141,11 +184,6 @@ const sizeTimelineDom = createSizeBuild({
   output: "dist/size-timeline-dom.js",
 })
 
-const sizePoseDom = createSizeBuild({
-  input: "lib/dom/pose/index.js",
-  output: "dist/size-pose-dom.js",
-})
-
 const sizeSpring = createSizeBuild({
   input: "lib/js/easing/spring/index.js",
   output: "dist/size-spring.js",
@@ -153,13 +191,12 @@ const sizeSpring = createSizeBuild({
 
 export default [
   dist,
+  distSvelte,
   umd,
   umdProd,
   sizeAnimateDom,
   sizeTimelineDom,
-  sizePoseDom,
   sizeAnimateStyle,
   sizeSpring,
   sizeReact,
-  sizeSvelte,
 ]

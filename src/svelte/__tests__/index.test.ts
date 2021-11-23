@@ -1,5 +1,6 @@
 import { render } from "@testing-library/svelte"
 import Motion from "../Motion.svelte"
+import TestParentWithChild from "./TestParentWithChild.svelte"
 
 function renderBox(props: any) {
   const { getByTestId } = render(Motion, { "data-testid": "box", ...props })
@@ -27,12 +28,24 @@ describe("Motion", () => {
     )
   })
 
-  test("Rerenders style", async () => {
-    const { getByTestId, rerender } = render(Motion, {
-      "data-testid": "box",
-      style: "background-color: red",
+  test("Child renders inherited initial", async () => {
+    const { getByTestId } = render(TestParentWithChild, {
+      parentProps: {
+        initial: "hidden",
+        variants: {
+          hidden: { opacity: 0 },
+        },
+      },
+      childProps: {
+        variants: {
+          hidden: { y: 100 },
+        },
+      },
     })
-    rerender({ "data-testid": "box", style: "background-color: green" })
-    expect(getByTestId("box")).toHaveStyle("background-color: green; ")
+
+    expect(getByTestId("parent")).toHaveStyle("opacity: 0")
+    expect(getByTestId("child")).toHaveStyle("transform: translateY(100px)")
   })
+
+  test("Updates style when props change", async () => {})
 })

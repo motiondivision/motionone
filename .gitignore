@@ -12,6 +12,8 @@ types
 dist
 _notes
 
+/.svelte-kit
+
 cypress/screenshots
 cypress/videos
 

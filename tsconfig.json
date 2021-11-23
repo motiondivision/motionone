@@ -15,7 +15,6 @@
     "noLib": false,
     "preserveConstEnums": true,
     "suppressImplicitAnyIndexErrors": true,
-    "rootDir": "src",
     "sourceMap": true,
     "baseUrl": "src",
     "strictNullChecks": true,
@@ -43,6 +42,7 @@
     "build",
     "**/__tests__/*",
     "jest.setup.tsx",
+    "jest.setup.svelte.ts",
     "_notes",
     "dev",
     "types",
@@ -54,6 +54,7 @@
     "api",
     "cypress",
     "__sapper__/*",
+    "svelte/*",
     "public/*"
   ],
   "filesGlob": ["./src/**/*.ts"]
