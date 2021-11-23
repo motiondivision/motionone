@@ -19,8 +19,8 @@
   ],
   "scripts": {
     "build": "rm -rf lib dist types && tsc -p . && rollup -c && npm run measure",
-    "test": "jest --coverage --config jest.config.json",
-    "test-svelte": "jest --coverage --config jest.config.svelte.json",
+    "test": "jest --coverage --config jest.config.js",
+    "test-svelte": "jest --coverage --config jest.config.svelte.js",
     "test-react": "",
     "test-react-ssr": "jest --coverage --config jest.config.react-ssr.json",
     "test-browser": "node ./cypress/scripts/collect-tests.js && start-server-and-test start-dev-server http://0.0.0.0:8000 'cypress run'",

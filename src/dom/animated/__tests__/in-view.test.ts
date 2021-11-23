@@ -19,7 +19,7 @@ let activeIntersectionObserver:
   | MockIntersectionObserverCallback
   | undefined = undefined
 
-global.IntersectionObserver = class MockIntersectionObserver {
+window.IntersectionObserver = class MockIntersectionObserver {
   callback: MockIntersectionObserverCallback
 
   constructor(callback: MockIntersectionObserverCallback) {

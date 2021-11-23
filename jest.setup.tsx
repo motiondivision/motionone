@@ -12,7 +12,7 @@ class FakePointerEvent extends Event {
   }
 }
 
-global.PointerEvent = FakePointerEvent as any
+window.PointerEvent = FakePointerEvent as any
 
 export const click = (element: Element) =>
   act(() => {
