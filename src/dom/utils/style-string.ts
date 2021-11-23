@@ -9,9 +9,9 @@ export function createStyleString(target: MotionKeyframes = {}) {
   const styles = createStyles(target)
   let style = ""
   for (const key in styles) {
-    style += `${key.startsWith("--") ? key : camelToPipeCase(key)}: ${
-      styles[key]
-    };`
+    style += key.startsWith("--") ? key : camelToPipeCase(key)
+    style += `: ${styles[key]}; `
   }
+
   return style
 }

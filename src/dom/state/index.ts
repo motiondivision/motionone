@@ -1,20 +1,21 @@
-import { AnimationState, Options, Target, Variant } from "./types"
+import { AnimationState, Options, Variant } from "./types"
 import { resolveVariant } from "./utils/resolve-variant"
 
 export function createAnimationState(
   options: Options = {},
   parent?: AnimationState
 ): AnimationState {
+  //@ts-ignore
   let element: Element
   let depth = parent ? parent.getDepth() + 1 : 0
 
   let target: Variant =
     resolveVariant(
-      options.initial || parent?.getOptions().initial,
+      options.initial ?? parent?.getOptions().initial,
       options.variants
     ) || {}
 
-  const baseTarget: Target = { ...target }
+  // const baseTarget: Target = { ...target }
 
   return {
     update: (newOptions: Options) => {
@@ -25,7 +26,6 @@ export function createAnimationState(
     getTarget: () => target,
     getOptions: () => options,
     mount: (newElement) => {
-      console.log("mounting", newElement)
       element = newElement
     },
     unmount: () => {

@@ -1,3 +1,5 @@
+// TODO: Move this line to setupAfterEnv in jest config
+import "@testing-library/jest-dom"
 import { render } from "@testing-library/svelte"
 import Motion from "../Motion.svelte"
 import TestParentWithChild from "./TestParentWithChild.svelte"
@@ -12,19 +14,13 @@ describe("Motion", () => {
     expect(renderBox({})).toBeTruthy()
   })
 
-  test("Accepts style", async () => {
-    const box = renderBox({ style: "background-color: red" })
-    expect(box).toHaveStyle("background-color: red")
-  })
-
   test("Renders initial as style", async () => {
     const box = renderBox({
       initial: { scale: 1.2, color: "green" },
-      style: "background-color: red",
     })
 
     expect(box).toHaveStyle(
-      "background-color: red; color: green; transform: scale(var(--motion-scale)); --motion-scale: 1.2"
+      "color: green; transform: scale(var(--motion-scale)); --motion-scale: 1.2"
     )
   })
 
@@ -33,18 +29,22 @@ describe("Motion", () => {
       parentProps: {
         initial: "hidden",
         variants: {
-          hidden: { opacity: 0 },
+          hidden: { opacity: 0, backgroundColor: "red" },
         },
       },
       childProps: {
         variants: {
-          hidden: { y: 100 },
+          hidden: { y: 100, backgroundColor: "purple" },
         },
       },
     })
 
+    expect(getByTestId("parent")).toHaveStyle("background-color: red;")
+    expect(getByTestId("child")).toHaveStyle("background-color: purple;")
+    expect(getByTestId("child")).toHaveStyle(
+      "transform: translateY(var(--motion-translateY))"
+    )
     expect(getByTestId("parent")).toHaveStyle("opacity: 0")
-    expect(getByTestId("child")).toHaveStyle("transform: translateY(100px)")
   })
 
   test("Updates style when props change", async () => {})

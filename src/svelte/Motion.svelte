@@ -44,7 +44,6 @@
   })
 
   afterUpdate(() => {
-    console.log(element)
     state.update({
       initial,
       hover,
@@ -57,6 +56,6 @@
   setContext(contextKey, state)
 </script>
 
-<div bind:this={element} {...$$restProps} style="{style}; {initialStyle}">
+<div bind:this={element} {...$$restProps} style={initialStyle}>
   <slot />
 </div>
