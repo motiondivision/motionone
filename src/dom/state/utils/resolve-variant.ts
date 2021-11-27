@@ -1,4 +1,4 @@
-import type { Variant, Variants, VariantDefinition } from "../types"
+import type { Variants, VariantDefinition, Variant } from "../types"
 import { isVariant } from "./is-variant"
 
 export function resolveVariant(

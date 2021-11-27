@@ -1,14 +1,20 @@
+import {
+  AnimationOptions,
+  MotionKeyframes,
+  MotionKeyframesDefinition,
+} from "../types"
+
 export interface Target {
   [key: string]: string | number
 }
 
-export interface AnimationState {
+export interface MotionState {
   update: (options: Options) => void
   getDepth: () => number
-  getTarget: () => Variant
+  getTarget: () => MotionKeyframes
   getOptions: () => Options
-  mount: (element: Element) => void
-  unmount: () => void
+  getContext: () => MotionStateContext
+  mount: (element: Element) => () => void
 }
 
 export interface Options {
@@ -20,8 +26,18 @@ export interface Options {
   variants?: Variants
 }
 
+export interface MotionStateContext {
+  initial?: string
+  animate?: string
+  inView?: string
+  hover?: string
+  press?: string
+}
+
 export interface Variants {}
 
-export interface Variant {}
+export type Variant = MotionKeyframesDefinition & {
+  transition?: AnimationOptions
+}
 
 export type VariantDefinition = Variant | string

@@ -7,6 +7,6 @@ describe("createStyleString", () => {
         backgroundColor: "red",
         "--translateX": "100px",
       })
-    ).toEqual("background-color: red;--translateX: 100px;")
+    ).toEqual("background-color: red; --translateX: 100px; ")
   })
 })

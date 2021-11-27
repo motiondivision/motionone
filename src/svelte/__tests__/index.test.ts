@@ -2,7 +2,7 @@
 import "@testing-library/jest-dom"
 import { render } from "@testing-library/svelte"
 import Motion from "../Motion.svelte"
-import TestParentWithChild from "./TestParentWithChild.svelte"
+import TestParentWithGrandchild from "./TestParentWithGrandchild.svelte"
 
 function renderBox(props: any) {
   const { getByTestId } = render(Motion, { "data-testid": "box", ...props })
@@ -24,8 +24,8 @@ describe("Motion", () => {
     )
   })
 
-  test("Child renders inherited initial", async () => {
-    const { getByTestId } = render(TestParentWithChild, {
+  test("Children render inherited initial", async () => {
+    const { getByTestId } = render(TestParentWithGrandchild, {
       parentProps: {
         initial: "hidden",
         variants: {
@@ -37,15 +37,19 @@ describe("Motion", () => {
           hidden: { y: 100, backgroundColor: "purple" },
         },
       },
+      grandchildProps: {
+        variants: {
+          hidden: { backgroundColor: "green" },
+        },
+      },
     })
 
-    expect(getByTestId("parent")).toHaveStyle("background-color: red;")
-    expect(getByTestId("child")).toHaveStyle("background-color: purple;")
-    expect(getByTestId("child")).toHaveStyle(
-      "transform: translateY(var(--motion-translateY))"
+    expect(getByTestId("parent")).toHaveStyle(
+      "background-color: red; opacity: 0"
     )
-    expect(getByTestId("parent")).toHaveStyle("opacity: 0")
+    expect(getByTestId("child")).toHaveStyle(
+      "background-color: purple; transform: translateY(var(--motion-translateY))"
+    )
+    expect(getByTestId("grandchild")).toHaveStyle("background-color: green;")
   })
-
-  test("Updates style when props change", async () => {})
 })

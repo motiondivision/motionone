@@ -57,20 +57,19 @@ export function createGeneratorEasing<Options extends {} = {}>(
           keyframes.every(isNumberOrNull)
 
         if (shouldUseGenerator) {
-          const prevAnimationState =
-            name && data && data.prevGeneratorState[name]
+          const prevMotionState = name && data && data.prevGeneratorState[name]
           const velocity =
-            prevAnimationState &&
+            prevMotionState &&
             (numKeyframes === 1 ||
               (numKeyframes === 2 && keyframes[0] === null))
-              ? prevAnimationState.velocity
+              ? prevMotionState.velocity
               : 0
           const target = keyframes[numKeyframes - 1] as number
           const unresolvedOrigin = numKeyframes === 1 ? null : keyframes[0]
           const origin =
             unresolvedOrigin === null
-              ? prevAnimationState
-                ? prevAnimationState.value
+              ? prevMotionState
+                ? prevMotionState.value
                 : parseFloat(getOrigin())
               : (unresolvedOrigin as number)
 

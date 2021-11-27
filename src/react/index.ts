@@ -1,16 +1,14 @@
-import type { AnimatedDOMComponents } from "./types"
-import { createAnimatedComponent } from "./animated"
+import type { MotionDOMComponents } from "./types"
+import { createMotionComponent } from "./component"
 
 const components = new Map<string, any>()
-export const animated = new Proxy(
+export const motion = new Proxy(
   {},
   {
     get: (_, key: string) => {
-      if (!components.has(key)) {
-        components.set(key, createAnimatedComponent(key))
-      }
+      !components.has(key) && components.set(key, createMotionComponent(key))
 
       return components.get(key)!
     },
   }
-) as AnimatedDOMComponents
+) as MotionDOMComponents

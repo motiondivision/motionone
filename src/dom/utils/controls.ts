@@ -7,7 +7,7 @@ import type {
 import { stopAnimation } from "./stop-animation"
 import { ms } from "./time"
 
-interface AnimationState {
+interface MotionState {
   animations: AnimationWithCommitStyles[]
   duration: number
   finished?: Promise<any>
@@ -33,11 +33,11 @@ export const createAnimations = (
  * the first active animation.
  */
 const getActiveAnimation = (
-  state: AnimationState
+  state: MotionState
 ): AnimationWithCommitStyles | undefined => state.animations[0]
 
 export const controls = {
-  get: (target: AnimationState, key: string) => {
+  get: (target: MotionState, key: string) => {
     switch (key) {
       case "duration":
         return target.duration
@@ -59,7 +59,7 @@ export const controls = {
         return () => target.animations.forEach((animation) => animation[key]())
     }
   },
-  set: (target: AnimationState, key: string, value: number) => {
+  set: (target: MotionState, key: string, value: number) => {
     switch (key) {
       case "currentTime":
         value = ms(value)
