@@ -36,93 +36,49 @@ function runTests(render: any) {
     )
   })
 
-  // test("Renders expected markup from style", () => {
-  //   const div = render(<motion.div style={{ opacity: 1 }} />)
-  //   expect(div).toBe(`<div style="opacity:1"></div>`)
-  // })
+  test("Renders expected markup from style as keyframes", () => {
+    const div = render(<motion.div initial={{ opacity: [0, 1] }} />)
+    expect(div).toBe(`<div style="opacity:0"></div>`)
+  })
 
-  // test("Renders expected markup from style as keyframes", () => {
-  //   const div = render(<motion.div style={{ opacity: [0, 1] }} />)
-  //   expect(div).toBe(`<div style="opacity:0"></div>`)
-  // })
+  test("Renders expected CSS variables", () => {
+    const div = render(
+      <motion.div
+        initial={{ "--foo": 0, "--bar": 2 }}
+        style={{ "--bar": 1, "--car": 3 } as any}
+      />
+    )
+    expect(div).toBe(`<div style="--bar:2;--car:3;--foo:0"></div>`)
+  })
 
-  // test("Renders expected markup from initial", () => {
-  //   const div = render(<motion.div initial={{ opacity: 0 }} />)
-  //   expect(div).toBe(`<div style="opacity:0"></div>`)
-  // })
+  test("Renders expected transform", () => {
+    const div = render(<motion.div initial={{ x: 100 }} />)
+    expect(div).toBe(
+      `<div style="--motion-translateX:100px;transform:translateX(var(--motion-translateX))"></div>`
+    )
+  })
 
-  // test("Renders expected CSS variables", () => {
-  //   const div = render(
-  //     <motion.div
-  //       initial={{ "--foo": 0, "--bar": 2 }}
-  //       style={{ "--bar": 1, "--car": 3 }}
-  //     />
-  //   )
-  //   expect(div).toBe(`<div style="--bar:2;--car:3;--foo:0"></div>`)
-  // })
+  test("Filters out all props", () => {
+    const div = render(
+      <motion.div
+        hover={{ opacity: 1 }}
+        press={{ opacity: 1 }}
+        variants={{}}
+        // exit={{ opacity: 1 }}
+        // inViewport={{ opacity: 1 }}
+        // inherit={false}
+        // poses={{}}
+        // viewport={{ margin: "100px" }}
+        // options={{ duration: 1 }}
+        // onStart={() => {}}
+        // onComplete={() => {}}
+        // onViewportEnter={() => {}}
+        // onViewportLeave={() => {}}
+      />
+    )
 
-  // test("Renders expected transform", () => {
-  //   const div = render(<motion.div initial={{ x: 100 }} />)
-  //   expect(div).toBe(
-  //     `<div style="--motion-translateX:100px;transform:translateX(var(--motion-translateX))"></div>`
-  //   )
-  // })
-
-  // test("Filters out all props", () => {
-  //   const div = render(
-  //     <motion.div
-  //       hover={{ opacity: 1 }}
-  //       press={{ opacity: 1 }}
-  //       exit={{ opacity: 1 }}
-  //       inViewport={{ opacity: 1 }}
-  //       inherit={false}
-  //       poses={{}}
-  //       viewport={{ margin: "100px" }}
-  //       options={{ duration: 1 }}
-  //       onStart={() => {}}
-  //       onComplete={() => {}}
-  //       onViewportEnter={() => {}}
-  //       onViewportLeave={() => {}}
-  //     />
-  //   )
-
-  //   expect(div).toBe("<div></div>")
-  // })
-
-  // test("Renders initial and style as poses", () => {
-  //   const html = render(
-  //     <motion.div
-  //       initial="foo"
-  //       style="bar"
-  //       hover="litmus"
-  //       press="litmus"
-  //       inViewport="litmus"
-  //       exit="litmus"
-  //       poses={{
-  //         foo: { opacity: 1, background: "red" },
-  //         bar: { opacity: 0.5, width: "100px" },
-  //         litmus: { opacity: 0.75 },
-  //       }}
-  //     >
-  //       <motion.article
-  //         style={{ opacity: 1 }}
-  //         poses={{ foo: { opacity: 0.99 }, litmus: { background: "red" } }}
-  //       >
-  //         <motion.span poses={{ bar: { opacity: 0.25 } }}>
-  //           <motion.div poses={{ foo: { opacity: 0.2 } }}>
-  //             <motion.div
-  //               inherit={false}
-  //               poses={{ foo: { opacity: 0.3 } }}
-  //             ></motion.div>
-  //           </motion.div>
-  //         </motion.span>
-  //       </motion.article>
-  //     </motion.div>
-  //   )
-  //   expect(html).toBe(
-  //     `<div style="opacity:1;width:100px;background:red"><article style="opacity:0.99"><span><div style="opacity:0.2"><div></div></div></span></article></div>`
-  //   )
-  // })
+    expect(div).toBe("<div></div>")
+  })
 }
 
 describe("render", () => {

@@ -1,4 +1,5 @@
 import * as React from "react"
+import type { MutableRefObject } from "react"
 import {
   createElement,
   forwardRef,
@@ -16,22 +17,36 @@ import { createStyles } from "../dom/utils/style-object"
 export function createMotionComponent<Props extends ElementProps>(
   Component: string
 ) {
-  function Motion({
-    initial,
-    animate,
-    press,
-    hover,
-    inView,
-    variants,
-    style,
-    ...props
-  }: Options & Props) {
-    const options = { initial, animate, press, hover, inView, variants }
+  function Motion(
+    {
+      initial,
+      animate,
+      press,
+      hover,
+      inView,
+      variants,
+      style,
+      transition,
+      onAnimationComplete,
+      ...props
+    }: Options & Props,
+    externalRef: MutableRefObject<Element>
+  ) {
+    const options = {
+      initial,
+      animate,
+      press,
+      hover,
+      inView,
+      variants,
+      transition,
+      onAnimationComplete,
+    }
     const state = createMotionState(options, useContext(MotionContext))
 
     const initialStyle = useMemo(() => createStyles(state.getTarget()), [])
 
-    const ref = useRef<Element>(null)
+    const ref = externalRef || useRef<Element>(null)
     const element = createElement(Component, {
       ...props,
       ref,

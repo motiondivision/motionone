@@ -7,27 +7,37 @@
     MotionState,
     Variants,
     VariantDefinition,
+    Variant,
   } from "../dom/state/types"
+  import { AnimationOptionsWithOverrides } from "../dom/types"
 
   const parentState = getContext<MotionState | undefined>(contextKey)
 
   let element: Element
 
   export let initial: VariantDefinition | undefined = undefined
+  export let animate: VariantDefinition | undefined = undefined
   export let hover: VariantDefinition | undefined = undefined
   export let press: VariantDefinition | undefined = undefined
   export let inView: VariantDefinition | undefined = undefined
+  export let onAnimationComplete:
+    | ((target: Variant) => void)
+    | undefined = undefined
   export let variants: Variants | undefined = undefined
+  export let transition: AnimationOptionsWithOverrides | undefined = undefined
 
   export let style = ""
 
   const state = createMotionState(
     {
       initial,
+      animate,
       hover,
       press,
       inView,
       variants,
+      transition,
+      onAnimationComplete,
     },
     parentState
   )
@@ -39,10 +49,13 @@
   afterUpdate(() => {
     state.update({
       initial,
+      animate,
       hover,
       press,
       inView,
       variants,
+      transition,
+      onAnimationComplete,
     })
   })
 

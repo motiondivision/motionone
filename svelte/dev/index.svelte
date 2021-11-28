@@ -1,10 +1,13 @@
 <script type="ts">
   import Motion from "../../src/svelte/Motion.svelte"
+
+  const onComplete = () => console.log("hellooo")
 </script>
 
 <Motion
-  style="width: 300px; height: 300px; background-color: #0055ff"
-  initial="hidden"
+  initial={{ width: "100px", height: "100px", background: "red", opacity: 0 }}
+  animate={{ opacity: 1 }}
+  onAnimationComplete={onComplete}
 >
   <Motion
     style="width: 100px; height: 100px; background-color: white; margin: 10px;"

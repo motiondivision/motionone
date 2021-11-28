@@ -3,9 +3,13 @@ import "@testing-library/jest-dom"
 import { render } from "@testing-library/svelte"
 import Motion from "../Motion.svelte"
 import TestParentWithGrandchild from "./TestParentWithGrandchild.svelte"
+import "../../dom/__tests__/web-animations.min-edited"
+
+const duration = 0.0001
 
 function renderBox(props: any) {
   const { getByTestId } = render(Motion, { "data-testid": "box", ...props })
+
   return getByTestId("box")
 }
 
@@ -51,5 +55,20 @@ describe("Motion", () => {
       "background-color: purple; transform: translateY(var(--motion-translateY))"
     )
     expect(getByTestId("grandchild")).toHaveStyle("background-color: green;")
+  })
+
+  test("Animation runs on mount if initial and animate differ", async () => {
+    const result = await new Promise((resolve, reject) => {
+      renderBox({
+        initial: { opacity: 0.4 },
+        animate: { opacity: [0, 0.8] },
+        transition: { duration },
+        onAnimationComplete: (target: any) => resolve(target),
+      })
+
+      setTimeout(() => reject(false), 100)
+    })
+
+    expect(result).toEqual({ opacity: [0, 0.8] })
   })
 })

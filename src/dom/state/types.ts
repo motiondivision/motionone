@@ -1,5 +1,5 @@
 import {
-  AnimationOptions,
+  AnimationOptionsWithOverrides,
   MotionKeyframes,
   MotionKeyframesDefinition,
 } from "../types"
@@ -15,6 +15,7 @@ export interface MotionState {
   getOptions: () => Options
   getContext: () => MotionStateContext
   mount: (element: Element) => () => void
+  animateUpdates: () => Generator<void>
 }
 
 export interface Options {
@@ -24,6 +25,8 @@ export interface Options {
   hover?: VariantDefinition
   press?: VariantDefinition
   variants?: Variants
+  transition?: AnimationOptionsWithOverrides
+  onAnimationComplete?: (variant: Variant) => void
 }
 
 export interface MotionStateContext {
@@ -34,10 +37,12 @@ export interface MotionStateContext {
   press?: string
 }
 
-export interface Variants {}
-
 export type Variant = MotionKeyframesDefinition & {
-  transition?: AnimationOptions
+  transition?: AnimationOptionsWithOverrides
+}
+
+export interface Variants {
+  [key: string]: Variant
 }
 
 export type VariantDefinition = Variant | string
