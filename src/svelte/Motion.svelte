@@ -62,6 +62,6 @@
   setContext(contextKey, state)
 </script>
 
-<div bind:this={element} {...$$restProps} style={initialStyle}>
+<div bind:this={element} {...$$restProps} style={initialStyle} on:click>
   <slot />
 </div>
