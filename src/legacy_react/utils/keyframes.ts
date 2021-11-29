@@ -1,13 +1,13 @@
 import type { MotionKeyframes } from "../../dom/types"
 import type { MotionCSSProperties } from "../types"
-import { isNumber } from "../../utils/is-number"
+import { isNumber } from "../../utils/is-number.js"
 import {
   asTransformCssVar,
   buildTransformTemplate,
   isTransform,
   transformAlias,
   transformDefinitions,
-} from "../../dom/utils/transforms"
+} from "../../dom/utils/transforms.js"
 
 export function convertKeyframesToStyles(
   keyframes?: MotionKeyframes

@@ -1,12 +1,12 @@
 import type { MotionKeyframes } from "../types"
-import { isNumber } from "../../utils/is-number"
+import { isNumber } from "../../utils/is-number.js"
 import {
   asTransformCssVar,
   buildTransformTemplate,
   isTransform,
   transformAlias,
   transformDefinitions,
-} from "../../dom/utils/transforms"
+} from "../../dom/utils/transforms.js"
 
 export function createStyles(keyframes?: MotionKeyframes): any {
   const initialKeyframes: any = {}

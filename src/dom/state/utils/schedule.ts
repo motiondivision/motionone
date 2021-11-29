@@ -1,4 +1,4 @@
-import { addUniqueItem, removeItem } from "../../../utils/array"
+import { addUniqueItem, removeItem } from "../../../utils/array.js"
 import { MotionState } from "../types"
 
 let scheduled: MotionState[] | undefined = undefined

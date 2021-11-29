@@ -19,7 +19,7 @@
     const x = easeOut(0.5); // returns 0.627...
 */
 
-import { noopReturn } from "../../utils/noop"
+import { noopReturn } from "../../utils/noop.js"
 
 // Returns x(t) given t, x1, and x2, or y(t) given t, y1, and y2.
 const calcBezier = (t: number, a1: number, a2: number) =>

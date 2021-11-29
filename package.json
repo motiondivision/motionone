@@ -31,7 +31,7 @@
     "storybook": "start-storybook -p 6006",
     "dev": "python -m SimpleHTTPServer",
     "dev-svelte": "svelte-kit dev",
-    "measure": "webpack --config webpack.config.js && bundlesize",
+    "measure": "webpack --config webpack.config.cjs && bundlesize",
     "build-storybook": "build-storybook"
   },
   "dependencies": {

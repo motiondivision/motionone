@@ -1,5 +1,5 @@
 import type { EasingFunction } from "../types"
-import { clamp } from "../../utils/clamp"
+import { clamp } from "../../utils/clamp.js"
 
 /*
   Create stepped version of 0-1 progress

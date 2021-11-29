@@ -5,7 +5,7 @@ import type {
 import type { AnimationCallback, MotionCSSProperties } from "../types"
 import { RefObject, useEffect, useRef } from "react"
 import { animateStyle } from "../../dom/animate-style"
-import { noop } from "../../utils/noop"
+import { noop } from "../../utils/noop.js"
 import { hasChanged } from "../utils/has-changed"
 import { getOptions } from "../../dom/utils/options"
 

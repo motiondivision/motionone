@@ -8,7 +8,7 @@ import {
   useMemo,
   useRef,
 } from "react"
-import { createMotionState } from "../dom/state"
+import { createMotionState } from "../dom/state/index"
 import type { Options } from "../dom/state/types"
 import type { ElementProps } from "./types"
 import { MotionContext } from "./context"
@@ -42,6 +42,7 @@ export function createMotionComponent<Props extends ElementProps>(
       transition,
       onAnimationComplete,
     }
+
     const state = createMotionState(options, useContext(MotionContext))
 
     const initialStyle = useMemo(() => createStyles(state.getTarget()), [])

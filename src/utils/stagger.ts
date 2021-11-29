@@ -1,7 +1,7 @@
 import type { Easing } from "../dom/types"
 import type { EasingFunction } from "../js/types"
-import { getEasingFunction } from "../js/easing/utils/get-function"
-import { isNumber } from "./is-number"
+import { getEasingFunction } from "../js/easing/utils/get-function.js"
+import { isNumber } from "./is-number.js"
 
 export type From = "first" | "last" | "center" | number
 

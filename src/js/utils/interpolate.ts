@@ -1,9 +1,9 @@
 import type { EasingFunction } from "../types"
-import { mix } from "../../utils/mix"
-import { noopReturn } from "../../utils/noop"
-import { progress } from "../../utils/progress"
-import { getEasingForSegment } from "./get-easing"
-import { defaultOffset, fillOffset } from "./offset"
+import { mix } from "../../utils/mix.js"
+import { noopReturn } from "../../utils/noop.js"
+import { progress } from "../../utils/progress.js"
+import { getEasingForSegment } from "./get-easing.js"
+import { defaultOffset, fillOffset } from "./offset.js"
 
 const clampProgress = (p: number) => Math.min(1, Math.max(p, 0))
 

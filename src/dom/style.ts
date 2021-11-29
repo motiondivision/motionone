@@ -1,6 +1,6 @@
-import { isCssVar } from "./utils/css-var"
-import { getStyleName } from "./utils/get-style-name"
-import { transformDefinitions } from "./utils/transforms"
+import { isCssVar } from "./utils/css-var.js"
+import { getStyleName } from "./utils/get-style-name.js"
+import { transformDefinitions } from "./utils/transforms.js"
 
 export const style = {
   get: (element: Element, name: string): string | undefined => {

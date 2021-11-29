@@ -1,4 +1,4 @@
-import { asTransformCssVar, isTransform, transformAlias } from "./transforms"
+import { asTransformCssVar, isTransform, transformAlias } from "./transforms.js"
 
 export function getStyleName(key: string): string {
   if (transformAlias[key]) key = transformAlias[key]
