@@ -71,4 +71,47 @@ describe("Motion", () => {
 
     expect(result).toEqual({ opacity: [0, 0.8] })
   })
+
+  test("Animation doesn't run on mount if initial and animate are the same", async () => {
+    const result = await new Promise((resolve, reject) => {
+      const animate = { opacity: [0, 0.8] }
+      renderBox({
+        initial: animate,
+        animate,
+        transition: { duration },
+        onAnimationComplete: () => reject(false),
+      })
+
+      setTimeout(() => resolve(true), 100)
+    })
+
+    expect(result).toEqual(true)
+  })
+
+  test("Animation doesn't run in subsequent render if value doesn't change", async () => {
+    const result = await new Promise((resolve, reject) => {
+      let completeCount = 0
+
+      const props = {
+        "data-testid": "box",
+        initial: { opacity: 0.4 },
+        animate: { opacity: [0, 0.8] },
+        transition: { duration },
+        onAnimationComplete: () => {
+          if (!completeCount) {
+            rerender(props)
+          } else {
+            reject(false)
+          }
+
+          completeCount++
+        },
+      }
+
+      const { rerender } = render(Motion, props)
+      setTimeout(() => resolve(true), 200)
+    })
+
+    expect(result).toEqual(true)
+  })
 })

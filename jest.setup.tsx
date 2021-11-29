@@ -49,13 +49,5 @@ export const blur = (element: HTMLElement, testId: string) =>
   })
 
 export const render = (children: any) => {
-  const renderReturn = testRender(
-    <React.StrictMode>{children}</React.StrictMode>
-  )
-
-  return {
-    ...renderReturn,
-    rerender: (children: any) =>
-      renderReturn.rerender(<React.StrictMode>{children}</React.StrictMode>),
-  }
+  return testRender(<React.StrictMode>{children}</React.StrictMode>)
 }

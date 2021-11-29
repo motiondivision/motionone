@@ -1,3 +1,4 @@
+import { invariant } from "hey-listen"
 import { noop } from "../../utils/noop"
 import { animateStyle } from "../animate-style"
 import { style } from "../style"
@@ -38,7 +39,6 @@ export function createMotionState(
   const baseTarget: Variant = { ...target }
 
   function* animateUpdates() {
-    console.log("animate updates")
     const prevTarget = target
     target = {}
 
@@ -73,7 +73,7 @@ export function createMotionState(
 
       if (hasChanged(prevTarget[key], target[key])) {
         baseTarget[key] ??= style.get(element, key) as string
-        console.log("animating", element, key, target[key], animationOptions)
+
         animationFactories.push(
           animateStyle(element, key, target[key], animationOptions[key])
         )
@@ -89,10 +89,8 @@ export function createMotionState(
     if (!animations.length) return
 
     const animationTarget = target
-    console.log("animating to", animationTarget)
     Promise.all(animations.map((animation: any) => animation.finished))
       .then(() => {
-        console.log(options.onAnimationComplete)
         options.onAnimationComplete?.(animationTarget)
       })
       .catch(noop)
@@ -101,7 +99,6 @@ export function createMotionState(
   const state: MotionState = {
     update: (newOptions: Options) => {
       if (!element) return
-
       options = newOptions
       scheduleAnimation(state)
     },
@@ -111,10 +108,14 @@ export function createMotionState(
     getOptions: () => options,
     getContext: () => context,
     mount: (newElement) => {
+      invariant(
+        Boolean(newElement),
+        "Animation state must be mounted with valid Element"
+      )
+
       element = newElement
 
       return () => {
-        console.log("unmounting")
         unscheduleAnimation(state)
         // Stop all animations
         // Remove all gesture subscriptions

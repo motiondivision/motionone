@@ -53,7 +53,7 @@ export function createMotionComponent<Props extends ElementProps>(
       style: { ...style, ...initialStyle },
     })
 
-    useEffect(() => state.mount(ref.current!), [])
+    useEffect(() => state.mount(ref.current), [])
     useEffect(() => state.update(options))
 
     return (

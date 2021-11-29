@@ -44,9 +44,91 @@ describe("motion", () => {
       const { rerender } = render(<Component />)
       rerender(<Component />)
 
-      setTimeout(() => reject(false), 1000)
+      setTimeout(() => reject(false), 100)
     })
 
     expect(element).toHaveStyle("opacity: 0.8")
+  })
+
+  test("Animation doesn't run on mount if initial and animate are the same", async () => {
+    const result = await new Promise((resolve, reject) => {
+      const Component = () => {
+        const animate = { opacity: 0.4 }
+        const ref = useRef(null)
+        return (
+          <motion.div
+            ref={ref}
+            initial={animate}
+            animate={animate}
+            onAnimationComplete={() => reject(false)}
+            transition={{ duration }}
+          />
+        )
+      }
+
+      const { rerender } = render(<Component />)
+      rerender(<Component />)
+
+      setTimeout(() => resolve(true), 100)
+    })
+
+    expect(result).toBe(true)
+  })
+
+  test("Animation doesn't run in subsequent render if value doesn't change", async () => {
+    const result = await new Promise((resolve, reject) => {
+      let completeCount = 0
+      const Component = () => {
+        const animate = { opacity: 0.4 }
+        const ref = useRef(null)
+        return (
+          <motion.div
+            ref={ref}
+            initial={animate}
+            animate={animate}
+            onAnimationComplete={() => {
+              if (!completeCount) {
+                rerender(<Component />)
+              } else {
+                reject(false)
+              }
+
+              completeCount++
+            }}
+            transition={{ duration }}
+          />
+        )
+      }
+
+      const { rerender } = render(<Component />)
+      rerender(<Component />)
+
+      setTimeout(() => resolve(true), 100)
+    })
+
+    expect(result).toBe(true)
+  })
+
+  test("Animation runs when target changes", async () => {
+    const result = await new Promise((resolve) => {
+      const Component = ({ animate }: any) => {
+        return (
+          <motion.div
+            data-testid="box"
+            initial={{ opacity: 0 }}
+            animate={animate}
+            onAnimationComplete={(target) => {
+              if (target.opacity === 0.8) resolve(true)
+            }}
+            transition={{ duration }}
+          />
+        )
+      }
+
+      const { rerender } = render(<Component animate={{ opacity: 0.5 }} />)
+      rerender(<Component animate={{ opacity: 0.8 }} />)
+    })
+
+    expect(result).toBe(true)
   })
 })
