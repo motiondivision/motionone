@@ -1,10 +1,7 @@
-import type { GestureHandler, GestureStateHandler } from "../types"
+import type { GestureHandler } from "../types"
 import { dispatchViewEvent } from "../utils/events"
 
-export const inView: GestureHandler = (
-  element: Element,
-  { enable, disable }: GestureStateHandler
-) => {
+export const inView: GestureHandler = (element, { enable, disable }) => {
   let isVisible = false
 
   // TODO: Check IntersectionObserver exists as it can be disabled in iOS

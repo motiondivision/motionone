@@ -1,5 +1,4 @@
-import * as React from "react"
-import type { MutableRefObject } from "react"
+import type { ForwardedRef, MutableRefObject } from "react"
 import {
   createElement,
   forwardRef,
@@ -30,7 +29,7 @@ export function createMotionComponent<Props extends ElementProps>(
       onAnimationComplete,
       ...props
     }: Options & Props,
-    externalRef: MutableRefObject<Element>
+    externalRef: ForwardedRef<Element>
   ) {
     const options = {
       initial,
@@ -47,19 +46,20 @@ export function createMotionComponent<Props extends ElementProps>(
 
     const initialStyle = useMemo(() => createStyles(state.getTarget()), [])
 
-    const ref = externalRef || useRef<Element>(null)
-    const element = createElement(Component, {
-      ...props,
-      ref,
-      style: { ...style, ...initialStyle },
-    })
+    const ref =
+      (externalRef as MutableRefObject<Element>) || useRef<Element>(null)
 
     useEffect(() => state.mount(ref.current), [])
     useEffect(() => state.update(options))
 
-    return (
-      <MotionContext.Provider value={state}>{element}</MotionContext.Provider>
-    )
+    return createElement(MotionContext.Provider, {
+      value: state,
+      children: createElement(Component, {
+        ...props,
+        ref,
+        style: { ...style, ...initialStyle },
+      }),
+    })
   }
 
   return forwardRef(Motion)

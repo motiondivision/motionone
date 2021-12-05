@@ -1,8 +1,8 @@
 import type { Easing } from "../../../dom/types"
 import type { EasingFunction } from "../../types"
-import { cubicBezier } from "../cubic-bezier.js"
-import { steps } from "../steps.js"
-import { noopReturn } from "../../../utils/noop.js"
+import { cubicBezier } from "../cubic-bezier"
+import { steps } from "../steps"
+import { noopReturn } from "../../../utils/noop"
 
 const namedEasings = {
   ease: cubicBezier(0.25, 0.1, 0.25, 1.0),
@@ -26,7 +26,7 @@ export function getEasingFunction(
   if (namedEasings[definition]) return namedEasings[definition]
 
   // If this is a steps function, attempt to create easing curve
-  if (definition.startsWith("steps.js")) {
+  if (definition.startsWith("steps")) {
     const args = functionArgsRegex.exec(definition)
     if (args) {
       const argsArray = args[1].split(",")

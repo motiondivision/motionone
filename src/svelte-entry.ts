@@ -1,2 +1,1 @@
-import Motion from "./svelte/Motion.svelte"
-export { Motion }
+export { default as Motion } from "./svelte/Motion.svelte"

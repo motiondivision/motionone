@@ -5,12 +5,12 @@ import type {
   AnimationListOptions,
   MotionKeyframesDefinition,
 } from "./types"
-import { animateStyle } from "./animate-style.js"
-import { getOptions } from "./utils/options.js"
-import { resolveElements } from "./utils/resolve-elements.js"
-import { createAnimations } from "./utils/controls.js"
-import { resolveOption } from "../utils/stagger.js"
-import { defaults } from "./utils/defaults.js"
+import { animateStyle } from "./animate-style"
+import { getOptions } from "./utils/options"
+import { resolveElements } from "./utils/resolve-elements"
+import { createAnimations } from "./utils/controls"
+import { resolveOption } from "../utils/stagger"
+import { defaults } from "./utils/defaults"
 
 export function animate(
   elements: AcceptedElements,

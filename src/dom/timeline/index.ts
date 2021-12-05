@@ -1,7 +1,7 @@
 import { invariant } from "hey-listen"
-import { progress } from "../../utils/progress.js"
+import { progress } from "../../utils/progress"
 import { resolveOption } from "../../utils/stagger"
-import { defaultOffset, fillOffset } from "../../js/utils/offset.js"
+import { defaultOffset, fillOffset } from "../../js/utils/offset"
 import { animateStyle } from "../animate-style"
 import type {
   AnimationOptions,
@@ -12,18 +12,18 @@ import type {
   ValueKeyframesDefinition,
 } from "../types"
 import { createAnimations } from "../utils/controls"
-import { defaults } from "../utils/defaults.js"
-import { isCustomEasing } from "../utils/easing.js"
+import { defaults } from "../utils/defaults"
+import { isCustomEasing } from "../utils/easing"
 import { keyframesList } from "../utils/keyframes"
 import { getOptions } from "../utils/options"
 import { resolveElements } from "../utils/resolve-elements"
-import { isTransform } from "../utils/transforms.js"
+import { isTransform } from "../utils/transforms"
 import type {
   ElementSequence,
   TimelineDefinition,
   ValueSequence,
 } from "./types"
-import { calcNextTime } from "./utils/calc-time.js"
+import { calcNextTime } from "./utils/calc-time"
 import { addKeyframes } from "./utils/edit"
 import { compareByTime } from "./utils/sort"
 

@@ -1,5 +1,5 @@
-import { wrap } from "../../utils/wrap.js"
-import { isEasingList } from "../../dom/utils/easing.js"
+import { wrap } from "../../utils/wrap"
+import { isEasingList } from "../../dom/utils/easing"
 
 export function getEasingForSegment<T>(easing: T | T[], i: number) {
   return isEasingList(easing as any)

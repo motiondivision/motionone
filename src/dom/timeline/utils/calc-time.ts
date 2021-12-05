@@ -1,5 +1,5 @@
 import type { NextTime } from "../types"
-import { isNumber } from "../../../utils/is-number.js"
+import { isNumber } from "../../../utils/is-number"
 
 export function calcNextTime(
   current: number,

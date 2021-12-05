@@ -3,8 +3,10 @@
     "target": "ES6",
     "module": "ESNext",
     "moduleResolution": "node",
+    "strict": true,
     "isolatedModules": true,
     "importHelpers": true,
+    "allowSyntheticDefaultImports": true,
     "jsx": "react",
     "esModuleInterop": true,
     "experimentalDecorators": true,
@@ -24,16 +26,24 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "removeComments": false,
-    "lib": ["es2017", "dom"],
+    "lib": ["es2017", "dom", "dom.iterable", "scripthost"],
     "skipLibCheck": true,
     "downlevelIteration": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["svelte", "jest"],
+    "types": ["svelte", "jest", "node", "vue"],
     "paths": {
       "react": ["node_modules/react"],
       "react-dom": ["node_modules/react-dom"],
-      "svelte": ["node_modules/svelte"]
-    }
+      "svelte": ["node_modules/svelte"],
+      "vue": ["node_modules/vue"],
+      "@/*": ["src/*"]
+    },
+    "plugins": [
+      {
+        "transform": "@zerollup/ts-transform-paths",
+        "exclude": ["*"]
+      }
+    ]
   },
   "compileOnSave": false,
   "buildOnSave": false,
@@ -41,7 +51,7 @@
     "node_modules",
     "build",
     "**/__tests__/*",
-    "jest.setup.tsx",
+    "jest.setup.ts",
     "jest.setup.svelte.ts",
     "_notes",
     "dev",
@@ -55,6 +65,7 @@
     "cypress",
     "__sapper__/*",
     "svelte/*",
+    "vue/*",
     "public/*"
   ],
   "filesGlob": ["./src/**/*.ts"]

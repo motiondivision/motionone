@@ -1,4 +1,4 @@
-import { registerCssVariable, registeredProperties } from "../css-var.js"
+import { registerCssVariable, registeredProperties } from "../css-var"
 
 describe("registerCssVariable", () => {
   test("it registers new CSS properties", () => {

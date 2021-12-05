@@ -1,11 +1,11 @@
-import { noop } from "../../utils/noop.js"
+import { noop } from "../../utils/noop"
 import type {
   AnimationControls,
   AnimationFactory,
   AnimationWithCommitStyles,
 } from "../types"
-import { stopAnimation } from "./stop-animation.js"
-import { ms } from "./time.js"
+import { stopAnimation } from "./stop-animation"
+import { ms } from "./time"
 
 interface MotionState {
   animations: AnimationWithCommitStyles[]

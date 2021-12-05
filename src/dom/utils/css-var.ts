@@ -1,4 +1,4 @@
-import { transformDefinitions } from "./transforms.js"
+import { transformDefinitions } from "./transforms"
 
 export const isCssVar = (name: string) => name.startsWith("--")
 

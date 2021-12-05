@@ -122,11 +122,10 @@ export function createAnimatedComponent<Props extends {}>(Component: string) {
      */
     const memoizedContext = useMemo(() => context, Object.values(context))
 
-    return (
-      <AnimationContext.Provider value={memoizedContext}>
-        {element}
-      </AnimationContext.Provider>
-    )
+    return createElement(AnimationContext.Provider, {
+      value: memoizedContext,
+      children: element,
+    })
   }
 
   return forwardRef(Animated)

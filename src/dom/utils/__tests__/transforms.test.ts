@@ -1,4 +1,4 @@
-import { addTransformToElement } from "../transforms.js"
+import { addTransformToElement } from "../transforms"
 
 describe("addTransformToElement", () => {
   test("correctly adds transforms to transform template", () => {

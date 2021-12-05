@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "main": "../dist/motion-vue.ssr.js",
+  "browser": "../dist/motion-vue.esm.js",
+  "module": "../dist/motion-vue.esm.js",
+  "unpkg": "../dist/motion-vue.min.js",
+  "types": "../dist/types/src/entry.esm.d.ts"
+}

@@ -74,7 +74,7 @@ describe("Motion", () => {
 
   test("Animation doesn't run on mount if initial and animate are the same", async () => {
     const result = await new Promise((resolve, reject) => {
-      const animate = { opacity: [0, 0.8] }
+      const animate = { opacity: 0.4 }
       renderBox({
         initial: animate,
         animate,

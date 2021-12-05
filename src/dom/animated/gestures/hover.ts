@@ -1,4 +1,4 @@
-import type { GestureHandler, GestureStateHandler } from "../types"
+import type { GestureHandler } from "../types"
 import { dispatchPointerEvent } from "../utils/events"
 
 const mouseEvent = (
@@ -11,18 +11,15 @@ const mouseEvent = (
   dispatchPointerEvent(element, name, event)
 }
 
-export const hover: GestureHandler = (
-  element: Element,
-  { enable, disable }: GestureStateHandler
-) => {
+export const hover: GestureHandler = (element, { enable, disable }) => {
   const onEnter = mouseEvent(element, "hoverstart", enable)
   const onLeave = mouseEvent(element, "hoverend", disable)
 
-  element.addEventListener("pointerenter", onEnter)
-  element.addEventListener("pointerleave", onLeave)
+  element.addEventListener("pointerenter", onEnter as EventListener)
+  element.addEventListener("pointerleave", onLeave as EventListener)
 
   return () => {
-    element.removeEventListener("pointerenter", onEnter)
-    element.removeEventListener("pointerleave", onLeave)
+    element.removeEventListener("pointerenter", onEnter as EventListener)
+    element.removeEventListener("pointerleave", onLeave as EventListener)
   }
 }

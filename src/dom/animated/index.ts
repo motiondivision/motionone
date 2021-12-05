@@ -13,12 +13,12 @@
 // } from "./types"
 // import { animateStyle } from "../animate-style"
 // import type { AcceptedElements, AnimationFactory } from "../types"
-// import { noop } from "../../utils/noop.js"
+// import { noop } from "../../utils/noop"
 // import { style } from "../style"
 // import { getPose } from "./utils/get-pose"
 // import { resolveElements } from "../utils/resolve-elements"
 // import { poseEvent } from "./utils/events"
-// import { addUniqueItem } from "../../utils/array.js"
+// import { addUniqueItem } from "../../utils/array"
 
 // const gestures = { style: () => () => {}, inView, hover, press }
 // const poseStateNames = Object.keys(gestures)

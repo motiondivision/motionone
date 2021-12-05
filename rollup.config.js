@@ -32,6 +32,7 @@ const umd = Object.assign({}, config, {
   plugins: [
     resolve(),
     replace({
+      preventAssignment: true,
       "process.env.NODE_ENV": JSON.stringify("development"),
     }),
   ],
@@ -44,6 +45,7 @@ const umdProd = Object.assign({}, umd, {
   plugins: [
     resolve(),
     replace({
+      preventAssignment: true,
       "process.env.NODE_ENV": JSON.stringify("production"),
     }),
     terser({ output: { comments: false } }),

@@ -32,7 +32,7 @@ export type GestureStateHandler = {
 export type RemoveGestureHandler = () => void
 
 export type GestureHandler = (
-  element: Element,
+  element: HTMLElement | SVGElement,
   stateHandler: GestureStateHandler
 ) => RemoveGestureHandler
 

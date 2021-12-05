@@ -26,8 +26,6 @@
   export let variants: Variants | undefined = undefined
   export let transition: AnimationOptionsWithOverrides | undefined = undefined
 
-  export let style = ""
-
   const state = createMotionState(
     {
       initial,

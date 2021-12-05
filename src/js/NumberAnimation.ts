@@ -1,14 +1,14 @@
 import type { AnimationControls, AnimationOptions, Easing } from "../dom/types"
-import { defaults } from "../dom/utils/defaults.js"
-import { isCustomEasing, isEasingList } from "../dom/utils/easing.js"
-import { getEasingFunction } from "./easing/utils/get-function.js"
-import { slowInterpolateNumbers } from "./utils/interpolate.js"
+import { defaults } from "../dom/utils/defaults"
+import { isCustomEasing, isEasingList } from "../dom/utils/easing"
+import { getEasingFunction } from "./easing/utils/get-function"
+import { slowInterpolateNumbers } from "./utils/interpolate"
 
 export class NumberAnimation
   implements Omit<AnimationControls, "stop" | "duration"> {
-  private resolve: (value: any) => void
+  private resolve?: (value: any) => void
 
-  private reject: (value: any) => void
+  private reject?: (value: any) => void
 
   private startTime = 0
 
@@ -127,7 +127,7 @@ export class NumberAnimation
 
       if (isAnimationFinished) {
         this.playState = "finished"
-        this.resolve(latest)
+        this.resolve?.(latest)
       } else if (this.playState !== "idle") {
         requestAnimationFrame(this.tick)
       }
@@ -168,7 +168,7 @@ export class NumberAnimation
   cancel() {
     this.playState = "idle"
     this.tick(this.cancelTimestamp)
-    this.reject(false)
+    this.reject?.(false)
   }
 
   reverse() {

@@ -1,27 +1,27 @@
-import { getAnimationData } from "./data.js"
+import { getAnimationData } from "./data"
 import type {
   AnimationFactory,
   AnimationOptions,
   ValueKeyframesDefinition,
 } from "./types"
-import { isCssVar, registerCssVariable } from "./utils/css-var.js"
-import { noop } from "../utils/noop.js"
-import { ms } from "./utils/time.js"
+import { isCssVar, registerCssVariable } from "./utils/css-var"
+import { noop } from "../utils/noop"
+import { ms } from "./utils/time"
 import {
   addTransformToElement,
   isTransform,
   transformDefinitions,
-} from "./utils/transforms.js"
-import { convertEasing, isCustomEasing, isEasingList } from "./utils/easing.js"
-import { supports } from "./utils/feature-detection.js"
-import { cssVariableRenderer, styleRenderer } from "./utils/apply.js"
-import { NumberAnimation } from "../js/NumberAnimation.js"
-import { hydrateKeyframes, keyframesList } from "./utils/keyframes.js"
-import { style } from "./style.js"
-import { defaults } from "./utils/defaults.js"
-import { getStyleName } from "./utils/get-style-name.js"
-import { isNumber } from "../utils/is-number.js"
-import { stopAnimation } from "./utils/stop-animation.js"
+} from "./utils/transforms"
+import { convertEasing, isCustomEasing, isEasingList } from "./utils/easing"
+import { supports } from "./utils/feature-detection"
+import { cssVariableRenderer, styleRenderer } from "./utils/apply"
+import { NumberAnimation } from "../js/NumberAnimation"
+import { hydrateKeyframes, keyframesList } from "./utils/keyframes"
+import { style } from "./style"
+import { defaults } from "./utils/defaults"
+import { getStyleName } from "./utils/get-style-name"
+import { isNumber } from "../utils/is-number"
+import { stopAnimation } from "./utils/stop-animation"
 
 export function animateStyle(
   element: Element,
