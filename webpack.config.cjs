@@ -15,4 +15,15 @@ module.exports = {
   experiments: {
     outputModule: true,
   },
+  resolve: { extensions: [".wasm", ".mjs", ".js", ".jsx", ".json"] },
+  module: {
+    rules: [
+      {
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false,
+        },
+      },
+    ],
+  },
 }
