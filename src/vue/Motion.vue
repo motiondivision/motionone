@@ -1,13 +1,26 @@
 <template>
-  <component v-bind:is="as"><slot /></component>
+  <component
+    v-bind:is="as"
+    ref="root"
+    style="width: 100px; height: 100px; background-color: green"
+    ><slot
+  /></component>
 </template>
 
 <script lang="ts">
-import Vue from "vue"
+import {
+  defineComponent,
+  inject,
+  onMounted,
+  onUpdated,
+  provide,
+  ref,
+} from "vue"
 import { createMotionState } from "../dom/state"
-import { MotionState } from "../dom/state/types"
 
-export default Vue.extend<any, any, { state: MotionState }, any>({
+const contextId = "motion-state"
+
+export default defineComponent({
   name: "Motion",
   inheritAttrs: true,
   props: {
@@ -16,23 +29,20 @@ export default Vue.extend<any, any, { state: MotionState }, any>({
       default: "div",
     },
   },
-  computed: {
-    state: function () {
-      return createMotionState(this.$props, this.parentState)
-    },
+  setup(props) {
+    const root = ref<Element | null>(null)
+    const parentState = inject(contextId, undefined)
+    const state = createMotionState(props as any, parentState)
+
+    provide(contextId, state)
+
+    onMounted(() => {
+      return root.value && state.mount(root.value)
+    })
+
+    onUpdated(() => {
+      state.update(props as any)
+    })
   },
-  provide() {
-    return {
-      parentMotionState: this.state,
-    }
-  },
-  inject: ["parentMotionState"],
-  mounted() {
-    this.state.mount(this.$el)
-  },
-  updated() {
-    this.state.update(this.$props)
-  },
-  destroyed() {},
 })
 </script>

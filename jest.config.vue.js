@@ -19,4 +19,4 @@ const config = {
   moduleFileExtensions: ["js", "ts", "vue"],
 }
 
-export default config
+module.exports = config

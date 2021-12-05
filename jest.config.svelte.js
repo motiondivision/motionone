@@ -10,7 +10,7 @@ const config = {
     "src/react-entry.ts",
     "src/svelte-entry.ts",
   ],
-  collectCoverageFrom: [],
+  collectCoverageFrom: ["<rootDir>/svelte"],
   coverageDirectory: "<rootDir>/../coverage/svelte",
   transform: {
     "^.+\\.svelte$": ["svelte-jester", { preprocess: true }],
@@ -19,4 +19,4 @@ const config = {
   moduleFileExtensions: ["js", "ts", "svelte"],
 }
 
-export default config
+module.exports = config
