@@ -13,7 +13,7 @@ const config = {
   collectCoverageFrom: [],
   coverageDirectory: "<rootDir>/../coverage/vue",
   transform: {
-    ".*\\.(vue)$": "vue-jest",
+    "^.+\\.vue$": "@vue/vue3-jest",
     "^.+\\.ts$": "ts-jest",
   },
   moduleFileExtensions: ["js", "ts", "vue"],
