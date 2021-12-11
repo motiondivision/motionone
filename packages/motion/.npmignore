@@ -1,0 +1,6 @@
+*
+**/*
+!dist/**
+!types/**
+!LICENSE.md
+!CHANGELOG.md

@@ -1,6 +1,0 @@
-{
-  "private": true,
-  "main": "../dist/svelte.cjs.js",
-  "module": "../dist/svelte.es.js",
-  "types": "../types/svelte-entry.d.ts"
-}

@@ -1,7 +1,0 @@
-export { animate } from "./dom/animate"
-export { animateStyle } from "./dom/animate-style"
-export { timeline } from "./dom/timeline/index"
-export { stagger } from "./utils/stagger"
-export { spring } from "./js/easing/spring/index"
-export { glide } from "./js/easing/glide/index"
-export * from "./dom/types"
