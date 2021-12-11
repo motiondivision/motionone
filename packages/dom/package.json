@@ -1,12 +1,16 @@
 {
   "name": "@motionone/dom",
+  "version": "10.5.0-alpha.1",
   "description": "A tiny, performant animation library for the DOM",
   "author": "Matt Perry",
-  "private": true,
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
+  "types": "types/index.d.ts",
   "sideEffects": false,
   "scripts": {
-    "test": "jest"
+    "build": "rm -rf lib dist types && tsc -p . && rollup -c"
+  },
+  "dependencies": {
+    "tslib": "^2.3.1"
   }
 }

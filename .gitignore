@@ -14,6 +14,7 @@ out/
 build
 dist/
 lib/
+types/
 
 # misc
 .DS_Store

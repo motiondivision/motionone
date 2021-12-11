@@ -12,9 +12,10 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "format": "prettier --write '**/*.{ts,tsx,.md}'",
-    "publish": "turbo run build test lint publish",
+    "publish": "turbo run build test lint publish && npx changeset publish && git push --tags",
     "deploy": "turbo run build test lint deploy",
-    "version": "npm changeset version"
+    "change": "npx changeset",
+    "version": "npx changeset version"
   },
   "devDependencies": {
     "@changesets/cli": "^2.18.1",

@@ -1,3 +1,3 @@
-export function animate() {
-  console.log("animate!")
+export function animate({ ...props }: any) {
+  console.log(props)
 }
