@@ -6,6 +6,7 @@
   "license": "MIT",
   "files": [
     "eslint-preset.js",
+    "jest.config.js",
     "ts-base.json",
     "ts-react.json",
     "rollup.config.js"

@@ -1,6 +1,6 @@
 import { animate } from ".."
 import { style } from "../style"
-import "./web-animations.min-edited.js.js"
+import "./web-animations.min-edited.js"
 
 /**
  * TODO: All tests currently have to define at least two keyframes

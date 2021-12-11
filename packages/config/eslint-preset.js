@@ -3,12 +3,14 @@ module.exports = {
   settings: {
     next: {
       rootDir: [
-        "apps/docs/",
-        "apps/web/",
-        "packages/uix/",
+        "sites/web/",
         "packages/config/",
-        "packages/tsconfig/",
+        "packages/dom/",
+        "packages/motion/",
+        "packages/react/",
+        "packages/svelte/",
+        "packages/vue/",
       ],
     },
   },
-};
+}
