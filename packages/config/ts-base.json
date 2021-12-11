@@ -34,5 +34,5 @@
     "downlevelIteration": true,
     "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["node_modules", "**/tests/*"]
+  "exclude": ["node_modules", "**/__tests__/*"]
 }

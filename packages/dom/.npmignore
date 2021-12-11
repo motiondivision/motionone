@@ -2,3 +2,4 @@ src/**
 .turbo
 tsconfig.json
 rollup.config.js
+README.md

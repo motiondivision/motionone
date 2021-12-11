@@ -12,7 +12,9 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "format": "prettier --write '**/*.{ts,tsx,.md}'",
-    "publish": "npm run build && npm run publish",
+    "publish": "npm run build && lerna publish",
+    "publish-alpha": "npm run build && lerna publish --npm-tag alpha",
+    "publish-beta": "npm run build && lerna publish --npm-tag beta",
     "deploy": "turbo run build test lint deploy"
   },
   "devDependencies": {
