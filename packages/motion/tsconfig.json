@@ -2,7 +2,9 @@
   "extends": "config/ts-base.json",
   "$schema": "https://json.schemastore.org/tsconfig",
   "include": ["src/**/*.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["**/tests/*"],
   "compilerOptions": {
-    "outDir": "./lib"
+    "outDir": "./lib",
+    "declarationDir": "./types"
   }
 }
