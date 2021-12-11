@@ -3,7 +3,6 @@
   "description": "A tiny, performant animation library for the DOM, Vue and Svelte",
   "version": "10.5.0-alpha.1",
   "author": "Matt Perry",
-  "private": true,
   "main": "dist/main.cjs.js",
   "module": "dist/main.es.js",
   "types": "types/index.d.ts",
