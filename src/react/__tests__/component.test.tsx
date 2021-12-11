@@ -9,18 +9,21 @@ import {
   render,
 } from "../../../jest.setup"
 import "../../dom/__tests__/web-animations.min-edited"
+import { createMotionComponent } from "../component"
 
 console.error = jest.fn()
 
 const duration = 0.001
 
+const Motion = createMotionComponent("div")
+
 describe("motion", () => {
   test("Types are correct", () => {
     render(
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <Motion initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <motion.a href="" />
         <motion.svg viewBox="" />
-      </motion.div>
+      </Motion>
     )
 
     expect(true).toBe(true)

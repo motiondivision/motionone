@@ -10,7 +10,10 @@ import { terser } from "rollup-plugin-terser"
 import ttypescript from "ttypescript"
 import typescript from "rollup-plugin-typescript2"
 import minimist from "minimist"
-import babelConfig from "./babel.config.cjs"
+
+const babelConfig = {
+  presets: ["@babel/preset-typescript", ["@babel/preset-env", {}]],
+}
 
 // Get browserslist config and remove ie from es build targets
 const esbrowserslist = fs
@@ -61,6 +64,15 @@ const baseConfig = {
       exclude: "node_modules/**",
       extensions: [".js", ".jsx", ".ts", ".tsx", ".vue"],
       babelHelpers: "bundled",
+      presets: [
+        [
+          "@babel/preset-env",
+          {
+            ...babelPresetEnvConfig,
+            targets: esbrowserslist,
+          },
+        ],
+      ],
     },
   },
 }
@@ -99,18 +111,7 @@ if (!argv.format || argv.format === "es") {
         useTsconfigDeclarationDir: true,
         emitDeclarationOnly: true,
       }),
-      babel({
-        ...baseConfig.plugins.babel,
-        presets: [
-          [
-            "@babel/preset-env",
-            {
-              ...babelPresetEnvConfig,
-              targets: esbrowserslist,
-            },
-          ],
-        ],
-      }),
+      babel(baseConfig.plugins.babel),
     ],
   }
   buildFormats.push(esConfig)
@@ -139,6 +140,11 @@ if (!argv.format || argv.format === "cjs") {
         },
       }),
       ...baseConfig.plugins.postVue,
+      typescript({
+        typescript: ttypescript,
+        useTsconfigDeclarationDir: true,
+        emitDeclarationOnly: true,
+      }),
       babel(baseConfig.plugins.babel),
     ],
   }
@@ -162,6 +168,11 @@ if (!argv.format || argv.format === "iife") {
       ...baseConfig.plugins.preVue,
       vue(baseConfig.plugins.vue),
       ...baseConfig.plugins.postVue,
+      typescript({
+        typescript: ttypescript,
+        useTsconfigDeclarationDir: true,
+        emitDeclarationOnly: true,
+      }),
       babel(baseConfig.plugins.babel),
       terser({
         output: {

@@ -37,7 +37,7 @@
     "dev": "python -m SimpleHTTPServer",
     "dev-svelte": "svelte-kit dev",
     "dev-vue": "vue-cli-service serve vue/src/main.ts",
-    "measure": "webpack --config webpack.config.cjs && bundlesize",
+    "measure": "webpack --config webpack.config.js && bundlesize",
     "build-storybook": "build-storybook"
   },
   "dependencies": {
@@ -105,6 +105,7 @@
     "rollup-plugin-svelte": "^7.1.0",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.31.1",
+    "rollup-plugin-vue": "^6.0.0",
     "start-server-and-test": "^1.12.5",
     "svelte": "^3.42.6",
     "svelte-check": "^2.2.6",
