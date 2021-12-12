@@ -1,7 +1,7 @@
-import NextAuth from "next-auth";
-import Providers from "next-auth/providers";
+import NextAuth from "next-auth"
+import Providers from "next-auth/providers"
 
-const whitelist = new Set(["mattgperry", "mircostraessle"]);
+const whitelist = new Set(["mattgperry", "mircostraessle"])
 
 export default NextAuth({
   providers: [
@@ -16,27 +16,27 @@ export default NextAuth({
           name: profile.name || profile.login,
           email: profile.email,
           image: profile.avatar_url,
-        } as any;
+        } as any
       },
     }),
   ],
   callbacks: {
-    async signIn(user, account, profile) {
+    async signIn(_user, _account, profile) {
       const canSignIn =
         whitelist.has(profile.login as string) ||
-        (await isSponsor(profile.login as string));
+        (await isSponsor(profile.login as string))
 
       if (canSignIn) {
-        return true;
+        return true
       } else {
-        return false;
+        return false
         // Or you can return a URL to redirect to:
         // return '/unauthorized'
       }
     },
   },
   // database: process.env.DATABASE_URL,
-});
+})
 
 async function isSponsor(id: string): Promise<boolean> {
   const res = await fetch("https://api.github.com/graphql", {
@@ -54,7 +54,7 @@ async function isSponsor(id: string): Promise<boolean> {
         }
       `,
     }),
-  }).then((res) => res.json());
-  console.log(res?.data?.user?.isSponsoredBy);
-  return res?.data?.user?.isSponsoredBy || false;
+  }).then((res) => res.json())
+  console.log(res?.data?.user?.isSponsoredBy)
+  return res?.data?.user?.isSponsoredBy || false
 }

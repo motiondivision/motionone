@@ -7,7 +7,7 @@ import { screenM } from "../template/vars"
 export function HomepageFooter() {
   return (
     <Container>
-      <p>Get started with Motion One's interactive quick start guide.</p>
+      <p>{`Get started with Motion One's interactive quick start guide.`}</p>
       <Link passHref href="/guides/quick-start">
         <MainCTA>
           Quick start

@@ -1,45 +1,49 @@
-import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { Tick } from "../components/icons/Tick";
-import { post } from "../src/forms/post";
-import { newsletterEndpoint } from "../src/forms/endpoints";
-import { FormState } from "../src/forms/types";
+import { useEffect, useRef, useState } from "react"
+import { AnimatePresence, motion } from "framer-motion"
+import { Tick } from "../components/icons/Tick"
+import { post } from "../src/forms/post"
+import { newsletterEndpoint } from "../src/forms/endpoints"
+import { FormState } from "../src/forms/types"
 
 const layoutTransition = {
   type: "spring",
   stiffness: 200,
   damping: 30,
-};
+}
 
 export function SignUpForm() {
-  const [email, setEmail] = useState("");
-  const [state, setState] = useState(FormState.Entry);
+  const [email, setEmail] = useState("")
+  const [state, setState] = useState(FormState.Entry)
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit(e: any) {
+    e.preventDefault()
 
-    if (state !== FormState.Entry) return;
+    if (state !== FormState.Entry) return
 
-    setState(FormState.Submitting);
+    setState(FormState.Submitting)
 
-    post(newsletterEndpoint(), { email_address: email });
+    post(newsletterEndpoint(), { email_address: email })
   }
 
-  const showForm = state === FormState.Entry || state === FormState.Submitting;
+  const showForm = state === FormState.Entry || state === FormState.Submitting
 
-  const form = useRef(null);
-  const button = useRef(null);
-  const [formBorderRadius, setFormBorderRadius] = useState(undefined);
-  const [buttonBorderRadius, setButtonBorderRadius] = useState(undefined);
+  const form = useRef<HTMLFormElement>(null)
+  const button = useRef<HTMLButtonElement>(null)
+  const [formBorderRadius, setFormBorderRadius] = useState<number | undefined>(
+    undefined
+  )
+  const [buttonBorderRadius, setButtonBorderRadius] = useState<
+    number | undefined
+  >(undefined)
   useEffect(() => {
-    if (!form.current) return;
+    if (!form.current) return
     setFormBorderRadius(
       parseFloat(window.getComputedStyle(form.current).borderRadius)
-    );
+    )
     setButtonBorderRadius(
-      parseFloat(window.getComputedStyle(button.current).borderRadius)
-    );
-  }, []);
+      parseFloat(window.getComputedStyle(button.current!).borderRadius)
+    )
+  }, [])
 
   return (
     <div className="signup" data-is-submitted={state !== FormState.Entry}>
@@ -144,5 +148,5 @@ export function SignUpForm() {
         )}
       </AnimatePresence>
     </div>
-  );
+  )
 }

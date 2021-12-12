@@ -78,7 +78,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { id } = params
+  const { id } = params as any
 
   const baseDir = path.join(
     __dirname,
@@ -113,7 +113,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   tabs.sort(compareExtension)
 
   return {
-    props: { id, tabs, meta } as ExampleProps,
+    props: { id, tabs, meta: meta! as any } as ExampleProps,
   }
 }
 

@@ -141,4 +141,8 @@
 // }
 
 // export default NurbEditor;
-export default () => null;
+function NurbEditor() {
+  return null
+}
+
+export default NurbEditor

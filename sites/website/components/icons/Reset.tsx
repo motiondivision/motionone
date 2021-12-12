@@ -1,6 +1,6 @@
-import * as React from "react";
-import { motion } from "framer-motion";
-import styled from "styled-components";
+import * as React from "react"
+import { motion } from "framer-motion"
+import styled from "styled-components"
 
 const RefreshContainer = styled(motion.div)`
   padding: 10px;
@@ -15,20 +15,20 @@ const RefreshContainer = styled(motion.div)`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-`;
+`
 
 const button = {
   rest: { scale: 1 },
   hover: { scale: 1.1 },
   pressed: { scale: 0.95 },
-};
+}
 
 const arrow = {
   rest: { rotate: 0 },
   hover: { rotate: 360, transition: { duration: 0.4 } },
-};
+}
 
-export const Reset = ({ onClick }) => {
+export const Reset = ({ onClick }: any) => {
   return (
     <RefreshContainer
       onClick={onClick}
@@ -50,5 +50,5 @@ export const Reset = ({ onClick }) => {
         />
       </motion.svg>
     </RefreshContainer>
-  );
-};
+  )
+}

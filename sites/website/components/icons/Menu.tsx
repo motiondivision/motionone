@@ -1,10 +1,10 @@
-import * as React from "react";
-import { animated } from "motion/react";
+import * as React from "react"
+import { animated } from "../animated"
 
 interface LineProps {
-  d: string;
-  style?: any;
-  options?: any;
+  d: string
+  style?: any
+  options?: any
 }
 
 function Line({ d, style, options }: LineProps) {
@@ -19,13 +19,13 @@ function Line({ d, style, options }: LineProps) {
       style={style}
       options={options}
     ></animated.path>
-  );
+  )
 }
 
 interface Props {
-  onClick?: VoidFunction;
-  isOpen?: boolean;
-  className?: string;
+  onClick?: VoidFunction
+  isOpen?: boolean
+  className?: string
 }
 
 export function MenuIcon({ onClick, isOpen, className }: Props) {
@@ -63,5 +63,5 @@ export function MenuIcon({ onClick, isOpen, className }: Props) {
         }}
       />
     </svg>
-  );
+  )
 }

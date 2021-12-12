@@ -44,7 +44,7 @@ export function PlayButton({
   children = "Play",
   replayLabel = children,
   style = {},
-}) {
+}: any) {
   const [hasPlayed, setHasPlayed] = useState(false)
 
   return (
@@ -61,11 +61,11 @@ export function PlayButton({
 }
 
 export function Stop() {
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement>(null)
 
   const play = () => {
     const animation = animate(
-      ref.current,
+      ref.current!,
       { opacity: [1, 0] },
       { duration: 1, easing: "ease-out" }
     )
@@ -81,10 +81,10 @@ export function Stop() {
 }
 
 export function Cancel() {
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement>(null)
 
   const play = () => {
-    const animation = ref.current.animate(
+    const animation = ref.current!.animate(
       { opacity: [1, 0] },
       { duration: 1000, easing: "ease-out" }
     )
@@ -100,9 +100,10 @@ export function Cancel() {
 }
 
 export function PersistentWAAPI() {
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement>(null)
 
-  const play = () => ref.current.animate({ opacity: [1, 0] }, { duration: 500 })
+  const play = () =>
+    ref.current!.animate({ opacity: [1, 0] }, { duration: 500 })
 
   return (
     <ExampleContainer>
@@ -113,10 +114,10 @@ export function PersistentWAAPI() {
 }
 
 export function PersistentMotion() {
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement>(null)
 
   const play = () =>
-    animate(ref.current, { opacity: [1, 0] }, { duration: 0.5 })
+    animate(ref.current!, { opacity: [1, 0] }, { duration: 0.5 })
 
   return (
     <ExampleContainer>
@@ -127,17 +128,17 @@ export function PersistentMotion() {
 }
 
 export function InterruptWAAPI() {
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    ref.current.animate(
+    ref.current!.animate(
       { transform: ["none", "translateX(300px)"] },
       { duration: 2000, iterations: Infinity, direction: "alternate" }
     )
   }, [])
 
   const play = () => {
-    ref.current.animate({ transform: "none" }, { duration: 500 })
+    ref.current!.animate({ transform: "none" }, { duration: 500 })
   }
 
   return (
@@ -151,18 +152,18 @@ export function InterruptWAAPI() {
 }
 
 export function InterruptMotion() {
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     animate(
-      ref.current,
+      ref.current!,
       { transform: ["none", "translateX(300px)"] },
       { duration: 2, repeat: Infinity, direction: "alternate" }
     )
   }, [])
 
   const play = () => {
-    animate(ref.current, { transform: "none" }, { duration: 0.5 })
+    animate(ref.current!, { transform: "none" }, { duration: 0.5 })
   }
 
   return (

@@ -6,6 +6,8 @@ import {
 import type { AnimationCallback, MotionCSSProperties } from "../types"
 import { RefObject, useEffect, useRef } from "react"
 import { hasChanged } from "../utils/has-changed"
+import { getOptions } from "../utils/get-options"
+import { noop } from "../utils/noop"
 
 export function useAnimation(
   ref: RefObject<HTMLElement>,

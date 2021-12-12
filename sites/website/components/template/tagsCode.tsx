@@ -1,10 +1,9 @@
-import { useState } from "react"
-import Editor from "react-simple-code-editor"
-import { highlight, languages } from "prismjs/components/prism-core"
-import "prismjs/components/prism-clike"
-import "prismjs/components/prism-javascript"
-import "prismjs/components/prism-markup"
-import "prismjs/components/prism-css"
+const Editor = require("react-simple-code-editor")
+const { highlight, languages } = require("prismjs/components/prism-core")
+require("prismjs/components/prism-clike")
+require("prismjs/components/prism-javascript")
+require("prismjs/components/prism-markup")
+require("prismjs/components/prism-css")
 
 interface Props {
   children: string
@@ -33,7 +32,7 @@ export function CodeBlock({
       <Editor
         value={children.substring(0, children.length - 1)}
         onValueChange={onChange}
-        highlight={(code) => highlight(code, highlighters[language])}
+        highlight={(code: any) => highlight(code, highlighters[language])}
         style={{
           fontSize: "1.4rem",
           lineHeight: "2.4rem",

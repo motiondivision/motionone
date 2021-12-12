@@ -2,8 +2,8 @@ import styled from "styled-components"
 import Link from "next/link"
 import { MenuIcon } from "../icons/Menu"
 import { screenM, showSideNavWidth } from "./vars"
-import { useRef, useState } from "react"
-import { animated } from "motion/react"
+import { useState } from "react"
+import { animated } from "../animated"
 import { SideMenu } from "../SideMenu"
 import { HeartIcon } from "../icons/Heart"
 
@@ -28,7 +28,7 @@ const SponsorLink = styled.a`
   }
 `
 
-const Container = styled(animated.nav)<{ isOpen: boolean; inline: boolean }>`
+const Container = styled(animated.nav)<{ isOpen: boolean; inline?: boolean }>`
   background-color: transparent;
   background-image: radial-gradient(
     rgba(0, 0, 0, 0) 1px,

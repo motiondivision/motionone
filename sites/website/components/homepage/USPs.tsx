@@ -1,7 +1,7 @@
 import Link from "next/link"
 import React, { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
-import { motion } from "motion/react"
+import { animated } from "../animated"
 import { mix } from "popmotion"
 import { animate, stagger } from "motion"
 
@@ -234,11 +234,12 @@ export function USPs() {
         blurb={
           <>
             <p>
-              A great web experience doesn't just look amazing, it loads fast.
+              {`A great web experience doesn't just look amazing, it loads fast.`}
             </p>
             <p>
-              Motion One's <code>animate</code> function is just 3.3kb, less
-              than half of Anime.js.
+              {`Motion One's `}
+              <code>animate</code> function is just 3.3kb, less than half of
+              Anime.js.
             </p>
           </>
         }
@@ -350,7 +351,7 @@ const MoreContainer = styled.div`
 `
 
 function SimpleExample() {
-  const shadow = (size) =>
+  const shadow = (size: number) =>
     `circle(${size}px at calc(50% + 5px) calc(50% + 5px))`
 
   const options = {
@@ -395,7 +396,7 @@ function SimpleExample() {
   )
 }
 
-const CircleShadow = styled(motion.div)`
+const CircleShadow = styled(animated.div)`
   position: absolute;
   top: 0;
   left: 0;
@@ -404,13 +405,13 @@ const CircleShadow = styled(motion.div)`
   ${shadow}
 `
 
-const SimpleContainer = styled(motion.div)`
+const SimpleContainer = styled(animated.div)`
   height: 300px;
   width: 100%;
   position: relative;
 `
 
-const Circle = styled(motion.div)`
+const Circle = styled(animated.div)`
   width: 150px;
   height: 150px;
   border-radius: 50%;
@@ -436,7 +437,7 @@ function SizeExample() {
   )
 }
 
-const SizeContainer = styled(motion.div)`
+const SizeContainer = styled(animated.div)`
   height: 280px;
   color: var(--background);
   width: 100%;
@@ -472,7 +473,7 @@ function Bar({ size, label, i }: any) {
   )
 }
 
-const BarGraphic = styled(motion.div)`
+const BarGraphic = styled(animated.div)`
   width: 100px;
   margin-top: 5px;
   margin-bottom: 10px;
@@ -486,7 +487,7 @@ const BarGraphic = styled(motion.div)`
 const spinnerClassName = "perf-loading-spinner"
 const hide = (node: HTMLElement) => (node.style.opacity = "0")
 const show = (node: HTMLElement) => (node.style.opacity = "1")
-function PerformanceSquare({ id, isPlaying, stutter = false }) {
+function PerformanceSquare({ id, isPlaying, stutter = false }: any) {
   useEffect(() => {
     if (!isPlaying) return
 
@@ -513,7 +514,7 @@ function PerformanceSquare({ id, isPlaying, stutter = false }) {
       options as any
     )
 
-    let stutterTimeout
+    let stutterTimeout: NodeJS.Timeout
     const loadingSpinners = document.querySelectorAll(`.${spinnerClassName}`)
 
     if (stutter) {
@@ -601,7 +602,7 @@ const SquareExample = styled.div`
   margin: 10px;
 `
 
-const SquareBackground = styled(motion.div)`
+const SquareBackground = styled(animated.div)`
   color: var(--background);
   position: absolute;
   top: 0;
@@ -614,7 +615,7 @@ const SquareBackground = styled(motion.div)`
   }
 `
 
-const Square = styled(motion.div)`
+const Square = styled(animated.div)`
   background: var(--color);
   border: 4px solid var(--background);
   border-radius: var(--action-radius);
@@ -628,28 +629,28 @@ const Square = styled(motion.div)`
 const path =
   "M 0 2.791 C 0 1.249 1.249 0 2.791 0 L 14.651 0 C 16.192 0 17.442 1.249 17.442 2.791 L 17.442 2.791 C 17.442 4.332 16.192 5.581 14.651 5.581 L 2.791 5.581 C 1.249 5.581 0 4.332 0 2.791 Z"
 
-function LoadingSpinnerIcon({ isPlaying }) {
-  const a = useRef(null)
-  const b = useRef(null)
-  const c = useRef(null)
-  const d = useRef(null)
-  const e = useRef(null)
-  const f = useRef(null)
-  const g = useRef(null)
-  const h = useRef(null)
+function LoadingSpinnerIcon({ isPlaying }: any) {
+  const a = useRef<SVGPathElement>(null)
+  const b = useRef<SVGPathElement>(null)
+  const c = useRef<SVGPathElement>(null)
+  const d = useRef<SVGPathElement>(null)
+  const e = useRef<SVGPathElement>(null)
+  const f = useRef<SVGPathElement>(null)
+  const g = useRef<SVGPathElement>(null)
+  const h = useRef<SVGPathElement>(null)
   useEffect(() => {
     if (!isPlaying) return
 
     const animation = animate(
       [
-        a.current,
-        b.current,
-        c.current,
-        d.current,
-        e.current,
-        f.current,
-        g.current,
-        h.current,
+        a.current!,
+        b.current!,
+        c.current!,
+        d.current!,
+        e.current!,
+        f.current!,
+        g.current!,
+        h.current!,
       ].reverse(),
       { opacity: [1, 1, 0, 0, 1] },
       {
@@ -753,7 +754,7 @@ function PerformanceExample() {
   )
 }
 
-const PerformanceContainer = styled(motion.div)`
+const PerformanceContainer = styled(animated.div)`
   display: flex;
   width: 100%;
   justify-content: center;

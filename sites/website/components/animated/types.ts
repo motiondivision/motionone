@@ -13,7 +13,7 @@ import type {
   AnimationOptions,
   AnimationOptionsWithOverrides,
   MotionKeyframes,
-} from "../dom/types"
+} from "@motionone/dom"
 import type { svgElements, htmlElements } from "./utils/supported-elements"
 
 export type AnimationCallback = (target: MotionKeyframes) => void
@@ -115,13 +115,12 @@ type HTMLAttributesWithoutAnimatedProps<
 /**
  * @public
  */
-export type AnimatedHTMLProps<
-  TagName extends keyof ReactHTML
-> = HTMLAttributesWithoutAnimatedProps<
-  UnwrapFactoryAttributes<ReactHTML[TagName]>,
-  UnwrapFactoryElement<ReactHTML[TagName]>
-> &
-  AnimatedProps
+export type AnimatedHTMLProps<TagName extends keyof ReactHTML> =
+  HTMLAttributesWithoutAnimatedProps<
+    UnwrapFactoryAttributes<ReactHTML[TagName]>,
+    UnwrapFactoryElement<ReactHTML[TagName]>
+  > &
+    AnimatedProps
 
 /**
  * Motion-optimised versions of React's HTML components.

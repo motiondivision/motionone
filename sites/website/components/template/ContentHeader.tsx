@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { SizeWrapper } from "../newsletter/styled";
-import { screenM } from "./vars";
+import styled from "styled-components"
+import { SizeWrapper } from "../newsletter/styled"
+import { screenM } from "./vars"
 
 const Container = styled.header`
   padding: 0 var(--padding);
@@ -8,7 +8,7 @@ const Container = styled.header`
   @media (max-width: ${screenM}) {
     height: auto;
   }
-`;
+`
 
 const Content = styled(SizeWrapper)`
   max-width: var(--max-body-width);
@@ -16,12 +16,12 @@ const Content = styled(SizeWrapper)`
   align-items: flex-end;
   padding-bottom: var(--padding-large);
   flex: 1;
-`;
+`
 
-export function ContentHeader({ children }) {
+export function ContentHeader({ children }: any) {
   return (
     <Container>
       <Content>{children}</Content>
     </Container>
-  );
+  )
 }

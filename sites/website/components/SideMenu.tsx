@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useState } from "react"
 import styled from "styled-components"
 import { showSideNavWidth } from "./template/vars"
 import { HeartIcon } from "./icons/Heart"
@@ -183,7 +182,7 @@ function LockIcon() {
   )
 }
 
-function renderPageLink(page: Page) {
+function useRenderPageLink(page: Page) {
   const router = useRouter()
   const [session, isLoading] = useSession()
   let lockIcon = null
@@ -208,7 +207,7 @@ function renderSection(section: Section) {
   return (
     <section key={section.title}>
       <h2 className="section-header">{section.title}</h2>
-      <ul>{section.pages.map(renderPageLink)}</ul>
+      <ul>{section.pages.map(useRenderPageLink)}</ul>
     </section>
   )
 }

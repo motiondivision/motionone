@@ -4,7 +4,7 @@ import { TabBar } from "./TabBar"
 import { CodeBlock } from "../../template/tagsCode"
 import styled from "styled-components"
 import { useSession, signIn } from "next-auth/client"
-import { animated } from "motion/react"
+import { animated } from "../../animated"
 import { showSideNavWidth } from "../vars"
 
 const Container = styled.div`
@@ -79,7 +79,7 @@ export function Editor({
       <Code
         selectedTab={selectedTab}
         content={content[selectedTab] + " "}
-        onChange={onChange}
+        onChange={onChange as any}
       />
       {showLogin && <LoginPopup />}
     </Container>

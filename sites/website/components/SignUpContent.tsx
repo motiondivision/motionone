@@ -1,13 +1,7 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useRef, useState } from "react"
 import styled from "styled-components"
 import { useInViewport } from "../src/use-in-viewport"
-import {
-  motion,
-  AnimatePresence,
-  MotionConfig,
-  Variants,
-  useMotionValue,
-} from "framer-motion"
+import { motion, AnimatePresence, Variants } from "framer-motion"
 import { FormState } from "../src/forms/types"
 import { post } from "../src/forms/post"
 import { newsletterEndpoint } from "../src/forms/endpoints"
@@ -124,7 +118,7 @@ export function SignUpContent({
 
   const showForm = state === FormState.Entry || state === FormState.Submitting
 
-  function handleSubmit(e) {
+  function handleSubmit(e: any) {
     e.preventDefault()
 
     if (state !== FormState.Entry) return

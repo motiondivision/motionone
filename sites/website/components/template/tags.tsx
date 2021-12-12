@@ -171,7 +171,7 @@ const ImageContainer = styled.div`
 `
 
 const FixTypesImage = NextImage as any
-export const Image = ({ width, height, ...props }) => {
+export const Image = ({ width, height, ...props }: any) => {
   return (
     <ImageContainer style={{ paddingBottom: `${(height / width) * 100}%` }}>
       <FixTypesImage {...props} layout="fill" />

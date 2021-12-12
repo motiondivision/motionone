@@ -4,9 +4,9 @@ import { useRef, useState, useEffect, useCallback } from "react"
 import { ExampleContainer, PlayButton, Ball } from "./waapi-improvements"
 
 export function JankExample() {
-  const waapiRef = useRef(null)
-  const jsRef = useRef(null)
-  const [isPlaying, setIsPlaying] = useState(true)
+  const waapiRef = useRef<HTMLDivElement>(null)
+  const jsRef = useRef<HTMLDivElement>(null)
+  const [isPlaying] = useState(true)
 
   const blockJavaScript = useCallback(() => {
     const timeStart = performance.now()
@@ -22,7 +22,7 @@ export function JankExample() {
     // if (!isPlaying) return
 
     const waapiAnimation = animate(
-      waapiRef.current,
+      waapiRef.current as any,
       {
         transform: ["scale(0.5) translateZ(0)", "scale(1.5) translateZ(0)"],
         opacity: [0.5, 1],
@@ -45,7 +45,7 @@ export function JankExample() {
       onUpdate: (v) => {
         if (!jsRef.current) return
         jsRef.current.style.transform = `scale(${mix(0.5, 1.5, v)})`
-        jsRef.current.style.opacity = mix(0.5, 1, v)
+        jsRef.current.style.opacity = `${mix(0.5, 1, v)}`
       },
       ease: cubicBezier(0.28, 0, 0.34, 0.99),
     })

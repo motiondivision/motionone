@@ -1,6 +1,5 @@
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 import styled from "styled-components"
-import { animated } from "motion/react"
 import { timeline } from "motion"
 import { shadow } from "./USPs"
 
@@ -190,6 +189,7 @@ const Shadow = styled.div`
   background-size: 6px 6px;
   border-radius: var(--action-radius);
   clip-path: ${initialShadow};
+  transform: translateZ(0);
 
   &#shadow-c {
     clip-path: ${drawShadowClip(screen, { ...cover, top: 150, left: 440 })};

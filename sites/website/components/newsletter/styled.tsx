@@ -74,7 +74,7 @@ export const TOCContainer = styled.div`
   }
 `
 
-export const TOC = ({ children }) => {
+export const TOC = ({ children }: any) => {
   return (
     <TOCContainer>
       <h2>Contents</h2>

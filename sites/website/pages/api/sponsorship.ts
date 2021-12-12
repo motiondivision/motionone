@@ -81,7 +81,7 @@ const actionHandlers: SponsorshipActionHandlers = {
 
     return responseMessage
   },
-  cancelled: async ({ sender }, res) => {
+  cancelled: async ({ sender }, _res) => {
     if (typeof sender === "string") {
       sender = JSON.parse(sender)
     }
@@ -92,7 +92,7 @@ const actionHandlers: SponsorshipActionHandlers = {
     )
 
     if (invitationsResponse.status === 200) {
-      const userInvite = invitationsResponse.data.find(({ invitee }) => {
+      const userInvite = invitationsResponse.data.find(({ invitee }: any) => {
         return invitee.login === sender.login
       })
 

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { animated } from "motion/react"
+import { animated } from "../animated"
 import styled from "styled-components"
 import { CTAButton } from "./tags"
 
@@ -126,7 +126,7 @@ export function Sponsorwall({ close, presence }: any) {
           <CTAButton
             as="a"
             href="https://github.com/sponsors/mattgperry"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e: any) => e.stopPropagation()}
           >
             Become a sponsor
           </CTAButton>

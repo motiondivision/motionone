@@ -52,12 +52,12 @@ const labels = {
   css: "CSS",
 }
 
-export function TabBar({ tabs, setTab, selectedTab }) {
+export function TabBar({ tabs, setTab, selectedTab }: any) {
   return (
     <TabBarContainer>
       <AnimateSharedLayout>
         <ul>
-          {tabs.map((tab) => (
+          {tabs.map((tab: any) => (
             <li
               key={tab}
               className={selectedTab === tab ? "selected" : ""}

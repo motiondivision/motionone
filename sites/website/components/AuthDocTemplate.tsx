@@ -1,4 +1,4 @@
-import { MDXProvider } from "@mdx-js/react"
+const { MDXProvider } = require("@mdx-js/react")
 import { ReactChild } from "react"
 import { Head } from "./template/Head"
 import { Header } from "./template/Header"
@@ -56,7 +56,7 @@ const components = {
 
 interface Props {
   children: ReactChild[]
-  meta?: {
+  meta: {
     issue?: number
     title?: string
     description?: string
@@ -68,11 +68,11 @@ interface Props {
   version?: string
 }
 
-export function AuthDocTemplate({ meta, children, version }: Props) {
+export function AuthDocTemplate({ meta, children }: Props) {
   const [session, isLoading] = useSession()
   let isAllowedToView = false
 
-  if (!meta.needsSponsorship) {
+  if (!(meta && meta.needsSponsorship)) {
     isAllowedToView = true
   } else {
     isAllowedToView = Boolean(session)
@@ -124,8 +124,8 @@ export function AuthDocTemplate({ meta, children, version }: Props) {
 
                 <PostContentSignup>
                   <p>
-                    Stay updated with the Motion One newsletter. We don't spam,
-                    and unsubscription is instant.
+                    {`Stay updated with the Motion One newsletter. We don't spam,
+                    and unsubscription is instant.`}
                   </p>
                 </PostContentSignup>
               </BodyContainer>

@@ -1,9 +1,9 @@
-import { motion } from "framer-motion";
-import { useRef, useState } from "react";
-import styled, { css, keyframes } from "styled-components";
-import { useInViewport } from "../../src/use-in-viewport";
-import { Reset } from "../icons/Reset";
-import { Switch } from "../icons/Switch";
+import { motion } from "framer-motion"
+import { useRef, useState } from "react"
+import styled, { css } from "styled-components"
+import { useInViewport } from "../../src/use-in-viewport"
+import { Reset } from "../icons/Reset"
+import { Switch } from "../icons/Switch"
 
 const Container = styled.div`
   display: flex;
@@ -35,12 +35,12 @@ const Container = styled.div`
         return `
         -webkit-text-stroke-width: 1px;
         -webkit-text-stroke-color: var(--extrusion-color);
-        `;
+        `
       } else if (outline) {
         return css`
           text-shadow: ${({ outline }: any) =>
             extrude({ size: 30, outline, offset: false })};
-        `;
+        `
       }
     }}
     color: var(--text-color);
@@ -54,13 +54,13 @@ const Container = styled.div`
       transition: all 600ms cubic-bezier(0.22, 0.12, 0.02, 1.26) 150ms;
     }
   }
-` as any;
+` as any
 
 const TextContainer = styled(Container)`
   --example-background: hsl(330, 97%, 86%);
   --text-color: #f4ff5d;
   --extrusion-color: hsl(330, 100%, 56%);
-`;
+`
 
 const FinalContainer = styled(TextContainer)`
   &[data-is-extruded="true"],
@@ -73,38 +73,38 @@ const FinalContainer = styled(TextContainer)`
       transition-delay: 450ms !important;
     }
   }
-`;
+`
 
 function extrude({ size = 0, offset = true, increment = 1, outline = false }) {
   let shadow = outline
     ? `${-increment}px ${-increment}px var(--extrusion-color), ${increment}px ${-increment}px var(--extrusion-color), ${increment}px ${increment}px var(--extrusion-color), ${-increment}px ${increment}px var(--extrusion-color), `
-    : "";
+    : ""
   // let shadow = ;
 
   for (let i = 1; i <= size; i++) {
-    const pos = offset ? i * increment : 0;
-    shadow += `${pos}px ${pos}px var(--extrusion-color), `;
+    const pos = offset ? i * increment : 0
+    shadow += `${pos}px ${pos}px var(--extrusion-color), `
   }
 
-  return shadow.slice(0, -2);
+  return shadow.slice(0, -2)
 }
 
 function useReset() {
-  const [state, setState] = useState(false);
+  const [state, setState] = useState(false)
 
   return [
     state,
     () => {
-      setState(true);
-      setTimeout(() => setState(false), 100);
+      setState(true)
+      setTimeout(() => setState(false), 100)
     },
-  ];
+  ]
 }
 
 export function FinishedExample() {
-  const ref = useRef(null);
-  const { isInViewport } = useInViewport(ref);
-  const [isResetting, reset] = useReset();
+  const ref = useRef(null)
+  const { isInViewport } = useInViewport(ref)
+  const [isResetting, reset] = useReset()
 
   return (
     <FinalContainer
@@ -119,13 +119,13 @@ export function FinishedExample() {
       <span>text</span>
       <Reset onClick={reset} />
     </FinalContainer>
-  );
+  )
 }
 
 export function StrokeExample() {
-  const ref = useRef(null);
-  const { isInViewport } = useInViewport(ref);
-  const [isResetting, reset] = useReset();
+  const ref = useRef(null)
+  const { isInViewport } = useInViewport(ref)
+  const [isResetting, reset] = useReset()
 
   return (
     <FinalContainer
@@ -140,7 +140,7 @@ export function StrokeExample() {
       <span>text</span>
       <Reset onClick={reset} />
     </FinalContainer>
-  );
+  )
 }
 
 const BasicContainer = styled(Container)`
@@ -152,14 +152,14 @@ const BasicContainer = styled(Container)`
     color: var(--text-color);
     text-shadow: 20px 20px var(--error), -20px -20px var(--blue);
   }
-`;
+`
 
 export function MultipleShadows() {
   return (
     <BasicContainer className="headline">
       <span>Text shadows</span>
     </BasicContainer>
-  );
+  )
 }
 
 const SimpleDepthContainer = styled(BasicContainer)`
@@ -169,25 +169,25 @@ const SimpleDepthContainer = styled(BasicContainer)`
     text-shadow: ${({ depth = 5, increment = 1 }) =>
       extrude({ size: depth, offset: true, increment })};
   }
-` as any;
+` as any
 
-export function SimpleDepth(props) {
+export function SimpleDepth(props: any) {
   return (
     <SimpleDepthContainer className="headline" {...props}>
       <span>Text shadows</span>
     </SimpleDepthContainer>
-  );
+  )
 }
 
 function extrude3d(size: number, hue: number) {
-  let shadow = "";
+  let shadow = ""
 
   for (let i = 1; i <= size; i++) {
-    const lightness = 50 - i * 1.5;
-    shadow += `${i}px ${i}px hsl(${hue}, 80%, ${lightness}%), `;
+    const lightness = 50 - i * 1.5
+    shadow += `${i}px ${i}px hsl(${hue}, 80%, ${lightness}%), `
   }
 
-  return shadow.slice(0, -2);
+  return shadow.slice(0, -2)
 }
 
 const OldSchoolContainer = styled(BasicContainer)`
@@ -199,18 +199,18 @@ const OldSchoolContainer = styled(BasicContainer)`
     transform: translate3d(-20px, -20px, 0);
     text-shadow: ${extrude3d(20, 200)};
   }
-`;
+`
 
 export function OldSchoolDepthExample() {
   return (
     <OldSchoolContainer className="headline">
       <span>Text shadows</span>
     </OldSchoolContainer>
-  );
+  )
 }
 
 export function CSSTransitionExample() {
-  const [isExtruded, setExtruded] = useState(false);
+  const [isExtruded, setExtruded] = useState(false)
 
   return (
     <TextContainer className={isExtruded && "extrude"}>
@@ -224,11 +224,11 @@ export function CSSTransitionExample() {
         <Switch on={isExtruded} onClick={() => setExtruded(!isExtruded)} />
       </Control>
     </TextContainer>
-  );
+  )
 }
 
-export function CSSTransitionDelayExample(props) {
-  const [isExtruded, setExtruded] = useState(false);
+export function CSSTransitionDelayExample(props: any) {
+  const [isExtruded, setExtruded] = useState(false)
 
   return (
     <FinalContainer {...props} move className={isExtruded && "extrude"}>
@@ -242,15 +242,15 @@ export function CSSTransitionDelayExample(props) {
         <Switch on={isExtruded} onClick={() => setExtruded(!isExtruded)} />
       </Control>
     </FinalContainer>
-  );
+  )
 }
 
 const CSSTransition2Container = styled(TextContainer)`
   padding-bottom: 2rem;
-`;
+`
 
 export function CSSTransitionExample2() {
-  const [isExtruded, setExtruded] = useState(false);
+  const [isExtruded, setExtruded] = useState(false)
 
   return (
     <CSSTransition2Container move className={isExtruded && "extrude"}>
@@ -264,21 +264,15 @@ export function CSSTransitionExample2() {
         <Switch on={isExtruded} onClick={() => setExtruded(!isExtruded)} />
       </Control>
     </CSSTransition2Container>
-  );
+  )
 }
-
-const extrusionKeyframes = keyframes`
-  to {
-    text-shadow: ${extrude({ size: 30 })};
-  }
-`;
 
 const CSSAnimationContainer = styled(TextContainer)`
   padding-bottom: 2rem;
-`;
+`
 
 export function CSSAnimationExample() {
-  const [isExtruded, setExtruded] = useState(true);
+  const [isExtruded, setExtruded] = useState(true)
 
   return (
     <CSSAnimationContainer data-is-enabled={isExtruded}>
@@ -290,7 +284,7 @@ export function CSSAnimationExample() {
         <Switch on={isExtruded} onClick={() => setExtruded(!isExtruded)} />
       </Control>
     </CSSAnimationContainer>
-  );
+  )
 }
 
 const textVariants = {
@@ -306,10 +300,10 @@ const textVariants = {
     textShadow: extrude({ size: 30 }),
     transition: { duration: 0.3 },
   },
-};
+}
 export function FramerMotionExample() {
-  const ref = useRef(null);
-  const [isExtruded, setExtruded] = useState(true);
+  const ref = useRef(null)
+  const [isExtruded, setExtruded] = useState(true)
 
   return (
     <TextContainer
@@ -333,7 +327,7 @@ export function FramerMotionExample() {
         <Switch on={isExtruded} onClick={() => setExtruded(!isExtruded)} />
       </Control>
     </TextContainer>
-  );
+  )
 }
 
 const Control = styled.div`
@@ -347,4 +341,4 @@ const Control = styled.div`
   p {
     margin: 0 10px 0 0;
   }
-`;
+`

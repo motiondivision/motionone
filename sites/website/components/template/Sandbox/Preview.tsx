@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import useIsomorphicLayoutEffect from "use-isomorphic-layout-effect"
 import styled from "styled-components"
 import { Play } from "../../icons/Play"
-import { animated } from "motion/react"
+import { animated } from "../../animated"
 import { SandboxProps } from "./types"
-import { motion, AnimatePresence } from "framer-motion"
 
 type Props = {
   template?: string
@@ -63,9 +62,9 @@ export function Preview({
     </style>`
   )
 
-  const pingpong = useRef(false)
-  const ping = useRef(null)
-  const pong = useRef(null)
+  const pingpong = useRef<any>(false)
+  const ping = useRef<any>(null)
+  const pong = useRef<any>(null)
   useIsomorphicLayoutEffect(() => {
     if (!hasPressedPlay && !autoplay) return
 
@@ -139,7 +138,7 @@ const Button = styled(animated.button)`
   }
 `
 
-function PlayButton({ onClick }) {
+function PlayButton({ onClick }: any) {
   return (
     <Button
       onClick={onClick}

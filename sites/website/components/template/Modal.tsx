@@ -1,32 +1,32 @@
-import { usePresence } from "framer-motion";
-import { useRef, useEffect, cloneElement } from "react";
-import { createPortal } from "react-dom";
+import { usePresence } from "framer-motion"
+import { useRef, useEffect, cloneElement } from "react"
+import { createPortal } from "react-dom"
 
-export function Modal({ children }) {
-  const presence = usePresence();
-  const target = usePortal("modal");
-  return createPortal(cloneElement(children, { presence }), target);
+export function Modal({ children }: any) {
+  const presence = usePresence()
+  const target = usePortal("modal")
+  return createPortal(cloneElement(children, { presence }), target as any)
 }
 
 /**
  * Creates DOM element to be used as React root.
  * @returns {HTMLElement}
  */
-function createRootElement(id) {
-  const rootContainer = document.createElement("div");
-  rootContainer.setAttribute("id", id);
-  return rootContainer;
+function createRootElement(id: string) {
+  const rootContainer = document.createElement("div")
+  rootContainer.setAttribute("id", id)
+  return rootContainer
 }
 
 /**
  * Appends element as last child of body.
  * @param {HTMLElement} rootElem
  */
-function addRootElement(rootElem) {
+function addRootElement(rootElem: any) {
   document.body.insertBefore(
     rootElem,
-    document.body.lastElementChild.nextElementSibling
-  );
+    document.body.lastElementChild!.nextElementSibling
+  )
 }
 
 /**
@@ -40,33 +40,33 @@ function addRootElement(rootElem) {
  * @param {String} id The id of the target container, e.g 'modal' or 'spotlight'
  * @returns {HTMLElement} The DOM node to use as the Portal target.
  */
-function usePortal(id) {
-  const rootElemRef = useRef(null);
+function usePortal(id: string) {
+  const rootElemRef = useRef(null)
 
   useEffect(
     function setupElement() {
       // Look for existing target dom element to append to
-      const existingParent = document.querySelector(`#${id}`);
+      const existingParent = document.querySelector(`#${id}`)
       // Parent is either a new root or the existing dom element
-      const parentElem = existingParent || createRootElement(id);
+      const parentElem = existingParent || createRootElement(id)
 
       // If there is no existing DOM element, add a new one.
       if (!existingParent) {
-        addRootElement(parentElem);
+        addRootElement(parentElem)
       }
 
       // Add the detached element to the parent
-      parentElem.appendChild(rootElemRef.current);
+      parentElem.appendChild(rootElemRef.current!)
 
       return function removeElement() {
-        rootElemRef.current.remove();
+        ;(rootElemRef.current! as any).remove()
         if (!parentElem.childElementCount) {
-          parentElem.remove();
+          parentElem.remove()
         }
-      };
+      }
     },
     [id]
-  );
+  )
 
   /**
    * It's important we evaluate this lazily:
@@ -80,12 +80,12 @@ function usePortal(id) {
    */
   function getRootElem() {
     if (!rootElemRef.current) {
-      rootElemRef.current = document.createElement("div");
+      rootElemRef.current = document.createElement("div") as any
     }
-    return rootElemRef.current;
+    return rootElemRef.current
   }
 
-  return getRootElem();
+  return getRootElem()
 }
 
-export default usePortal;
+export default usePortal
