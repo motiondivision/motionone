@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "npm run build-files && next dev",
-    "_build": "npm run build-files && next build",
+    "build": "npm run build-files && next build",
     "build-files": "node ./scripts/build-files",
     "start": "npm run build-files && next start",
     "lint": "next lint"
