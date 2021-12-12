@@ -1,18 +1,5 @@
-const config = require("config/rollup.config")
-const resolve = require("@rollup/plugin-node-resolve").default
-const { terser } = require("rollup-plugin-terser")
+const { createDistBuild, createSizeBuild } = require("config/rollup.config")
 const pkg = require("./package.json")
-
-const createSizeBuild = ({ input, output }, plugins = []) => ({
-  input,
-  output: {
-    format: "es",
-    exports: "named",
-    file: output,
-  },
-  plugins: [resolve(), ...plugins, terser({ output: { comments: false } })],
-  external: [...Object.keys(pkg.peerDependencies || {})],
-})
 
 const sizeBundles = [
   ["animate/index.js", "size-animate.js"],
@@ -20,7 +7,7 @@ const sizeBundles = [
   ["timeline/index.js", "size-timeline.js"],
   ["js/easing/spring/index.js", "size-spring.js"],
 ].map(([input, output]) =>
-  createSizeBuild({ input: `lib/${input}`, output: `dist/${output}` })
+  createSizeBuild({ input: `lib/${input}`, output: `dist/${output}` }, pkg)
 )
 
-module.exports = [...config(pkg), ...sizeBundles]
+module.exports = [...createDistBuild(pkg), ...sizeBundles]

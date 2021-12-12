@@ -9,7 +9,8 @@
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf lib dist types && tsc -p . && rollup -c",
-    "test": "jest --coverage --config jest.config.js"
+    "test": "jest --coverage --config jest.config.js",
+    "measure": "bundlesize"
   },
   "dependencies": {
     "@motionone/dom": "^10.5.0-alpha.2",
@@ -36,5 +37,11 @@
     "react-dom": {
       "optional": true
     }
-  }
+  },
+  "bundlesize": [
+    {
+      "path": "./dist/size.js",
+      "maxSize": "4.5 kB"
+    }
+  ]
 }
