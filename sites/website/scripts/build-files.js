@@ -3,7 +3,14 @@ const path = require("path")
 const { readFile, writeFile } = require("fs/promises")
 
 async function buildFiles() {
-  const motionDir = path.join(__dirname, "../", "node_modules", "motion")
+  const motionDir = path.join(
+    __dirname,
+    "../",
+    "../",
+    "../",
+    "node_modules",
+    "motion"
+  )
   const pagesDir = path.join(__dirname, "../", "pages")
 
   /**
@@ -21,7 +28,10 @@ async function buildFiles() {
   /**
    * Pretty up changelog and copy into mdx file
    */
-  let changelog = await readFile(path.join(motionDir, "CHANGELOG.md"), "utf8")
+  let changelog = await readFile(
+    path.join(__dirname, "../", "../", "../", "CHANGELOG.md"),
+    "utf8"
+  )
 
   changelog = changelog.replace("# Changelog\n", "")
   changelog = changelog.replace(/## \[/g, "---\n#### [")
