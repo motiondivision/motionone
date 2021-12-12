@@ -11,23 +11,27 @@
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "test": "turbo run test",
+    "measure": "turbo run measure",
     "format": "prettier --write '**/*.{ts,tsx,.md}'",
-    "new": "npm run build && lerna publish",
-    "new-alpha": "npm run build && lerna publish from-package --canary --preid alpha",
-    "new-beta": "npm run build && lerna publish from-package --canary --preid beta",
-    "deploy": "turbo run build test lint deploy"
+    "new-prepare": "turbo run build test measure lint",
+    "new": "npm run new-prepare && lerna publish",
+    "new-alpha": "npm run new-prepare && lerna publish from-package --canary --preid alpha",
+    "new-beta": "npm run new-prepare && lerna publish from-package --canary --preid beta",
+    "deploy": "turbo run build test measure lint deploy"
   },
   "devDependencies": {
     "@changesets/cli": "^2.18.1",
     "@rollup/plugin-node-resolve": "^13.0.6",
     "@rollup/plugin-replace": "^3.0.0",
     "@types/jest": "^27.0.3",
+    "bundlesize": "^0.18.1",
     "jest": "^27.4.4",
     "lerna": "^4.0.0",
     "prettier": "^2.5.1",
     "rollup-plugin-terser": "^7.0.2",
     "ts-jest": "^27.1.1",
-    "turbo": "latest"
+    "turbo": "latest",
+    "webpack-cli": "^4.9.1"
   },
   "turbo": {
     "npmClient": "yarn",
@@ -58,6 +62,11 @@
           "lint"
         ]
       },
+      "measure": {
+        "dependsOn": [
+          "build"
+        ]
+      },
       "publish": {
         "dependsOn": [
           "build",
@@ -69,8 +78,5 @@
         "cache": false
       }
     }
-  },
-  "dependencies": {
-    "rollup": "^2.61.1"
   }
 }

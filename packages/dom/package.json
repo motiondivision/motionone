@@ -8,8 +8,9 @@
   "types": "types/index.d.ts",
   "sideEffects": false,
   "scripts": {
-    "build": "rm -rf lib dist types && tsc -p . && rollup -c",
-    "test": "jest --coverage --config jest.config.js"
+    "build": "rm -rf lib dist types && tsc -p . && webpack --config webpack.config.js && rollup -c",
+    "test": "jest --coverage --config jest.config.js",
+    "measure": "bundlesize"
   },
   "dependencies": {
     "hey-listen": "^1.0.8",
@@ -18,5 +19,27 @@
   "devDependencies": {
     "@testing-library/dom": "^8.11.1",
     "@testing-library/jest-dom": "^5.16.1"
-  }
+  },
+  "bundlesize": [
+    {
+      "path": "./dist/size-animate.js",
+      "maxSize": "3.4 kB"
+    },
+    {
+      "path": "./dist/size-animate-style.js",
+      "maxSize": "2.9 kB"
+    },
+    {
+      "path": "./dist/size-timeline.js",
+      "maxSize": "4.3 kB"
+    },
+    {
+      "path": "./dist/size-spring.js",
+      "maxSize": "1 kB"
+    },
+    {
+      "path": "./dist/size-webpack-animate.js",
+      "maxSize": "3.4 kB"
+    }
+  ]
 }
