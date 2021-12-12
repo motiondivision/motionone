@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@motionone/dom": "^10.5.0-alpha.1",
-    "@motionone/react": "^10.5.0-alpha.1"
+    "@motionone/react": "^10.5.0-alpha.1",
+    "@motionone/svelte": "^10.5.0-alpha.1",
+    "@motionone/vue": "^10.5.0-alpha.1"
   }
 }

@@ -1,10 +1,45 @@
 {
   "name": "@motionone/vue",
+  "version": "10.5.0-alpha.1",
   "description": "A tiny, performant animation library for Vue",
   "author": "Matt Perry",
-  "private": true,
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
+  "types": "types/index.d.ts",
   "sideEffects": false,
-  "scripts": {}
+  "scripts": {
+    "build": "cross-env NODE_ENV=production rollup --config rollup.config.js",
+    "build-vue:ssr": "cross-env NODE_ENV=production rollup --config rollup.config.js --format cjs && npm run build-vue:ssr && npm run build-vue:es && npm run build-vue:unpkg",
+    "build-vue:es": "cross-env NODE_ENV=production rollup --config rollup.config.js --format es",
+    "build-vue:unpkg": "cross-env NODE_ENV=production rollup --config rollup.config.js --format iife",
+    "test": "vue-cli-service test:unit --config jest.config.js"
+  },
+  "dependencies": {
+    "@motionone/dom": "^10.5.0-alpha.1",
+    "tslib": "^2.3.1"
+  },
+  "devDependencies": {
+    "@rollup/plugin-alias": "^3.1.8",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@testing-library/dom": "^8.11.1",
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/vue": "next",
+    "@vue/cli-plugin-babel": "5.0.0-rc.1",
+    "@vue/cli-plugin-typescript": "5.0.0-rc.1",
+    "@vue/cli-plugin-unit-jest": "5.0.0-rc.1",
+    "@vue/cli-service": "5.0.0-rc.1",
+    "@vue/compiler-sfc": "^3.0.0",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "@vue/eslint-config-typescript": "^7.0.0",
+    "@vue/test-utils": "^2.0.0-0",
+    "@vue/vue3-jest": "^27.0.0-alpha.4",
+    "@zerollup/ts-transform-paths": "^1.7.18",
+    "cross-env": "^7.0.3",
+    "minimist": "^1.2.5",
+    "rollup-plugin-typescript2": "^0.31.1",
+    "rollup-plugin-vue": "^6.0.0",
+    "ttypescript": "^1.5.13",
+    "vue": "^3.2.23"
+  }
 }

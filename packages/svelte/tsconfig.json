@@ -1,0 +1,13 @@
+{
+  "extends": "config/ts-base.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "include": ["src/**/*.ts", "**/*.ts", "**/*.svelte"],
+  "exclude": ["**/__tests__/*"],
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./lib",
+    "declarationDir": "./types",
+    "skipLibCheck": true,
+    "sourceMap": true
+  }
+}
