@@ -1,4 +1,4 @@
-const Editor = require("react-simple-code-editor")
+const Editor = require("react-simple-code-editor").default
 const { highlight, languages } = require("prismjs/components/prism-core")
 require("prismjs/components/prism-clike")
 require("prismjs/components/prism-javascript")

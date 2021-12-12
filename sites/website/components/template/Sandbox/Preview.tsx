@@ -93,6 +93,7 @@ export function Preview({
   }, [template, renderCount, hasPressedPlay])
 
   const [initialTemplate] = useState(template)
+
   return (
     <Container>
       <div>
