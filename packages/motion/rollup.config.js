@@ -1,17 +1,17 @@
-import fs from "fs";
-import resolve from "@rollup/plugin-node-resolve";
-import { terser } from "rollup-plugin-terser";
-import replace from "@rollup/plugin-replace";
-import pkg from "./package.json";
+import fs from "fs"
+import resolve from "@rollup/plugin-node-resolve"
+import { terser } from "rollup-plugin-terser"
+import replace from "@rollup/plugin-replace"
+import pkg from "./package.json"
 
 const config = {
   input: "lib/index.js",
-};
+}
 
 const external = [
   ...Object.keys(pkg.dependencies || {}),
   ...Object.keys(pkg.peerDependencies || {}),
-];
+]
 
 const umd = Object.assign({}, config, {
   output: {
@@ -27,7 +27,7 @@ const umd = Object.assign({}, config, {
       "process.env.NODE_ENV": JSON.stringify("development"),
     }),
   ],
-});
+})
 
 const umdProd = Object.assign({}, umd, {
   output: Object.assign({}, umd.output, {
@@ -41,11 +41,12 @@ const umdProd = Object.assign({}, umd, {
     }),
     terser({ output: { comments: false } }),
   ],
-});
+})
 
 const distEntries = {
   main: "lib/index.js",
-};
+  react: "lib/react.js",
+}
 
 const dist = {
   input: distEntries,
@@ -63,14 +64,14 @@ const dist = {
       async buildEnd() {
         const extraEntryNames = Object.keys(distEntries).filter(
           (entyrName) => entyrName !== "main"
-        );
+        )
 
         for (const entryName of extraEntryNames) {
           try {
-            await fs.promises.mkdir(entryName);
+            await fs.promises.mkdir(entryName)
           } catch (err) {
             if (!err || err.code !== "EEXIST") {
-              throw err;
+              throw err
             }
           }
 
@@ -81,17 +82,17 @@ const dist = {
                 private: true,
                 main: `../dist/${entryName}.cjs.js`,
                 module: `../dist/${entryName}.es.js`,
-                types: `../types/${entryName}-entry.d.ts`,
+                types: `../types/${entryName}.d.ts`,
               },
               null,
               2
             ) + "\n"
-          );
+          )
         }
       },
     },
   ],
-};
+}
 
 const createSizeBuild = ({ input, output }, plugins = []) => ({
   input,
@@ -102,11 +103,11 @@ const createSizeBuild = ({ input, output }, plugins = []) => ({
   },
   plugins: [resolve(), ...plugins, terser({ output: { comments: false } })],
   external: [...Object.keys(pkg.peerDependencies || {})],
-});
+})
 
 const sizeAnimateDom = createSizeBuild({
   input: "lib/index.js",
   output: "dist/size-index.js",
-});
+})
 
-export default [dist, umd, umdProd, sizeAnimateDom];
+export default [dist, umd, umdProd, sizeAnimateDom]

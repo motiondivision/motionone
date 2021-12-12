@@ -11,6 +11,7 @@
     "build": "rm -rf lib dist types && tsc -p . && rollup -c"
   },
   "dependencies": {
-    "@motionone/dom": "^10.5.0-alpha.1"
+    "@motionone/dom": "^10.5.0-alpha.1",
+    "@motionone/react": "^10.5.0-alpha.1"
   }
 }

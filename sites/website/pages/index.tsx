@@ -1,10 +1,11 @@
 import { useEffect } from "react"
+import { motion } from "motion/react"
 
 export default function Web() {
   useEffect(() => {})
   return (
     <div>
-      <h1>Web</h1>
+      <motion.h1 animate={{}}>Web</motion.h1>
     </div>
   )
 }
