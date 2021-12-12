@@ -1,6 +1,6 @@
 {
   "name": "@motionone/vue",
-  "version": "10.5.0-alpha.1",
+  "version": "10.5.0-alpha.2",
   "description": "A tiny, performant animation library for Vue",
   "author": "Matt Perry",
   "main": "dist/index.cjs.js",
@@ -15,7 +15,7 @@
     "test": "vue-cli-service test:unit --config jest.config.js"
   },
   "dependencies": {
-    "@motionone/dom": "^10.5.0-alpha.1",
+    "@motionone/dom": "^10.5.0-alpha.2",
     "tslib": "^2.3.1"
   },
   "devDependencies": {
