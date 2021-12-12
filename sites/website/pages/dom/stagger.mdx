@@ -1,0 +1,66 @@
+import { AuthDocTemplate } from "../../components/AuthDocTemplate"
+import styled from "styled-components"
+export default AuthDocTemplate
+
+export const meta = {
+  title: "stagger",
+  description:
+    "The stagger function is used to offset the start time of each animation.",
+  needsSponsorship: false,
+  shareImage: "social/share-stagger.png",
+}
+
+`stagger` is used to offset the start time of each animation.
+
+```javascript
+stagger(duration, options)
+```
+
+When defining an animation with one or more elements, `delay` can be set with the `stagger` function to delay each element's animation by a specific duration:
+
+```javascript
+import { animate, stagger } from "motion"
+
+animate("li", { x: 100 }, { delay: stagger(0.1) })
+```
+
+## Options
+
+### `start`
+
+**Default:** `0`
+
+```javascript
+stagger(0.1, { start: 0.2 }) // 0.2, 0.3, 0.4...
+```
+
+### `from`
+
+**Default:** `"first"`
+
+Specifies an element position from which to stagger. Can be set as `"first"`, `"center"`, `"last"`, or a number to specify an index.
+
+```javascript
+animate(
+  [a, b, c],
+  { x: 100 },
+  { delay: stagger(0.1, { from: "last" }) } // 0.2, 0.1, 0
+)
+```
+
+### `easing`
+
+**Default:** `"linear"`
+
+Applies easing to the `duration` so the interval between delays becomes longer or shorter over each animation.
+
+Can be set in the same way as `animate` [`easing` option](/dom/animate#easing), or as an easing function.
+
+<!-- prettier-ignore -->
+```javascript
+animate(
+  "li", 
+  { opacity: 1 }, 
+  { delay: stagger(0.2, { easing: "ease-out" }) }
+);
+```

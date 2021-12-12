@@ -1,0 +1,10 @@
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.segment {
+  opacity: 0;
+  fill: var(--splash);
+}

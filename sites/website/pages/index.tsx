@@ -1,11 +1,17 @@
-import { useEffect } from "react"
-import { motion } from "motion/react"
+import { Head } from "../components/template/Head"
+import { HomepageHeader } from "../components/homepage/HomepageHeader"
+import { HomepageFooter } from "../components/homepage/HomepageFooter"
+import { USPs } from "../components/homepage/USPs"
 
-export default function Web() {
-  useEffect(() => {})
+function HomePage() {
   return (
-    <div>
-      <motion.h1 animate={{}}>Web</motion.h1>
-    </div>
+    <>
+      <Head />
+      <HomepageHeader />
+      <USPs />
+      <HomepageFooter />
+    </>
   )
 }
+
+export default HomePage

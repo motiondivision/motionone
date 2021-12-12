@@ -1,0 +1,315 @@
+import { AuthDocTemplate } from "../../components/AuthDocTemplate"
+import { JankExample } from "../../components/examples/feature-comparison"
+import styled from "styled-components"
+export default AuthDocTemplate
+
+export const Table = styled.table`
+  text-align: left;
+  position: relative;
+  border-collapse: collapse;
+  font-size: 1.6rem;
+  th {
+    font-weight: 400;
+  }
+  td,
+  th {
+    padding: 5px;
+    width: 23%;
+    text-align: center;
+    vertical-align: center;
+  }
+  th:first-child {
+    width: auto;
+    text-align: left;
+  }
+  tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+`
+
+export const TableHeader = styled.th`
+  position: sticky;
+  top: 72px;
+  font-weight: 600 !important;
+  background-color: transparent;
+  background-image: radial-gradient(
+    rgba(0, 0, 0, 0) 1px,
+    var(--background) 1px
+  );
+  background-size: 4px 4px;
+  backdrop-filter: brightness(50%) blur(3px);
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+  z-index: 1;
+`
+
+export function Subheader({ children }) {
+  return (
+    <thead>
+      <th
+        style={{
+          paddingTop: 50,
+          paddingBottom: 20,
+          fontWeight: "600",
+          fontSize: "2.4rem",
+        }}
+      >
+        {children}
+      </th>
+    </thead>
+  )
+}
+
+export function ColumnHeaders() {
+  return (
+    <thead>
+      <tr>
+        <TableHeader></TableHeader>
+        <TableHeader scope="col">Motion One</TableHeader>
+        <TableHeader scope="col">Anime.js</TableHeader>
+        <TableHeader scope="col">Greensock</TableHeader>
+      </tr>
+    </thead>
+  )
+}
+
+export function row(label, a, b, c, url) {
+  return (
+    <tr>
+      <th scope="row">
+        {url ? (
+          <a href={url} target="_blank">
+            {label}
+          </a>
+        ) : (
+          label
+        )}
+      </th>
+      <td>{a === true ? "✅" : a === false ? "❌" : a}</td>
+      <td>{b === true ? "✅" : b === false ? "❌" : b}</td>
+      <td>{c === true ? "✅" : c === false ? "❌" : c}</td>
+    </tr>
+  )
+}
+
+export function Bar({ size }) {
+  return (
+    <div
+      style={{
+        height: "250px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "flex-end",
+        paddingTop: 50,
+      }}
+    >
+      <div
+        style={{
+          width: 80,
+          height: `${size * 10}px`,
+          background: "var(--foreground)",
+          borderRadius: 3,
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        <span
+          style={{ color: "var(--foreground)", position: "relative", top: -35 }}
+        >
+          {size}
+        </span>
+      </div>
+    </div>
+  )
+}
+
+export const meta = {
+  title: "Feature comparison",
+  description:
+    "Compare the bundle size and features of Motion One with Anime.js and Greensock",
+  needsSponsorship: false,
+  shareImage: "social/share-feature-comparison.png",
+}
+
+## Overview
+
+There are so many JavaScript libraries to choose from, it can be difficult to decide which is right for your project.
+
+The two best established libraries for animating the DOM are [Anime.js](https://animejs.com/) and [Greensock](https://greensock.com/gsap/). Unlike these libraries, Motion One is built on the Web Animations API (WAAPI), which comes with different trade-offs.
+
+### Benefits
+
+Broadly, the benefits are:
+
+- Far smaller bundlesize
+- Hardware accelerated animations
+- Excellent value interpolation
+
+#### Bundlesize
+
+Motion One is built on WAAPI, so unlike other animation libraries it doesn't force users to download code already present in their browser.
+
+This leads to a tiny bundlesize. The core `animate` function is just 3.3kb. By comparison, Anime.js is 7kb and Greensock 23.5kb. And because neither support tree-shaking, using any part of them is using all of them.
+
+As support for the [CSS Properties and Values API](https://developer.mozilla.org/en-US/docs/Web/API/CSS_Properties_and_Values_API) improves, Motion One will be able to drop even more weight to get down as low as 1.8kb.
+
+#### Hardware acceleration
+
+Hardware accelerations run animations outside the main JavaScript thread, usually on the GPU. This means if your app is performing heavy work, animations remain smooth.
+
+You might have heard that for best performance you should only animate `opacity` and `transform` because these styles [don't trigger layout or paint](https://developers.google.com/web/fundamentals/performance/rendering/avoid-large-complex-layouts-and-layout-thrashing), they're handled entirely by the browser's compositor.
+
+Values like this can enjoy an extra performance boost with hardware accelerated animations, as the animation itself can run off the main thread. That means if the browser is busy doing computation or rendering, your animations will remain smooth.
+
+To illustrate, in the following example the ball on the left is animated with Motion One, and the ball on the right by a traditional animation library. Press the "Block JavaScript" button to block JS execution for two seconds:
+
+<JankExample />
+
+In the majority of browsers, the left ball will continue animating at 60fps, even as the website becomes unresponsive.
+
+Additionally, as browsers optimise more values (Chrome is [adding SVG and `background-color`](https://developer.chrome.com/blog/renderingng/) soon), Motion One will gain even more performance over time.
+
+#### Value interpolation
+
+Value interpolation is the process of mixing two values. For example, interpolating `1` and `2` by `0.5` would return `1.5`. Interpolating over time is the foundation of most animation.
+
+Interpolating numbers is cheap, both computationally and in terms of bundlesize. But animations can happen between all sorts of values, like the box shadows `10px 10px 5px red` and `0px 0px 2px rgba(0, 0, 0, 0.2)`, and these complex values can be more expensive.
+
+A large part of Motion One's bundlesize savings come from not needing to include this code, but there's an added benefit in that the browser's interpolation code is usually much better **because** it doesn't have to worry about bundlesize.
+
+So animating between different value types like `rgba` and `hsla`, or `px` and `%`; or values computed from CSS functions like `calc()`, `minmax()` or `var()`, is all supported.
+
+### Limitations
+
+The main limitation of WAAPI is it can only animate CSS styles. So it can't animate HTML text, JavaScript values, or SVG attributes like `d` (although SVG styles work fine).
+
+However, Motion One uses a small polyfill to support animating individual transforms, so in the future this could form the basis of an API to support these kinds of animations.
+
+## Comparison table
+
+#### Key
+
+- ✅ Supported
+- ❌ Not supported
+- ⏩ Support relies on modern browser features
+- 🚧 In development
+
+**Note:** While this list is extensive, it focuses on core library features. Greensock offers a [ton of extra paid-for plugins](https://greensock.com/gsap-plugins/) in addition to the base GSAP library.
+
+<Table>
+  <ColumnHeaders />
+  <tbody>
+    <tr>
+      <th scope="row" style={{ verticalAlign: "bottom" }}>
+        Core bundlesize (kb)
+      </th>
+      <td>
+        <Bar size={3.3} />
+      </td>
+      <td>
+        <Bar size={7} />
+      </td>
+      <td>
+        <Bar size={23.5} />
+      </td>
+    </tr>
+    <Subheader>Values</Subheader>
+    {row("Individual transforms", true, true, true)}
+    {row(
+      `Transform`,
+      true,
+      false,
+      true,
+      "https://codesandbox.io/s/transform-interpolation-motion-concept-c-vs-greensock-vs-anime-js-m90tc"
+    )}
+    {row(
+      "Named colors",
+      true,
+      false,
+      `✅ (subset of 20)`,
+      "https://codesandbox.io/s/named-color-animations-comparison-motion-concept-c-vs-greensock-vs-anime-js-vbkey"
+    )}
+    {row(
+      "Color type conversion",
+      true,
+      true,
+      true,
+      "https://codesandbox.io/s/animation-between-color-types-motion-concept-c-vs-greensock-vs-anime-js-gvip9"
+    )}
+    {row(
+      "To/from CSS variables",
+      true,
+      false,
+      false,
+      "https://codesandbox.io/s/animating-to-from-css-variables-motion-concept-c-vs-greensock-vs-anime-js-yxz1z"
+    )}
+    {row("To/from CSS functions", true, false, false)}
+    {row("Animate CSS variables", `✅ ⏩`, false, true)}
+    {row("Simple keyframes syntax", true, true, false)}
+    {row("Wildcard keyframes", true, false, false)}
+    {row("Relative values", false, true, true)}
+    <Subheader>Output</Subheader>
+    {row("Element styles", true, true, true)}
+    {row("Element attributes", false, true, true)}
+    {row("Raw JS output", `🚧`, true, true)}
+    <Subheader>Options</Subheader>
+    {row("Duration", true, true, true)}
+    {row("Direction", true, true, true)}
+    {row("Repeat", true, true, true)}
+    {row("Delay", true, true, true)}
+    {row("End delay", true, true, true)}
+    {row("Repeat delay", "🚧", false, true)}
+    <Subheader>Stagger</Subheader>
+    {row("Stagger", `✅ (+0.1kb)`, true, true)}
+    {row("Min delay", true, true, true)}
+    {row("Ease", true, true, true)}
+    {row("Grid", false, true, true)}
+    <Subheader>Timeline</Subheader>
+    {row("Timeline", `✅ (+0.6kb)`, true, true)}
+    {row("Selectors", true, true, true)}
+    {row("Relative offsets", true, true, true)}
+    {row("Absolute offsets", true, true, true)}
+    {row("Start of previous offset", true, false, true)}
+    {row("Percentage offsets", false, false, true)}
+    {row("Label offsets", "🚧", false, true)}
+    {row("Segment stagger", true, false, true)}
+    {row("Segment keyframes", true, false, false)}
+    <Subheader>Controls</Subheader>
+    {row("Play", true, true, true)}
+    {row("Pause", true, true, true)}
+    {row("Finish", true, true, true)}
+    {row("Reverse", true, true, true)}
+    {row("Stop", true, true, true)}
+    {row("Playback rate", true, false, true)}
+    <Subheader>Easing</Subheader>
+    {row("Linear", true, true, true)}
+    {row("Cubic bezier", true, true, true)}
+    {row("Steps", true, true, true)}
+    {row("Spring simulation", `✅ (+1kb)`, false, false)}
+    {row("Glide", `✅ (+0.3kb & Spring)`, false, `✅ ($99/yr)`)}
+    {row("Spring easing", false, true, false)}
+    {row("Custom easings", false, true, true)}
+    <Subheader>Events</Subheader>
+    {row("Complete", true, true, true)}
+    {row("Cancel", true, true, true)}
+    {row("Start", false, true, true)}
+    {row("Update", false, true, true)}
+    {row("Repeat", false, true, true)}
+    <Subheader>Path</Subheader>
+    {row("Motion path", `✅ ⏩`, true, `✅ (+9.5kb)`)}
+    {row(
+      "Path morphing",
+      `❌`,
+      `✅ (Same number of points only)`,
+      `✅ (+$149/yr & +8.7kb)`
+    )}
+    {row("Path drawing", true, true, `✅ ($99/yr)`)}
+    <Subheader>Other</Subheader>
+    {row("MIT license", true, true, false)}
+    {row("Accelerated animations", true, false, false)}
+    {row("IE11 support", false, true, true)}
+    {/* {row("React API", `🚧 (+1kb)`, false, false)}
+    {row("Vue API", `🚧 (+1kb)`, false, false)}
+    {row("Svelte API", `🚧 (+1kb)`, false, false)} */}
+  </tbody>
+</Table>

@@ -1,0 +1,131 @@
+
+import { AuthDocTemplate } from "../components/AuthDocTemplate";
+import { Version, Date } from "../components/template/changelog";
+export default AuthDocTemplate;
+
+export const meta = {
+  title: "Changelog",
+  description: "Keep up-to-date with the latest updates in Motion One",
+  needsSponsorship: true,
+  showContents: false,
+  shareImage: "social/share-changelog.png",
+};
+
+
+Motion One adheres to [Semantic Versioning](http://semver.org/).
+
+---
+#### <Version>10.4.0</Version> <Date>18 October 21</Date>
+
+##### ⭐️ Added
+
+- **Spring and glide in timeline:** `timeline` now supports animations with `ease: spring()` and `ease: glide()`.
+
+---
+#### <Version>10.3.2</Version> <Date>18 October 21</Date>
+
+##### 🐞 Fixed
+
+- Fixing animation interruption for independent transform animations in Safari and Firefox. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/27)
+
+---
+#### <Version>10.3.1</Version> <Date>12 October 21</Date>
+
+##### 🐞 Fixed
+
+- Fixing a bug in `stagger` and `animate`.
+
+---
+#### <Version>10.3.0</Version> <Date>11 October 21</Date>
+
+##### ⭐️ New
+
+- **Glide:** Animate transforms with realistic [glide](https://motion.dev/dom/glide) that can be used to mimic momentum scroll.
+
+##### 🐞 Fixed
+
+- Fixing a bug where sometimes velocity wasn't being correctly passed to the next animation.
+
+---
+#### <Version>10.2.1</Version> <Date>6 October 21</Date>
+
+##### 🐞 Fixed
+
+- Ensuring `duration` is always passed correctly to the independent transform polyfill.
+
+---
+#### <Version>10.2.0</Version> <Date>5 October 21</Date>
+
+##### ⭐️ New
+
+- **Springs:** Animate transforms with realistic [spring](https://motion.dev/dom/spring) simulations.
+
+---
+#### <Version>10.1.3</Version> <Date>1 October 21</Date>
+
+##### 🐞 Fixed
+
+- **Fill both for timelines:** Extends `fill: "both"` effect from `10.1.2` to `timeline`.
+
+---
+#### <Version>10.1.2</Version> <Date>1 October 21</Date>
+
+##### 🐞 Fixed
+
+- **Fill both:** Previously, if an animation had a delay and an initially-defined first keyframe (`opacity: [0, 1]`) the animation would start from its rendered style to that first keyframe. Now, the initial keyframe gets stretched to the very start of the whole animation by setting `fill: "both"`. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/20)
+
+---
+#### <Version>10.1.1</Version> <Date>28 September 21</Date>
+
+##### 🐞 Fixed
+
+- **Scrub to end:** Setting `currentTime` to `duration` was removing the animation effect. This has been fixed by setting `fill: "forwards"` on the WAAPI animation. This won't affect memory consumption as animations are flattened into styles and removed on finish. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/21)
+
+##### 🚦 Changed
+
+- **Removed Popmotion dependency:** Reduced the number of dependencies by moving Popmotion utilities inside Motion One. Filesize remains unaffected in most environments but will be lower in Skypack and other distributors that don't support tree-shaking.
+
+---
+#### <Version>10.1.0</Version> <Date>27 September 21</Date>
+
+##### ⭐️ New
+
+- **Duration:** The duration of timelines is usually automatically calculated from its defined animations. It can now be read from the new read-only `duration` prop on [animation controls](http://motion.dev/dom/controls).
+
+##### 🚦 Changed
+
+- **Performance:** Before Motion One starts a new animation, it stops the old one. Stopping an animation commits its styles, which can cause a style recalculation. Now, when an animation finishes, we delete the reference to the old animation. Additionally, we check the animation status isn't `"finished"` before committing styles within `stop`. This prevents unnecessary style recalculations.
+
+---
+#### <Version>10.0.3</Version> <Date>25 September 21</Date>
+
+##### 🐞 Fixed
+
+- Fixed formatting of changelog for website publication.
+
+---
+#### <Version>10.0.2</Version> <Date>24 September 21</Date>
+
+##### 🚦 Changed
+
+- Generating `finished` promise on-demand.
+
+##### 🐞 Fixed
+
+- Catching promise in `animate` and `timeline` to prevent errors whenever a sub-animation is cancelled.
+
+---
+#### <Version>10.0.1</Version> <Date>22 September 21</Date>
+
+##### 🚦 Changed
+
+- Removed links to repo from Readme.
+
+---
+#### <Version>10.0.0</Version> <Date>12 September 21</Date>
+
+##### ⭐️ New
+
+- First publish
+
+  

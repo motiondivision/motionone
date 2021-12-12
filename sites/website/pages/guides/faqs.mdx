@@ -1,0 +1,57 @@
+import { AuthDocTemplate } from "../../components/AuthDocTemplate"
+import styled from "styled-components"
+export default AuthDocTemplate
+
+export const meta = {
+  title: "FAQs",
+  description: "Frequently asked questions about Motion One",
+  needsSponsorship: false,
+  shareImage: "social/share-faqs.png",
+}
+
+## Browser support?
+
+Motion One supports all modern browsers. It **doesn't support** Internet Explorer 11 or below.
+
+Additionally, it supports animating CSS variables in browsers that support the [CSS Properties and Values API](https://developer.mozilla.org/en-US/docs/Web/API/CSS_Properties_and_Values_API) (currently Chrome and Edge). Rather than including a polyfill with a large filesize, Motion One currently uses a progressive enhancement strategy where in older browsers CSS variables will be animated with an instant transition.
+
+## What can I animate?
+
+Motion One is built on top of the [Web Animations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API). As such, it's currently capable of animating CSS styles on HTML or SVG elements.
+
+It **can't** currently animate SVG attributes like `d`, but many styling attributes can also be set [via CSS](https://css-tricks.com/svg-properties-and-css/#svg-css-properties), so you **can** animate things like `fill` and `stroke-dashoffset`.
+
+Additionally, you can animate CSS variables and individual transforms like `x`, `y` etc:
+
+```javascript
+animate(element, {
+  x: 100,
+  "--highlight-color": "#f00",
+})
+```
+
+## Why is my animation finishing instantly?
+
+There are a couple reasons an animation might appear to finish instantly.
+
+### 1. Your browser doesn't support `CSS.registerProperty`
+
+If you're animating CSS variables and your browser doesn't support the [CSS Properties and Values API](https://developer.mozilla.org/en-US/docs/Web/API/CSS_Properties_and_Values_API), animations will finish instantly.
+
+An optional polyfill may be offered in the future.
+
+### 2. `scale: 0` in Safari
+
+There's a bug in many versions of Safari where animating to `scale(0)` completes instantly. This is fixed in the latest Safari betas, but if it's an issue you can animate to `scale(0.0001)` to fix.
+
+## Why do I have to sponsor to access the Github repo?
+
+A couple reasons.
+
+This is [my](https://twitter.com/mattgperry) side project so the sponsorship helps the work be sustainable. By restricting access to the repo I can also ensure I'm targeting my free time supporting the users who are getting the most value from the project.
+
+In the future I might open access to the repo and find a different perk for sponsors. But in this early stage I want to be able to provide access to the library to everyone while also ensuring [sponsors](https://github.com/sponsors/mattgperry) get something in addition.
+
+## Why is `motion` already on version 10?
+
+The `motion` package's version 10 is essentially Motion One's version 1. The package name was very kindly donated by [Nate](https://twitter.com/natebirdman) which was already on version 5, and I thought 10 would be a clear break from the previous resident.

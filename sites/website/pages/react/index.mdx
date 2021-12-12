@@ -1,0 +1,261 @@
+import { AuthDocTemplate } from "../../components/AuthDocTemplate";
+import styled from "styled-components";
+export default AuthDocTemplate;
+
+export const meta = {
+  title: "React: animated",
+  description: "Create an animated React component.",
+  needsSponsorship: true,
+};
+
+<!-- TODO: Replace with introduction article -->
+
+Create an animated HTML element.
+
+```jsx
+import { animated } from "motion/react";
+
+export function Component() {
+  return (
+    <animated.div
+      style={{ scale: 1 }}
+      hover={{ scale: 1.2 }}
+      press={{ scale: 0.95 }}
+      options={{ duration: 0.8, easing: [0.11, 1.75, 0.7, 0.79] }}
+    />
+  );
+}
+```
+
+## Keyframes
+
+### Single keyframe
+
+Whenever a value in `style` changes, the element will animate to that value.
+
+```jsx
+<animated.div style={{ height: isOpen ? 200 : 0 }} />
+```
+
+### Multiple keyframes
+
+By defining a value as an array, it'll animate through each keyframe in turn:
+
+```jsx
+<animated.div
+  style={{ transform: ["none", "translateX(100px)", "scale(2)"] }}
+/>
+```
+
+### Mount animations
+
+Animations can be triggered on mount by providing an `initial` prop. Any values also in `style` will be animated when the component is first rendered:
+
+```jsx
+<animated.div initial={{ opacity: 0 }} style={{ opacity: 1 }} />
+```
+
+### Custom keyframe timing
+
+By default, each keyframe will be spaced evenly throughout the animation. It's also possible to specify a list of `offset`s, values between `0` and `1`, that defines a relative point in the animation a specific keyframe should be hit:
+
+```jsx
+<animated.div
+  style={{ transform: ["none", "translateX(100px)", "scale(2)"] }}
+  options={{
+    offsets: [0, 0.8, 1],
+  }}
+/>
+```
+
+If there are fewer keyframes than offsets defined in `offset`, the other keyframes will be spaced evenly:
+
+```jsx
+<animated.div
+  style={{ color: ["red", "yellow", "green", "blue"] }}
+  options={{
+    offset: [0, 0.2], // [...0.6, 1]
+  }}
+/>
+```
+
+### Custom keyframe easing
+
+It's also possible to define easing between specific keyframes by defining an [easing](#easing) option as any array:
+
+```jsx
+<animated.div
+  style={{ color: ["red", "yellow", "green", "blue"] }}
+  options={{
+    easing: ["ease-in", "linear", "ease-out"],
+  }}
+/>
+```
+
+<!--
+TODO: Accepted values / single transforms
+-->
+
+## Options
+
+Options can be provided to the `options` prop. They can be defined either for all values:
+
+```jsx
+<animated.div
+  style={{ color: ["red", "yellow", "green", "blue"] }}
+  options={{ duration: 2 }}
+/>
+```
+
+Or overridden for individual values:
+
+```jsx
+<animated.div
+  style={{ opacity: 0, color: ["red", "yellow", "green", "blue"] }}
+  options={{
+    duration: 2,
+    ease: "linear",
+    opacity: { duration: 0.4 },
+  }}
+/>
+```
+
+### `duration`
+
+**Default:** `0.3`
+
+A duration, in seconds, that the animation will be delayed before starting.
+
+```jsx
+<animated.div style={{ backgroundColor: "red" }} options={{ duration: 2 }} />
+```
+
+### `delay`
+
+**Default:** `0`
+
+A duration, in seconds, that the animation will be delayed before starting.
+
+```jsx
+<animated.div style={{ backgroundColor: "red" }} options={{ delay: 0.5 }} />
+```
+
+### `endDelay`
+
+**Default:** `0`
+
+A duration, in seconds, that the animation will wait at the end before repeating or ending.
+
+```jsx
+<animated.div
+  style={{ backgroundColor: "red" }}
+  options={{ endDelay: 0.5, repeat: 2 }}
+/>
+```
+
+### `easing`
+
+**Default:** `"ease"`
+
+An easing function to use, or list of easing functions to use for individual keyframes.
+
+- Basic function names: `"linear"`, `"ease"`, `"ease-in"`, `"ease-out"`, `"ease-in-out"`
+- [Cubic bezier curve](https://cubic-bezier.com/): e.g. `[.17,.67,.83,.67]`
+- Stepped easing: e.g. `"steps(2, start)"`
+
+```jsx
+<animated.div
+  initial={{ transform: "none" }}
+  style={{ transform: "rotate(90deg)" }}
+  options={{ easing: "steps(2, start)" }}
+/>
+```
+
+### `direction`
+
+**Default:** `"normal"`
+
+The direction of animation playback. `"normal"`, `"reverse"`, `"alternate"`, or `"alternate-reverse"`.
+
+```jsx
+<animated.div
+  initial={{ transform: "none" }}
+  style={{ transform: "rotate(90deg)" }}
+  options={{ direction: "reverse" }}
+/>
+```
+
+### `repeat`
+
+**Default:** `0`
+
+The number of times the animation should repeat. Set to `Infinity` to repeat indefinitely.
+
+```jsx
+<animated.div
+  initial={{ transform: "none" }}
+  style={{ transform: "rotate(360deg)" }}
+  options={{ repeat: Infinity }}
+/>
+```
+
+## Props
+
+### `initial`
+
+An object of styles to animate from when the component first renders.
+
+```jsx
+<animated.div initial={{ opacity: 0 }} style={{ opacity: 1 }} />
+```
+
+### `hover`
+
+An object of styles to animate to while a hover gesture is active.
+
+```jsx
+<animated.div
+  style={{ transform: "none" }}
+  hover={{ transform: "scale(1.2)" }}
+/>
+```
+
+### `press`
+
+An object of styles to animate to while a press gesture is active.
+
+```jsx
+<animated.div
+  style={{ transform: "none" }}
+  hover={{ transform: "scale(1.2)" }}
+  press={{ transform: "scale(0.9)" }}
+/>
+```
+
+### `options`
+
+An object of animation options as described above.
+
+### `onStart`
+
+A callback that fires whenever an animation starts.
+
+```jsx
+<animated.div
+  initial={{ transform: "none" }}
+  style={{ transform: "rotate(360deg)" }}
+  onStart={(definition) => console.log("Started", definition)}
+/>
+```
+
+### `onComplete`
+
+A callback that fires whenever an animation successfully completes.
+
+```jsx
+<animated.div
+  initial={{ transform: "none" }}
+  style={{ transform: "rotate(360deg)" }}
+  onComplete={(definition) => console.log("Completed", definition)}
+/>
+```
