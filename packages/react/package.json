@@ -1,10 +1,40 @@
 {
   "name": "@motionone/react",
-  "description": "A tiny, performant animation library for React web",
+  "version": "10.5.0-alpha.1",
+  "description": "A tiny, performant animation library for React",
   "author": "Matt Perry",
-  "private": true,
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
+  "types": "types/index.d.ts",
   "sideEffects": false,
-  "scripts": {}
+  "scripts": {
+    "build": "rm -rf lib dist types && tsc -p . && rollup -c",
+    "test": "jest --coverage --config jest.config.js"
+  },
+  "dependencies": {
+    "@motionone/dom": "^10.5.0-alpha.1",
+    "hey-listen": "^1.0.8",
+    "tslib": "^2.3.1"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^8.11.1",
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.0.0",
+    "@types/react": "^17.0.37",
+    "@types/react-dom": "^17.0.11",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
+  }
 }

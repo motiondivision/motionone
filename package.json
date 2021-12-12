@@ -30,7 +30,7 @@
     "turbo": "latest"
   },
   "turbo": {
-    "npmClient": "npm",
+    "npmClient": "yarn",
     "baseBranch": "origin/main",
     "pipeline": {
       "build": {

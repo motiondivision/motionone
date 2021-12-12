@@ -9,7 +9,8 @@
     "jest.config.js",
     "ts-base.json",
     "ts-react.json",
-    "rollup.config.js"
+    "rollup.config.js",
+    "waapi-polyfill.js"
   ],
   "dependencies": {
     "eslint-config-next": "^12.0.3",

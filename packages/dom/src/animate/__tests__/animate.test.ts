@@ -1,12 +1,11 @@
 import { animate } from ".."
 import { style } from "../style"
-import "./web-animations.min-edited.js"
+import "config/waapi-polyfill"
 
 /**
  * TODO: All tests currently have to define at least two keyframes
  * because the polyfill doesn't support partial keyframes.
  */
-
 const duration = 0.001
 
 describe("animate", () => {
