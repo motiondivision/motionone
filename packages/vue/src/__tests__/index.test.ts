@@ -1,20 +1,32 @@
 import "@testing-library/jest-dom"
 import "config/waapi-polyfill"
-import { render } from "@testing-library/vue"
-import Motion from "../Motion.vue"
+import { mount } from "@vue/test-utils"
+import Motion from "../Motion"
 
 describe("Motion", () => {
   test("Renders element", async () => {
-    const { getByTestId } = render(Motion, {
+    const wrapper = mount(Motion, {
       props: { "data-testid": "box" },
     })
-    expect(getByTestId("box")).toBeTruthy()
+    expect(wrapper.get("[data-testid='box']").element).toBeTruthy()
   })
 
   test("Renders element as 'as' prop", async () => {
-    const { getByTestId } = render(Motion, {
+    const wrapper = mount(Motion, {
       props: { "data-testid": "box", as: "li" },
     })
-    expect(getByTestId("box").tagName).toEqual("LI")
+    expect(wrapper.get("[data-testid='box']").element.tagName).toEqual("LI")
+  })
+
+  test("Applies initial as style", async () => {
+    const wrapper = mount(Motion, {
+      props: { "data-testid": "box", initial: { opacity: 0.5, x: 100 } },
+    })
+
+    expect(wrapper.get("[data-testid='box']").element).toHaveStyle({
+      opacity: 0.5,
+      transform: "translateX(var(--motion-translateX))",
+      "--motion-translateX": "100px",
+    })
   })
 })
