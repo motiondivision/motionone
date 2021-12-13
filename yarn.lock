@@ -2725,7 +2725,7 @@
     require-relative "^0.8.7"
     svelte-hmr "^0.14.7"
 
-"@testing-library/dom@^7.0.3", "@testing-library/dom@^7.30.4":
+"@testing-library/dom@^7.0.3":
   version "7.31.2"
   resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-7.31.2.tgz#df361db38f5212b88555068ab8119f5d841a8c4a"
   integrity sha512-3UqjCpey6HiTZT92vODYLPxTBWlM8ZOOjr3LX5F37/VRipW2M1kX6I/Cm4VXzteZqfGfagg8yXywpcOgQBlNsQ==
@@ -2782,15 +2782,6 @@
   integrity sha512-GxafAllShGM2nkntFGURZ7fYVlUYwv7K62lqv1aFqtTYzzeZ2Cu8zTVhtE/Qt3bk2zMl6+FPKP03wjLip/G8mA==
   dependencies:
     "@testing-library/dom" "^7.0.3"
-
-"@testing-library/vue@next":
-  version "6.4.2"
-  resolved "https://registry.yarnpkg.com/@testing-library/vue/-/vue-6.4.2.tgz#4286d9b6495fc8869b9e8e1937687c0755412aab"
-  integrity sha512-L+yFRVu+zc/kwYWRaEF3gkEwUcoxhKNz74aya1NmAni2xrJORMqpY7URKxjfiJb4YchLgA47qEZ3irE11/x/+A==
-  dependencies:
-    "@babel/runtime" "^7.14.0"
-    "@testing-library/dom" "^7.30.4"
-    "@vue/test-utils" "^2.0.0-rc.0"
 
 "@tootallnate/once@1":
   version "1.1.2"
@@ -3673,7 +3664,7 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.26.tgz#7acd1621783571b9a82eca1f041b4a0a983481d9"
   integrity sha512-vPV6Cq+NIWbH5pZu+V+2QHE9y1qfuTq49uNWw4f7FDEeZaDU2H2cx5jcUZOAKW7qTrUS4k6qZPbMy1x4N96nbA==
 
-"@vue/test-utils@^2.0.0-0", "@vue/test-utils@^2.0.0-rc.0":
+"@vue/test-utils@^2.0.0-rc.17":
   version "2.0.0-rc.17"
   resolved "https://registry.yarnpkg.com/@vue/test-utils/-/test-utils-2.0.0-rc.17.tgz#e6dcf5b5bd3ae23595bdb154b9b578ebcdffd698"
   integrity sha512-7LHZKsFRV/HqDoMVY+cJamFzgHgsrmQFalROHC5FMWrzPzd+utG5e11krj1tVsnxYufGA2ABShX4nlcHXED+zQ==
