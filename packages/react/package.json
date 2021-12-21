@@ -2,6 +2,7 @@
   "name": "@motionone/react",
   "version": "10.5.0-alpha.2",
   "description": "A tiny, performant animation library for React",
+  "license": "MIT",
   "author": "Matt Perry",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",

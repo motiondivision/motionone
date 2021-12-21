@@ -20,7 +20,7 @@ export type AcceptedElements =
 export type BezierDefinition = [number, number, number, number]
 
 export interface CSSStyleDeclarationWithTransform
-  extends Omit<CSSStyleDeclaration, "direction"> {
+  extends Omit<CSSStyleDeclaration, "direction" | "transition"> {
   x: number
   y: number
   z: number

@@ -11,6 +11,7 @@
     "inlineSources": false,
     "isolatedModules": true,
     "preserveWatchOutput": true,
+    "allowJs": true,
     "strict": true,
     "moduleResolution": "node",
     "importHelpers": true,

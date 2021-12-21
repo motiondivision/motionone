@@ -3,7 +3,7 @@
   "version": "10.5.0-alpha.2",
   "private": true,
   "scripts": {
-    "dev": "npm run build-files && next dev",
+    "dev": "npm run build-files && next dev -p 3001",
     "build": "npm run build-files && next build",
     "build-files": "node ./scripts/build-files",
     "start": "npm run build-files && next start",

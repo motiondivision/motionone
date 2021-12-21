@@ -3,8 +3,9 @@
   "version": "10.5.0-alpha.2",
   "description": "A tiny, performant animation library for Vue",
   "author": "Matt Perry",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.es.js",
+  "license": "MIT",
+  "main": "dist/motion-vue.cjs.js",
+  "module": "dist/motion-vue.esm.js",
   "types": "types/index.d.ts",
   "sideEffects": false,
   "scripts": {
@@ -12,7 +13,9 @@
     "build-vue:ssr": "cross-env NODE_ENV=production rollup --config rollup.config.js --format cjs && npm run build-vue:ssr && npm run build-vue:es && npm run build-vue:unpkg",
     "build-vue:es": "cross-env NODE_ENV=production rollup --config rollup.config.js --format es",
     "build-vue:unpkg": "cross-env NODE_ENV=production rollup --config rollup.config.js --format iife",
-    "test": "vue-cli-service test:unit --config jest.config.js"
+    "dev": "yarn build-vue:es -w",
+    "test": "vue-cli-service test:unit --config jest.config.js",
+    "measure": "bundlesize"
   },
   "dependencies": {
     "@motionone/dom": "^10.5.0-alpha.2",
@@ -40,5 +43,11 @@
     "rollup-plugin-vue": "^6.0.0",
     "ttypescript": "^1.5.13",
     "vue": "^3.2.23"
-  }
+  },
+  "bundlesize": [
+    {
+      "path": "./dist/motion-vue.min.js",
+      "maxSize": "5.0 kB"
+    }
+  ]
 }

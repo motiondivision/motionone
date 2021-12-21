@@ -2,6 +2,7 @@
   "name": "@motionone/dom",
   "version": "10.5.0-alpha.2",
   "description": "A tiny, performant animation library for the DOM",
+  "license": "MIT",
   "author": "Matt Perry",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
@@ -10,6 +11,7 @@
   "scripts": {
     "build": "rm -rf lib dist types && tsc -p . && webpack --config webpack.config.js && rollup -c",
     "test": "jest --coverage --config jest.config.js",
+    "dev": "rollup -c -w",
     "measure": "bundlesize"
   },
   "dependencies": {

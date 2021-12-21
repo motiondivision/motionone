@@ -3,6 +3,7 @@
   "version": "10.5.0-alpha.2",
   "description": "A tiny, performant animation library for Svelte",
   "author": "Matt Perry",
+  "license": "MIT",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
   "types": "types/index.d.ts",

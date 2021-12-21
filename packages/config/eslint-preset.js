@@ -4,6 +4,7 @@ module.exports = {
     next: {
       rootDir: [
         "sites/web/",
+        "sites/playground-vue/",
         "packages/config/",
         "packages/dom/",
         "packages/motion/",
@@ -14,6 +15,7 @@ module.exports = {
     },
   },
   rules: {
+    "react/no-unescaped-entities": "off",
     "react-hooks/exhaustive-deps": "off",
   },
 }

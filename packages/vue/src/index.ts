@@ -1,1 +1,2 @@
-export { default as Motion } from "./Motion.vue"
+export * from "./Motion"
+export * from "./Presence"

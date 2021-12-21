@@ -1,4 +1,5 @@
 import {
+  h,
   inject,
   onMounted,
   onUpdated,
@@ -6,52 +7,72 @@ import {
   ref,
   defineComponent,
 } from "vue"
-import { createMotionState, createStyleString } from "@motionone/dom"
+import { createMotionState, createStyles } from "@motionone/dom"
 
 const contextId = "motion-state"
 
-const Motion = defineComponent({
+const variants = {
+  type: Object,
+}
+
+export const Motion = defineComponent({
   name: "Motion",
   inheritAttrs: true,
   props: {
-    as: {
+    tag: {
       type: String,
       default: "div",
     },
-    initial: {
+    initial: variants,
+    animate: variants,
+    inView: variants,
+    hover: variants,
+    press: variants,
+    exit: variants,
+    transition: {
       type: Object,
     },
     style: {
-      type: String,
-      default: "",
+      type: Object,
     },
   },
   setup(props) {
     const root = ref<Element | null>(null)
     const parentState = inject(contextId, undefined)
-    const state = createMotionState(props as any, parentState)
-    const initialStyle = createStyleString(state.getTarget())
+    const state = createMotionState({ ...props }, parentState)
 
     provide(contextId, state)
 
     onMounted(() => {
-      return root.value && state.mount(root.value)
+      const unmount = state.mount(root.value!)
+      state.update({ ...props })
+
+      return unmount
     })
 
     onUpdated(() => {
-      state.update(props as any)
+      state.update({ ...props })
     })
 
     return {
+      state,
       root,
-      initialStyle,
     }
   },
-  template: `
-  <component :is="as" :style="style + initialStyle" ref="root">
-    <slot />
-  </component>
-  `,
+  render() {
+    return h(
+      this.tag,
+      {
+        ref: "root",
+        /**
+         * If this is the initial render, incorporate animated values so we
+         * support SSR. For subsequent renders just forward style.
+         */
+        style: !this.state.isMounted()
+          ? { ...this.style, ...createStyles(this.state.getTarget()) }
+          : this.style,
+      },
+      this.$slots.default?.()
+    )
+  },
 })
-
-export default Motion
