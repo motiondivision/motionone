@@ -3,7 +3,7 @@
   "display": "React Library",
   "extends": "./ts-base.json",
   "include": ["src"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "types"],
   "compilerOptions": {
     "lib": ["ES2015"],
     "module": "ESNext",

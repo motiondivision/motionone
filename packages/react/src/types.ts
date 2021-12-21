@@ -8,8 +8,24 @@ import type {
   RefAttributes,
   SVGAttributes,
 } from "react"
-import { Options } from "@motionone/dom"
+import {
+  Options,
+  MotionEvent,
+  CustomPointerEvent,
+  ViewEvent,
+} from "@motionone/dom"
 import type { svgElements, htmlElements } from "./utils/supported-elements"
+
+export interface MotionEventHandlers {
+  onMotionStart?: (event: MotionEvent) => void
+  onMotionComplete?: (event: MotionEvent) => void
+  onHoverStart?: (event: CustomPointerEvent) => void
+  onHoverEnd?: (event: CustomPointerEvent) => void
+  onPressStart?: (event: CustomPointerEvent) => void
+  onPressEnd?: (event: CustomPointerEvent) => void
+  onViewEnter?: (event: ViewEvent) => void
+  onViewLeave?: (event: ViewEvent) => void
+}
 
 export interface ElementProps {
   style: CSSProperties
@@ -45,13 +61,13 @@ type HTMLAttributesWithoutMotionProps<
 /**
  * @public
  */
-export type MotionHTMLProps<
-  TagName extends keyof ReactHTML
-> = HTMLAttributesWithoutMotionProps<
-  UnwrapFactoryAttributes<ReactHTML[TagName]>,
-  UnwrapFactoryElement<ReactHTML[TagName]>
-> &
-  Options
+export type MotionHTMLProps<TagName extends keyof ReactHTML> =
+  HTMLAttributesWithoutMotionProps<
+    UnwrapFactoryAttributes<ReactHTML[TagName]>,
+    UnwrapFactoryElement<ReactHTML[TagName]>
+  > &
+    Options &
+    MotionEventHandlers
 
 /**
  * Motion-optimised versions of React's HTML components.
@@ -78,7 +94,8 @@ type UnwrapSVGFactoryElement<F> = F extends React.SVGProps<infer P> ? P : never
  */
 export interface MotionSVGProps<T>
   extends SVGAttributesWithoutOptions<T>,
-    Options {}
+    Options,
+    MotionEventHandlers {}
 
 /**
  * Motion-optimised versions of React's SVG components.

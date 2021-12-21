@@ -5,7 +5,7 @@ import { render } from "@testing-library/svelte"
 import Motion from "../Motion.svelte"
 import TestParentWithGrandchild from "./TestParentWithGrandchild.svelte"
 
-const duration = 0.0001
+const duration = 0.01
 
 function renderBox(props: any) {
   const { getByTestId } = render(Motion, { "data-testid": "box", ...props })
@@ -59,12 +59,18 @@ describe("Motion", () => {
 
   test("Animation runs on mount if initial and animate differ", async () => {
     const result = await new Promise((resolve, reject) => {
-      renderBox({
+      const { getByTestId } = render(Motion, {
+        "data-testid": "box",
         initial: { opacity: 0.4 },
         animate: { opacity: [0, 0.8] },
         transition: { duration },
-        onAnimationComplete: (target: any) => resolve(target),
       })
+      getByTestId("box").addEventListener(
+        "motioncomplete",
+        ({ detail }: any) => {
+          resolve(detail.target)
+        }
+      )
 
       setTimeout(() => reject(false), 100)
     })
@@ -75,11 +81,14 @@ describe("Motion", () => {
   test("Animation doesn't run on mount if initial and animate are the same", async () => {
     const result = await new Promise((resolve, reject) => {
       const animate = { opacity: 0.4 }
-      renderBox({
+      const { getByTestId } = render(Motion, {
+        "data-testid": "box",
         initial: animate,
         animate,
         transition: { duration },
-        onAnimationComplete: () => reject(false),
+      })
+      getByTestId("box").addEventListener("motioncomplete", () => {
+        reject(false)
       })
 
       setTimeout(() => resolve(true), 100)
@@ -97,18 +106,19 @@ describe("Motion", () => {
         initial: { opacity: 0.4 },
         animate: { opacity: [0, 0.8] },
         transition: { duration },
-        onAnimationComplete: () => {
-          if (!completeCount) {
-            rerender(props)
-          } else {
-            reject(false)
-          }
-
-          completeCount++
-        },
       }
 
-      const { rerender } = render(Motion, props)
+      const { getByTestId, rerender } = render(Motion, props)
+      getByTestId("box").addEventListener("motioncomplete", () => {
+        if (!completeCount) {
+          rerender(props)
+        } else {
+          reject(false)
+        }
+
+        completeCount++
+      })
+
       setTimeout(() => resolve(true), 200)
     })
 

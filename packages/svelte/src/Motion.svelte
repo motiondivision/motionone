@@ -8,7 +8,6 @@
     MotionState,
     Variants,
     VariantDefinition,
-    Variant,
   } from "@motionone/dom"
 
   const parentState = getContext<MotionState | undefined>(contextKey)
@@ -20,8 +19,6 @@
   export let hover: VariantDefinition | undefined = undefined
   export let press: VariantDefinition | undefined = undefined
   export let inView: VariantDefinition | undefined = undefined
-  export let onAnimationComplete: ((target: Variant) => void) | undefined =
-    undefined
   export let variants: Variants | undefined = undefined
   export let transition: AnimationOptionsWithOverrides | undefined = undefined
 
@@ -34,7 +31,6 @@
       inView,
       variants,
       transition,
-      onAnimationComplete,
     },
     parentState
   )
@@ -52,7 +48,6 @@
       inView,
       variants,
       transition,
-      onAnimationComplete,
     })
   })
 

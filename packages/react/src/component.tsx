@@ -9,8 +9,9 @@ import {
   useRef,
 } from "react"
 import { createMotionState, createStyles, Options } from "@motionone/dom"
-import type { ElementProps } from "./types"
+import type { ElementProps, MotionEventHandlers } from "./types"
 import { MotionContext } from "./context"
+import { useEvents } from "./utils/events"
 
 export function createMotionComponent<Props extends ElementProps>(
   Component: string
@@ -25,9 +26,16 @@ export function createMotionComponent<Props extends ElementProps>(
       variants,
       style,
       transition,
-      onAnimationComplete,
+      onMotionStart,
+      onMotionComplete,
+      onHoverStart,
+      onHoverEnd,
+      onPressStart,
+      onPressEnd,
+      onViewEnter,
+      onViewLeave,
       ...props
-    }: Options & Props,
+    }: Options & Props & MotionEventHandlers,
     externalRef: ForwardedRef<Element>
   ): JSX.Element {
     const options = {
@@ -38,7 +46,6 @@ export function createMotionComponent<Props extends ElementProps>(
       inView,
       variants,
       transition,
-      onAnimationComplete,
     }
 
     const state = createMotionState(options, useContext(MotionContext))
@@ -50,6 +57,17 @@ export function createMotionComponent<Props extends ElementProps>(
 
     useEffect(() => state.mount(ref.current), [])
     useEffect(() => state.update(options))
+
+    useEvents(ref, {
+      onMotionStart,
+      onMotionComplete,
+      onHoverStart,
+      onHoverEnd,
+      onPressStart,
+      onPressEnd,
+      onViewEnter,
+      onViewLeave,
+    })
 
     const element = createElement(Component, {
       ...props,

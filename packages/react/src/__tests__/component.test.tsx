@@ -1,13 +1,7 @@
 import * as React from "react"
 import { useRef } from "react"
 import { motion } from "../"
-import {
-  // pointerDown,
-  // pointerUp,
-  // pointerEnter,
-  // pointerLeave,
-  render,
-} from "../../jest.setup.js"
+import { render } from "../../jest.setup.js"
 import "config/waapi-polyfill"
 
 console.error = jest.fn()
@@ -35,7 +29,7 @@ describe("motion", () => {
             ref={ref}
             initial={{ opacity: 0.4 }}
             animate={{ opacity: [0, 0.8] }}
-            onAnimationComplete={() => resolve(ref.current)}
+            onMotionComplete={() => resolve(ref.current)}
             transition={{ duration }}
           />
         )
@@ -60,7 +54,7 @@ describe("motion", () => {
             ref={ref}
             initial={animate}
             animate={animate}
-            onAnimationComplete={() => reject(false)}
+            onMotionComplete={() => reject(false)}
             transition={{ duration }}
           />
         )
@@ -86,7 +80,7 @@ describe("motion", () => {
             ref={ref}
             initial={animate}
             animate={animate}
-            onAnimationComplete={() => {
+            onMotionComplete={() => {
               if (!completeCount) {
                 rerender(<Component />)
               } else {
@@ -117,8 +111,8 @@ describe("motion", () => {
             data-testid="box"
             initial={{ opacity: 0 }}
             animate={animate}
-            onAnimationComplete={(target) => {
-              if (target.opacity === 0.8) resolve(true)
+            onMotionComplete={({ detail }) => {
+              if (detail.target.opacity === 0.8) resolve(true)
             }}
             transition={{ duration }}
           />

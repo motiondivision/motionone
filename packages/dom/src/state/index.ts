@@ -237,8 +237,6 @@ export function createMotionState(
         for (const key in gestureSubscriptions) {
           gestureSubscriptions[key]()
         }
-        // Stop all animations
-        // Remove all gesture subscriptions
       }
     },
     isMounted: () => Boolean(element),

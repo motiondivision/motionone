@@ -27,14 +27,14 @@ describe("Motion", () => {
 
   test("Renders element as 'as' prop to HTML", async () => {
     const wrapper = mount(Motion, {
-      props: { "data-testid": "box", as: "li" },
+      props: { "data-testid": "box", tag: "li" },
     })
     expect(wrapper.html()).toEqual(`<li data-testid="box"></li>`)
   })
 
   test("Renders element as 'as' prop to DOM node", async () => {
     const wrapper = mount(Motion, {
-      props: { "data-testid": "box", as: "li" },
+      props: { "data-testid": "box", tag: "li" },
     })
     expect(wrapper.get("[data-testid='box']").element.tagName).toEqual("LI")
   })
