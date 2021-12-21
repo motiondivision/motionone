@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.5.0] [2022-01-01]
+
+### Added
+
+- **Motion One for Vue:** A fully declarative version of Motion One for Vue 3!
+
 ## [10.4.0] [2021-10-18]
 
 ### Added
