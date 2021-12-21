@@ -1,7 +1,7 @@
 {
   "name": "motion",
   "description": "A tiny, performant animation library for the web",
-  "version": "10.5.0-alpha.2",
+  "version": "10.5.0-alpha.3",
   "license": "MIT",
   "author": "Matt Perry",
   "main": "dist/main.cjs.js",
@@ -21,9 +21,9 @@
     "build": "rm -rf lib dist types && tsc -p . && rollup -c"
   },
   "dependencies": {
-    "@motionone/dom": "^10.5.0-alpha.2",
-    "@motionone/react": "^10.5.0-alpha.2",
-    "@motionone/svelte": "^10.5.0-alpha.2",
-    "@motionone/vue": "^10.5.0-alpha.2"
+    "@motionone/dom": "^10.5.0-alpha.3",
+    "@motionone/react": "^10.5.0-alpha.3",
+    "@motionone/svelte": "^10.5.0-alpha.3",
+    "@motionone/vue": "^10.5.0-alpha.3"
   }
 }

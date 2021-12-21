@@ -1,6 +1,6 @@
 {
   "name": "@motionone/vue",
-  "version": "10.5.0-alpha.2",
+  "version": "10.5.0-alpha.3",
   "description": "A tiny, performant animation library for Vue",
   "author": "Matt Perry",
   "license": "MIT",
@@ -18,7 +18,7 @@
     "measure": "bundlesize"
   },
   "dependencies": {
-    "@motionone/dom": "^10.5.0-alpha.2",
+    "@motionone/dom": "^10.5.0-alpha.3",
     "tslib": "^2.3.1"
   },
   "devDependencies": {
