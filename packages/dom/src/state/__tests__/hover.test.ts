@@ -1,4 +1,4 @@
-import { pointerEnter, pointerLeave } from "../../../jest.setup"
+const { pointerEnter, pointerLeave } = require("config/jest.setup.js")
 import { createTestMotionState } from "./utils"
 import "config/waapi-polyfill"
 

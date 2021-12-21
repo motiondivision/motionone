@@ -3,12 +3,13 @@ import "config/waapi-polyfill"
 import { mount } from "@vue/test-utils"
 import { Motion } from "../Motion"
 
+const { pointerEnter } = require("config/jest.setup.js")
+
 /**
  * Features TODO/test
  *
  *  - Animate when value changes
  *  - Presence
- *  - Renders child element
  *  - Hover
  *  - Press
  *  - Event handlers
@@ -115,5 +116,23 @@ describe("Motion", () => {
         ).not.toEqual("opacity: 0.9;")
       }, 500)
     })
+  })
+
+  test("Passes event handlers", async () => {
+    const didHover = await new Promise<boolean>((resolve) => {
+      const wrapper = mount(Motion, {
+        props: {
+          "data-testid": "box",
+          hover: { scale: 2 },
+          onHoverstart: () => {
+            resolve(true)
+          },
+        },
+      })
+
+      pointerEnter(wrapper.get("[data-testid='box']").element)
+    })
+
+    expect(didHover).toBe(true)
   })
 })
