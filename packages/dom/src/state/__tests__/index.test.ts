@@ -97,6 +97,31 @@ describe("createMotionState()", () => {
     )
   })
 
+  test("If animate is same as initial, fire animation.", async () => {
+    const { element } = createTestMotionState({
+      initial: { scale: 2 },
+      animate: { scale: 2 },
+      transition: { duration: 0.01 },
+    })
+
+    expect(style.get(element, "scale")).toBe("2")
+    expect(element).toHaveStyle("transform: scale(var(--motion-scale))")
+
+    const motionStartHandler = jest.fn()
+    const motionCompleteHandler = jest.fn()
+
+    await new Promise<void>((resolve) => {
+      element.addEventListener("motionstart", motionStartHandler)
+      element.addEventListener("motioncomplete", motionCompleteHandler)
+      setTimeout(() => resolve(), 200)
+    })
+
+    expect(motionStartHandler).not.toBeCalled()
+    expect(motionCompleteHandler).not.toBeCalled()
+    expect(style.get(element, "scale")).toBe("2")
+    expect(element).toHaveStyle("transform: scale(var(--motion-scale))")
+  })
+
   test("State type can override default transition", async () => {
     const { element } = createTestMotionState({
       initial: { opacity: 0 },
@@ -114,56 +139,35 @@ describe("createMotionState()", () => {
     expect(style.get(element, "opacity")).toBe("0.5")
   })
 
-  // test("New poses trigger animations if different", async () => {
-  //   const { element, state } = createTestMotionState({
-  //     animate: { opacity: 1 },
-  //   })
+  test("If value is removed, animate to base", async () => {
+    const { element, state } = createTestMotionState({
+      transition: { duration: 0.01 },
+    })
 
-  //   await new Promise((resolve) => {
-  //     state.update({ animate: { opacity: 1 }, transition: { duration: 0.01 } })
-  //     element.addEventListener("motioncomplete", () => resolve(true))
-  //   })
+    element.style.opacity = "0.5"
 
-  //   expect(element).toHaveStyle("opacity: 0.5")
-  // })
+    let resolver = () => {}
+    await new Promise<void>((resolve) => {
+      state.update({
+        animate: { opacity: 0.9 },
+        transition: { duration: 0.01 },
+      })
+      resolver = () => resolve()
+      element.addEventListener("motioncomplete", resolver)
+    })
 
-  // test("New poses don't trigger animations if the same", async () => {
-  //   const { element, state } = createTestMotionState({
-  //     animate: { opacity: 1 },
-  //   })
+    element.removeEventListener("motioncomplete", resolver)
 
-  //   const promise = new Promise((resolve, reject) => {
-  //     state.update({ animate: { opacity: 1 }, transition: { duration: 0.01 } })
-  //     element.addEventListener("motioncomplete", reject)
-  //     setTimeout(() => resolve(true), 100)
-  //   })
+    expect(style.get(element, "opacity")).toBe("0.9")
 
-  //   expect(promise).resolves.toEqual(true)
-  // })
+    await new Promise<void>((resolve) => {
+      state.update({
+        transition: { duration: 0.01 },
+      })
+      resolver = () => resolve()
+      element.addEventListener("motioncomplete", resolver)
+    })
 
-  // test("If value is removed from active pose, animate to initial base target", async () => {
-  //   const { element, state } = createTestMotionState({
-  //     animate: { opacity: 1, scale: 2 },
-  //     transition: { duration: 0.01 },
-  //   })
-  //   element.style.opacity = "0.5"
-
-  //   await new Promise<void>((resolve, reject) => {
-  //     function nextAnimation() {
-  //       element.removeEventListener("motioncomplete", nextAnimation)
-  //       element.addEventListener("motioncomplete", () => resolve())
-  //       expect(element).toHaveStyle("opacity: 1; --motion-scale: 2")
-  //       state.update({
-  //         animate: { opacity: 1, scale: 2 },
-  //         transition: { duration: 0.01 },
-  //       })
-  //     }
-
-  //     element.addEventListener("motioncomplete", nextAnimation)
-
-  //     setTimeout(reject, 200)
-  //   })
-
-  //   expect(element).toHaveStyle("opacity: 0.5; --motion-scale: 1")
-  // })
+    expect(style.get(element, "opacity")).toBe("0.5")
+  })
 })
