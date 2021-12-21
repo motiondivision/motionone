@@ -1,0 +1,16 @@
+export { animate } from "./animate/index"
+export { animateStyle } from "./animate/animate-style"
+export { timeline } from "./timeline/index"
+export { stagger } from "./utils/stagger"
+export { spring } from "./js/easing/spring/index"
+export { glide } from "./js/easing/glide/index"
+export { style } from "./animate/style"
+
+export { getAnimationData } from "./animate/data"
+export { getStyleName } from "./animate/utils/get-style-name"
+export { createMotionState, mountedStates } from "./state/index"
+export { createStyles } from "./animate/utils/style-object"
+export { createStyleString } from "./animate/utils/style-string"
+
+export * from "./state/types"
+export * from "./animate/types"

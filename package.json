@@ -1,149 +1,87 @@
 {
-  "name": "motion",
-  "version": "10.4.0",
-  "description": "The Motion library for the web",
-  "author": "Matt Perry",
-  "main": "dist/main.cjs.js",
-  "module": "dist/main.es.js",
-  "types": "types/index.d.ts",
-  "license": "MIT",
-  "sideEffects": false,
-  "keywords": [
-    "motion",
-    "animation",
-    "bezier",
-    "cubic bezier",
-    "easing",
-    "waapi"
-  ],
-  "scripts": {
-    "build": "rm -rf lib dist types && tsc -p . && rollup -c && npm run measure",
-    "test": "jest --coverage --config jest.config.json --maxWorkers=2",
-    "test-react": "",
-    "test-react-ssr": "jest --coverage --config jest.config.react-ssr.json --maxWorkers=2",
-    "test-browser": "node ./cypress/scripts/collect-tests.js && start-server-and-test start-dev-server http://0.0.0.0:8000 'cypress run'",
-    "watch": "concurrently \"tsc --watch -p .\" \"rollup -c -w\" \"npm run dev\"",
-    "format": "yarn prettier --write .",
-    "postpublish": "git push --tags",
-    "prepublishOnly": "yarn test && yarn build",
-    "storybook": "start-storybook -p 6006",
-    "dev": "python -m SimpleHTTPServer",
-    "measure": "webpack --config webpack.config.js && bundlesize",
-    "build-storybook": "build-storybook"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
-    "transform": {
-      "\\.(ts)$": "../../../node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "/__tests__/.*\\.test.(ts|js)$",
-    "rootDir": "src",
-    "collectCoverageFrom": [
-      "**/*.{js,jsx,ts,tsx}",
-      "!**/node_modules/**",
-      "!**/__tests__/**",
-      "!**/worklet/**"
-    ],
-    "coverageDirectory": "<rootDir>/../coverage"
-  },
-  "dependencies": {
-    "framer-motion": "^4.1.17",
-    "hey-listen": "^1.0.8",
-    "tslib": "^2.3.0"
-  },
-  "peerDependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  },
-  "peerDependenciesMeta": {
-    "react": {
-      "optional": true
-    },
-    "react-dom": {
-      "optional": true
-    }
-  },
-  "devDependencies": {
-    "@babel/core": "^7.13.16",
-    "@rollup/plugin-commonjs": "^19.0.0",
-    "@rollup/plugin-node-resolve": "^11.2.0",
-    "@rollup/plugin-replace": "^2.4.1",
-    "@testing-library/dom": "^8.1.0",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^12.0.0",
-    "@types/jest": "^26.0.21",
-    "@types/react": "^17.0.15",
-    "@types/react-dom": "^17.0.9",
-    "babel-loader": "^8.2.2",
-    "bundlesize": "^0.18.1",
-    "canvas": "^2.8.0",
-    "concurrently": "^6.2.0",
-    "convert-tsconfig-paths-to-webpack-aliases": "^0.9.2",
-    "cypress": "^7.6.0",
-    "gsap": "^3.7.1",
-    "husky": "=4",
-    "jest": "^26.6.3",
-    "jest-watch-typeahead": "^0.6.1",
-    "lint-staged": ">=10",
-    "prettier": "2.2.1",
-    "rollup": "^2.52.3",
-    "rollup-plugin-terser": "^7.0.2",
-    "start-server-and-test": "^1.12.5",
-    "terser-webpack-plugin": "^4.2.3",
-    "ts-jest": "^26.5.4",
-    "ts-loader": "^8.3.0",
-    "typescript": "^4.4.0-beta",
-    "web-animations-js": "^2.3.2",
-    "webpack": "^5.58.1",
-    "webpack-cli": "^4.8.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
-  },
-  "eslintConfig": {
-    "overrides": [
-      {
-        "files": [
-          "**/*.stories.*"
-        ],
-        "rules": {
-          "import/no-anonymous-default-export": "off"
-        }
-      }
+  "name": "motionone-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "playgrounds/*",
+      "packages/*"
     ]
   },
-  "bundlesize": [
-    {
-      "path": "./dist/size-animate-dom.js",
-      "maxSize": "3.3 kB"
-    },
-    {
-      "path": "./dist/size-animate-style.js",
-      "maxSize": "2.9 kB"
-    },
-    {
-      "path": "./dist/size-timeline-dom.js",
-      "maxSize": "4.2 kB"
-    },
-    {
-      "path": "./dist/size-spring.js",
-      "maxSize": "1 kB"
-    },
-    {
-      "path": "./dist/size-react.js",
-      "maxSize": "4.5 kB"
-    },
-    {
-      "path": "./dist/size-webpack-animate.js",
-      "maxSize": "3.4 kB"
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "measure": "turbo run measure",
+    "format": "prettier --write '**/*.{ts,tsx,.md}'",
+    "new-prepare": "turbo run build test measure lint",
+    "new": "npm run new-prepare && lerna publish",
+    "new-alpha": "npm run new-prepare && lerna publish from-package --canary --preid alpha",
+    "new-beta": "npm run new-prepare && lerna publish from-package --canary --preid beta",
+    "deploy": "turbo run build test measure lint deploy"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.18.1",
+    "@rollup/plugin-node-resolve": "^13.0.6",
+    "@rollup/plugin-replace": "^3.0.0",
+    "@types/jest": "^27.0.3",
+    "bundlesize": "^0.18.1",
+    "jest": "^27.4.4",
+    "lerna": "^4.0.0",
+    "prettier": "^2.5.1",
+    "rollup-plugin-terser": "^7.0.2",
+    "ts-jest": "^27.1.1",
+    "turbo": "latest",
+    "webpack-cli": "^4.9.1"
+  },
+  "turbo": {
+    "npmClient": "yarn",
+    "baseBranch": "origin/main",
+    "pipeline": {
+      "build": {
+        "dependsOn": [
+          "^build"
+        ],
+        "outputs": [
+          "dist/**",
+          ".next/**"
+        ]
+      },
+      "lint": {
+        "outputs": []
+      },
+      "test": {
+        "dependsOn": [
+          "build"
+        ],
+        "outputs": []
+      },
+      "deploy": {
+        "dependsOn": [
+          "build",
+          "test",
+          "lint"
+        ]
+      },
+      "measure": {
+        "dependsOn": [
+          "build"
+        ]
+      },
+      "publish": {
+        "dependsOn": [
+          "build",
+          "test",
+          "lint"
+        ]
+      },
+      "dev": {
+        "dependsOn": [
+          "build"
+        ],
+        "cache": false
+      }
     }
-  ]
+  }
 }

@@ -1,6 +1,0 @@
-{
-  "private": true,
-  "main": "../dist/react.cjs.js",
-  "module": "../dist/react.es.js",
-  "types": "../types/react-entry.d.ts"
-}

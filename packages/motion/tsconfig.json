@@ -1,0 +1,10 @@
+{
+  "extends": "config/ts-base.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "include": ["src/**/*.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["**/__tests__/*"],
+  "compilerOptions": {
+    "outDir": "./lib",
+    "declarationDir": "./types"
+  }
+}

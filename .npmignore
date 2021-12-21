@@ -1,9 +1,0 @@
-*
-**/*
-!dist/**
-!types/**
-!react/**
-!vue/**
-!svelte/**
-!LICENSE.md
-!CHANGELOG.md
