@@ -47,7 +47,7 @@
   "bundlesize": [
     {
       "path": "./dist/motion-vue.min.js",
-      "maxSize": "5.0 kB"
+      "maxSize": "6.0 kB"
     }
   ]
 }
