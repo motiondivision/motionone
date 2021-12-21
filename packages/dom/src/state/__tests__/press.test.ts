@@ -90,7 +90,7 @@ describe("press", () => {
 
         setTimeout(() => {
           resolve()
-        }, 50)
+        }, 100)
       })
     })
 
