@@ -158,7 +158,7 @@ if (!argv.format || argv.format === "iife") {
     output: {
       compact: true,
       file: "dist/motion-vue.min.js",
-      format: "iife",
+      format: "esm",
       name: "Motion",
       exports: "auto",
       globals,
@@ -174,11 +174,7 @@ if (!argv.format || argv.format === "iife") {
         emitDeclarationOnly: true,
       }),
       babel(baseConfig.plugins.babel),
-      terser({
-        output: {
-          ecma: 5,
-        },
-      }),
+      terser({ output: { comments: false } }),
     ],
   }
   buildFormats.push(unpkgConfig)

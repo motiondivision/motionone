@@ -9,8 +9,7 @@
     :transition="{ duration: 1 }"
     style="width: 200px; background-color: red; height: 200px"
     v-on:click="onClick"
-  >
-  </Motion>
+  />
 </template>
 
 <script lang="ts">
