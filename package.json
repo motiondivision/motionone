@@ -17,8 +17,8 @@
     "format": "prettier --write '**/*.{ts,tsx,.md}'",
     "new-prepare": "turbo run build test measure lint",
     "new": "npm run new-prepare && lerna publish",
-    "new-alpha": "npm run new-prepare && lerna publish from-package --canary --preid alpha",
-    "new-beta": "npm run new-prepare && lerna publish from-package --canary --preid beta",
+    "new-alpha": "npm run new-prepare && lerna publish from-package --canary minor --preid alpha",
+    "new-beta": "npm run new-prepare && lerna publish from-package --canary minor --preid beta",
     "deploy": "turbo run build test measure lint deploy"
   },
   "devDependencies": {
