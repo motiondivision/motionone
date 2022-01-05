@@ -120,8 +120,8 @@ describe("press", () => {
           fireEvent.pointerUp(window)
           setTimeout(() => {
             resolve()
-          }, 50)
-        }, 10)
+          }, 100)
+        }, 50)
       })
     })
 

@@ -103,9 +103,9 @@ describe("inView", () => {
 
       setTimeout(() => {
         activeIntersectionObserver?.([{ isIntersecting: false }])
-      }, 20)
+      }, 30)
 
-      setTimeout(resolve, 50)
+      setTimeout(resolve, 100)
     })
 
     expect(element).toHaveStyle("background-color: blue")
