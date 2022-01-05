@@ -7,9 +7,8 @@ import {
   ref,
   defineComponent,
 } from "vue"
-import { createMotionState, createStyles } from "@motionone/dom"
-
-const contextId = "motion-state"
+import { createMotionState, createStyleString } from "@motionone/dom"
+import { contextId, presenceId, PresenceState } from "./context"
 
 const variants = {
   type: Object,
@@ -39,7 +38,20 @@ export const Motion = defineComponent({
   setup(props) {
     const root = ref<Element | null>(null)
     const parentState = inject(contextId, undefined)
-    const state = createMotionState({ ...props }, parentState)
+    const presenceState = inject(presenceId, undefined) as
+      | PresenceState
+      | undefined
+
+    const state = createMotionState(
+      {
+        ...props,
+        initial:
+          presenceState?.initial === false
+            ? presenceState.initial
+            : props.initial,
+      },
+      parentState
+    )
 
     provide(contextId, state)
 
@@ -57,6 +69,7 @@ export const Motion = defineComponent({
     return {
       state,
       root,
+      initialStyles: createStyleString(state.getTarget()),
     }
   },
   render() {
@@ -65,12 +78,13 @@ export const Motion = defineComponent({
       {
         ref: "root",
         /**
-         * If this is the initial render, incorporate animated values so we
-         * support SSR. For subsequent renders just forward style.
+         * We pass this as a style string as Vue doesn't diff
+         * individual styles, reapplying them every render.
+         *
+         * This leads to a known bug where if a value in this.style
+         * changes, initial styles may be reapplied.
          */
-        style: !this.state.isMounted()
-          ? { ...this.style, ...createStyles(this.state.getTarget()) }
-          : this.style,
+        style: createStyleString(this.style) + this.initialStyles,
       },
       this.$slots.default?.()
     )

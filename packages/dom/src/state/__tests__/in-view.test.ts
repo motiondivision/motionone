@@ -92,7 +92,7 @@ describe("inView", () => {
   test("Animate from inView when element enters viewport", async () => {
     const { element } = createTestMotionState({
       inView: { backgroundColor: "red" },
-      transition: { duration: 0.01 },
+      transition: { duration: 0.001 },
     })
     element.style.backgroundColor = "blue"
 

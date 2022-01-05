@@ -14,10 +14,7 @@ export interface MotionState {
   getTarget: () => MotionKeyframes
   getOptions: () => Options
   getContext: () => MotionStateContext
-  setActive: (
-    type: keyof MotionStateContext,
-    isActive: boolean
-  ) => Promise<void>
+  setActive: (type: keyof MotionStateContext, isActive: boolean) => void
   mount: (element: Element) => () => void
   isMounted: () => boolean
   animateUpdates: () => Generator<void>

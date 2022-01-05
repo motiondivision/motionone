@@ -207,13 +207,9 @@ export function createMotionState(
       scheduleAnimation(state)
     },
     setActive: (name, isActive) => {
-      if (!element) return Promise.resolve()
+      if (!element) return
       activeStates[name] = isActive
       scheduleAnimation(state)
-
-      return new Promise((resolve) => {
-        setTimeout(() => resolve(), 100)
-      })
     },
     animateUpdates,
     getDepth: () => depth,
