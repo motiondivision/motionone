@@ -14,7 +14,6 @@ import {
 } from "./utils/transforms"
 import { convertEasing, isCustomEasing, isEasingList } from "./utils/easing"
 import { supports } from "./utils/feature-detection"
-import { cssVariableRenderer, styleRenderer } from "./utils/apply"
 import { NumberAnimation } from "../js/NumberAnimation"
 import { hydrateKeyframes, keyframesList } from "./utils/keyframes"
 import { style } from "./style"
@@ -42,7 +41,6 @@ export function animateStyle(
   } = options
   const data = getAnimationData(element)
   let canAnimateNatively = supports.waapi()
-  let render: (v: any) => void = noop
   const valueIsTransform = isTransform(key)
 
   /**
@@ -101,15 +99,11 @@ export function animateStyle(
      * rather than directly onto the element.style object.
      */
     if (isCssVar(name)) {
-      render = cssVariableRenderer(element, name)
-
       if (supports.cssRegisterProperty()) {
         registerCssVariable(name)
       } else {
         canAnimateNatively = false
       }
-    } else {
-      render = styleRenderer(element, name)
     }
 
     /**
@@ -168,7 +162,7 @@ export function animateStyle(
       animation.finished
         .then(() => {
           // Apply styles to target
-          render(target)
+          style.set(element, name, target)
 
           // Ensure fill modes don't persist
           animation.cancel()
@@ -199,9 +193,9 @@ export function animateStyle(
         keyframes.unshift(parseFloat(readInitialValue() as string))
       }
 
-      if (definition) {
-        const applyStyle = render
-        render = (v: number) => applyStyle(definition.toDefaultUnit(v))
+      const render = (latest: number) => {
+        if (definition) latest = definition.toDefaultUnit(latest) as any
+        style.set(element, name, latest)
       }
 
       animation = new NumberAnimation(render, keyframes as any, {
@@ -211,7 +205,9 @@ export function animateStyle(
       })
     } else {
       const target = keyframes[keyframes.length - 1]
-      render(
+      style.set(
+        element,
+        name,
         definition && isNumber(target)
           ? definition.toDefaultUnit(target)
           : target

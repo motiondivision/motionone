@@ -16,4 +16,13 @@ export const style = {
 
     return value
   },
+  set: (element: Element, name: string, value: string | number) => {
+    name = getStyleName(name)
+
+    if (isCssVar(name)) {
+      ;(element as HTMLElement).style.setProperty(name, value as string)
+    } else {
+      ;(element as HTMLElement).style[name] = value
+    }
+  },
 }

@@ -17,6 +17,7 @@ export const Presence = defineComponent({
     name: { type: String },
     initial: {
       type: Boolean,
+      default: true,
     },
     exitBeforeEnter: {
       type: Boolean,
