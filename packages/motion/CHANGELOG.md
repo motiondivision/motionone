@@ -7,6 +7,7 @@ Motion One adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - **Motion One for Vue:** A fully declarative version of Motion One for Vue 3!
+- `style` utility for getting/setting styles and CSS variables on DOM elements.
 
 ## [10.4.0] [2021-10-18]
 
