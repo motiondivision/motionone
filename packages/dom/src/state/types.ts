@@ -26,6 +26,7 @@ export interface Options {
   inView?: VariantDefinition
   hover?: VariantDefinition
   press?: VariantDefinition
+  exit?: VariantDefinition
   variants?: Variants
   transition?: AnimationOptionsWithOverrides
 }

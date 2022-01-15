@@ -13,6 +13,10 @@ const config = {
       routes: "svelte/dev",
       template: "svelte/app.html",
     },
+
+    package: {
+      dir: "lib",
+    },
   },
 }
 

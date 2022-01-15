@@ -2,6 +2,7 @@ import svelte from "rollup-plugin-svelte"
 import resolve from "@rollup/plugin-node-resolve"
 import sveltePreprocess from "svelte-preprocess"
 import css from "rollup-plugin-css-only"
+import replace from "@rollup/plugin-replace"
 import typescript from "@rollup/plugin-typescript"
 import commonjs from "@rollup/plugin-commonjs"
 
@@ -15,6 +16,10 @@ const dist = {
     file: "dist/index.js",
   },
   plugins: [
+    replace({
+      preventAssignment: true,
+      "process.env.NODE_ENV": JSON.stringify("production"),
+    }),
     svelte({
       preprocess: sveltePreprocess({ sourceMap: !production }),
       compilerOptions: {

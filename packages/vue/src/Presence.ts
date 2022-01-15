@@ -64,7 +64,7 @@ export const Presence = defineComponent({
         css: false,
         mode: this.exitBeforeEnter ? "out-in" : undefined,
       },
-      this.$slots.default?.()
+      this.$slots.default
     )
   },
 })

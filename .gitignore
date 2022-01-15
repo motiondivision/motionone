@@ -34,4 +34,6 @@ yarn-error.log*
 # turbo
 .turbo
 
+packages/svelte/package
+
 tsconfig.tsbuildinfo

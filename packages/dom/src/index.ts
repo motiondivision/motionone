@@ -8,9 +8,12 @@ export { style } from "./animate/style"
 
 export { getAnimationData } from "./animate/data"
 export { getStyleName } from "./animate/utils/get-style-name"
+export { getOptions } from "./animate/utils/options"
 export { createMotionState, mountedStates } from "./state/index"
 export { createStyles } from "./animate/utils/style-object"
 export { createStyleString } from "./animate/utils/style-string"
+export { defaults } from "./animate/utils/defaults"
+export { isCustomEasing } from "./animate/utils/easing"
 
 export * from "./state/types"
 export * from "./animate/types"

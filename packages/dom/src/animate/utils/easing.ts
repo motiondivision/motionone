@@ -9,7 +9,7 @@ export const isEasingList = (easing: Easing | Easing[]): easing is Easing[] =>
   Array.isArray(easing) && !isNumber(easing[0])
 
 export const isCustomEasing = (
-  easing: Easing | Easing[] | CustomEasing
+  easing?: Easing | Easing[] | CustomEasing
 ): easing is CustomEasing =>
   typeof easing === "object" &&
   Boolean((easing as CustomEasing).createAnimation)
