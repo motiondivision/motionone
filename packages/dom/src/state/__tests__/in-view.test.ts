@@ -97,15 +97,17 @@ describe("inView", () => {
     element.style.backgroundColor = "blue"
 
     await new Promise<void>((resolve) => {
+      element.addEventListener("motioncomplete", ({ detail }) => {
+        if (detail.target.backgroundColor === "red") {
+          activeIntersectionObserver?.([{ isIntersecting: false }])
+        } else if (detail.target.backgroundColor === "blue") {
+          resolve()
+        }
+      })
+
       expect(activeIntersectionObserver).toBeTruthy()
 
       activeIntersectionObserver?.([{ isIntersecting: true }])
-
-      setTimeout(() => {
-        activeIntersectionObserver?.([{ isIntersecting: false }])
-      }, 50)
-
-      setTimeout(resolve, 150)
     })
 
     expect(element).toHaveStyle("background-color: blue")
