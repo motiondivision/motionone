@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.5.1] [2022-01-15]
+
+### Fixed
+
+- Fixing "default slot" warning in Vue `Presence` component. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/45)
+
 ## [10.5.0] [2022-01-01]
 
 ### Added
