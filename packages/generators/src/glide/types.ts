@@ -2,7 +2,6 @@ export interface GlideOptions {
   power?: number
   decay?: number
   changeTarget?: (v: number) => number
-
   max?: number
   min?: number
   bounceDamping?: number

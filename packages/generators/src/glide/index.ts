@@ -1,9 +1,10 @@
-import type { GlideOptions } from "./types"
-import type { AnimationGenerator, AnimationGeneratorState } from "../../types"
-import { calcVelocity, createSpringGenerator } from "../spring/generator"
-import { ms } from "../../../animate/utils/time"
+import { time } from "@motionone/utils"
+import { spring as createSpring } from "../spring"
+import { AnimationGenerator, AnimationGeneratorState } from "../types"
+import { calcGeneratorVelocity } from "../utils"
+import { GlideOptions } from "./types"
 
-export const createGlideGenerator = ({
+export const glide = ({
   from = 0,
   velocity = 0.0,
   power = 0.8,
@@ -15,15 +16,15 @@ export const createGlideGenerator = ({
   max,
   restDistance = 0.5,
   restSpeed,
-}: GlideOptions) => {
-  decay = ms(decay)
+}: GlideOptions): AnimationGenerator => {
+  decay = time.ms(decay)
 
   const state: AnimationGeneratorState = {
-    value: from,
-    target: from,
-    velocity,
     hasReachedTarget: false,
     done: false,
+    current: from,
+    target: from,
+    velocity,
   }
 
   const isOutOfBounds = (v: number) =>
@@ -55,9 +56,9 @@ export const createGlideGenerator = ({
     const delta = calcDelta(t)
     const latest = calcLatest(t)
     state.done = Math.abs(delta) <= restDistance
-    state.value = state.done ? target : latest
+    state.current = state.done ? target : latest
     state.velocity =
-      t === 0 ? velocity : calcVelocity(calcLatest, t, state.value)
+      t === 0 ? velocity : calcGeneratorVelocity(calcLatest, t, state.current)
   }
 
   /**
@@ -70,13 +71,13 @@ export const createGlideGenerator = ({
   let spring: AnimationGenerator | undefined
 
   const checkCatchBoundary = (t: number) => {
-    if (!isOutOfBounds(state.value)) return
+    if (!isOutOfBounds(state.current)) return
 
     timeReachedBoundary = t
 
-    spring = createSpringGenerator({
-      from: state.value,
-      to: nearestBoundary(state.value),
+    spring = createSpring({
+      from: state.current,
+      to: nearestBoundary(state.current),
       velocity: state.velocity,
       damping: bounceDamping,
       stiffness: bounceStiffness,
@@ -87,33 +88,31 @@ export const createGlideGenerator = ({
 
   checkCatchBoundary(0)
 
-  return {
-    next: (t: number) => {
-      /**
-       * We need to resolve the friction to figure out if we need a
-       * spring but we don't want to do this twice per frame. So here
-       * we flag if we updated for this frame and later if we did
-       * we can skip doing it again.
-       */
-      let hasUpdatedFrame = false
-      if (!spring && timeReachedBoundary === undefined) {
-        hasUpdatedFrame = true
-        applyFriction(t)
-        checkCatchBoundary(t)
-      }
+  return (t: number) => {
+    /**
+     * We need to resolve the friction to figure out if we need a
+     * spring but we don't want to do this twice per frame. So here
+     * we flag if we updated for this frame and later if we did
+     * we can skip doing it again.
+     */
+    let hasUpdatedFrame = false
+    if (!spring && timeReachedBoundary === undefined) {
+      hasUpdatedFrame = true
+      applyFriction(t)
+      checkCatchBoundary(t)
+    }
 
-      /**
-       * If we have a spring and the provided t is beyond the moment the friction
-       * animation crossed the min/max boundary, use the spring.
-       */
-      if (timeReachedBoundary !== undefined && t > timeReachedBoundary) {
-        state.hasReachedTarget = true
-        return spring!.next(t - timeReachedBoundary)
-      } else {
-        state.hasReachedTarget = false
-        !hasUpdatedFrame && applyFriction(t)
-        return state
-      }
-    },
+    /**
+     * If we have a spring and the provided t is beyond the moment the friction
+     * animation crossed the min/max boundary, use the spring.
+     */
+    if (timeReachedBoundary !== undefined && t > timeReachedBoundary) {
+      state.hasReachedTarget = true
+      return spring!(t - timeReachedBoundary)
+    } else {
+      state.hasReachedTarget = false
+      !hasUpdatedFrame && applyFriction(t)
+      return state
+    }
   }
 }

@@ -1,5 +1,5 @@
 import type { SpringOptions } from "./types"
-import { createSpringGenerator } from "./generator"
+import { spring as createSpringGenerator } from "@motionone/generators"
 import { createGeneratorEasing } from "../utils/create-generator-easing"
 
 export const spring = createGeneratorEasing<SpringOptions>(
