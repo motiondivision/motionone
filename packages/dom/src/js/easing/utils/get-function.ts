@@ -1,8 +1,7 @@
 import type { Easing } from "../../../animate/types"
 import type { EasingFunction } from "../../types"
-import { cubicBezier } from "../cubic-bezier"
-import { steps } from "../steps"
-import { noopReturn } from "../../../utils/noop"
+import { cubicBezier, steps } from "@motionone/easing"
+import { noopReturn } from "@motionone/utils"
 
 const namedEasings = {
   ease: cubicBezier(0.25, 0.1, 0.25, 1.0),

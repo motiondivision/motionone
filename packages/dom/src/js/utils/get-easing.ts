@@ -1,4 +1,4 @@
-import { wrap } from "../../utils/wrap"
+import { wrap } from "@motionone/utils"
 import { isEasingList } from "../../animate/utils/easing"
 
 export function getEasingForSegment<T>(easing: T | T[], i: number) {

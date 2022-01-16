@@ -1,5 +1,5 @@
 import type { BezierDefinition, CustomEasing, Easing } from "../types"
-import { isNumber } from "../../utils/is-number"
+import { isNumber } from "@motionone/utils"
 
 export const isCubicBezier = (
   easing: Easing | Easing[]

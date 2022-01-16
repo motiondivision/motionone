@@ -1,0 +1,27 @@
+{
+  "name": "@motionone/value",
+  "version": "10.5.2",
+  "description": "An animatable value state.",
+  "license": "MIT",
+  "author": "Matt Perry",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
+  "types": "types/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "rm -rf lib dist types && tsc -p . && rollup -c",
+    "test": "jest --coverage --config jest.config.js",
+    "dev": "rollup -c -w",
+    "measure": "bundlesize"
+  },
+  "dependencies": {
+    "hey-listen": "^1.0.8",
+    "tslib": "^2.3.1"
+  },
+  "bundlesize": [
+    {
+      "path": "./dist/size-index.js",
+      "maxSize": "0.5 kB"
+    }
+  ]
+}

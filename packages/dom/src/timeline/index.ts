@@ -1,5 +1,5 @@
 import { invariant } from "hey-listen"
-import { progress } from "../utils/progress"
+import { progress } from "@motionone/utils"
 import { resolveOption } from "../utils/stagger"
 import { defaultOffset, fillOffset } from "../js/utils/offset"
 import { animateStyle } from "../animate/animate-style"

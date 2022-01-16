@@ -1,4 +1,4 @@
-import { noop } from "../../utils/noop"
+import { noop } from "@motionone/utils"
 import type {
   AnimationControls,
   AnimationFactory,

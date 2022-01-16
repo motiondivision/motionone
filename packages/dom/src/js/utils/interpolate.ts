@@ -1,7 +1,5 @@
 import type { EasingFunction } from "../types"
-import { mix } from "../../utils/mix"
-import { noopReturn } from "../../utils/noop"
-import { progress } from "../../utils/progress"
+import { noopReturn, progress, mix } from "@motionone/utils"
 import { getEasingForSegment } from "./get-easing"
 import { defaultOffset, fillOffset } from "./offset"
 

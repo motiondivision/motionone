@@ -5,7 +5,6 @@ import type {
   ValueKeyframesDefinition,
 } from "./types"
 import { isCssVar, registerCssVariable } from "./utils/css-var"
-import { noop } from "../utils/noop"
 import { ms } from "./utils/time"
 import {
   addTransformToElement,
@@ -19,7 +18,7 @@ import { hydrateKeyframes, keyframesList } from "./utils/keyframes"
 import { style } from "./style"
 import { defaults } from "./utils/defaults"
 import { getStyleName } from "./utils/get-style-name"
-import { isNumber } from "../utils/is-number"
+import { isNumber, noop } from "@motionone/utils"
 import { stopAnimation } from "./utils/stop-animation"
 
 export function animateStyle(

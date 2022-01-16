@@ -1,6 +1,6 @@
 import type { AnimationGenerator, AnimationGeneratorState } from "../../types"
 import type { SpringOptions } from "./types"
-import { velocityPerSecond } from "../../../utils/velocity-per-second"
+import { velocityPerSecond } from "@motionone/utils"
 import { hasReachedTarget } from "../utils/has-reached-target"
 
 const defaultStiffness = 100.0

@@ -1,7 +1,6 @@
 import type { Easing, UnresolvedValueKeyframe } from "../../animate/types"
 import type { ValueSequence } from "../types"
-import { mix } from "../../utils/mix"
-import { removeItem } from "../../utils/array"
+import { removeItem, mix } from "@motionone/utils"
 import { getEasingForSegment } from "../../js/utils/get-easing"
 
 export function eraseKeyframes(

@@ -1,5 +1,4 @@
-import { mix } from "../../utils/mix"
-import { progress } from "../../utils/progress"
+import { mix, progress } from "@motionone/utils"
 
 export function fillOffset(offset: number[], remaining: number): void {
   const min = offset[offset.length - 1]
