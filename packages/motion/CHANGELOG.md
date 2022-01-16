@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.5.2] [2022-01-16]
+
+### Fixed
+
+- Fixing types for `Presence`. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/44)
+
 ## [10.5.1] [2022-01-15]
 
 ### Fixed
