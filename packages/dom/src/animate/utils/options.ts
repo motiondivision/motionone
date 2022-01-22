@@ -1,8 +1,8 @@
 import type {
   AnimationListOptions,
-  AnimationOptions,
   AnimationOptionsWithOverrides,
 } from "../types"
+import type { AnimationOptions } from "@motionone/types"
 
 export const getOptions = (
   options: AnimationOptionsWithOverrides | AnimationListOptions,

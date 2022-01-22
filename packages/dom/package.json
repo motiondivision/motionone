@@ -15,6 +15,11 @@
     "measure": "bundlesize"
   },
   "dependencies": {
+    "@motionone/animation": "^10.5.2",
+    "@motionone/easing": "^10.5.2",
+    "@motionone/generators": "^10.5.2",
+    "@motionone/utils": "^10.5.2",
+    "@motionone/types": "^10.5.2",
     "hey-listen": "^1.0.8",
     "tslib": "^2.3.1"
   },

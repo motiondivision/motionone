@@ -1,25 +1,25 @@
 import { getAnimationData } from "./data"
-import type {
-  AnimationFactory,
-  AnimationOptions,
-  ValueKeyframesDefinition,
-} from "./types"
+import type { AnimationFactory, ValueKeyframesDefinition } from "./types"
 import { isCssVar, registerCssVariable } from "./utils/css-var"
-import { noop } from "../utils/noop"
-import { ms } from "./utils/time"
+import { Animation } from "@motionone/animation"
+import {
+  defaults,
+  time,
+  isEasingGenerator,
+  isEasingList,
+} from "@motionone/utils"
+import { AnimationOptions } from "@motionone/types"
 import {
   addTransformToElement,
   isTransform,
   transformDefinitions,
 } from "./utils/transforms"
-import { convertEasing, isCustomEasing, isEasingList } from "./utils/easing"
+import { convertEasing } from "./utils/easing"
 import { supports } from "./utils/feature-detection"
-import { NumberAnimation } from "../js/NumberAnimation"
 import { hydrateKeyframes, keyframesList } from "./utils/keyframes"
 import { style } from "./style"
-import { defaults } from "./utils/defaults"
 import { getStyleName } from "./utils/get-style-name"
-import { isNumber } from "../utils/is-number"
+import { isNumber, noop } from "@motionone/utils"
 import { stopAnimation } from "./utils/stop-animation"
 
 export function animateStyle(
@@ -80,7 +80,7 @@ export function animateStyle(
       readInitialValue
     )
 
-    if (isCustomEasing(easing)) {
+    if (isEasingGenerator(easing)) {
       const custom = easing.createAnimation(
         keyframes,
         readInitialValue as any,
@@ -130,9 +130,9 @@ export function animateStyle(
       }
 
       const animationOptions = {
-        delay: ms(delay),
-        duration: ms(duration),
-        endDelay: ms(endDelay),
+        delay: time.ms(delay),
+        duration: time.ms(duration),
+        endDelay: time.ms(endDelay),
         easing: !isEasingList(easing) ? convertEasing(easing) : undefined,
         direction,
         iterations: repeat + 1,
@@ -198,7 +198,7 @@ export function animateStyle(
         style.set(element, name, latest)
       }
 
-      animation = new NumberAnimation(render, keyframes as any, {
+      animation = new Animation(render, keyframes as any, {
         ...options,
         duration,
         easing,

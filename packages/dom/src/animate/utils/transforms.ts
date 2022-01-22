@@ -1,6 +1,5 @@
 import type { CssPropertyDefinition, CssPropertyDefinitionMap } from "../types"
-import { addUniqueItem } from "../../utils/array"
-import { noopReturn } from "../../utils/noop"
+import { addUniqueItem, noopReturn } from "@motionone/utils"
 import { getAnimationData } from "../data"
 
 /**

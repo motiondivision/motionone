@@ -1,6 +1,5 @@
 import type {
   AcceptedElements,
-  AnimationControls,
   AnimationFactory,
   AnimationListOptions,
   MotionKeyframesDefinition,
@@ -10,7 +9,8 @@ import { getOptions } from "./utils/options"
 import { resolveElements } from "./utils/resolve-elements"
 import { createAnimations } from "./utils/controls"
 import { resolveOption } from "../utils/stagger"
-import { defaults } from "./utils/defaults"
+import { AnimationControls } from "@motionone/types"
+import { defaults } from "@motionone/utils"
 
 export function animate(
   elements: AcceptedElements,

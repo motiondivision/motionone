@@ -1,5 +1,5 @@
 import type { MotionKeyframes } from "../types"
-import { isNumber } from "../../utils/is-number"
+import { isNumber } from "@motionone/utils"
 import {
   asTransformCssVar,
   buildTransformTemplate,

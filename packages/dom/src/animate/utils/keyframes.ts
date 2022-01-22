@@ -1,4 +1,4 @@
-import type { UnresolvedValueKeyframe, ValueKeyframe } from "../types"
+import type { UnresolvedValueKeyframe, ValueKeyframe } from "@motionone/types"
 
 export function hydrateKeyframes(
   keyframes: UnresolvedValueKeyframe[],

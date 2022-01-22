@@ -1,7 +1,7 @@
-import type { Easing } from "../animate/types"
-import type { EasingFunction } from "../js/types"
-import { getEasingFunction } from "../js/easing/utils/get-function"
-import { isNumber } from "./is-number"
+import type { Easing } from "@motionone/types"
+import type { EasingFunction } from "@motionone/easing"
+import { isNumber } from "@motionone/utils"
+import { getEasingFunction } from "@motionone/animation"
 
 export type From = "first" | "last" | "center" | number
 
