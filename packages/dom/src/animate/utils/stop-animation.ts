@@ -1,4 +1,4 @@
-import type { BasicAnimationControls } from "../types"
+import type { BasicAnimationControls } from "@motionone/types"
 
 export interface WithCommitStyles {
   commitStyles: VoidFunction

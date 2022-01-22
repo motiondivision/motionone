@@ -1,11 +1,7 @@
-import { noop } from "@motionone/utils"
-import type {
-  AnimationControls,
-  AnimationFactory,
-  AnimationWithCommitStyles,
-} from "../types"
+import { noop, time } from "@motionone/utils"
+import type { AnimationControls } from "@motionone/types"
+import type { AnimationFactory, AnimationWithCommitStyles } from "../types"
 import { stopAnimation } from "./stop-animation"
-import { ms } from "./time"
 
 interface MotionState {
   animations: AnimationWithCommitStyles[]
@@ -62,7 +58,7 @@ export const controls = {
   set: (target: MotionState, key: string, value: number) => {
     switch (key) {
       case "currentTime":
-        value = ms(value)
+        value = time.ms(value)
       case "currentTime":
       case "playbackRate":
         for (let i = 0; i < target.animations.length; i++) {

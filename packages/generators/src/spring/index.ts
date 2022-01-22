@@ -1,9 +1,10 @@
 import { time } from "@motionone/utils"
+import { AnimationGenerator, AnimationGeneratorState } from "@motionone/types"
 import { defaults } from "./defaults"
-import { AnimationGenerator, AnimationGeneratorState } from "../types"
 import { SpringOptions } from "./types"
 import { calcAngularFreq, calcDampingRatio } from "./utils"
-import { calcGeneratorVelocity, hasReachedTarget } from "../utils"
+import { hasReachedTarget } from "../utils/has-reached-target"
+import { calcGeneratorVelocity } from "../utils/velocity"
 
 export const spring = ({
   stiffness = defaults.stiffness,

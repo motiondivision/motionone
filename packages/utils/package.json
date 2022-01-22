@@ -11,17 +11,11 @@
   "scripts": {
     "build": "rm -rf lib dist types && tsc -p . && rollup -c",
     "test": "jest --coverage --config jest.config.js",
-    "dev": "rollup -c -w",
-    "measure": "bundlesize"
+    "dev": "rollup -c -w"
   },
   "dependencies": {
+    "@motionone/types": "^10.5.2",
     "hey-listen": "^1.0.8",
     "tslib": "^2.3.1"
-  },
-  "bundlesize": [
-    {
-      "path": "./dist/size-index.js",
-      "maxSize": "0.5 kB"
-    }
-  ]
+  }
 }

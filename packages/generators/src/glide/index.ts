@@ -1,7 +1,7 @@
 import { time } from "@motionone/utils"
 import { spring as createSpring } from "../spring/index.js"
-import { AnimationGenerator, AnimationGeneratorState } from "../types"
-import { calcGeneratorVelocity } from "../utils"
+import { AnimationGenerator, AnimationGeneratorState } from "@motionone/types"
+import { calcGeneratorVelocity } from "../utils/velocity.js"
 import { GlideOptions } from "./types"
 
 export const glide = ({
