@@ -26,7 +26,7 @@ export const glide = ({
     target: from,
     velocity,
   }
-  console.log("velocity", velocity)
+
   const isOutOfBounds = (v: number) =>
     (min !== undefined && v < min) || (max !== undefined && v > max)
 
@@ -74,7 +74,6 @@ export const glide = ({
     if (!isOutOfBounds(state.current)) return
 
     timeReachedBoundary = t
-    console.log("statevelocity", state.velocity, t)
 
     spring = createSpring({
       from: state.current,
