@@ -170,7 +170,6 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
   cancel() {
     this.playState = "idle"
     this.tick(this.cancelTimestamp)
-    this.reject?.(false)
   }
 
   reverse() {
