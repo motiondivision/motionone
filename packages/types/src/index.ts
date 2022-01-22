@@ -6,6 +6,8 @@ export interface AnimationGeneratorState {
   velocity: number
 }
 
+export type ProgressFunction = (t: number) => void
+
 export type AnimationGeneratorFactory<Options> = (
   options: Options
 ) => AnimationGenerator

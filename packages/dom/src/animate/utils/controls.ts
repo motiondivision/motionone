@@ -1,4 +1,4 @@
-import { noop, time } from "@motionone/utils"
+import { defaults, noop, time } from "@motionone/utils"
 import type { AnimationControls } from "@motionone/types"
 import type { AnimationFactory, AnimationWithCommitStyles } from "../types"
 import { stopAnimation } from "./stop-animation"
@@ -11,9 +11,9 @@ interface MotionState {
 
 const createAnimation = (factory: AnimationFactory) => factory()
 
-export const createAnimations = (
+export const wrapAnimationWithControls = (
   animationFactory: AnimationFactory[],
-  duration: number
+  duration: number = defaults.duration
 ) =>
   new Proxy(
     {

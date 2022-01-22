@@ -6,6 +6,7 @@ export { spring } from "./easing/spring/index"
 export { glide } from "./easing/glide/index"
 export { style } from "./animate/style"
 
+export { wrapAnimationWithControls } from "./animate/utils/controls"
 export { getAnimationData } from "./animate/data"
 export { getStyleName } from "./animate/utils/get-style-name"
 export { createMotionState, mountedStates } from "./state/index"

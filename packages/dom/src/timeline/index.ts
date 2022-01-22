@@ -18,7 +18,7 @@ import type {
   AnimationOptionsWithOverrides,
   ValueKeyframesDefinition,
 } from "../animate/types"
-import { createAnimations } from "../animate/utils/controls"
+import { wrapAnimationWithControls } from "../animate/utils/controls"
 import { keyframesList } from "../animate/utils/keyframes"
 import { getOptions } from "../animate/utils/options"
 import { resolveElements } from "../animate/utils/resolve-elements"
@@ -57,10 +57,10 @@ export function timeline(
     .map((definition) => animateStyle(...definition))
     .filter(Boolean)
 
-  return createAnimations(
+  return wrapAnimationWithControls(
     animationFactories,
     // Get the duration from the first animation definition
-    animationDefinitions[0]?.[3].duration ?? defaults.duration
+    animationDefinitions[0]?.[3].duration
   )
 }
 
