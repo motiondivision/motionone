@@ -25,6 +25,5 @@
       "path": "./dist/size-index.js",
       "maxSize": "1.5 kB"
     }
-  ],
-  "gitHead": "055071744f8dd36825b1fe43145b6e6667fc28c2"
+  ]
 }

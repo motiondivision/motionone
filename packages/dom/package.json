@@ -46,8 +46,7 @@
     },
     {
       "path": "./dist/size-webpack-animate.js",
-      "maxSize": "3.4 kB"
+      "maxSize": "3.45 kB"
     }
-  ],
-  "gitHead": "055071744f8dd36825b1fe43145b6e6667fc28c2"
+  ]
 }
