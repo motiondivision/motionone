@@ -1,6 +1,6 @@
-# `@motionone/dom`
+# `@motionone/react`
 
-DOM bindings for Motion One.
+React bindings for Motion One.
 
 ## 📚 Documentation
 

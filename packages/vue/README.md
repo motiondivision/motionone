@@ -1,6 +1,6 @@
-# `@motionone/dom`
+# `@motionone/vue`
 
-DOM bindings for Motion One.
+Vue bindings for Motion One.
 
 ## 📚 Documentation
 
