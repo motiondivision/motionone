@@ -34,7 +34,7 @@
     },
     {
       "path": "./dist/size-animate-style.js",
-      "maxSize": "2.9 kB"
+      "maxSize": "3 kB"
     },
     {
       "path": "./dist/size-timeline.js",
