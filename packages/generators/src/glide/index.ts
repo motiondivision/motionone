@@ -1,7 +1,7 @@
 import { time } from "@motionone/utils"
-import { spring as createSpring } from "../spring/index.js"
 import { AnimationGenerator, AnimationGeneratorState } from "@motionone/types"
-import { calcGeneratorVelocity } from "../utils/velocity.js"
+import { calcGeneratorVelocity } from "../utils/velocity"
+import { spring as createSpring } from "../spring/index"
 import { GlideOptions } from "./types"
 
 export const glide = ({
@@ -26,7 +26,7 @@ export const glide = ({
     target: from,
     velocity,
   }
-
+  console.log("velocity", velocity)
   const isOutOfBounds = (v: number) =>
     (min !== undefined && v < min) || (max !== undefined && v > max)
 
@@ -74,11 +74,12 @@ export const glide = ({
     if (!isOutOfBounds(state.current)) return
 
     timeReachedBoundary = t
+    console.log("statevelocity", state.velocity)
 
     spring = createSpring({
       from: state.current,
       to: nearestBoundary(state.current),
-      velocity: state.velocity,
+      velocity: state.velocity, // TODO: This should be passing * 1000
       damping: bounceDamping,
       stiffness: bounceStiffness,
       restDistance,

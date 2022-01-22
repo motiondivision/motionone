@@ -78,6 +78,7 @@ describe("spring", () => {
   })
 
   test("Single numeric keyframe should resume existing velocity and not read style from DOM", () => {
+    console.log("test start =========")
     const existingSpring = createSpringGenerator({
       stiffness: 500,
       damping: 5,
@@ -122,6 +123,7 @@ describe("spring", () => {
     expect(animation.keyframes).toEqual(expectedKeyframes)
     expect(animation.easing).toEqual("linear")
     expect(animation.duration).toEqual(0.71)
+    console.log("test end =========")
   })
 
   test("[null, number] should resume existing velocity and not read style from DOM", () => {

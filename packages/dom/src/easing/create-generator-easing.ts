@@ -66,6 +66,10 @@ export function createGeneratorEasing<Options extends {} = {}>(
               (numKeyframes === 2 && keyframes[0] === null))
               ? prevMotionState.velocity
               : 0
+
+          if (prevMotionState) {
+            console.log(prevMotionState)
+          }
           const target = keyframes[numKeyframes - 1] as number
           const unresolvedOrigin = numKeyframes === 1 ? null : keyframes[0]
           const origin =

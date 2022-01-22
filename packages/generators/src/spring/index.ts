@@ -17,7 +17,7 @@ export const spring = ({
   restDistance = 0.5,
 }: SpringOptions = {}): AnimationGenerator => {
   velocity = velocity ? time.s(velocity) : 0.0
-
+  console.log("spring velocity", velocity)
   const state: AnimationGeneratorState = {
     done: false,
     hasReachedTarget: false,
