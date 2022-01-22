@@ -17,7 +17,13 @@ export function animateProgress(
   options?: AnimationOptions
 ) {
   return wrapAnimationWithControls(
-    [() => new Animation(target, [0, 1], options)],
+    [
+      () => {
+        const animation = new Animation(target, [0, 1], options)
+        animation.finished.catch(() => {})
+        return animation
+      },
+    ],
     options?.duration
   )
 }

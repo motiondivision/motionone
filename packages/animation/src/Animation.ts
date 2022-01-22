@@ -24,6 +24,8 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
 
   private cancelTimestamp = 0
 
+  private frameRequestId?: number
+
   playState: AnimationPlayState = "idle"
 
   constructor(
@@ -60,7 +62,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
       if (this.pauseTime) timestamp = this.pauseTime
 
       let t = (timestamp - this.startTime) * this.rate
-
+      console.log(timestamp, this.startTime, t)
       this.t = t
 
       // Convert to seconds
@@ -131,7 +133,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
         this.playState = "finished"
         this.resolve?.(latest)
       } else if (this.playState !== "idle") {
-        requestAnimationFrame(this.tick)
+        this.frameRequestId = requestAnimationFrame(this.tick)
       }
     }
 
@@ -169,8 +171,12 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
 
   cancel() {
     this.playState = "idle"
+    console.log("cancelling with timestamp ", this.cancelTimestamp)
     this.tick(this.cancelTimestamp)
     this.reject?.(false)
+    if (this.frameRequestId !== undefined) {
+      cancelAnimationFrame(this.frameRequestId)
+    }
   }
 
   reverse() {

@@ -12,11 +12,28 @@
 </template>
 
 <script lang="ts">
+import { animate } from "motion"
 import { Motion } from "@motionone/vue"
 
 export default {
   components: {
     Motion,
+  },
+  setup() {
+    onMounted(() => {
+      setTimeout(() => {
+        const animation = animate(
+          (p) => {
+            console.log("p", p)
+          },
+          { duration: 1 }
+        )
+        setTimeout(() => {
+          console.log("stop")
+          animation.stop()
+        }, 200)
+      }, 3000)
+    })
   },
 }
 </script>

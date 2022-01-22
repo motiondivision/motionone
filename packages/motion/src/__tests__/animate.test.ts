@@ -34,4 +34,23 @@ describe("animate", () => {
       0.9248370413624798, 0.9834614620209323, 1,
     ])
   })
+
+  test("Animates numbers", async () => {
+    mockTimeFrom(0.5)
+    const output: number[] = []
+    await new Promise<void>((resolve) => {
+      const animation = animate((p) => {
+        output.push(p)
+        if (output.length === 4) {
+          mockReadTime(700)
+          animation.stop()
+          expect(output).toEqual([
+            0.22043358268711016, 0.5759729522294947, 0.8022760787498554,
+            0.9248370413624798, 0.9834614620209323, 1,
+          ])
+          resolve()
+        }
+      })
+    })
+  })
 })
