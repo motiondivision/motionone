@@ -1,21 +1,20 @@
 import type {
   AcceptedElements,
   AnimationFactory,
-  AnimationListOptions,
+  AnimationOptionsWithOverrides,
   MotionKeyframesDefinition,
 } from "./types"
 import { animateStyle } from "./animate-style"
 import { getOptions } from "./utils/options"
 import { resolveElements } from "./utils/resolve-elements"
-import { createAnimations } from "./utils/controls"
+import { wrapAnimationWithControls } from "./utils/controls"
 import { resolveOption } from "../utils/stagger"
 import { AnimationControls } from "@motionone/types"
-import { defaults } from "@motionone/utils"
 
 export function animate(
   elements: AcceptedElements,
   keyframes: MotionKeyframesDefinition,
-  options: AnimationListOptions = {}
+  options: AnimationOptionsWithOverrides = {}
 ): AnimationControls {
   elements = resolveElements(elements)
   const numElements = elements.length
@@ -42,7 +41,7 @@ export function animate(
     }
   }
 
-  return createAnimations(
+  return wrapAnimationWithControls(
     animationFactories,
     /**
      * TODO:
@@ -53,6 +52,6 @@ export function animate(
      * to Proxy animations returned from animateStyle that has duration
      * as a getter.
      */
-    options.duration ?? defaults.duration
+    options.duration
   )
 }

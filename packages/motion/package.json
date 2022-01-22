@@ -18,9 +18,11 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "rm -rf lib dist types && tsc -p . && rollup -c"
+    "build": "rm -rf lib dist types && tsc -p . && rollup -c",
+    "test": "jest --coverage --config jest.config.js"
   },
   "dependencies": {
+    "@motionone/animation": "^10.5.2",
     "@motionone/dom": "^10.5.2",
     "@motionone/react": "^10.5.2",
     "@motionone/svelte": "^10.5.2",
