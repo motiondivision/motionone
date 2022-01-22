@@ -1,6 +1,6 @@
 import { velocityPerSecond } from "@motionone/utils"
 
-const sampleT = 10 // ms
+const sampleT = 5 // ms
 export function calcGeneratorVelocity(
   resolveValue: (v: number) => number,
   t: number,

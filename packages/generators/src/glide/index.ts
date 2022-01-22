@@ -74,7 +74,7 @@ export const glide = ({
     if (!isOutOfBounds(state.current)) return
 
     timeReachedBoundary = t
-    console.log("statevelocity", state.velocity)
+    console.log("statevelocity", state.velocity, t)
 
     spring = createSpring({
       from: state.current,
