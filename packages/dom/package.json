@@ -1,6 +1,6 @@
 {
   "name": "@motionone/dom",
-  "version": "10.6.0-rc.0",
+  "version": "10.6.0-rc.1",
   "description": "A tiny, performant animation library for the DOM",
   "license": "MIT",
   "author": "Matt Perry",
@@ -15,11 +15,11 @@
     "measure": "bundlesize"
   },
   "dependencies": {
-    "@motionone/animation": "^10.6.0-rc.0",
-    "@motionone/easing": "^10.6.0-rc.0",
-    "@motionone/generators": "^10.6.0-rc.0",
-    "@motionone/types": "^10.6.0-rc.0",
-    "@motionone/utils": "^10.6.0-rc.0",
+    "@motionone/animation": "^10.6.0-rc.1",
+    "@motionone/easing": "^10.6.0-rc.1",
+    "@motionone/generators": "^10.6.0-rc.1",
+    "@motionone/types": "^10.6.0-rc.1",
+    "@motionone/utils": "^10.6.0-rc.1",
     "hey-listen": "^1.0.8",
     "tslib": "^2.3.1"
   },
@@ -48,5 +48,6 @@
       "path": "./dist/size-webpack-animate.js",
       "maxSize": "3.4 kB"
     }
-  ]
+  ],
+  "gitHead": "055071744f8dd36825b1fe43145b6e6667fc28c2"
 }

@@ -1,6 +1,6 @@
 {
   "name": "@motionone/vue",
-  "version": "10.6.0-rc.0",
+  "version": "10.6.0-rc.1",
   "description": "A tiny, performant animation library for Vue",
   "author": "Matt Perry",
   "license": "MIT",
@@ -18,7 +18,7 @@
     "measure": "bundlesize"
   },
   "dependencies": {
-    "@motionone/dom": "^10.6.0-rc.0",
+    "@motionone/dom": "^10.6.0-rc.1",
     "tslib": "^2.3.1"
   },
   "devDependencies": {
@@ -49,5 +49,6 @@
       "path": "./dist/motion-vue.min.js",
       "maxSize": "5.5 kB"
     }
-  ]
+  ],
+  "gitHead": "055071744f8dd36825b1fe43145b6e6667fc28c2"
 }
