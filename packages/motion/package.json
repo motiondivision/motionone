@@ -1,7 +1,7 @@
 {
   "name": "motion",
   "description": "A tiny, performant animation library for the web",
-  "version": "10.6.0-rc.2",
+  "version": "10.6.0-rc.3",
   "license": "MIT",
   "author": "Matt Perry",
   "main": "dist/main.cjs.js",
@@ -22,11 +22,11 @@
     "test": "jest --coverage --config jest.config.js"
   },
   "dependencies": {
-    "@motionone/animation": "^10.6.0-rc.2",
-    "@motionone/dom": "^10.6.0-rc.2",
-    "@motionone/react": "^10.6.0-rc.2",
-    "@motionone/svelte": "^10.6.0-rc.2",
-    "@motionone/vue": "^10.6.0-rc.2"
+    "@motionone/animation": "^10.6.0-rc.3",
+    "@motionone/dom": "^10.6.0-rc.3",
+    "@motionone/react": "^10.6.0-rc.3",
+    "@motionone/svelte": "^10.6.0-rc.3",
+    "@motionone/vue": "^10.6.0-rc.3"
   },
   "gitHead": "055071744f8dd36825b1fe43145b6e6667fc28c2"
 }
