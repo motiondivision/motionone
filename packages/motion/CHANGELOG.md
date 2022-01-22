@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.6.0] [2022-01-22]
+
+### Added
+
+- Custom animations by passing function to `animate`.
+
 ## [10.5.2] [2022-01-16]
 
 ### Fixed
