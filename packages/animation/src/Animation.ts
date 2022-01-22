@@ -10,6 +10,8 @@ import { interpolate as createInterpolate } from "./utils/interpolate"
 export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
   private resolve?: (value: any) => void
 
+  private reject?: (value: any) => void
+
   private startTime = 0
 
   private pauseTime: number | undefined
@@ -136,8 +138,9 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
     this.play()
   }
 
-  finished = new Promise((resolve) => {
+  finished = new Promise((resolve, reject) => {
     this.resolve = resolve
+    this.reject = reject
   })
 
   play() {
@@ -167,6 +170,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
   cancel() {
     this.playState = "idle"
     this.tick(this.cancelTimestamp)
+    this.reject?.(false)
   }
 
   reverse() {
