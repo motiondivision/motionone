@@ -1,6 +1,6 @@
 {
   "name": "@motionone/utils",
-  "version": "10.6.0-rc.6",
+  "version": "10.6.0",
   "description": "A collection of utility functions for animations.",
   "license": "MIT",
   "author": "Matt Perry",
@@ -14,7 +14,7 @@
     "dev": "rollup -c -w"
   },
   "dependencies": {
-    "@motionone/types": "^10.6.0-rc.6",
+    "@motionone/types": "^10.6.0",
     "hey-listen": "^1.0.8",
     "tslib": "^2.3.1"
   },
