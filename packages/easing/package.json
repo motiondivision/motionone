@@ -1,6 +1,6 @@
 {
   "name": "@motionone/easing",
-  "version": "10.6.0-rc.4",
+  "version": "10.6.0-rc.5",
   "description": "A collection of easing functions.",
   "license": "MIT",
   "author": "Matt Perry",
@@ -15,7 +15,7 @@
     "measure": "bundlesize"
   },
   "dependencies": {
-    "@motionone/utils": "^10.6.0-rc.4",
+    "@motionone/utils": "^10.6.0-rc.5",
     "tslib": "^2.3.1"
   },
   "bundlesize": [
