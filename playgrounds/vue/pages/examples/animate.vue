@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { animate } from "motion"
+import { animate, spring } from "motion"
 import { Motion } from "@motionone/vue"
 
 export default {
@@ -22,16 +22,9 @@ export default {
   setup() {
     onMounted(() => {
       setTimeout(() => {
-        const animation = animate(
-          (p) => {
-            console.log("p", p)
-          },
-          { duration: 1 }
-        )
-        setTimeout(() => {
-          console.log("stop")
-          animation.stop()
-        }, 200)
+        const animation = animate((p) => console.log("p", p), {
+          easing: spring({ stiffness: 300, damping: 10 }),
+        })
       }, 3000)
     })
   },

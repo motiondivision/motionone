@@ -41,14 +41,14 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
       direction = "normal",
     }: AnimationOptions = {}
   ) {
-    const totalDuration = duration * (repeat + 1)
-
     if (isEasingGenerator(easing)) {
       const custom = easing.createAnimation(keyframes, () => "0", true)
       easing = custom.easing
       if (custom.keyframes !== undefined) keyframes = custom.keyframes
       if (custom.duration !== undefined) duration = custom.duration
     }
+
+    const totalDuration = duration * (repeat + 1)
 
     const interpolate = createInterpolate(
       keyframes,
