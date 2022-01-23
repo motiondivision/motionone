@@ -6,14 +6,14 @@ export interface WithCommitStyles {
 }
 
 export function stopAnimation(animation?: BasicAnimationControls) {
-  if (!animation) return
+  if (!animation || animation.playState === "finished") return
 
   // Suppress error thrown by WAAPI
   try {
     /**
      * commitStyles has overhead so we only want to commit and cancel
      */
-    animation.playState !== "finished" && animation.commitStyles()
+    animation.commitStyles()
     animation.cancel()
   } catch (e) {}
 }
