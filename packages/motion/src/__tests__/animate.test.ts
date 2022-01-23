@@ -34,4 +34,19 @@ describe("animate", () => {
       0.9248370413624798, 0.9834614620209323, 1,
     ])
   })
+
+  test("Doesn't add 0 frame when stop called", async () => {
+    mockTimeFrom(0.5)
+    const output: number[] = []
+    await new Promise<void>(async (resolve) => {
+      const animation = animate((p) => output.push(p))
+      await animation.finished
+      animation.stop()
+      resolve()
+    })
+    expect(output).toEqual([
+      0.22043358268711016, 0.5759729522294947, 0.8022760787498554,
+      0.9248370413624798, 0.9834614620209323, 1,
+    ])
+  })
 })

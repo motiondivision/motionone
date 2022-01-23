@@ -62,7 +62,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
       if (this.pauseTime) timestamp = this.pauseTime
 
       let t = (timestamp - this.startTime) * this.rate
-      console.log(timestamp, this.startTime, t)
+
       this.t = t
 
       // Convert to seconds
@@ -171,7 +171,6 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
 
   cancel() {
     this.playState = "idle"
-    console.log("cancelling with timestamp ", this.cancelTimestamp)
     this.tick(this.cancelTimestamp)
     this.reject?.(false)
     if (this.frameRequestId !== undefined) {
@@ -184,6 +183,8 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
   }
 
   commitStyles() {
+    // TODO: The bug now is that this is not called if the animation is finished
+    // this should be called regardless
     this.cancelTimestamp = performance.now()
   }
 
