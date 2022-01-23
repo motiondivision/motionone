@@ -43,12 +43,12 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
   ) {
     const totalDuration = duration * (repeat + 1)
 
-    /**
-     * We don't currently support custom easing (spring, glide etc) in Animation
-     * (although this is completely possible), so this will have been hydrated by
-     * animateStyle.
-     */
-    if (isEasingGenerator(easing)) easing = "ease"
+    if (isEasingGenerator(easing)) {
+      const custom = easing.createAnimation(keyframes, () => "0", true)
+      easing = custom.easing
+      if (custom.keyframes !== undefined) keyframes = custom.keyframes
+      if (custom.duration !== undefined) duration = custom.duration
+    }
 
     const interpolate = createInterpolate(
       keyframes,
