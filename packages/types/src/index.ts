@@ -69,7 +69,7 @@ export type EasingGenerator = {
     getOrigin: () => string,
     isNumber: boolean,
     name?: string,
-    value?: MotionValue<number>
+    value?: MotionValue
   ) => CustomAnimationSettings
 }
 

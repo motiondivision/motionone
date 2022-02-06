@@ -4,7 +4,7 @@
     style="
       width: 100px;
       border-radius: 20px;
-      background-color: red;
+      background-color: #ff1231;
       height: 100px;
     "
     @mousedown="startDrag"
