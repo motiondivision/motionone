@@ -3,6 +3,7 @@ import type {
   EasingGenerator,
   AnimationGenerator,
   AnimationGeneratorFactory,
+  MotionValue,
 } from "@motionone/types"
 import type { KeyframesMetadata } from "@motionone/generators"
 import { pregenerateKeyframes } from "@motionone/generators"
@@ -48,7 +49,13 @@ export function createGeneratorEasing<Options extends {} = {}>(
     }
 
     return {
-      createAnimation: (keyframes, getOrigin, canUseGenerator, name, data) => {
+      createAnimation: (
+        keyframes,
+        getOrigin,
+        canUseGenerator,
+        name,
+        motionValue
+      ) => {
         let settings: CustomAnimationSettings
         let generator: AnimationGenerator
         const numKeyframes = keyframes.length
@@ -59,7 +66,7 @@ export function createGeneratorEasing<Options extends {} = {}>(
           keyframes.every(isNumberOrNull)
 
         if (shouldUseGenerator) {
-          const prevMotionState = name && data && data.prevGeneratorState[name]
+          const prevMotionState = getPrevMotionState(motionValue)
           const velocity =
             prevMotionState &&
             (numKeyframes === 1 ||
@@ -82,8 +89,15 @@ export function createGeneratorEasing<Options extends {} = {}>(
             velocity,
             name?.includes("scale")
           )
+
           const keyframesMetadata = getKeyframes(generator)
           settings = { ...keyframesMetadata, easing: "linear" }
+
+          // TODO Add test for this
+          if (motionValue) {
+            motionValue.generator = generator
+            motionValue.generatorStartTime = performance.now()
+          }
         } else {
           generator = getGenerator(0, 100)
 
@@ -95,11 +109,6 @@ export function createGeneratorEasing<Options extends {} = {}>(
           }
         }
 
-        // TODO Add test for this
-        if (data && name) {
-          data.generators[name] = generator
-        }
-
         return settings
       },
     }
@@ -108,3 +117,15 @@ export function createGeneratorEasing<Options extends {} = {}>(
 
 const isNumberOrNull = (value: null | number | string) =>
   typeof value !== "string"
+
+function getPrevMotionState(motionValue?: MotionValue) {
+  if (!motionValue) return
+
+  const { animation, generator, generatorStartTime } = motionValue
+
+  if (!generator) return
+
+  const startTime = animation?.startTime || generatorStartTime || 0
+
+  return generator(animation?.currentTime ?? performance.now() - startTime)
+}

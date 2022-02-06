@@ -11,6 +11,5 @@
   "scripts": {
     "build": "rm -rf lib dist types && tsc -p . && rollup -c",
     "dev": "rollup -c -w"
-  },
-  "gitHead": "055071744f8dd36825b1fe43145b6e6667fc28c2"
+  }
 }

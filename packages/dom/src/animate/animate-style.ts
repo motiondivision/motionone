@@ -1,4 +1,4 @@
-import { getAnimationData } from "./data"
+import { getAnimationData, getMotionValue } from "./data"
 import type { AnimationFactory, ValueKeyframesDefinition } from "./types"
 import { isCssVar, registerCssVariable } from "./utils/css-var"
 import { Animation } from "@motionone/animation"
@@ -50,6 +50,8 @@ export function animateStyle(
   valueIsTransform && addTransformToElement(element as HTMLElement, key)
   const name = getStyleName(key)
 
+  const motionValue = getMotionValue(data.values, name)
+
   /**
    * Get definition of value, this will be used to convert numerical
    * keyframes into the default value type.
@@ -57,12 +59,24 @@ export function animateStyle(
   const definition = transformDefinitions.get(name)
 
   /**
-   * Stop the current animation, if any. Because this will trigger
-   * commitStyles (DOM writes) and we might later trigger DOM reads,
-   * this is fired now and we return a factory function to create
-   * the actual animation that can get called in batch,
+   * TODO: If there's an active generator we can use this to always
+   * get the origin value rather than ever reading from the DOM.
    */
-  stopAnimation(data.animations[name])
+  if (isEasingGenerator(easing) && motionValue.generator) {
+    /**
+     * If we can sample an existing animation to resume this animation
+     * from then just cancel it rather than stop (which commits styles).
+     */
+    motionValue.animation?.cancel()
+  } else {
+    /**
+     * Otherwise stop the current animation, if any. Because this will trigger
+     * commitStyles (DOM writes) and we might later trigger DOM reads,
+     * this is fired now and we return a factory function to create
+     * the actual animation that can get called in batch,
+     */
+    stopAnimation(motionValue.animation)
+  }
 
   /**
    * Batchable factory function containing all DOM reads.
@@ -86,7 +100,7 @@ export function animateStyle(
         readInitialValue as any,
         valueIsTransform,
         name,
-        data
+        motionValue
       )
       easing = custom.easing
       if (custom.keyframes !== undefined) keyframes = custom.keyframes
@@ -214,18 +228,7 @@ export function animateStyle(
       )
     }
 
-    data.animations[name] = animation
-
-    /**
-     * When an animation finishes, delete the reference to the previous animation.
-     */
-    animation?.finished
-      .then(() => {
-        data.animations[name] = undefined
-        data.generators[name] = undefined
-        data.prevGeneratorState[name] = undefined
-      })
-      .catch(noop)
+    motionValue.setAnimation(animation)
 
     return animation
   }

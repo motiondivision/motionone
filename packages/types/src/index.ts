@@ -1,3 +1,7 @@
+import { MotionValue } from "./MotionValue"
+
+export { MotionValue } from "./MotionValue"
+
 export interface AnimationGeneratorState {
   done: boolean
   hasReachedTarget: boolean
@@ -19,32 +23,23 @@ export type BezierDefinition = [number, number, number, number]
 export type PlayState = "idle" | "running" | "paused" | "finished"
 
 export interface BasicAnimationControls {
-  pause: () => void
-  play: () => void
-  commitStyles: () => void
-  cancel: () => void
-  playState: PlayState
-}
-
-export interface AnimationControls {
   play: VoidFunction
   pause: VoidFunction
+  commitStyles: VoidFunction
+  cancel: VoidFunction
+  playState: PlayState
+  finished: Promise<any>
+  startTime: number | null
+  currentTime: number | null
+}
+
+export interface AnimationControls extends BasicAnimationControls {
   stop: VoidFunction
   finish: VoidFunction
   reverse: VoidFunction
-  cancel: VoidFunction
   finished: Promise<any>
-  currentTime: number | null
   duration: number
   playbackRate: number
-}
-
-export interface AnimationData {
-  transforms: string[]
-  // TODO: Replace these with MotionValues
-  animations: { [key: string]: BasicAnimationControls | undefined }
-  generators: { [key: string]: AnimationGenerator | undefined }
-  prevGeneratorState: { [key: string]: AnimationGeneratorState | undefined }
 }
 
 export type CustomAnimationSettings = {
@@ -72,9 +67,9 @@ export type EasingGenerator = {
   createAnimation: (
     keyframes: UnresolvedValueKeyframe[],
     getOrigin: () => string,
-    isTransform: boolean,
+    isNumber: boolean,
     name?: string,
-    data?: AnimationData
+    value?: MotionValue
   ) => CustomAnimationSettings
 }
 

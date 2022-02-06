@@ -19,7 +19,8 @@
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf lib dist types && tsc -p . && rollup -c",
-    "test": "jest --coverage --config jest.config.js"
+    "test": "jest --coverage --config jest.config.js",
+    "dev": "rollup -c -w"
   },
   "dependencies": {
     "@motionone/animation": "^10.6.0",
@@ -27,6 +28,5 @@
     "@motionone/react": "^10.6.0",
     "@motionone/svelte": "^10.6.0",
     "@motionone/vue": "^10.6.0"
-  },
-  "gitHead": "055071744f8dd36825b1fe43145b6e6667fc28c2"
+  }
 }

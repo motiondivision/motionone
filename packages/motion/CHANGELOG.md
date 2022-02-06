@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.6.1] [2022-02-07]
+
+### Fixed
+
+- Fixed velocity transfer of interrupted generated animations. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/43)
+
 ## [10.6.0] [2022-01-22]
 
 ### Added
