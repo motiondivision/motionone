@@ -44,6 +44,5 @@
       "path": "./dist/size.js",
       "maxSize": "5.5 kB"
     }
-  ],
-  "gitHead": "055071744f8dd36825b1fe43145b6e6667fc28c2"
+  ]
 }

@@ -13,5 +13,6 @@ export { createMotionState, mountedStates } from "./state/index"
 export { createStyles } from "./animate/utils/style-object"
 export { createStyleString } from "./animate/utils/style-string"
 
+export * from "./types"
 export * from "./state/types"
 export * from "./animate/types"

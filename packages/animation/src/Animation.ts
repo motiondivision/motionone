@@ -12,7 +12,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
 
   private reject?: (value: any) => void
 
-  private startTime = 0
+  startTime = 0
 
   private pauseTime: number | undefined
 

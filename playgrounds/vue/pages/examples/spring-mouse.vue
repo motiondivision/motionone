@@ -17,8 +17,10 @@ import { animate, spring } from "motion"
 export default {
   setup: () => {
     const root = ref<HTMLElement | null>(null)
+    let springScheduled = false
 
-    function handleMove(e) {
+    function startSpring(e) {
+      springScheduled = false
       animate(
         root.value!,
         { x: e.pageX - 50, y: e.pageY - 50 },
@@ -29,6 +31,11 @@ export default {
           }),
         }
       )
+    }
+
+    function handleMove(e) {
+      !springScheduled && requestAnimationFrame(() => startSpring(e))
+      springScheduled = true
     }
 
     function stopDrag() {
