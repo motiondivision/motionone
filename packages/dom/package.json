@@ -20,7 +20,6 @@
     "@motionone/generators": "^10.6.0",
     "@motionone/types": "^10.6.0",
     "@motionone/utils": "^10.6.0",
-    "@motionone/value": "^10.6.0",
     "hey-listen": "^1.0.8",
     "tslib": "^2.3.1"
   },
