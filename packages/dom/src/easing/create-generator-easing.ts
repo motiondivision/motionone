@@ -92,6 +92,12 @@ export function createGeneratorEasing<Options extends {} = {}>(
 
           const keyframesMetadata = getKeyframes(generator)
           settings = { ...keyframesMetadata, easing: "linear" }
+
+          // TODO Add test for this
+          if (motionValue) {
+            motionValue.generator = generator
+            motionValue.generatorStartTime = performance.now()
+          }
         } else {
           generator = getGenerator(0, 100)
 
@@ -101,12 +107,6 @@ export function createGeneratorEasing<Options extends {} = {}>(
             easing: "ease",
             duration: keyframesMetadata.overshootDuration,
           }
-        }
-
-        // TODO Add test for this
-        if (motionValue) {
-          motionValue.generator = generator
-          motionValue.generatorStartTime = performance.now()
         }
 
         return settings
@@ -127,5 +127,5 @@ function getPrevMotionState(motionValue?: MotionValue) {
 
   const startTime = animation?.startTime || generatorStartTime || 0
 
-  return generator(performance.now() - startTime)
+  return generator(animation?.currentTime ?? performance.now() - startTime)
 }

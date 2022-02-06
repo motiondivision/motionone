@@ -59,12 +59,24 @@ export function animateStyle(
   const definition = transformDefinitions.get(name)
 
   /**
-   * Stop the current animation, if any. Because this will trigger
-   * commitStyles (DOM writes) and we might later trigger DOM reads,
-   * this is fired now and we return a factory function to create
-   * the actual animation that can get called in batch,
+   * TODO: If there's an active generator we can use this to always
+   * get the origin value rather than ever reading from the DOM.
    */
-  stopAnimation(motionValue.animation)
+  if (isEasingGenerator(easing) && motionValue.generator) {
+    /**
+     * If we can sample an existing animation to resume this animation
+     * from then just cancel it rather than stop (which commits styles).
+     */
+    motionValue.animation?.cancel()
+  } else {
+    /**
+     * Otherwise stop the current animation, if any. Because this will trigger
+     * commitStyles (DOM writes) and we might later trigger DOM reads,
+     * this is fired now and we return a factory function to create
+     * the actual animation that can get called in batch,
+     */
+    stopAnimation(motionValue.animation)
+  }
 
   /**
    * Batchable factory function containing all DOM reads.

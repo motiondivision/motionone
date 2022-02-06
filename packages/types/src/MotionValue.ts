@@ -1,11 +1,15 @@
 import type { AnimationGenerator, BasicAnimationControls } from "./"
 
-export class MotionValue<V = any> {
+/**
+ * The MotionValue tracks the state of a single animatable
+ * value. Currently, updatedAt and current are unused. The
+ * long term idea is to use this to minimise the number
+ * of DOM reads, and to abstract the DOM interactions here.
+ */
+export class MotionValue {
   animation?: BasicAnimationControls
   generatorStartTime?: number
   generator?: AnimationGenerator
-  current?: V
-  updatedAt?: number
 
   setAnimation(animation?: BasicAnimationControls) {
     this.animation = animation
@@ -15,10 +19,5 @@ export class MotionValue<V = any> {
 
   clearAnimation() {
     this.animation = this.generator = undefined
-  }
-
-  set(current: V) {
-    this.current = current
-    this.updatedAt = performance.now()
   }
 }

@@ -3,6 +3,7 @@ import {
   pregenerateKeyframes,
   spring as createSpringGenerator,
 } from "@motionone/generators"
+import { MotionValue } from "@motionone/types"
 
 describe("spring", () => {
   test("Single numeric keyframe should return real spring", () => {
@@ -85,17 +86,10 @@ describe("spring", () => {
       to: 500,
     })
 
-    const data = {
-      animations: {
-        x: { currentTime: 300 },
-      },
-      generators: {
-        x: existingSpring,
-      },
-      prevGeneratorState: {
-        x: { ...existingSpring(300) },
-      },
-    }
+    const data = new MotionValue()
+    data.animation = { currentTime: 300 } as any
+    data.generator = existingSpring
+    data.generatorStartTime = 0
 
     const origin = 362.59753425757185
     const target = 100
@@ -132,17 +126,10 @@ describe("spring", () => {
       to: 500,
     })
 
-    const data = {
-      animations: {
-        x: { currentTime: 300 },
-      },
-      generators: {
-        x: existingSpring,
-      },
-      prevGeneratorState: {
-        x: { ...existingSpring(300) },
-      },
-    }
+    const data = new MotionValue()
+    data.animation = { currentTime: 300 } as any
+    data.generator = existingSpring
+    data.generatorStartTime = 0
 
     const origin = 362.59753425757185
     const target = 100
@@ -179,17 +166,10 @@ describe("spring", () => {
       to: 500,
     })
 
-    const data = {
-      animations: {
-        x: { currentTime: 300 },
-      },
-      generators: {
-        x: existingSpring,
-      },
-      prevGeneratorState: {
-        x: { ...existingSpring(300) },
-      },
-    }
+    const data = new MotionValue()
+    data.animation = { currentTime: 300 } as any
+    data.generator = existingSpring
+    data.generatorStartTime = 0
 
     const origin = 0
     const target = 100
@@ -315,17 +295,10 @@ describe("spring", () => {
       to: 500,
     })
 
-    const data = {
-      animations: {
-        x: { currentTime: 300 },
-      },
-      generators: {
-        x: existingSpring,
-      },
-      prevGeneratorState: {
-        x: { ...existingSpring(300) },
-      },
-    }
+    const data = new MotionValue()
+    data.animation = { currentTime: 300 } as any
+    data.generator = existingSpring
+    data.generatorStartTime = 0
 
     const origin = 362.59753425757185
     const target = 100
@@ -363,17 +336,10 @@ describe("spring", () => {
       velocity: 10000,
     })
 
-    const data = {
-      animations: {
-        x: { currentTime: 300 },
-      },
-      generators: {
-        x: existingSpring,
-      },
-      prevGeneratorState: {
-        x: { ...existingSpring(300) },
-      },
-    }
+    const data = new MotionValue()
+    data.animation = { currentTime: 300 } as any
+    data.generator = existingSpring
+    data.generatorStartTime = 0
 
     const origin = 362.59753425757185
     const target = 100
