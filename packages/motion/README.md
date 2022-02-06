@@ -1,0 +1,22 @@
+# Motion One
+
+A new animation library, built on the Web Animations API for the smallest filesize and the fastest performance.
+
+## 📚 Documentation
+
+Full docs are available at [motion.dev](https://motion.dev).
+
+## 🙌 Sponsors
+
+A huge thank you to all sponsors of this project, with a special shoutout to:
+
+- [Victor Pontis](https://github.com/vpontis)
+- [‹div›RIOTS](https://github.com/divriots)
+- [Alex Frazer](https://github.com/AlexFrazer)
+- [Derek Reynolds](https://github.com/derekr)
+- [Martin Pitt](https://github.com/Martin-Pitt)
+- [Mihael Konjević](https://github.com/retro)
+- [impactvelocity](https://github.com/impactvelocity)
+- [Namit Chadha](https://github.com/nc)
+
+[Become a sponsor](https://github.com/sponsors/mattgperry) and get access to the private Motion One repo. File issues, read the changelog and source code, and join discussions that help shape the future of the API.
