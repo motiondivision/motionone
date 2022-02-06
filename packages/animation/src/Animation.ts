@@ -59,11 +59,9 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
     )
 
     this.tick = (timestamp: number) => {
-      if (!this.startTime) this.cancelTimestamp = this.startTime = timestamp
-
       if (this.pauseTime) timestamp = this.pauseTime
 
-      let t = (timestamp - this.startTime) * this.rate
+      let t = (timestamp - this.startTime!) * this.rate
 
       this.t = t
 
@@ -150,8 +148,8 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
     const now = performance.now()
     this.playState = "running"
 
-    if (this.pauseTime && this.startTime) {
-      this.startTime = now - (this.pauseTime - this.startTime)
+    if (this.pauseTime) {
+      this.startTime = now - (this.pauseTime - (this.startTime ?? 0))
     } else if (!this.startTime) {
       this.startTime = now
     }
@@ -177,12 +175,13 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
     if (this.frameRequestId !== undefined) {
       cancelAnimationFrame(this.frameRequestId)
     }
+
+    this.reject?.(false)
   }
 
   cancel() {
     this.stop()
     this.tick(this.cancelTimestamp!)
-    this.reject?.(false)
   }
 
   reverse() {
