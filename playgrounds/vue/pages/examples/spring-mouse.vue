@@ -23,7 +23,7 @@ export default {
       springScheduled = false
       animate(
         root.value!,
-        { x: e.pageX - 50, y: e.pageY - 50 },
+        { x: e.pageX - 50 }, //, y: e.pageY - 50 },
         {
           easing: spring({
             stiffness: 300,

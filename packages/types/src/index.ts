@@ -27,6 +27,7 @@ export interface BasicAnimationControls {
   pause: VoidFunction
   commitStyles: VoidFunction
   cancel: VoidFunction
+  stop?: VoidFunction
   playState: PlayState
   finished: Promise<any>
   startTime: number | null

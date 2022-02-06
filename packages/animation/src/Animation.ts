@@ -12,7 +12,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
 
   private reject?: (value: any) => void
 
-  startTime = 0
+  startTime: number | null = null
 
   private pauseTime: number | undefined
 
@@ -22,7 +22,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
 
   private t = 0
 
-  private cancelTimestamp = 0
+  private cancelTimestamp: number | null = null
 
   private frameRequestId?: number
 
@@ -59,6 +59,8 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
     )
 
     this.tick = (timestamp: number) => {
+      if (!this.startTime) this.cancelTimestamp = this.startTime = timestamp
+
       if (this.pauseTime) timestamp = this.pauseTime
 
       let t = (timestamp - this.startTime) * this.rate
@@ -70,7 +72,6 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
 
       // Rebase on delay
       t = Math.max(t - delay, 0)
-
       /**
        * If this animation has finished, set the current time
        * to the total duration.
@@ -149,12 +150,13 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
     const now = performance.now()
     this.playState = "running"
 
-    if (this.pauseTime) {
+    if (this.pauseTime && this.startTime) {
       this.startTime = now - (this.pauseTime - this.startTime)
     } else if (!this.startTime) {
       this.startTime = now
     }
 
+    this.cancelTimestamp = this.startTime
     this.pauseTime = undefined
     requestAnimationFrame(this.tick)
   }
@@ -169,24 +171,25 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
     this.tick(0)
   }
 
-  cancel() {
+  stop() {
     this.playState = "idle"
-    this.tick(this.cancelTimestamp)
-    this.reject?.(false)
+
     if (this.frameRequestId !== undefined) {
       cancelAnimationFrame(this.frameRequestId)
     }
+  }
+
+  cancel() {
+    this.stop()
+    this.tick(this.cancelTimestamp!)
+    this.reject?.(false)
   }
 
   reverse() {
     this.rate *= -1
   }
 
-  commitStyles() {
-    // TODO: The bug now is that this is not called if the animation is finished
-    // this should be called regardless
-    this.cancelTimestamp = performance.now()
-  }
+  commitStyles() {}
 
   get currentTime() {
     return this.t

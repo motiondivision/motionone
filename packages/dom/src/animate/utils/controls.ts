@@ -50,7 +50,8 @@ export const controls = {
         }
         return target.finished
       case "stop":
-        return () => target.animations.forEach(stopAnimation)
+        return () =>
+          target.animations.forEach((animation) => stopAnimation(animation))
       default:
         return () => target.animations.forEach((animation) => animation[key]())
     }

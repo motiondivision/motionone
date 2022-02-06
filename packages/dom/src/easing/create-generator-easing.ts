@@ -126,6 +126,7 @@ function getPrevMotionState(motionValue?: MotionValue) {
   if (!generator) return
 
   const startTime = animation?.startTime || generatorStartTime || 0
+  const currentTime = animation?.currentTime || performance.now() - startTime
 
-  return generator(animation?.currentTime ?? performance.now() - startTime)
+  return generator(currentTime)
 }
