@@ -64,7 +64,6 @@ export function createGeneratorEasing<Options extends {} = {}>(
         let shouldUseGenerator =
           canUseGenerator &&
           numKeyframes <= 2 &&
-          motionValue &&
           keyframes.every(isNumberOrNull)
 
         if (shouldUseGenerator) {
@@ -74,7 +73,8 @@ export function createGeneratorEasing<Options extends {} = {}>(
           let velocity = 0
           let origin = 0
 
-          const { generator: prevGenerator } = motionValue!
+          const prevGenerator = motionValue?.generator
+
           if (prevGenerator) {
             /**
              * If we have a generator for this value we can use it to resolve
