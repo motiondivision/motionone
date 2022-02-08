@@ -5,6 +5,3 @@ export const calcDampingRatio = (
   damping = defaults.damping,
   mass = defaults.mass
 ): number => damping / (2 * Math.sqrt(stiffness * mass))
-
-export const calcAngularFreq = (undampedFreq: number, dampingRatio: number) =>
-  undampedFreq * Math.sqrt(1 - dampingRatio * dampingRatio)

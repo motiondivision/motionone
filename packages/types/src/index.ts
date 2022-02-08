@@ -7,7 +7,6 @@ export interface AnimationGeneratorState {
   hasReachedTarget: boolean
   current: number
   target: number
-  velocity: number
 }
 
 export type ProgressFunction = (t: number) => void

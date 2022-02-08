@@ -2,7 +2,7 @@ import { time } from "@motionone/utils"
 import { AnimationGenerator, AnimationGeneratorState } from "@motionone/types"
 import { defaults } from "./defaults"
 import { SpringOptions } from "./types"
-import { calcAngularFreq, calcDampingRatio } from "./utils"
+import { calcDampingRatio } from "./utils"
 import { hasReachedTarget } from "../utils/has-reached-target"
 import { calcGeneratorVelocity } from "../utils/velocity"
 
@@ -23,16 +23,18 @@ export const spring = ({
     hasReachedTarget: false,
     current: from,
     target: to,
-    velocity,
   }
 
-  const dampingRatio = calcDampingRatio(stiffness, damping, mass)
   const initialDelta = to - from
   const undampedAngularFreq = Math.sqrt(stiffness / mass) / 1000
-  const angularFreq = calcAngularFreq(undampedAngularFreq, dampingRatio)
+  const dampingRatio = calcDampingRatio(stiffness, damping, mass)
 
   let resolveSpring: (t: number) => number
+
   if (dampingRatio < 1) {
+    const angularFreq =
+      undampedAngularFreq * Math.sqrt(1 - dampingRatio * dampingRatio)
+
     // Underdamped spring (bouncy)
     resolveSpring = (t) =>
       to -
@@ -43,19 +45,23 @@ export const spring = ({
           initialDelta * Math.cos(angularFreq * t))
   } else {
     // Critically damped spring
-    resolveSpring = (t) =>
-      to -
-      Math.exp(-undampedAngularFreq * t) *
-        (initialDelta + (velocity + undampedAngularFreq * initialDelta) * t)
+    resolveSpring = (t) => {
+      return (
+        to -
+        Math.exp(-undampedAngularFreq * t) *
+          (initialDelta + (-velocity + undampedAngularFreq * initialDelta) * t)
+      )
+    }
   }
 
   return (t: number) => {
     state.current = resolveSpring(t)
-    state.velocity =
+
+    const currentVelocity =
       t === 0
         ? velocity
         : calcGeneratorVelocity(resolveSpring, t, state.current)
-    const isBelowVelocityThreshold = Math.abs(state.velocity) <= restSpeed
+    const isBelowVelocityThreshold = Math.abs(currentVelocity) <= restSpeed
     const isBelowDisplacementThreshold =
       Math.abs(to - state.current) <= restDistance
     state.done = isBelowVelocityThreshold && isBelowDisplacementThreshold

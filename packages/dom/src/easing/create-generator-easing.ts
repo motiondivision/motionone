@@ -3,10 +3,12 @@ import type {
   EasingGenerator,
   AnimationGenerator,
   AnimationGeneratorFactory,
-  MotionValue,
 } from "@motionone/types"
 import type { KeyframesMetadata } from "@motionone/generators"
-import { pregenerateKeyframes } from "@motionone/generators"
+import {
+  pregenerateKeyframes,
+  calcGeneratorVelocity,
+} from "@motionone/generators"
 
 export function createGeneratorEasing<Options extends {} = {}>(
   createGenerator: AnimationGeneratorFactory<Options>
@@ -57,33 +59,51 @@ export function createGeneratorEasing<Options extends {} = {}>(
         motionValue
       ) => {
         let settings: CustomAnimationSettings
-        let generator: AnimationGenerator
         const numKeyframes = keyframes.length
 
         let shouldUseGenerator =
           canUseGenerator &&
           numKeyframes <= 2 &&
+          motionValue &&
           keyframes.every(isNumberOrNull)
 
         if (shouldUseGenerator) {
-          const prevMotionState = getPrevMotionState(motionValue)
-          const velocity =
-            prevMotionState &&
-            (numKeyframes === 1 ||
-              (numKeyframes === 2 && keyframes[0] === null))
-              ? prevMotionState.velocity
-              : 0
-
           const target = keyframes[numKeyframes - 1] as number
           const unresolvedOrigin = numKeyframes === 1 ? null : keyframes[0]
-          const origin =
-            unresolvedOrigin === null
-              ? prevMotionState
-                ? prevMotionState.current
-                : parseFloat(getOrigin())
-              : (unresolvedOrigin as number)
 
-          generator = getGenerator(
+          let velocity = 0
+          let origin = 0
+
+          const { generator: prevGenerator } = motionValue!
+          if (prevGenerator) {
+            /**
+             * If we have a generator for this value we can use it to resolve
+             * the animations's current value and velocity.
+             */
+            const { animation, generatorStartTime } = motionValue!
+
+            const startTime = animation?.startTime || generatorStartTime || 0
+            const currentTime =
+              animation?.currentTime || performance.now() - startTime
+            const prevGeneratorCurrent = prevGenerator(currentTime).current
+
+            origin = (unresolvedOrigin as number) ?? prevGeneratorCurrent
+
+            if (
+              numKeyframes === 1 ||
+              (numKeyframes === 2 && keyframes[0] === null)
+            ) {
+              velocity = calcGeneratorVelocity(
+                (t: number) => prevGenerator(t).current,
+                currentTime,
+                prevGeneratorCurrent
+              )
+            }
+          } else {
+            origin = (unresolvedOrigin as number) ?? parseFloat(getOrigin())
+          }
+
+          const generator = getGenerator(
             origin as number,
             target,
             velocity,
@@ -99,9 +119,7 @@ export function createGeneratorEasing<Options extends {} = {}>(
             motionValue.generatorStartTime = performance.now()
           }
         } else {
-          generator = getGenerator(0, 100)
-
-          const keyframesMetadata = getKeyframes(generator)
+          const keyframesMetadata = getKeyframes(getGenerator(0, 100))
 
           settings = {
             easing: "ease",
@@ -117,16 +135,3 @@ export function createGeneratorEasing<Options extends {} = {}>(
 
 const isNumberOrNull = (value: null | number | string) =>
   typeof value !== "string"
-
-function getPrevMotionState(motionValue?: MotionValue) {
-  if (!motionValue) return
-
-  const { animation, generator, generatorStartTime } = motionValue
-
-  if (!generator) return
-
-  const startTime = animation?.startTime || generatorStartTime || 0
-  const currentTime = animation?.currentTime || performance.now() - startTime
-
-  return generator(currentTime)
-}

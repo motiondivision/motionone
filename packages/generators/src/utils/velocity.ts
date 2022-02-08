@@ -7,5 +7,5 @@ export function calcGeneratorVelocity(
   current: number
 ) {
   const prevT = Math.max(t - sampleT, 0)
-  return velocityPerSecond(current - resolveValue(prevT), 5)
+  return velocityPerSecond(current - resolveValue(prevT), t - prevT)
 }

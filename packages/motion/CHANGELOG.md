@@ -2,7 +2,13 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
-## [10.6.1] [2022-02-07]
+## [10.6.2] [2022-02-08]
+
+### Fixed
+
+- Fixed velocity calculations of critically and overdamped animations.
+
+## [10.6.1] [2022-02-06]
 
 ### Fixed
 

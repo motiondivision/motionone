@@ -24,7 +24,6 @@ export const glide = ({
     done: false,
     current: from,
     target: from,
-    velocity,
   }
 
   const isOutOfBounds = (v: number) =>
@@ -57,8 +56,6 @@ export const glide = ({
     const latest = calcLatest(t)
     state.done = Math.abs(delta) <= restDistance
     state.current = state.done ? target : latest
-    state.velocity =
-      t === 0 ? velocity : calcGeneratorVelocity(calcLatest, t, state.current)
   }
 
   /**
@@ -78,7 +75,7 @@ export const glide = ({
     spring = createSpring({
       from: state.current,
       to: nearestBoundary(state.current),
-      velocity: state.velocity, // TODO: This should be passing * 1000
+      velocity: calcGeneratorVelocity(calcLatest, t, state.current), // TODO: This should be passing * 1000
       damping: bounceDamping,
       stiffness: bounceStiffness,
       restDistance,
