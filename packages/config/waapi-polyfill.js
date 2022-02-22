@@ -924,9 +924,8 @@
                 this._updateSvgTransformAttr &&
                   "transform" == a.unprefixedPropertyName(b) &&
                   (null == this._savedTransformAttr &&
-                    (this._savedTransformAttr = this._element.getAttribute(
-                      "transform"
-                    )),
+                    (this._savedTransformAttr =
+                      this._element.getAttribute("transform")),
                   this._element.setAttribute(
                     "transform",
                     a.transformToSvgMatrix(c)

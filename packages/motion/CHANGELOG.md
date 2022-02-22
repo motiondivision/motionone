@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.10.1] [Unreleased]
+
+### Fixed
+
+- Animations finishing in reverse apply their initial styles instead of their final styles by cancelling the animation. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/51)
+
 ## [10.10.0] [2022-05-28]
 
 ### Added

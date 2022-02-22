@@ -8,6 +8,7 @@
       "packages/*"
     ]
   },
+  "funding": "https://motion.dev/sponsor",
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",

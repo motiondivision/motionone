@@ -175,11 +175,25 @@ export function animateStyle(
         })
       }
 
-      const target = keyframes[keyframes.length - 1]
       animation.finished
         .then(() => {
-          // Apply styles to target
-          style.set(element, name, target)
+          /**
+           * TODO: We could replace the style.set() calls and the logic surrounding
+           * them by replacing this block with animation.commitStyles().
+           * However, commitStyles isn't polyfilled correctly so its not testable,
+           * additionally I worry this has implications for its support in older browsers.
+           */
+          const isForwardPlayback = animation.playbackRate > 0
+
+          if (isForwardPlayback) {
+            /**
+             * If the animation is being played forward, explicitly set the final
+             * keyframe as a
+             */
+            style.set(element, name, keyframes[keyframes.length - 1])
+          } else if (keyframes.length > 1) {
+            style.set(element, name, keyframes[0])
+          }
 
           // Ensure fill modes don't persist
           animation.cancel()

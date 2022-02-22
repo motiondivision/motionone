@@ -50,6 +50,41 @@ describe("animate", () => {
     })
   })
 
+  test("Applies initial keyframe if a reverse animation finishes", async () => {
+    const div = document.createElement("div")
+    const animation = animate(
+      div,
+      { opacity: [0.2, 0.5] },
+      { duration, direction: "reverse" }
+    )
+    await animation.finished.then(() => {
+      expect(div).toHaveStyle("opacity: 0.2")
+    })
+  })
+
+  test("Applies initial keyframe if a reverse animation finishes having been manually reversed", async () => {
+    const div = document.createElement("div")
+    const animation = animate(div, { opacity: [0.2, 0.5] }, { duration: 0.2 })
+
+    animation.reverse()
+
+    await animation.finished.then(() => {
+      expect(div).toHaveStyle("opacity: 0.2")
+    })
+  })
+
+  test("Applies initial keyframe if animation finishes on a repeat reverse", async () => {
+    const div = document.createElement("div")
+    const animation = animate(
+      div,
+      { opacity: [0.2, 0.5] },
+      { duration, repeat: 1, direction: "alternate-reverse" }
+    )
+    await animation.finished.then(() => {
+      expect(div).toHaveStyle("opacity: 0.2")
+    })
+  })
+
   test("Applies transform template", async () => {
     const div = document.createElement("div")
     const animation = animate(div, { x: 1 }, { duration })
