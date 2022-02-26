@@ -47,10 +47,13 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   }
 })
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (request, sender) {
   if (!sender.tab) return
 
   const { id } = sender.tab
+
+  if (typeof id !== "number") return
+
   const connection = devToolsConnections.get(id)
 
   if (connection) {

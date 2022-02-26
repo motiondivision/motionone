@@ -15,9 +15,7 @@
     "measure": "bundlesize"
   },
   "dependencies": {
-    "@motionone/animation": "^10.6.2",
-    "@motionone/easing": "^10.6.2",
-    "@motionone/generators": "^10.6.2",
+    "@motionone/dom": "^10.6.2",
     "@motionone/types": "^10.6.2",
     "@motionone/utils": "^10.6.2",
     "hey-listen": "^1.0.8",

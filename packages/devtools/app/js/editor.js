@@ -521,8 +521,9 @@ function Editor() {
         if (!port)
             return;
         const listener = (message) => {
-            console.log("dev tools receive message", message);
-            setAnimations([...animations, message]);
+            if (message.type === "animationstart") {
+                setAnimations([...animations, message]);
+            }
         };
         port === null || port === void 0 ? void 0 : port.onMessage.addListener(listener);
         return () => port === null || port === void 0 ? void 0 : port.onMessage.removeListener(listener);

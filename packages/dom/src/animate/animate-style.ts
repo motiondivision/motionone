@@ -8,7 +8,7 @@ import {
   isEasingGenerator,
   isEasingList,
 } from "@motionone/utils"
-import { AnimationOptions, WindowWithDevTools } from "@motionone/types"
+import { AnimationOptions, DevTools } from "@motionone/types"
 import {
   addTransformToElement,
   isTransform,
@@ -23,7 +23,7 @@ import { isNumber, noop } from "@motionone/utils"
 import { stopAnimation } from "./utils/stop-animation"
 
 function getDevTools() {
-  return (window as WindowWithDevTools).__MOTION_DEV_TOOLS
+  return (window as any).__MOTION_DEV_TOOLS as DevTools
 }
 
 export function animateStyle(

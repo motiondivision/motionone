@@ -1,4 +1,4 @@
-import { MotionEvent } from "./types"
+import { MotionMessage } from "./types"
 
 const script = document.createElement("script")
 script.src = chrome.runtime.getURL("js/client.js")
@@ -7,19 +7,19 @@ script.parentNode?.removeChild(script)
 
 const port = chrome.runtime.connect({ name: "client" })
 
-port.onMessage.addListener((message, sender) => {
+port.onMessage.addListener(() => {
   /**
    * Receive message from port - replace runtime.listener with this
    */
 })
 
-chrome.runtime.onMessage.addListener((message: MotionEvent) =>
-  window.postMessage(message)
+chrome.runtime.onMessage.addListener((message: MotionMessage) =>
+  window.postMessage(message, "*")
 )
 
 window.addEventListener(
   "message",
-  (event: MessageEvent<MotionEvent>) => {
+  (event: MessageEvent<MotionMessage>) => {
     if (event.source != window) return
 
     switch (event.data.type) {

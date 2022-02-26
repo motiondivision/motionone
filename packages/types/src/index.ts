@@ -93,14 +93,10 @@ export type AnimationOptions = KeyframeOptions &
 
 export interface DevTools {
   record: (
-    element: Element,
-    key: string,
-    keyframesDefinition: any,
+    element: HTMLElement,
+    valueName: string,
+    keyframes: any,
     options: AnimationOptions
   ) => void
   isRecording: boolean
-}
-
-export interface WindowWithDevTools extends Window {
-  __MOTION_DEV_TOOLS: DevTools
 }

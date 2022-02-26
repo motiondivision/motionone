@@ -1,8 +1,4 @@
-import type {
-  WindowWithDevTools,
-  DevTools,
-  AnimationOptions,
-} from "@motionone/types"
+import type { DevTools, AnimationOptions } from "@motionone/types"
 import type { ValueKeyframesDefinition } from "@motionone/dom"
 import { AnimationStartMessage, MotionMessage } from "./types"
 
@@ -61,6 +57,6 @@ function createDevToolsClient(): DevTools {
   return client
 }
 
-if (!(window as WindowWithDevTools).__MOTION_DEV_TOOLS) {
-  ;(window as WindowWithDevTools).__MOTION_DEV_TOOLS = createDevToolsClient()
+if (!(window as any).__MOTION_DEV_TOOLS) {
+  ;(window as any).__MOTION_DEV_TOOLS = createDevToolsClient()
 }

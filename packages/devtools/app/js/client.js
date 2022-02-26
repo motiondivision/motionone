@@ -1,7 +1,3 @@
-const events = {
-    animationStart: "animation_start",
-};
-
 let elementCounter = 0;
 function generateElementId(element) {
     let id = element.dataset.motionId || element.id;
@@ -15,16 +11,17 @@ function generateElementId(element) {
 function createDevToolsClient() {
     const client = {
         isRecording: false,
-        record: (element, name, keyframes, options) => {
+        record: (element, valueName, keyframes, options) => {
             if (!client.isRecording)
                 return;
-            window.postMessage({
-                type: events.animationStart,
+            const message = {
+                type: "animationstart",
                 elementId: generateElementId(element),
-                name,
+                valueName,
                 keyframes,
                 options,
-            }, "*");
+            };
+            window.postMessage(message, "*");
         },
     };
     function startRecording() {
@@ -36,14 +33,8 @@ function createDevToolsClient() {
     window.addEventListener("message", (event) => {
         if (event.source !== window)
             return;
-        console.log(event.data);
-        if (event.data.type === "recording") {
-            if (event.data.isRecording) {
-                startRecording();
-            }
-            else {
-                stopRecording();
-            }
+        if (event.data.type === "isrecording") {
+            event.data.isRecording ? startRecording() : stopRecording();
         }
     });
     return client;

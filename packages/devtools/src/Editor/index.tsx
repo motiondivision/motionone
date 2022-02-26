@@ -2,18 +2,20 @@ import * as React from "react"
 import { useEffect, useState } from "react"
 import { usePort } from "./state/use-port"
 import { useIsRecording } from "./state/use-is-recording"
+import { AnimationStartMessage, MotionMessage } from "../types"
 
 export function Editor() {
   const port = usePort()
   const [isRecording, setIsRecording] = useIsRecording(port)
-  const [animations, setAnimations] = useState([])
+  const [animations, setAnimations] = useState<AnimationStartMessage[]>([])
 
   useEffect(() => {
     if (!port) return
 
-    const listener = (message) => {
-      console.log("dev tools receive message", message)
-      setAnimations([...animations, message])
+    const listener = (message: MotionMessage) => {
+      if (message.type === "animationstart") {
+        setAnimations([...animations, message])
+      }
     }
 
     port?.onMessage.addListener(listener)
