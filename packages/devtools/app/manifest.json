@@ -1,0 +1,32 @@
+{
+  "name": "Motion One Editor",
+  "description": "Inspect and edit Motion One animations",
+  "version": "1.0",
+  "manifest_version": 3,
+  "icons": {
+    "16": "/assets/icon-16.png",
+    "32": "/assets/icon-32.png",
+    "48": "/assets/icon-48.png",
+    "128": "/assets/icon-128.png"
+  },
+  "devtools_page": "devtools.html",
+  "background": {
+    "service_worker": "js/background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "devtools.html",
+        "editor.html",
+        "js/background.js",
+        "js/client.js",
+        "js/devtools.js",
+        "js/editor.js"
+      ],
+      "matches": ["https://*/*", "file:///*", "http://*/*"],
+      "use_dynamic_url": true
+    }
+  ],
+  "permissions": ["storage", "activeTab", "tabs", "scripting"],
+  "host_permissions": ["file:///*", "http://*/*", "https://*/*"]
+}

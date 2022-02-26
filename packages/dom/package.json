@@ -11,7 +11,7 @@
   "scripts": {
     "build": "rm -rf lib dist types && tsc -p . && webpack --config webpack.config.js && rollup -c",
     "test": "jest --coverage --config jest.config.js",
-    "dev": "rollup -c -w",
+    "dev": "concurrently -c blue,red -n tsc,rollup --kill-others \"tsc --watch -p . --preserveWatchOutput\" \"rollup --c --watch --no-watch.clearScreen\"",
     "measure": "bundlesize"
   },
   "dependencies": {

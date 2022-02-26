@@ -1,0 +1,14 @@
+{
+  "extends": "config/ts-base.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "include": ["src/**/*.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["**/__tests__/*"],
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./lib",
+    "isolatedModules": false,
+    "declaration": false,
+    "declarationMap": false,
+    "jsx": "react"
+  }
+}

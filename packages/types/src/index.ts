@@ -90,3 +90,17 @@ export type AnimationOptions = KeyframeOptions &
   PlaybackOptions & {
     allowWebkitAcceleration?: boolean
   }
+
+export interface DevTools {
+  record: (
+    element: Element,
+    key: string,
+    keyframesDefinition: any,
+    options: AnimationOptions
+  ) => void
+  isRecording: boolean
+}
+
+export interface WindowWithDevTools extends Window {
+  __MOTION_DEV_TOOLS: DevTools
+}

@@ -8,7 +8,7 @@ import {
   isEasingGenerator,
   isEasingList,
 } from "@motionone/utils"
-import { AnimationOptions } from "@motionone/types"
+import { AnimationOptions, WindowWithDevTools } from "@motionone/types"
 import {
   addTransformToElement,
   isTransform,
@@ -22,12 +22,18 @@ import { getStyleName } from "./utils/get-style-name"
 import { isNumber, noop } from "@motionone/utils"
 import { stopAnimation } from "./utils/stop-animation"
 
+function getDevTools() {
+  return (window as WindowWithDevTools).__MOTION_DEV_TOOLS
+}
+
 export function animateStyle(
   element: Element,
   key: string,
   keyframesDefinition: ValueKeyframesDefinition,
   options: AnimationOptions = {}
 ): AnimationFactory {
+  getDevTools()?.record(element, key, keyframesDefinition, options)
+
   let animation: any
   let {
     duration = defaults.duration,
