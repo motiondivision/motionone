@@ -8,23 +8,49 @@ function generateElementId(element) {
     }
     return id;
 }
+let animations = {};
+let animationCount = 1;
+let isFlushScheduled = false;
+function flushBuffer() {
+    const message = {
+        type: "animationstart",
+        animations: animations,
+    };
+    window.postMessage(message, "*");
+    isFlushScheduled = false;
+    animations = {};
+    animationCount++;
+}
 function createDevToolsClient() {
     const client = {
         isRecording: false,
         record: (element, valueName, keyframes, options) => {
             if (!client.isRecording)
                 return;
-            const message = {
-                type: "animationstart",
-                elementId: generateElementId(element),
+            const animationName = `Animation ${animationCount}`;
+            const elementId = generateElementId(element);
+            if (!animations[animationName]) {
+                animations[animationName] = {};
+            }
+            if (!animations[animationName][elementId]) {
+                animations[animationName][elementId] = [];
+            }
+            animations[animationName][elementId].push({
+                elementId,
+                animationName,
                 valueName,
                 keyframes,
                 options,
-            };
-            window.postMessage(message, "*");
+            });
+            if (!isFlushScheduled) {
+                isFlushScheduled = true;
+                requestAnimationFrame(flushBuffer);
+            }
         },
     };
     function startRecording() {
+        animationCount = 1;
+        animations = {};
         client.isRecording = true;
     }
     function stopRecording() {

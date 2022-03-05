@@ -1,6 +1,10 @@
 import type { DevTools, AnimationOptions } from "@motionone/types"
 import type { ValueKeyframesDefinition } from "@motionone/dom"
-import { AnimationStartMessage, MotionMessage } from "./types"
+import {
+  AnimationStartMessage,
+  MotionMessage,
+  AnimationsMetadata,
+} from "./types"
 
 let elementCounter = 0
 function generateElementId(element: HTMLElement) {
@@ -15,6 +19,23 @@ function generateElementId(element: HTMLElement) {
   return id
 }
 
+let animations: AnimationsMetadata = {}
+let animationCount = 1
+let isFlushScheduled = false
+
+function flushBuffer() {
+  const message: AnimationStartMessage = {
+    type: "animationstart",
+    animations: animations,
+  }
+
+  window.postMessage(message, "*")
+
+  isFlushScheduled = false
+  animations = {}
+  animationCount++
+}
+
 function createDevToolsClient(): DevTools {
   const client: DevTools = {
     isRecording: false,
@@ -26,19 +47,35 @@ function createDevToolsClient(): DevTools {
     ) => {
       if (!client.isRecording) return
 
-      const message: AnimationStartMessage = {
-        type: "animationstart",
-        elementId: generateElementId(element),
+      const animationName = `Animation ${animationCount}`
+      const elementId = generateElementId(element)
+
+      if (!animations[animationName]) {
+        animations[animationName] = {}
+      }
+
+      if (!animations[animationName][elementId]) {
+        animations[animationName][elementId] = []
+      }
+
+      animations[animationName][elementId].push({
+        elementId,
+        animationName,
         valueName,
         keyframes,
         options,
-      }
+      })
 
-      window.postMessage(message, "*")
+      if (!isFlushScheduled) {
+        isFlushScheduled = true
+        requestAnimationFrame(flushBuffer)
+      }
     },
   }
 
   function startRecording() {
+    animationCount = 1
+    animations = {}
     client.isRecording = true
   }
 

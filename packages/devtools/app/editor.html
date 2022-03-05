@@ -1,4 +1,188 @@
 <html>
+  <head>
+    <style>
+      @font-face {
+        font-family: "Inter";
+        src: url("./fonts/inter.woff") format("woff");
+        font-display: auto;
+        font-style: normal;
+        font-weight: 400;
+      }
+
+      @font-face {
+        font-family: "Inter";
+        src: url("./fonts/interbold.woff") format("woff");
+        font-display: auto;
+        font-style: normal;
+        font-weight: bold;
+      }
+
+      @font-face {
+        font-family: "JetBrains Mono";
+        src: url("./fonts/jetbrainsmono.woff2") format("woff2");
+        font-display: auto;
+        font-style: normal;
+        font-weight: 400;
+      }
+
+      @font-face {
+        font-family: "JetBrains Mono";
+        src: url("./fonts/jetbrainsmonobold.woff2") format("woff2");
+        font-display: auto;
+        font-style: normal;
+        font-weight: bold;
+      }
+
+      x *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      * {
+        margin: 0;
+      }
+
+      ul,
+      li {
+        padding: 0;
+        list-style: none;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      img,
+      picture,
+      video,
+      canvas,
+      svg {
+        display: block;
+        max-width: 100%;
+      }
+
+      input,
+      button,
+      textarea,
+      select {
+        font: inherit;
+      }
+
+      p,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        overflow-wrap: break-word;
+      }
+
+      #app {
+        isolation: isolate;
+      }
+
+      button,
+      input,
+      optgroup,
+      select,
+      textarea {
+        font-family: inherit;
+        font-size: 100%;
+        line-height: 1.15;
+        margin: 0;
+      }
+
+      button,
+      input {
+        overflow: visible;
+      }
+
+      button,
+      select {
+        text-transform: none;
+      }
+
+      button,
+      [type="button"],
+      [type="reset"],
+      [type="submit"] {
+        -webkit-appearance: none;
+        border: 0;
+        background: none;
+      }
+
+      body {
+        --white: #f5f5f5;
+        --black: #0f1115;
+        --yellow: #fff208;
+        --strong-blue: #0d63f8;
+        --blue: #31a6fa;
+        --green: #57eb64;
+        --pink: #ff2965;
+        --red: #ff1231;
+        --splash: #00ffdb;
+        --feint: rgba(133, 150, 193, 0.2);
+        --feint-solid: #1a1e26;
+
+        --background: var(--black);
+        --background-semi: #0f1115c0;
+        --foreground: var(--white);
+        --primary: var(--yellow);
+        --secondary: var(--strong-blue);
+        --success: var(--green);
+        --error: var(--red);
+        --padding: 20px;
+        --padding-large: 40px;
+
+        --action-radius: 10px;
+
+        --z-modal: 1100;
+        --z-header: 1000;
+        --z-code-block: 900;
+        --z-toc: 100;
+
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        background-color: var(--background);
+        font-family: Inter, sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        color: var(--foreground);
+        overflow: hidden;
+      }
+
+      * {
+        -webkit-font-smoothing: antialiased;
+      }
+
+      pre,
+      code {
+        font-family: "JetBrains Mono", mono;
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      #app {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+      }
+    </style>
+  </head>
   <body>
     <div id="app"></div>
     <script src="js/editor.js"></script>

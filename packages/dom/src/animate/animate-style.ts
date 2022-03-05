@@ -32,7 +32,8 @@ export function animateStyle(
   keyframesDefinition: ValueKeyframesDefinition,
   options: AnimationOptions = {}
 ): AnimationFactory {
-  getDevTools()?.record(element, key, keyframesDefinition, options)
+  const devTools = getDevTools()
+  const isRecording = devTools?.isRecording
 
   let animation: any
   let {
@@ -136,7 +137,9 @@ export function animateStyle(
        * If this browser doesn't support partial/implicit keyframes we need to
        * explicitly provide one.
        */
-      if (!supports.partialKeyframes() && keyframes.length === 1) {
+      const needsToReadInitialKeyframe =
+        !supports.partialKeyframes() && keyframes.length === 1
+      if (isRecording || needsToReadInitialKeyframe) {
         keyframes.unshift(readInitialValue())
       }
 
@@ -224,6 +227,14 @@ export function animateStyle(
           : target
       )
     }
+
+    devTools?.record(element as HTMLElement, key, keyframes, {
+      duration,
+      delay,
+      easing,
+      repeat,
+      offset,
+    })
 
     motionValue.setAnimation(animation)
 

@@ -13,16 +13,16 @@ chrome.runtime.onConnect.addListener((port) => {
             return;
         }
         case "devtools-page": {
-            const listener = (message, { sender }) => {
-                if (message.name === "init" && message.tabId) {
-                    devToolsConnections.set(message.tabId, port);
-                    return;
-                }
-                else if (message.name === "recording") {
-                    console.log("Is recording", message.isRecording);
-                    console.log(sender);
-                    chrome.tabs.sendMessage(message.tabId, message);
-                    // Send message to client with new recording status
+            const listener = (message) => {
+                switch (message.type) {
+                    case "init": {
+                        devToolsConnections.set(message.tabId, port);
+                        return;
+                    }
+                    case "isrecording": {
+                        chrome.tabs.sendMessage(message.tabId, message);
+                        return;
+                    }
                 }
             };
             port.onMessage.addListener(listener);

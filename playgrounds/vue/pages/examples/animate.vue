@@ -2,11 +2,37 @@
   <Motion
     :initial="{ opacity: 0 }"
     :animate="{ opacity: 1 }"
-    :hover="{ scale: 1.2 }"
+    :hover="{ scale: 1.2, backgroundColor: `red`, rotate: 90 }"
     :press="{ scale: 0.9 }"
-    :inView="{ backgroundColor: 'black' }"
-    :transition="{ duration: 1 }"
-    style="width: 200px; background-color: red; height: 200px"
+    :transition="{ duration: 1, easing: 'ease-in-out', delay: 0.5, repeat: 1 }"
+    style="width: 200px; background-color: black; height: 200px"
+  >
+  </Motion>
+  <Motion
+    :initial="{ opacity: 0 }"
+    :animate="{ opacity: 1 }"
+    :hover="{ scale: 1.2, backgroundColor: `red`, rotate: 90 }"
+    :press="{ scale: 0.9 }"
+    :transition="{ duration: 1, easing: 'ease-in-out', delay: 0.5, repeat: 1 }"
+    style="width: 200px; background-color: black; height: 200px"
+  >
+  </Motion>
+  <Motion
+    :initial="{ opacity: 0 }"
+    :animate="{ opacity: 1 }"
+    :hover="{ scale: 1.2, backgroundColor: `red`, rotate: 90 }"
+    :press="{ scale: 0.9 }"
+    :transition="{ duration: 1, easing: 'ease-in-out', delay: 0.5, repeat: 1 }"
+    style="width: 200px; background-color: black; height: 200px"
+  >
+  </Motion>
+  <Motion
+    :initial="{ opacity: 0 }"
+    :animate="{ opacity: 1 }"
+    :hover="{ scale: 1.2, backgroundColor: `red`, rotate: 90 }"
+    :press="{ scale: 0.9 }"
+    :transition="{ duration: 1, easing: 'ease-in-out', delay: 0.5, repeat: 1 }"
+    style="width: 200px; background-color: black; height: 200px"
   >
   </Motion>
 </template>

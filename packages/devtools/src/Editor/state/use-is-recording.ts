@@ -1,16 +1,15 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
+import { IsRecordingMessage } from "../../types"
+import { EditorState } from "./types"
 
-export function useIsRecording(port?: chrome.runtime.Port) {
-  const recordingState = useState(false)
-  const [isRecording] = recordingState
-
+export function useIsRecording(state: EditorState, port?: chrome.runtime.Port) {
   useEffect(() => {
-    port?.postMessage({
-      name: "recording",
-      isRecording,
+    const message: IsRecordingMessage = {
+      type: "isrecording",
+      isRecording: state.isRecording,
       tabId: chrome.devtools.inspectedWindow.tabId,
-    })
-  }, [isRecording])
+    }
 
-  return recordingState
+    port?.postMessage(message)
+  }, [port, state.isRecording])
 }

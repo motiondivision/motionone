@@ -1,3 +1,5 @@
+import { MotionMessage } from "./types"
+
 const devToolsConnections = new Map<number, chrome.runtime.Port>()
 
 chrome.runtime.onConnect.addListener((port) => {
@@ -5,7 +7,7 @@ chrome.runtime.onConnect.addListener((port) => {
 
   switch (port.name) {
     case "client": {
-      const listener = (message: any, { sender }: any) => {
+      const listener = (message: MotionMessage, { sender }: any) => {
         const port = devToolsConnections.get(sender.tab.id)
 
         // TODO: Sender doesnt contain tab id
@@ -16,16 +18,16 @@ chrome.runtime.onConnect.addListener((port) => {
       return
     }
     case "devtools-page": {
-      const listener = (message: any, { sender }: any) => {
-        if (message.name === "init" && message.tabId) {
-          devToolsConnections.set(message.tabId, port)
-          return
-        } else if (message.name === "recording") {
-          console.log("Is recording", message.isRecording)
-          console.log(sender)
-          chrome.tabs.sendMessage(message.tabId, message)
-
-          // Send message to client with new recording status
+      const listener = (message: MotionMessage) => {
+        switch (message.type) {
+          case "init": {
+            devToolsConnections.set(message.tabId, port)
+            return
+          }
+          case "isrecording": {
+            chrome.tabs.sendMessage(message.tabId, message)
+            return
+          }
         }
       }
 
