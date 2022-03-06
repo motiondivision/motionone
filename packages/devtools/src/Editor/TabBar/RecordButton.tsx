@@ -1,5 +1,6 @@
 import * as React from "react"
 import styled from "styled-components"
+import { RecordIcon } from "../icons/RecordIcon"
 import { tabBarHeight } from "../styles"
 
 interface Props {
@@ -12,13 +13,10 @@ const Button = styled.button`
   height: ${tabBarHeight}px;
   flex: 0 0 ${tabBarHeight}px;
   position: relative;
-`
-
-const Icon = styled.div`
-  clip-path: circle(18%);
   text-indent: -1000px;
-  position: absolute;
-  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 export function RecordButton({
@@ -28,13 +26,12 @@ export function RecordButton({
 }: Props) {
   return (
     <Button onClick={isRecording ? stopRecording : startRecording}>
-      <Icon
+      <RecordIcon
         style={{
           backgroundColor: isRecording ? "var(--red)" : "rgba(255,255,255,0.5)",
         }}
-      >
-        {isRecording ? "Stop recording" : "Start recording"}
-      </Icon>
+      ></RecordIcon>
+      {isRecording ? "Stop recording" : "Start recording"}
     </Button>
   )
 }

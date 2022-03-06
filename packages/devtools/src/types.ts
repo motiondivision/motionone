@@ -1,5 +1,9 @@
 import { AnimationOptions, ValueKeyframe } from "@motionone/types"
 
+export interface Storage {
+  recordingTabs: Set<number>
+}
+
 export interface ValueAnimationMetadata {
   elementId: string
   animationName: string
@@ -32,7 +36,24 @@ export interface DevToolsInitMessage {
   tabId: number
 }
 
+export interface LoginMessage {
+  type: "login"
+  isPro: boolean
+  username: string
+}
+
+export interface ClearAnimationsMessage {
+  type: "clear"
+}
+
 export type MotionMessage =
   | AnimationStartMessage
   | IsRecordingMessage
   | DevToolsInitMessage
+  | LoginMessage
+  | ClearAnimationsMessage
+
+export type EditorAuth = {
+  isPro: boolean
+  username?: string
+}

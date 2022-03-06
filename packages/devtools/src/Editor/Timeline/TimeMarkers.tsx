@@ -7,8 +7,10 @@ interface Props {
 }
 
 const Container = styled.div`
-  margin-left: calc(-1 * var(--sidebar-width) - 20px);
-  padding-left: calc(var(--sidebar-width) + 20px);
+  margin-left: calc(-1 * var(--sidebar-width) - 40px);
+  margin-right: calc(-1 * var(--sidebar-width) - 40px);
+  margin-bottom: 10px;
+  padding-left: calc(var(--sidebar-width) + 40px);
   flex: 0 0 var(--row-height);
   background-color: var(--feint);
   position: sticky;
@@ -16,6 +18,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   overflow: hidden;
+  z-index: 1;
 `
 
 const Marker = styled.div`

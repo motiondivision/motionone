@@ -99,8 +99,8 @@ var objectAssign = shouldUseNative() ? Object.assign : function (target, source)
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var l$1=objectAssign,n$1=60103,p$1=60106;react_production_min.Fragment=60107;react_production_min.StrictMode=60108;react_production_min.Profiler=60114;var q$2=60109,r$2=60110,t$1=60112;react_production_min.Suspense=60113;var u=60115,v$2=60116;
-if("function"===typeof Symbol&&Symbol.for){var w$2=Symbol.for;n$1=w$2("react.element");p$1=w$2("react.portal");react_production_min.Fragment=w$2("react.fragment");react_production_min.StrictMode=w$2("react.strict_mode");react_production_min.Profiler=w$2("react.profiler");q$2=w$2("react.provider");r$2=w$2("react.context");t$1=w$2("react.forward_ref");react_production_min.Suspense=w$2("react.suspense");u=w$2("react.memo");v$2=w$2("react.lazy");}var x$2="function"===typeof Symbol&&Symbol.iterator;
+var l$1=objectAssign,n$1=60103,p$1=60106;react_production_min.Fragment=60107;react_production_min.StrictMode=60108;react_production_min.Profiler=60114;var q$2=60109,r$3=60110,t$1=60112;react_production_min.Suspense=60113;var u=60115,v$2=60116;
+if("function"===typeof Symbol&&Symbol.for){var w$2=Symbol.for;n$1=w$2("react.element");p$1=w$2("react.portal");react_production_min.Fragment=w$2("react.fragment");react_production_min.StrictMode=w$2("react.strict_mode");react_production_min.Profiler=w$2("react.profiler");q$2=w$2("react.provider");r$3=w$2("react.context");t$1=w$2("react.forward_ref");react_production_min.Suspense=w$2("react.suspense");u=w$2("react.memo");v$2=w$2("react.lazy");}var x$2="function"===typeof Symbol&&Symbol.iterator;
 function y$3(a){if(null===a||"object"!==typeof a)return null;a=x$2&&a[x$2]||a["@@iterator"];return "function"===typeof a?a:null}function z$2(a){for(var b="https://reactjs.org/docs/error-decoder.html?invariant="+a,c=1;c<arguments.length;c++)b+="&args[]="+encodeURIComponent(arguments[c]);return "Minified React error #"+a+"; visit "+b+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}
 var A$1={isMounted:function(){return !1},enqueueForceUpdate:function(){},enqueueReplaceState:function(){},enqueueSetState:function(){}},B$2={};function C$1(a,b,c){this.props=a;this.context=b;this.refs=B$2;this.updater=c||A$1;}C$1.prototype.isReactComponent={};C$1.prototype.setState=function(a,b){if("object"!==typeof a&&"function"!==typeof a&&null!=a)throw Error(z$2(85));this.updater.enqueueSetState(this,a,b,"setState");};C$1.prototype.forceUpdate=function(a){this.updater.enqueueForceUpdate(this,a,"forceUpdate");};
 function D$2(){}D$2.prototype=C$1.prototype;function E$2(a,b,c){this.props=a;this.context=b;this.refs=B$2;this.updater=c||A$1;}var F$2=E$2.prototype=new D$2;F$2.constructor=E$2;l$1(F$2,C$1.prototype);F$2.isPureReactComponent=!0;var G$2={current:null},H$2=Object.prototype.hasOwnProperty,I$2={key:!0,ref:!0,__self:!0,__source:!0};
@@ -111,7 +111,7 @@ function O$1(a,b,c,e,d){var k=typeof a;if("undefined"===k||"boolean"===k)a=null;
 function Q$1(a){if(-1===a._status){var b=a._result;b=b();a._status=0;a._result=b;b.then(function(b){0===a._status&&(b=b.default,a._status=1,a._result=b);},function(b){0===a._status&&(a._status=2,a._result=b);});}if(1===a._status)return a._result;throw a._result;}var R$1={current:null};function S$2(){var a=R$1.current;if(null===a)throw Error(z$2(321));return a}var T$2={ReactCurrentDispatcher:R$1,ReactCurrentBatchConfig:{transition:0},ReactCurrentOwner:G$2,IsSomeRendererActing:{current:!1},assign:l$1};
 react_production_min.Children={map:P$1,forEach:function(a,b,c){P$1(a,function(){b.apply(this,arguments);},c);},count:function(a){var b=0;P$1(a,function(){b++;});return b},toArray:function(a){return P$1(a,function(a){return a})||[]},only:function(a){if(!L$1(a))throw Error(z$2(143));return a}};react_production_min.Component=C$1;react_production_min.PureComponent=E$2;react_production_min.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED=T$2;
 react_production_min.cloneElement=function(a,b,c){if(null===a||void 0===a)throw Error(z$2(267,a));var e=l$1({},a.props),d=a.key,k=a.ref,h=a._owner;if(null!=b){void 0!==b.ref&&(k=b.ref,h=G$2.current);void 0!==b.key&&(d=""+b.key);if(a.type&&a.type.defaultProps)var g=a.type.defaultProps;for(f in b)H$2.call(b,f)&&!I$2.hasOwnProperty(f)&&(e[f]=void 0===b[f]&&void 0!==g?g[f]:b[f]);}var f=arguments.length-2;if(1===f)e.children=c;else if(1<f){g=Array(f);for(var m=0;m<f;m++)g[m]=arguments[m+2];e.children=g;}return {$$typeof:n$1,type:a.type,
-key:d,ref:k,props:e,_owner:h}};react_production_min.createContext=function(a,b){void 0===b&&(b=null);a={$$typeof:r$2,_calculateChangedBits:b,_currentValue:a,_currentValue2:a,_threadCount:0,Provider:null,Consumer:null};a.Provider={$$typeof:q$2,_context:a};return a.Consumer=a};react_production_min.createElement=J$1;react_production_min.createFactory=function(a){var b=J$1.bind(null,a);b.type=a;return b};react_production_min.createRef=function(){return {current:null}};react_production_min.forwardRef=function(a){return {$$typeof:t$1,render:a}};react_production_min.isValidElement=L$1;
+key:d,ref:k,props:e,_owner:h}};react_production_min.createContext=function(a,b){void 0===b&&(b=null);a={$$typeof:r$3,_calculateChangedBits:b,_currentValue:a,_currentValue2:a,_threadCount:0,Provider:null,Consumer:null};a.Provider={$$typeof:q$2,_context:a};return a.Consumer=a};react_production_min.createElement=J$1;react_production_min.createFactory=function(a){var b=J$1.bind(null,a);b.type=a;return b};react_production_min.createRef=function(){return {current:null}};react_production_min.forwardRef=function(a){return {$$typeof:t$1,render:a}};react_production_min.isValidElement=L$1;
 react_production_min.lazy=function(a){return {$$typeof:v$2,_payload:{_status:-1,_result:a},_init:Q$1}};react_production_min.memo=function(a,b){return {$$typeof:u,type:a,compare:void 0===b?null:b}};react_production_min.useCallback=function(a,b){return S$2().useCallback(a,b)};react_production_min.useContext=function(a,b){return S$2().useContext(a,b)};react_production_min.useDebugValue=function(){};react_production_min.useEffect=function(a,b){return S$2().useEffect(a,b)};react_production_min.useImperativeHandle=function(a,b,c){return S$2().useImperativeHandle(a,b,c)};
 react_production_min.useLayoutEffect=function(a,b){return S$2().useLayoutEffect(a,b)};react_production_min.useMemo=function(a,b){return S$2().useMemo(a,b)};react_production_min.useReducer=function(a,b,c){return S$2().useReducer(a,b,c)};react_production_min.useRef=function(a){return S$2().useRef(a)};react_production_min.useState=function(a){return S$2().useState(a)};react_production_min.version="17.0.2";
 
@@ -119,7 +119,7 @@ react_production_min.useLayoutEffect=function(a,b){return S$2().useLayoutEffect(
   react.exports = react_production_min;
 }
 
-var React__default = react.exports;
+var r$2 = react.exports;
 
 var reactDom = {exports: {}};
 
@@ -501,840 +501,6 @@ function usePort() {
         setPort(port);
     }, []);
     return port;
-}
-
-function Instructions() {
-    return react.exports.createElement("p", null, "Click the record button to start recording animations.");
-}
-
-var reactIs$1 = {exports: {}};
-
-var reactIs_production_min = {};
-
-/** @license React v16.13.1
- * react-is.production.min.js
- *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-var b$2="function"===typeof Symbol&&Symbol.for,c$1=b$2?Symbol.for("react.element"):60103,d=b$2?Symbol.for("react.portal"):60106,e=b$2?Symbol.for("react.fragment"):60107,f=b$2?Symbol.for("react.strict_mode"):60108,g$1=b$2?Symbol.for("react.profiler"):60114,h=b$2?Symbol.for("react.provider"):60109,k$1=b$2?Symbol.for("react.context"):60110,l=b$2?Symbol.for("react.async_mode"):60111,m=b$2?Symbol.for("react.concurrent_mode"):60111,n=b$2?Symbol.for("react.forward_ref"):60112,p=b$2?Symbol.for("react.suspense"):60113,q$1=b$2?
-Symbol.for("react.suspense_list"):60120,r=b$2?Symbol.for("react.memo"):60115,t=b$2?Symbol.for("react.lazy"):60116,v$1=b$2?Symbol.for("react.block"):60121,w$1=b$2?Symbol.for("react.fundamental"):60117,x$1=b$2?Symbol.for("react.responder"):60118,y$1=b$2?Symbol.for("react.scope"):60119;
-function z$1(a){if("object"===typeof a&&null!==a){var u=a.$$typeof;switch(u){case c$1:switch(a=a.type,a){case l:case m:case e:case g$1:case f:case p:return a;default:switch(a=a&&a.$$typeof,a){case k$1:case n:case t:case r:case h:return a;default:return u}}case d:return u}}}function A(a){return z$1(a)===m}reactIs_production_min.AsyncMode=l;reactIs_production_min.ConcurrentMode=m;reactIs_production_min.ContextConsumer=k$1;reactIs_production_min.ContextProvider=h;reactIs_production_min.Element=c$1;reactIs_production_min.ForwardRef=n;reactIs_production_min.Fragment=e;reactIs_production_min.Lazy=t;reactIs_production_min.Memo=r;reactIs_production_min.Portal=d;
-reactIs_production_min.Profiler=g$1;reactIs_production_min.StrictMode=f;reactIs_production_min.Suspense=p;reactIs_production_min.isAsyncMode=function(a){return A(a)||z$1(a)===l};reactIs_production_min.isConcurrentMode=A;reactIs_production_min.isContextConsumer=function(a){return z$1(a)===k$1};reactIs_production_min.isContextProvider=function(a){return z$1(a)===h};reactIs_production_min.isElement=function(a){return "object"===typeof a&&null!==a&&a.$$typeof===c$1};reactIs_production_min.isForwardRef=function(a){return z$1(a)===n};reactIs_production_min.isFragment=function(a){return z$1(a)===e};reactIs_production_min.isLazy=function(a){return z$1(a)===t};
-reactIs_production_min.isMemo=function(a){return z$1(a)===r};reactIs_production_min.isPortal=function(a){return z$1(a)===d};reactIs_production_min.isProfiler=function(a){return z$1(a)===g$1};reactIs_production_min.isStrictMode=function(a){return z$1(a)===f};reactIs_production_min.isSuspense=function(a){return z$1(a)===p};
-reactIs_production_min.isValidElementType=function(a){return "string"===typeof a||"function"===typeof a||a===e||a===m||a===g$1||a===f||a===p||a===q$1||"object"===typeof a&&null!==a&&(a.$$typeof===t||a.$$typeof===r||a.$$typeof===h||a.$$typeof===k$1||a.$$typeof===n||a.$$typeof===w$1||a.$$typeof===x$1||a.$$typeof===y$1||a.$$typeof===v$1)};reactIs_production_min.typeOf=z$1;
-
-{
-  reactIs$1.exports = reactIs_production_min;
-}
-
-function stylis_min (W) {
-  function M(d, c, e, h, a) {
-    for (var m = 0, b = 0, v = 0, n = 0, q, g, x = 0, K = 0, k, u = k = q = 0, l = 0, r = 0, I = 0, t = 0, B = e.length, J = B - 1, y, f = '', p = '', F = '', G = '', C; l < B;) {
-      g = e.charCodeAt(l);
-      l === J && 0 !== b + n + v + m && (0 !== b && (g = 47 === b ? 10 : 47), n = v = m = 0, B++, J++);
-
-      if (0 === b + n + v + m) {
-        if (l === J && (0 < r && (f = f.replace(N, '')), 0 < f.trim().length)) {
-          switch (g) {
-            case 32:
-            case 9:
-            case 59:
-            case 13:
-            case 10:
-              break;
-
-            default:
-              f += e.charAt(l);
-          }
-
-          g = 59;
-        }
-
-        switch (g) {
-          case 123:
-            f = f.trim();
-            q = f.charCodeAt(0);
-            k = 1;
-
-            for (t = ++l; l < B;) {
-              switch (g = e.charCodeAt(l)) {
-                case 123:
-                  k++;
-                  break;
-
-                case 125:
-                  k--;
-                  break;
-
-                case 47:
-                  switch (g = e.charCodeAt(l + 1)) {
-                    case 42:
-                    case 47:
-                      a: {
-                        for (u = l + 1; u < J; ++u) {
-                          switch (e.charCodeAt(u)) {
-                            case 47:
-                              if (42 === g && 42 === e.charCodeAt(u - 1) && l + 2 !== u) {
-                                l = u + 1;
-                                break a;
-                              }
-
-                              break;
-
-                            case 10:
-                              if (47 === g) {
-                                l = u + 1;
-                                break a;
-                              }
-
-                          }
-                        }
-
-                        l = u;
-                      }
-
-                  }
-
-                  break;
-
-                case 91:
-                  g++;
-
-                case 40:
-                  g++;
-
-                case 34:
-                case 39:
-                  for (; l++ < J && e.charCodeAt(l) !== g;) {
-                  }
-
-              }
-
-              if (0 === k) break;
-              l++;
-            }
-
-            k = e.substring(t, l);
-            0 === q && (q = (f = f.replace(ca, '').trim()).charCodeAt(0));
-
-            switch (q) {
-              case 64:
-                0 < r && (f = f.replace(N, ''));
-                g = f.charCodeAt(1);
-
-                switch (g) {
-                  case 100:
-                  case 109:
-                  case 115:
-                  case 45:
-                    r = c;
-                    break;
-
-                  default:
-                    r = O;
-                }
-
-                k = M(c, r, k, g, a + 1);
-                t = k.length;
-                0 < A && (r = X(O, f, I), C = H(3, k, r, c, D, z, t, g, a, h), f = r.join(''), void 0 !== C && 0 === (t = (k = C.trim()).length) && (g = 0, k = ''));
-                if (0 < t) switch (g) {
-                  case 115:
-                    f = f.replace(da, ea);
-
-                  case 100:
-                  case 109:
-                  case 45:
-                    k = f + '{' + k + '}';
-                    break;
-
-                  case 107:
-                    f = f.replace(fa, '$1 $2');
-                    k = f + '{' + k + '}';
-                    k = 1 === w || 2 === w && L('@' + k, 3) ? '@-webkit-' + k + '@' + k : '@' + k;
-                    break;
-
-                  default:
-                    k = f + k, 112 === h && (k = (p += k, ''));
-                } else k = '';
-                break;
-
-              default:
-                k = M(c, X(c, f, I), k, h, a + 1);
-            }
-
-            F += k;
-            k = I = r = u = q = 0;
-            f = '';
-            g = e.charCodeAt(++l);
-            break;
-
-          case 125:
-          case 59:
-            f = (0 < r ? f.replace(N, '') : f).trim();
-            if (1 < (t = f.length)) switch (0 === u && (q = f.charCodeAt(0), 45 === q || 96 < q && 123 > q) && (t = (f = f.replace(' ', ':')).length), 0 < A && void 0 !== (C = H(1, f, c, d, D, z, p.length, h, a, h)) && 0 === (t = (f = C.trim()).length) && (f = '\x00\x00'), q = f.charCodeAt(0), g = f.charCodeAt(1), q) {
-              case 0:
-                break;
-
-              case 64:
-                if (105 === g || 99 === g) {
-                  G += f + e.charAt(l);
-                  break;
-                }
-
-              default:
-                58 !== f.charCodeAt(t - 1) && (p += P(f, q, g, f.charCodeAt(2)));
-            }
-            I = r = u = q = 0;
-            f = '';
-            g = e.charCodeAt(++l);
-        }
-      }
-
-      switch (g) {
-        case 13:
-        case 10:
-          47 === b ? b = 0 : 0 === 1 + q && 107 !== h && 0 < f.length && (r = 1, f += '\x00');
-          0 < A * Y && H(0, f, c, d, D, z, p.length, h, a, h);
-          z = 1;
-          D++;
-          break;
-
-        case 59:
-        case 125:
-          if (0 === b + n + v + m) {
-            z++;
-            break;
-          }
-
-        default:
-          z++;
-          y = e.charAt(l);
-
-          switch (g) {
-            case 9:
-            case 32:
-              if (0 === n + m + b) switch (x) {
-                case 44:
-                case 58:
-                case 9:
-                case 32:
-                  y = '';
-                  break;
-
-                default:
-                  32 !== g && (y = ' ');
-              }
-              break;
-
-            case 0:
-              y = '\\0';
-              break;
-
-            case 12:
-              y = '\\f';
-              break;
-
-            case 11:
-              y = '\\v';
-              break;
-
-            case 38:
-              0 === n + b + m && (r = I = 1, y = '\f' + y);
-              break;
-
-            case 108:
-              if (0 === n + b + m + E && 0 < u) switch (l - u) {
-                case 2:
-                  112 === x && 58 === e.charCodeAt(l - 3) && (E = x);
-
-                case 8:
-                  111 === K && (E = K);
-              }
-              break;
-
-            case 58:
-              0 === n + b + m && (u = l);
-              break;
-
-            case 44:
-              0 === b + v + n + m && (r = 1, y += '\r');
-              break;
-
-            case 34:
-            case 39:
-              0 === b && (n = n === g ? 0 : 0 === n ? g : n);
-              break;
-
-            case 91:
-              0 === n + b + v && m++;
-              break;
-
-            case 93:
-              0 === n + b + v && m--;
-              break;
-
-            case 41:
-              0 === n + b + m && v--;
-              break;
-
-            case 40:
-              if (0 === n + b + m) {
-                if (0 === q) switch (2 * x + 3 * K) {
-                  case 533:
-                    break;
-
-                  default:
-                    q = 1;
-                }
-                v++;
-              }
-
-              break;
-
-            case 64:
-              0 === b + v + n + m + u + k && (k = 1);
-              break;
-
-            case 42:
-            case 47:
-              if (!(0 < n + m + v)) switch (b) {
-                case 0:
-                  switch (2 * g + 3 * e.charCodeAt(l + 1)) {
-                    case 235:
-                      b = 47;
-                      break;
-
-                    case 220:
-                      t = l, b = 42;
-                  }
-
-                  break;
-
-                case 42:
-                  47 === g && 42 === x && t + 2 !== l && (33 === e.charCodeAt(t + 2) && (p += e.substring(t, l + 1)), y = '', b = 0);
-              }
-          }
-
-          0 === b && (f += y);
-      }
-
-      K = x;
-      x = g;
-      l++;
-    }
-
-    t = p.length;
-
-    if (0 < t) {
-      r = c;
-      if (0 < A && (C = H(2, p, r, d, D, z, t, h, a, h), void 0 !== C && 0 === (p = C).length)) return G + p + F;
-      p = r.join(',') + '{' + p + '}';
-
-      if (0 !== w * E) {
-        2 !== w || L(p, 2) || (E = 0);
-
-        switch (E) {
-          case 111:
-            p = p.replace(ha, ':-moz-$1') + p;
-            break;
-
-          case 112:
-            p = p.replace(Q, '::-webkit-input-$1') + p.replace(Q, '::-moz-$1') + p.replace(Q, ':-ms-input-$1') + p;
-        }
-
-        E = 0;
-      }
-    }
-
-    return G + p + F;
-  }
-
-  function X(d, c, e) {
-    var h = c.trim().split(ia);
-    c = h;
-    var a = h.length,
-        m = d.length;
-
-    switch (m) {
-      case 0:
-      case 1:
-        var b = 0;
-
-        for (d = 0 === m ? '' : d[0] + ' '; b < a; ++b) {
-          c[b] = Z(d, c[b], e).trim();
-        }
-
-        break;
-
-      default:
-        var v = b = 0;
-
-        for (c = []; b < a; ++b) {
-          for (var n = 0; n < m; ++n) {
-            c[v++] = Z(d[n] + ' ', h[b], e).trim();
-          }
-        }
-
-    }
-
-    return c;
-  }
-
-  function Z(d, c, e) {
-    var h = c.charCodeAt(0);
-    33 > h && (h = (c = c.trim()).charCodeAt(0));
-
-    switch (h) {
-      case 38:
-        return c.replace(F, '$1' + d.trim());
-
-      case 58:
-        return d.trim() + c.replace(F, '$1' + d.trim());
-
-      default:
-        if (0 < 1 * e && 0 < c.indexOf('\f')) return c.replace(F, (58 === d.charCodeAt(0) ? '' : '$1') + d.trim());
-    }
-
-    return d + c;
-  }
-
-  function P(d, c, e, h) {
-    var a = d + ';',
-        m = 2 * c + 3 * e + 4 * h;
-
-    if (944 === m) {
-      d = a.indexOf(':', 9) + 1;
-      var b = a.substring(d, a.length - 1).trim();
-      b = a.substring(0, d).trim() + b + ';';
-      return 1 === w || 2 === w && L(b, 1) ? '-webkit-' + b + b : b;
-    }
-
-    if (0 === w || 2 === w && !L(a, 1)) return a;
-
-    switch (m) {
-      case 1015:
-        return 97 === a.charCodeAt(10) ? '-webkit-' + a + a : a;
-
-      case 951:
-        return 116 === a.charCodeAt(3) ? '-webkit-' + a + a : a;
-
-      case 963:
-        return 110 === a.charCodeAt(5) ? '-webkit-' + a + a : a;
-
-      case 1009:
-        if (100 !== a.charCodeAt(4)) break;
-
-      case 969:
-      case 942:
-        return '-webkit-' + a + a;
-
-      case 978:
-        return '-webkit-' + a + '-moz-' + a + a;
-
-      case 1019:
-      case 983:
-        return '-webkit-' + a + '-moz-' + a + '-ms-' + a + a;
-
-      case 883:
-        if (45 === a.charCodeAt(8)) return '-webkit-' + a + a;
-        if (0 < a.indexOf('image-set(', 11)) return a.replace(ja, '$1-webkit-$2') + a;
-        break;
-
-      case 932:
-        if (45 === a.charCodeAt(4)) switch (a.charCodeAt(5)) {
-          case 103:
-            return '-webkit-box-' + a.replace('-grow', '') + '-webkit-' + a + '-ms-' + a.replace('grow', 'positive') + a;
-
-          case 115:
-            return '-webkit-' + a + '-ms-' + a.replace('shrink', 'negative') + a;
-
-          case 98:
-            return '-webkit-' + a + '-ms-' + a.replace('basis', 'preferred-size') + a;
-        }
-        return '-webkit-' + a + '-ms-' + a + a;
-
-      case 964:
-        return '-webkit-' + a + '-ms-flex-' + a + a;
-
-      case 1023:
-        if (99 !== a.charCodeAt(8)) break;
-        b = a.substring(a.indexOf(':', 15)).replace('flex-', '').replace('space-between', 'justify');
-        return '-webkit-box-pack' + b + '-webkit-' + a + '-ms-flex-pack' + b + a;
-
-      case 1005:
-        return ka.test(a) ? a.replace(aa, ':-webkit-') + a.replace(aa, ':-moz-') + a : a;
-
-      case 1e3:
-        b = a.substring(13).trim();
-        c = b.indexOf('-') + 1;
-
-        switch (b.charCodeAt(0) + b.charCodeAt(c)) {
-          case 226:
-            b = a.replace(G, 'tb');
-            break;
-
-          case 232:
-            b = a.replace(G, 'tb-rl');
-            break;
-
-          case 220:
-            b = a.replace(G, 'lr');
-            break;
-
-          default:
-            return a;
-        }
-
-        return '-webkit-' + a + '-ms-' + b + a;
-
-      case 1017:
-        if (-1 === a.indexOf('sticky', 9)) break;
-
-      case 975:
-        c = (a = d).length - 10;
-        b = (33 === a.charCodeAt(c) ? a.substring(0, c) : a).substring(d.indexOf(':', 7) + 1).trim();
-
-        switch (m = b.charCodeAt(0) + (b.charCodeAt(7) | 0)) {
-          case 203:
-            if (111 > b.charCodeAt(8)) break;
-
-          case 115:
-            a = a.replace(b, '-webkit-' + b) + ';' + a;
-            break;
-
-          case 207:
-          case 102:
-            a = a.replace(b, '-webkit-' + (102 < m ? 'inline-' : '') + 'box') + ';' + a.replace(b, '-webkit-' + b) + ';' + a.replace(b, '-ms-' + b + 'box') + ';' + a;
-        }
-
-        return a + ';';
-
-      case 938:
-        if (45 === a.charCodeAt(5)) switch (a.charCodeAt(6)) {
-          case 105:
-            return b = a.replace('-items', ''), '-webkit-' + a + '-webkit-box-' + b + '-ms-flex-' + b + a;
-
-          case 115:
-            return '-webkit-' + a + '-ms-flex-item-' + a.replace(ba, '') + a;
-
-          default:
-            return '-webkit-' + a + '-ms-flex-line-pack' + a.replace('align-content', '').replace(ba, '') + a;
-        }
-        break;
-
-      case 973:
-      case 989:
-        if (45 !== a.charCodeAt(3) || 122 === a.charCodeAt(4)) break;
-
-      case 931:
-      case 953:
-        if (!0 === la.test(d)) return 115 === (b = d.substring(d.indexOf(':') + 1)).charCodeAt(0) ? P(d.replace('stretch', 'fill-available'), c, e, h).replace(':fill-available', ':stretch') : a.replace(b, '-webkit-' + b) + a.replace(b, '-moz-' + b.replace('fill-', '')) + a;
-        break;
-
-      case 962:
-        if (a = '-webkit-' + a + (102 === a.charCodeAt(5) ? '-ms-' + a : '') + a, 211 === e + h && 105 === a.charCodeAt(13) && 0 < a.indexOf('transform', 10)) return a.substring(0, a.indexOf(';', 27) + 1).replace(ma, '$1-webkit-$2') + a;
-    }
-
-    return a;
-  }
-
-  function L(d, c) {
-    var e = d.indexOf(1 === c ? ':' : '{'),
-        h = d.substring(0, 3 !== c ? e : 10);
-    e = d.substring(e + 1, d.length - 1);
-    return R(2 !== c ? h : h.replace(na, '$1'), e, c);
-  }
-
-  function ea(d, c) {
-    var e = P(c, c.charCodeAt(0), c.charCodeAt(1), c.charCodeAt(2));
-    return e !== c + ';' ? e.replace(oa, ' or ($1)').substring(4) : '(' + c + ')';
-  }
-
-  function H(d, c, e, h, a, m, b, v, n, q) {
-    for (var g = 0, x = c, w; g < A; ++g) {
-      switch (w = S[g].call(B, d, x, e, h, a, m, b, v, n, q)) {
-        case void 0:
-        case !1:
-        case !0:
-        case null:
-          break;
-
-        default:
-          x = w;
-      }
-    }
-
-    if (x !== c) return x;
-  }
-
-  function T(d) {
-    switch (d) {
-      case void 0:
-      case null:
-        A = S.length = 0;
-        break;
-
-      default:
-        if ('function' === typeof d) S[A++] = d;else if ('object' === typeof d) for (var c = 0, e = d.length; c < e; ++c) {
-          T(d[c]);
-        } else Y = !!d | 0;
-    }
-
-    return T;
-  }
-
-  function U(d) {
-    d = d.prefix;
-    void 0 !== d && (R = null, d ? 'function' !== typeof d ? w = 1 : (w = 2, R = d) : w = 0);
-    return U;
-  }
-
-  function B(d, c) {
-    var e = d;
-    33 > e.charCodeAt(0) && (e = e.trim());
-    V = e;
-    e = [V];
-
-    if (0 < A) {
-      var h = H(-1, c, e, e, D, z, 0, 0, 0, 0);
-      void 0 !== h && 'string' === typeof h && (c = h);
-    }
-
-    var a = M(O, e, c, 0, 0);
-    0 < A && (h = H(-2, a, e, e, D, z, a.length, 0, 0, 0), void 0 !== h && (a = h));
-    V = '';
-    E = 0;
-    z = D = 1;
-    return a;
-  }
-
-  var ca = /^\0+/g,
-      N = /[\0\r\f]/g,
-      aa = /: */g,
-      ka = /zoo|gra/,
-      ma = /([,: ])(transform)/g,
-      ia = /,\r+?/g,
-      F = /([\t\r\n ])*\f?&/g,
-      fa = /@(k\w+)\s*(\S*)\s*/,
-      Q = /::(place)/g,
-      ha = /:(read-only)/g,
-      G = /[svh]\w+-[tblr]{2}/,
-      da = /\(\s*(.*)\s*\)/g,
-      oa = /([\s\S]*?);/g,
-      ba = /-self|flex-/g,
-      na = /[^]*?(:[rp][el]a[\w-]+)[^]*/,
-      la = /stretch|:\s*\w+\-(?:conte|avail)/,
-      ja = /([^-])(image-set\()/,
-      z = 1,
-      D = 1,
-      E = 0,
-      w = 1,
-      O = [],
-      S = [],
-      A = 0,
-      R = null,
-      Y = 0,
-      V = '';
-  B.use = T;
-  B.set = U;
-  void 0 !== W && U(W);
-  return B;
-}
-
-var unitlessKeys = {
-  animationIterationCount: 1,
-  borderImageOutset: 1,
-  borderImageSlice: 1,
-  borderImageWidth: 1,
-  boxFlex: 1,
-  boxFlexGroup: 1,
-  boxOrdinalGroup: 1,
-  columnCount: 1,
-  columns: 1,
-  flex: 1,
-  flexGrow: 1,
-  flexPositive: 1,
-  flexShrink: 1,
-  flexNegative: 1,
-  flexOrder: 1,
-  gridRow: 1,
-  gridRowEnd: 1,
-  gridRowSpan: 1,
-  gridRowStart: 1,
-  gridColumn: 1,
-  gridColumnEnd: 1,
-  gridColumnSpan: 1,
-  gridColumnStart: 1,
-  msGridRow: 1,
-  msGridRowSpan: 1,
-  msGridColumn: 1,
-  msGridColumnSpan: 1,
-  fontWeight: 1,
-  lineHeight: 1,
-  opacity: 1,
-  order: 1,
-  orphans: 1,
-  tabSize: 1,
-  widows: 1,
-  zIndex: 1,
-  zoom: 1,
-  WebkitLineClamp: 1,
-  // SVG-related properties
-  fillOpacity: 1,
-  floodOpacity: 1,
-  stopOpacity: 1,
-  strokeDasharray: 1,
-  strokeDashoffset: 1,
-  strokeMiterlimit: 1,
-  strokeOpacity: 1,
-  strokeWidth: 1
-};
-
-function memoize(fn) {
-  var cache = {};
-  return function (arg) {
-    if (cache[arg] === undefined) cache[arg] = fn(arg);
-    return cache[arg];
-  };
-}
-
-var reactPropsRegex = /^((children|dangerouslySetInnerHTML|key|ref|autoFocus|defaultValue|defaultChecked|innerHTML|suppressContentEditableWarning|suppressHydrationWarning|valueLink|accept|acceptCharset|accessKey|action|allow|allowUserMedia|allowPaymentRequest|allowFullScreen|allowTransparency|alt|async|autoComplete|autoPlay|capture|cellPadding|cellSpacing|challenge|charSet|checked|cite|classID|className|cols|colSpan|content|contentEditable|contextMenu|controls|controlsList|coords|crossOrigin|data|dateTime|decoding|default|defer|dir|disabled|disablePictureInPicture|download|draggable|encType|form|formAction|formEncType|formMethod|formNoValidate|formTarget|frameBorder|headers|height|hidden|high|href|hrefLang|htmlFor|httpEquiv|id|inputMode|integrity|is|keyParams|keyType|kind|label|lang|list|loading|loop|low|marginHeight|marginWidth|max|maxLength|media|mediaGroup|method|min|minLength|multiple|muted|name|nonce|noValidate|open|optimum|pattern|placeholder|playsInline|poster|preload|profile|radioGroup|readOnly|referrerPolicy|rel|required|reversed|role|rows|rowSpan|sandbox|scope|scoped|scrolling|seamless|selected|shape|size|sizes|slot|span|spellCheck|src|srcDoc|srcLang|srcSet|start|step|style|summary|tabIndex|target|title|type|useMap|value|width|wmode|wrap|about|datatype|inlist|prefix|property|resource|typeof|vocab|autoCapitalize|autoCorrect|autoSave|color|inert|itemProp|itemScope|itemType|itemID|itemRef|on|results|security|unselectable|accentHeight|accumulate|additive|alignmentBaseline|allowReorder|alphabetic|amplitude|arabicForm|ascent|attributeName|attributeType|autoReverse|azimuth|baseFrequency|baselineShift|baseProfile|bbox|begin|bias|by|calcMode|capHeight|clip|clipPathUnits|clipPath|clipRule|colorInterpolation|colorInterpolationFilters|colorProfile|colorRendering|contentScriptType|contentStyleType|cursor|cx|cy|d|decelerate|descent|diffuseConstant|direction|display|divisor|dominantBaseline|dur|dx|dy|edgeMode|elevation|enableBackground|end|exponent|externalResourcesRequired|fill|fillOpacity|fillRule|filter|filterRes|filterUnits|floodColor|floodOpacity|focusable|fontFamily|fontSize|fontSizeAdjust|fontStretch|fontStyle|fontVariant|fontWeight|format|from|fr|fx|fy|g1|g2|glyphName|glyphOrientationHorizontal|glyphOrientationVertical|glyphRef|gradientTransform|gradientUnits|hanging|horizAdvX|horizOriginX|ideographic|imageRendering|in|in2|intercept|k|k1|k2|k3|k4|kernelMatrix|kernelUnitLength|kerning|keyPoints|keySplines|keyTimes|lengthAdjust|letterSpacing|lightingColor|limitingConeAngle|local|markerEnd|markerMid|markerStart|markerHeight|markerUnits|markerWidth|mask|maskContentUnits|maskUnits|mathematical|mode|numOctaves|offset|opacity|operator|order|orient|orientation|origin|overflow|overlinePosition|overlineThickness|panose1|paintOrder|pathLength|patternContentUnits|patternTransform|patternUnits|pointerEvents|points|pointsAtX|pointsAtY|pointsAtZ|preserveAlpha|preserveAspectRatio|primitiveUnits|r|radius|refX|refY|renderingIntent|repeatCount|repeatDur|requiredExtensions|requiredFeatures|restart|result|rotate|rx|ry|scale|seed|shapeRendering|slope|spacing|specularConstant|specularExponent|speed|spreadMethod|startOffset|stdDeviation|stemh|stemv|stitchTiles|stopColor|stopOpacity|strikethroughPosition|strikethroughThickness|string|stroke|strokeDasharray|strokeDashoffset|strokeLinecap|strokeLinejoin|strokeMiterlimit|strokeOpacity|strokeWidth|surfaceScale|systemLanguage|tableValues|targetX|targetY|textAnchor|textDecoration|textRendering|textLength|to|transform|u1|u2|underlinePosition|underlineThickness|unicode|unicodeBidi|unicodeRange|unitsPerEm|vAlphabetic|vHanging|vIdeographic|vMathematical|values|vectorEffect|version|vertAdvY|vertOriginX|vertOriginY|viewBox|viewTarget|visibility|widths|wordSpacing|writingMode|x|xHeight|x1|x2|xChannelSelector|xlinkActuate|xlinkArcrole|xlinkHref|xlinkRole|xlinkShow|xlinkTitle|xlinkType|xmlBase|xmlns|xmlnsXlink|xmlLang|xmlSpace|y|y1|y2|yChannelSelector|z|zoomAndPan|for|class|autofocus)|(([Dd][Aa][Tt][Aa]|[Aa][Rr][Ii][Aa]|x)-.*))$/; // https://esbench.com/bench/5bfee68a4cd7e6009ef61d23
-
-var index = memoize(function (prop) {
-  return reactPropsRegex.test(prop) || prop.charCodeAt(0) === 111
-  /* o */
-  && prop.charCodeAt(1) === 110
-  /* n */
-  && prop.charCodeAt(2) < 91;
-}
-/* Z+1 */
-);
-
-var reactIs = reactIs$1.exports;
-
-/**
- * Copyright 2015, Yahoo! Inc.
- * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
- */
-var REACT_STATICS = {
-  childContextTypes: true,
-  contextType: true,
-  contextTypes: true,
-  defaultProps: true,
-  displayName: true,
-  getDefaultProps: true,
-  getDerivedStateFromError: true,
-  getDerivedStateFromProps: true,
-  mixins: true,
-  propTypes: true,
-  type: true
-};
-var KNOWN_STATICS = {
-  name: true,
-  length: true,
-  prototype: true,
-  caller: true,
-  callee: true,
-  arguments: true,
-  arity: true
-};
-var FORWARD_REF_STATICS = {
-  '$$typeof': true,
-  render: true,
-  defaultProps: true,
-  displayName: true,
-  propTypes: true
-};
-var MEMO_STATICS = {
-  '$$typeof': true,
-  compare: true,
-  defaultProps: true,
-  displayName: true,
-  propTypes: true,
-  type: true
-};
-var TYPE_STATICS = {};
-TYPE_STATICS[reactIs.ForwardRef] = FORWARD_REF_STATICS;
-TYPE_STATICS[reactIs.Memo] = MEMO_STATICS;
-
-function getStatics(component) {
-  // React v16.11 and below
-  if (reactIs.isMemo(component)) {
-    return MEMO_STATICS;
-  } // React v16.12 and above
-
-
-  return TYPE_STATICS[component['$$typeof']] || REACT_STATICS;
-}
-
-var defineProperty = Object.defineProperty;
-var getOwnPropertyNames = Object.getOwnPropertyNames;
-var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-var getPrototypeOf = Object.getPrototypeOf;
-var objectPrototype = Object.prototype;
-function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
-  if (typeof sourceComponent !== 'string') {
-    // don't hoist over string (html) components
-    if (objectPrototype) {
-      var inheritedComponent = getPrototypeOf(sourceComponent);
-
-      if (inheritedComponent && inheritedComponent !== objectPrototype) {
-        hoistNonReactStatics(targetComponent, inheritedComponent, blacklist);
-      }
-    }
-
-    var keys = getOwnPropertyNames(sourceComponent);
-
-    if (getOwnPropertySymbols) {
-      keys = keys.concat(getOwnPropertySymbols(sourceComponent));
-    }
-
-    var targetStatics = getStatics(targetComponent);
-    var sourceStatics = getStatics(sourceComponent);
-
-    for (var i = 0; i < keys.length; ++i) {
-      var key = keys[i];
-
-      if (!KNOWN_STATICS[key] && !(blacklist && blacklist[key]) && !(sourceStatics && sourceStatics[key]) && !(targetStatics && targetStatics[key])) {
-        var descriptor = getOwnPropertyDescriptor(sourceComponent, key);
-
-        try {
-          // Avoid failures from read-only properties
-          defineProperty(targetComponent, key, descriptor);
-        } catch (e) {}
-      }
-    }
-  }
-
-  return targetComponent;
-}
-
-var hoistNonReactStatics_cjs = hoistNonReactStatics;
-
-function y(){return (y=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r]);}return e}).apply(this,arguments)}var v=function(e,t){for(var n=[e[0]],r=0,o=t.length;r<o;r+=1)n.push(t[r],e[r+1]);return n},g=function(t){return null!==t&&"object"==typeof t&&"[object Object]"===(t.toString?t.toString():Object.prototype.toString.call(t))&&!reactIs$1.exports.typeOf(t)},S=Object.freeze([]),w=Object.freeze({});function E(e){return "function"==typeof e}function b$1(e){return e.displayName||e.name||"Component"}function _(e){return e&&"string"==typeof e.styledComponentId}var N="undefined"!=typeof process&&(process.env.REACT_APP_SC_ATTR||process.env.SC_ATTR)||"data-styled",C="undefined"!=typeof window&&"HTMLElement"in window,I=Boolean("boolean"==typeof SC_DISABLE_SPEEDY?SC_DISABLE_SPEEDY:"undefined"!=typeof process&&void 0!==process.env.REACT_APP_SC_DISABLE_SPEEDY&&""!==process.env.REACT_APP_SC_DISABLE_SPEEDY?"false"!==process.env.REACT_APP_SC_DISABLE_SPEEDY&&process.env.REACT_APP_SC_DISABLE_SPEEDY:"undefined"!=typeof process&&void 0!==process.env.SC_DISABLE_SPEEDY&&""!==process.env.SC_DISABLE_SPEEDY?"false"!==process.env.SC_DISABLE_SPEEDY&&process.env.SC_DISABLE_SPEEDY:"production"!=="production");function D(e){for(var t=arguments.length,n=new Array(t>1?t-1:0),r=1;r<t;r++)n[r-1]=arguments[r];throw new Error("An error occurred. See https://git.io/JUIaE#"+e+" for more information."+(n.length>0?" Args: "+n.join(", "):""))}var j=function(){function e(e){this.groupSizes=new Uint32Array(512),this.length=512,this.tag=e;}var t=e.prototype;return t.indexOfGroup=function(e){for(var t=0,n=0;n<e;n++)t+=this.groupSizes[n];return t},t.insertRules=function(e,t){if(e>=this.groupSizes.length){for(var n=this.groupSizes,r=n.length,o=r;e>=o;)(o<<=1)<0&&D(16,""+e);this.groupSizes=new Uint32Array(o),this.groupSizes.set(n),this.length=o;for(var s=r;s<o;s++)this.groupSizes[s]=0;}for(var i=this.indexOfGroup(e+1),a=0,c=t.length;a<c;a++)this.tag.insertRule(i,t[a])&&(this.groupSizes[e]++,i++);},t.clearGroup=function(e){if(e<this.length){var t=this.groupSizes[e],n=this.indexOfGroup(e),r=n+t;this.groupSizes[e]=0;for(var o=n;o<r;o++)this.tag.deleteRule(n);}},t.getGroup=function(e){var t="";if(e>=this.length||0===this.groupSizes[e])return t;for(var n=this.groupSizes[e],r=this.indexOfGroup(e),o=r+n,s=r;s<o;s++)t+=this.tag.getRule(s)+"/*!sc*/\n";return t},e}(),T=new Map,x=new Map,k=1,V=function(e){if(T.has(e))return T.get(e);for(;x.has(k);)k++;var t=k++;return T.set(e,t),x.set(t,e),t},z=function(e){return x.get(e)},B=function(e,t){t>=k&&(k=t+1),T.set(e,t),x.set(t,e);},M="style["+N+'][data-styled-version="5.3.3"]',G=new RegExp("^"+N+'\\.g(\\d+)\\[id="([\\w\\d-]+)"\\].*?"([^"]*)'),L=function(e,t,n){for(var r,o=n.split(","),s=0,i=o.length;s<i;s++)(r=o[s])&&e.registerName(t,r);},F=function(e,t){for(var n=(t.textContent||"").split("/*!sc*/\n"),r=[],o=0,s=n.length;o<s;o++){var i=n[o].trim();if(i){var a=i.match(G);if(a){var c=0|parseInt(a[1],10),u=a[2];0!==c&&(B(u,c),L(e,u,a[3]),e.getTag().insertRules(c,r)),r.length=0;}else r.push(i);}}},Y=function(){return "undefined"!=typeof window&&void 0!==window.__webpack_nonce__?window.__webpack_nonce__:null},q=function(e){var t=document.head,n=e||t,r=document.createElement("style"),o=function(e){for(var t=e.childNodes,n=t.length;n>=0;n--){var r=t[n];if(r&&1===r.nodeType&&r.hasAttribute(N))return r}}(n),s=void 0!==o?o.nextSibling:null;r.setAttribute(N,"active"),r.setAttribute("data-styled-version","5.3.3");var i=Y();return i&&r.setAttribute("nonce",i),n.insertBefore(r,s),r},H=function(){function e(e){var t=this.element=q(e);t.appendChild(document.createTextNode("")),this.sheet=function(e){if(e.sheet)return e.sheet;for(var t=document.styleSheets,n=0,r=t.length;n<r;n++){var o=t[n];if(o.ownerNode===e)return o}D(17);}(t),this.length=0;}var t=e.prototype;return t.insertRule=function(e,t){try{return this.sheet.insertRule(t,e),this.length++,!0}catch(e){return !1}},t.deleteRule=function(e){this.sheet.deleteRule(e),this.length--;},t.getRule=function(e){var t=this.sheet.cssRules[e];return void 0!==t&&"string"==typeof t.cssText?t.cssText:""},e}(),$=function(){function e(e){var t=this.element=q(e);this.nodes=t.childNodes,this.length=0;}var t=e.prototype;return t.insertRule=function(e,t){if(e<=this.length&&e>=0){var n=document.createTextNode(t),r=this.nodes[e];return this.element.insertBefore(n,r||null),this.length++,!0}return !1},t.deleteRule=function(e){this.element.removeChild(this.nodes[e]),this.length--;},t.getRule=function(e){return e<this.length?this.nodes[e].textContent:""},e}(),W=function(){function e(e){this.rules=[],this.length=0;}var t=e.prototype;return t.insertRule=function(e,t){return e<=this.length&&(this.rules.splice(e,0,t),this.length++,!0)},t.deleteRule=function(e){this.rules.splice(e,1),this.length--;},t.getRule=function(e){return e<this.length?this.rules[e]:""},e}(),U=C,J={isServer:!C,useCSSOMInjection:!I},X=function(){function e(e,t,n){void 0===e&&(e=w),void 0===t&&(t={}),this.options=y({},J,{},e),this.gs=t,this.names=new Map(n),this.server=!!e.isServer,!this.server&&C&&U&&(U=!1,function(e){for(var t=document.querySelectorAll(M),n=0,r=t.length;n<r;n++){var o=t[n];o&&"active"!==o.getAttribute(N)&&(F(e,o),o.parentNode&&o.parentNode.removeChild(o));}}(this));}e.registerId=function(e){return V(e)};var t=e.prototype;return t.reconstructWithOptions=function(t,n){return void 0===n&&(n=!0),new e(y({},this.options,{},t),this.gs,n&&this.names||void 0)},t.allocateGSInstance=function(e){return this.gs[e]=(this.gs[e]||0)+1},t.getTag=function(){return this.tag||(this.tag=(n=(t=this.options).isServer,r=t.useCSSOMInjection,o=t.target,e=n?new W(o):r?new H(o):new $(o),new j(e)));var e,t,n,r,o;},t.hasNameForId=function(e,t){return this.names.has(e)&&this.names.get(e).has(t)},t.registerName=function(e,t){if(V(e),this.names.has(e))this.names.get(e).add(t);else {var n=new Set;n.add(t),this.names.set(e,n);}},t.insertRules=function(e,t,n){this.registerName(e,t),this.getTag().insertRules(V(e),n);},t.clearNames=function(e){this.names.has(e)&&this.names.get(e).clear();},t.clearRules=function(e){this.getTag().clearGroup(V(e)),this.clearNames(e);},t.clearTag=function(){this.tag=void 0;},t.toString=function(){return function(e){for(var t=e.getTag(),n=t.length,r="",o=0;o<n;o++){var s=z(o);if(void 0!==s){var i=e.names.get(s),a=t.getGroup(o);if(i&&a&&i.size){var c=N+".g"+o+'[id="'+s+'"]',u="";void 0!==i&&i.forEach((function(e){e.length>0&&(u+=e+",");})),r+=""+a+c+'{content:"'+u+'"}/*!sc*/\n';}}}return r}(this)},e}(),Z=/(a)(d)/gi,K=function(e){return String.fromCharCode(e+(e>25?39:97))};function Q(e){var t,n="";for(t=Math.abs(e);t>52;t=t/52|0)n=K(t%52)+n;return (K(t%52)+n).replace(Z,"$1-$2")}var ee=function(e,t){for(var n=t.length;n;)e=33*e^t.charCodeAt(--n);return e},te=function(e){return ee(5381,e)};function ne(e){for(var t=0;t<e.length;t+=1){var n=e[t];if(E(n)&&!_(n))return !1}return !0}var re=te("5.3.3"),oe=function(){function e(e,t,n){this.rules=e,this.staticRulesId="",this.isStatic=(void 0===n||n.isStatic)&&ne(e),this.componentId=t,this.baseHash=ee(re,t),this.baseStyle=n,X.registerId(t);}return e.prototype.generateAndInjectStyles=function(e,t,n){var r=this.componentId,o=[];if(this.baseStyle&&o.push(this.baseStyle.generateAndInjectStyles(e,t,n)),this.isStatic&&!n.hash)if(this.staticRulesId&&t.hasNameForId(r,this.staticRulesId))o.push(this.staticRulesId);else {var s=_e(this.rules,e,t,n).join(""),i=Q(ee(this.baseHash,s)>>>0);if(!t.hasNameForId(r,i)){var a=n(s,"."+i,void 0,r);t.insertRules(r,i,a);}o.push(i),this.staticRulesId=i;}else {for(var c=this.rules.length,u=ee(this.baseHash,n.hash),l="",d=0;d<c;d++){var h=this.rules[d];if("string"==typeof h)l+=h;else if(h){var p=_e(h,e,t,n),f=Array.isArray(p)?p.join(""):p;u=ee(u,f+d),l+=f;}}if(l){var m=Q(u>>>0);if(!t.hasNameForId(r,m)){var y=n(l,"."+m,void 0,r);t.insertRules(r,m,y);}o.push(m);}}return o.join(" ")},e}(),se=/^\s*\/\/.*$/gm,ie=[":","[",".","#"];function ae(e){var t,n,r,o,s=void 0===e?w:e,i=s.options,a=void 0===i?w:i,c=s.plugins,u=void 0===c?S:c,l=new stylis_min(a),d=[],p=function(e){function t(t){if(t)try{e(t+"}");}catch(e){}}return function(n,r,o,s,i,a,c,u,l,d){switch(n){case 1:if(0===l&&64===r.charCodeAt(0))return e(r+";"),"";break;case 2:if(0===u)return r+"/*|*/";break;case 3:switch(u){case 102:case 112:return e(o[0]+r),"";default:return r+(0===d?"/*|*/":"")}case-2:r.split("/*|*/}").forEach(t);}}}((function(e){d.push(e);})),f=function(e,r,s){return 0===r&&-1!==ie.indexOf(s[n.length])||s.match(o)?e:"."+t};function m(e,s,i,a){void 0===a&&(a="&");var c=e.replace(se,""),u=s&&i?i+" "+s+" { "+c+" }":c;return t=a,n=s,r=new RegExp("\\"+n+"\\b","g"),o=new RegExp("(\\"+n+"\\b){2,}"),l(i||!s?"":s,u)}return l.use([].concat(u,[function(e,t,o){2===e&&o.length&&o[0].lastIndexOf(n)>0&&(o[0]=o[0].replace(r,f));},p,function(e){if(-2===e){var t=d;return d=[],t}}])),m.hash=u.length?u.reduce((function(e,t){return t.name||D(15),ee(e,t.name)}),5381).toString():"",m}var ce=React__default.createContext();ce.Consumer;var le=React__default.createContext(),de=(le.Consumer,new X),he=ae();function pe(){return react.exports.useContext(ce)||de}function fe(){return react.exports.useContext(le)||he}var ye=function(){function e(e,t){var n=this;this.inject=function(e,t){void 0===t&&(t=he);var r=n.name+t.hash;e.hasNameForId(n.id,r)||e.insertRules(n.id,r,t(n.rules,r,"@keyframes"));},this.toString=function(){return D(12,String(n.name))},this.name=e,this.id="sc-keyframes-"+e,this.rules=t;}return e.prototype.getName=function(e){return void 0===e&&(e=he),this.name+e.hash},e}(),ve=/([A-Z])/,ge=/([A-Z])/g,Se=/^ms-/,we=function(e){return "-"+e.toLowerCase()};function Ee(e){return ve.test(e)?e.replace(ge,we).replace(Se,"-ms-"):e}var be=function(e){return null==e||!1===e||""===e};function _e(e,n,r,o){if(Array.isArray(e)){for(var s,i=[],a=0,c=e.length;a<c;a+=1)""!==(s=_e(e[a],n,r,o))&&(Array.isArray(s)?i.push.apply(i,s):i.push(s));return i}if(be(e))return "";if(_(e))return "."+e.styledComponentId;if(E(e)){if("function"!=typeof(l=e)||l.prototype&&l.prototype.isReactComponent||!n)return e;var u=e(n);return _e(u,n,r,o)}var l;return e instanceof ye?r?(e.inject(r,o),e.getName(o)):e:g(e)?function e(t,n){var r,o,s=[];for(var i in t)t.hasOwnProperty(i)&&!be(t[i])&&(Array.isArray(t[i])&&t[i].isCss||E(t[i])?s.push(Ee(i)+":",t[i],";"):g(t[i])?s.push.apply(s,e(t[i],i)):s.push(Ee(i)+": "+(r=i,null==(o=t[i])||"boolean"==typeof o||""===o?"":"number"!=typeof o||0===o||r in unitlessKeys?String(o).trim():o+"px")+";"));return n?[n+" {"].concat(s,["}"]):s}(e):e.toString()}var Ne=function(e){return Array.isArray(e)&&(e.isCss=!0),e};function Ae(e){for(var t=arguments.length,n=new Array(t>1?t-1:0),r=1;r<t;r++)n[r-1]=arguments[r];return E(e)||g(e)?Ne(_e(v(S,[e].concat(n)))):0===n.length&&1===e.length&&"string"==typeof e[0]?e:Ne(_e(v(e,n)))}var Oe=function(e,t,n){return void 0===n&&(n=w),e.theme!==n.theme&&e.theme||t||n.theme},Re=/[!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~-]+/g,De=/(^-|-$)/g;function je(e){return e.replace(Re,"-").replace(De,"")}var Te=function(e){return Q(te(e)>>>0)};function xe(e){return "string"==typeof e&&("production"==="production")}var ke=function(e){return "function"==typeof e||"object"==typeof e&&null!==e&&!Array.isArray(e)},Ve=function(e){return "__proto__"!==e&&"constructor"!==e&&"prototype"!==e};function ze(e,t,n){var r=e[n];ke(t)&&ke(r)?Be(r,t):e[n]=t;}function Be(e){for(var t=arguments.length,n=new Array(t>1?t-1:0),r=1;r<t;r++)n[r-1]=arguments[r];for(var o=0,s=n;o<s.length;o++){var i=s[o];if(ke(i))for(var a in i)Ve(a)&&ze(e,i[a],a);}return e}var Me=React__default.createContext();Me.Consumer;var Fe={};function Ye(e,t,n){var o=_(e),i=!xe(e),a=t.attrs,c=void 0===a?S:a,d=t.componentId,h=void 0===d?function(e,t){var n="string"!=typeof e?"sc":je(e);Fe[n]=(Fe[n]||0)+1;var r=n+"-"+Te("5.3.3"+n+Fe[n]);return t?t+"-"+r:r}(t.displayName,t.parentComponentId):d,p=t.displayName,v=void 0===p?function(e){return xe(e)?"styled."+e:"Styled("+b$1(e)+")"}(e):p,g=t.displayName&&t.componentId?je(t.displayName)+"-"+t.componentId:t.componentId||h,N=o&&e.attrs?Array.prototype.concat(e.attrs,c).filter(Boolean):c,A=t.shouldForwardProp;o&&e.shouldForwardProp&&(A=t.shouldForwardProp?function(n,r,o){return e.shouldForwardProp(n,r,o)&&t.shouldForwardProp(n,r,o)}:e.shouldForwardProp);var C,I=new oe(n,g,o?e.componentStyle:void 0),P=I.isStatic&&0===c.length,O=function(e,t){return function(e,t,n,r){var o=e.attrs,i=e.componentStyle,a=e.defaultProps,c=e.foldedComponentIds,d=e.shouldForwardProp,h=e.styledComponentId,p=e.target;var m=function(e,t,n){void 0===e&&(e=w);var r=y({},t,{theme:e}),o={};return n.forEach((function(e){var t,n,s,i=e;for(t in E(i)&&(i=i(r)),i)r[t]=o[t]="className"===t?(n=o[t],s=i[t],n&&s?n+" "+s:n||s):i[t];})),[r,o]}(Oe(t,react.exports.useContext(Me),a)||w,t,o),v=m[0],g=m[1],S=function(e,t,n,r){var o=pe(),s=fe(),i=t?e.generateAndInjectStyles(w,o,s):e.generateAndInjectStyles(n,o,s);return i}(i,r,v),b=n,_=g.$as||t.$as||g.as||t.as||p,N=xe(_),A=g!==t?y({},t,{},g):t,C={};for(var I in A)"$"!==I[0]&&"as"!==I&&("forwardedAs"===I?C.as=A[I]:(d?d(I,index,_):!N||index(I))&&(C[I]=A[I]));return t.style&&g.style!==t.style&&(C.style=y({},t.style,{},g.style)),C.className=Array.prototype.concat(c,h,S!==h?S:null,t.className,g.className).filter(Boolean).join(" "),C.ref=b,react.exports.createElement(_,C)}(C,e,t,P)};return O.displayName=v,(C=React__default.forwardRef(O)).attrs=N,C.componentStyle=I,C.displayName=v,C.shouldForwardProp=A,C.foldedComponentIds=o?Array.prototype.concat(e.foldedComponentIds,e.styledComponentId):S,C.styledComponentId=g,C.target=o?e.target:e,C.withComponent=function(e){var r=t.componentId,o=function(e,t){if(null==e)return {};var n,r,o={},s=Object.keys(e);for(r=0;r<s.length;r++)n=s[r],t.indexOf(n)>=0||(o[n]=e[n]);return o}(t,["componentId"]),s=r&&r+"-"+(xe(e)?e:je(b$1(e)));return Ye(e,y({},o,{attrs:N,componentId:s}),n)},Object.defineProperty(C,"defaultProps",{get:function(){return this._foldedDefaultProps},set:function(t){this._foldedDefaultProps=o?Be({},e.defaultProps,t):t;}}),C.toString=function(){return "."+C.styledComponentId},i&&hoistNonReactStatics_cjs(C,e,{attrs:!0,componentStyle:!0,displayName:!0,foldedComponentIds:!0,shouldForwardProp:!0,styledComponentId:!0,target:!0,withComponent:!0}),C}var qe=function(e){return function e(t,r,o){if(void 0===o&&(o=w),!reactIs$1.exports.isValidElementType(r))return D(1,String(r));var s=function(){return t(r,o,Ae.apply(void 0,arguments))};return s.withConfig=function(n){return e(t,r,y({},o,{},n))},s.attrs=function(n){return e(t,r,y({},o,{attrs:Array.prototype.concat(o.attrs,n).filter(Boolean)}))},s}(Ye,e)};["a","abbr","address","area","article","aside","audio","b","base","bdi","bdo","big","blockquote","body","br","button","canvas","caption","cite","code","col","colgroup","data","datalist","dd","del","details","dfn","dialog","div","dl","dt","em","embed","fieldset","figcaption","figure","footer","form","h1","h2","h3","h4","h5","h6","head","header","hgroup","hr","html","i","iframe","img","input","ins","kbd","keygen","label","legend","li","link","main","map","mark","marquee","menu","menuitem","meta","meter","nav","noscript","object","ol","optgroup","option","output","p","param","picture","pre","progress","q","rp","rt","ruby","s","samp","script","section","select","small","source","span","strong","style","sub","summary","sup","table","tbody","td","textarea","tfoot","th","thead","time","title","tr","track","u","ul","var","video","wbr","circle","clipPath","defs","ellipse","foreignObject","g","image","line","linearGradient","marker","mask","path","pattern","polygon","polyline","radialGradient","rect","stop","svg","text","textPath","tspan"].forEach((function(e){qe[e]=qe(e);}));var styled = qe;
-
-const tabBarHeight = 42;
-
-const Button = styled.button `
-  height: ${tabBarHeight}px;
-  flex: 0 0 ${tabBarHeight}px;
-  position: relative;
-`;
-const Icon = styled.div `
-  clip-path: circle(18%);
-  text-indent: -1000px;
-  position: absolute;
-  inset: 0;
-`;
-function RecordButton({ isRecording, startRecording, stopRecording, }) {
-    return (react.exports.createElement(Button, { onClick: isRecording ? stopRecording : startRecording },
-        react.exports.createElement(Icon, { style: {
-                backgroundColor: isRecording ? "var(--red)" : "rgba(255,255,255,0.5)",
-            } }, isRecording ? "Stop recording" : "Start recording")));
 }
 
 /*! *****************************************************************************
@@ -2829,10 +1995,10 @@ function distance(a, b) {
 }
 
 const a = (a1, a2) => 1.0 - 3.0 * a2 + 3.0 * a1;
-const b = (a1, a2) => 3.0 * a2 - 6.0 * a1;
-const c = (a1) => 3.0 * a1;
-const calcBezier = (t, a1, a2) => ((a(a1, a2) * t + b(a1, a2)) * t + c(a1)) * t;
-const getSlope = (t, a1, a2) => 3.0 * a(a1, a2) * t * t + 2.0 * b(a1, a2) * t + c(a1);
+const b$2 = (a1, a2) => 3.0 * a2 - 6.0 * a1;
+const c$1 = (a1) => 3.0 * a1;
+const calcBezier = (t, a1, a2) => ((a(a1, a2) * t + b$2(a1, a2)) * t + c$1(a1)) * t;
+const getSlope = (t, a1, a2) => 3.0 * a(a1, a2) * t * t + 2.0 * b$2(a1, a2) * t + c$1(a1);
 const subdivisionPrecision = 0.0000001;
 const subdivisionMaxIterations = 10;
 function binarySubdivide(aX, aA, aB, mX1, mX2) {
@@ -5541,7 +4707,7 @@ var VisualElementHandler = /** @class */ (function (_super) {
         return this.props.children;
     };
     return VisualElementHandler;
-}(React__default.Component));
+}(r$2.Component));
 
 /**
  * Create a `motion` component.
@@ -9440,11 +8606,11 @@ var MeasureLayoutWithContext = /** @class */ (function (_super) {
         return null;
     };
     return MeasureLayoutWithContext;
-}(React__default.Component));
+}(r$2.Component));
 function MeasureLayout(props) {
     var _a = __read(usePresence(), 2), isPresent = _a[0], safeToRemove = _a[1];
     var layoutGroup = react.exports.useContext(LayoutGroupContext);
-    return (React__default.createElement(MeasureLayoutWithContext, __assign({}, props, { layoutGroup: layoutGroup, switchLayoutGroup: react.exports.useContext(SwitchLayoutGroupContext), isPresent: isPresent, safeToRemove: safeToRemove })));
+    return (r$2.createElement(MeasureLayoutWithContext, __assign({}, props, { layoutGroup: layoutGroup, switchLayoutGroup: react.exports.useContext(SwitchLayoutGroupContext), isPresent: isPresent, safeToRemove: safeToRemove })));
 }
 var defaultScaleCorrectors = {
     borderRadius: __assign(__assign({}, correctBorderRadius), { applyTo: [
@@ -9728,7 +8894,871 @@ var AnimatePresence = function (_a) {
         : childrenToRender.map(function (child) { return react.exports.cloneElement(child); })));
 };
 
-const Container$5 = styled.section `
+var reactIs$1 = {exports: {}};
+
+var reactIs_production_min = {};
+
+/** @license React v16.13.1
+ * react-is.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+var b$1="function"===typeof Symbol&&Symbol.for,c=b$1?Symbol.for("react.element"):60103,d=b$1?Symbol.for("react.portal"):60106,e=b$1?Symbol.for("react.fragment"):60107,f=b$1?Symbol.for("react.strict_mode"):60108,g$1=b$1?Symbol.for("react.profiler"):60114,h=b$1?Symbol.for("react.provider"):60109,k$1=b$1?Symbol.for("react.context"):60110,l=b$1?Symbol.for("react.async_mode"):60111,m=b$1?Symbol.for("react.concurrent_mode"):60111,n=b$1?Symbol.for("react.forward_ref"):60112,p=b$1?Symbol.for("react.suspense"):60113,q$1=b$1?
+Symbol.for("react.suspense_list"):60120,r=b$1?Symbol.for("react.memo"):60115,t=b$1?Symbol.for("react.lazy"):60116,v$1=b$1?Symbol.for("react.block"):60121,w$1=b$1?Symbol.for("react.fundamental"):60117,x$1=b$1?Symbol.for("react.responder"):60118,y$1=b$1?Symbol.for("react.scope"):60119;
+function z$1(a){if("object"===typeof a&&null!==a){var u=a.$$typeof;switch(u){case c:switch(a=a.type,a){case l:case m:case e:case g$1:case f:case p:return a;default:switch(a=a&&a.$$typeof,a){case k$1:case n:case t:case r:case h:return a;default:return u}}case d:return u}}}function A(a){return z$1(a)===m}reactIs_production_min.AsyncMode=l;reactIs_production_min.ConcurrentMode=m;reactIs_production_min.ContextConsumer=k$1;reactIs_production_min.ContextProvider=h;reactIs_production_min.Element=c;reactIs_production_min.ForwardRef=n;reactIs_production_min.Fragment=e;reactIs_production_min.Lazy=t;reactIs_production_min.Memo=r;reactIs_production_min.Portal=d;
+reactIs_production_min.Profiler=g$1;reactIs_production_min.StrictMode=f;reactIs_production_min.Suspense=p;reactIs_production_min.isAsyncMode=function(a){return A(a)||z$1(a)===l};reactIs_production_min.isConcurrentMode=A;reactIs_production_min.isContextConsumer=function(a){return z$1(a)===k$1};reactIs_production_min.isContextProvider=function(a){return z$1(a)===h};reactIs_production_min.isElement=function(a){return "object"===typeof a&&null!==a&&a.$$typeof===c};reactIs_production_min.isForwardRef=function(a){return z$1(a)===n};reactIs_production_min.isFragment=function(a){return z$1(a)===e};reactIs_production_min.isLazy=function(a){return z$1(a)===t};
+reactIs_production_min.isMemo=function(a){return z$1(a)===r};reactIs_production_min.isPortal=function(a){return z$1(a)===d};reactIs_production_min.isProfiler=function(a){return z$1(a)===g$1};reactIs_production_min.isStrictMode=function(a){return z$1(a)===f};reactIs_production_min.isSuspense=function(a){return z$1(a)===p};
+reactIs_production_min.isValidElementType=function(a){return "string"===typeof a||"function"===typeof a||a===e||a===m||a===g$1||a===f||a===p||a===q$1||"object"===typeof a&&null!==a&&(a.$$typeof===t||a.$$typeof===r||a.$$typeof===h||a.$$typeof===k$1||a.$$typeof===n||a.$$typeof===w$1||a.$$typeof===x$1||a.$$typeof===y$1||a.$$typeof===v$1)};reactIs_production_min.typeOf=z$1;
+
+{
+  reactIs$1.exports = reactIs_production_min;
+}
+
+function stylis_min (W) {
+  function M(d, c, e, h, a) {
+    for (var m = 0, b = 0, v = 0, n = 0, q, g, x = 0, K = 0, k, u = k = q = 0, l = 0, r = 0, I = 0, t = 0, B = e.length, J = B - 1, y, f = '', p = '', F = '', G = '', C; l < B;) {
+      g = e.charCodeAt(l);
+      l === J && 0 !== b + n + v + m && (0 !== b && (g = 47 === b ? 10 : 47), n = v = m = 0, B++, J++);
+
+      if (0 === b + n + v + m) {
+        if (l === J && (0 < r && (f = f.replace(N, '')), 0 < f.trim().length)) {
+          switch (g) {
+            case 32:
+            case 9:
+            case 59:
+            case 13:
+            case 10:
+              break;
+
+            default:
+              f += e.charAt(l);
+          }
+
+          g = 59;
+        }
+
+        switch (g) {
+          case 123:
+            f = f.trim();
+            q = f.charCodeAt(0);
+            k = 1;
+
+            for (t = ++l; l < B;) {
+              switch (g = e.charCodeAt(l)) {
+                case 123:
+                  k++;
+                  break;
+
+                case 125:
+                  k--;
+                  break;
+
+                case 47:
+                  switch (g = e.charCodeAt(l + 1)) {
+                    case 42:
+                    case 47:
+                      a: {
+                        for (u = l + 1; u < J; ++u) {
+                          switch (e.charCodeAt(u)) {
+                            case 47:
+                              if (42 === g && 42 === e.charCodeAt(u - 1) && l + 2 !== u) {
+                                l = u + 1;
+                                break a;
+                              }
+
+                              break;
+
+                            case 10:
+                              if (47 === g) {
+                                l = u + 1;
+                                break a;
+                              }
+
+                          }
+                        }
+
+                        l = u;
+                      }
+
+                  }
+
+                  break;
+
+                case 91:
+                  g++;
+
+                case 40:
+                  g++;
+
+                case 34:
+                case 39:
+                  for (; l++ < J && e.charCodeAt(l) !== g;) {
+                  }
+
+              }
+
+              if (0 === k) break;
+              l++;
+            }
+
+            k = e.substring(t, l);
+            0 === q && (q = (f = f.replace(ca, '').trim()).charCodeAt(0));
+
+            switch (q) {
+              case 64:
+                0 < r && (f = f.replace(N, ''));
+                g = f.charCodeAt(1);
+
+                switch (g) {
+                  case 100:
+                  case 109:
+                  case 115:
+                  case 45:
+                    r = c;
+                    break;
+
+                  default:
+                    r = O;
+                }
+
+                k = M(c, r, k, g, a + 1);
+                t = k.length;
+                0 < A && (r = X(O, f, I), C = H(3, k, r, c, D, z, t, g, a, h), f = r.join(''), void 0 !== C && 0 === (t = (k = C.trim()).length) && (g = 0, k = ''));
+                if (0 < t) switch (g) {
+                  case 115:
+                    f = f.replace(da, ea);
+
+                  case 100:
+                  case 109:
+                  case 45:
+                    k = f + '{' + k + '}';
+                    break;
+
+                  case 107:
+                    f = f.replace(fa, '$1 $2');
+                    k = f + '{' + k + '}';
+                    k = 1 === w || 2 === w && L('@' + k, 3) ? '@-webkit-' + k + '@' + k : '@' + k;
+                    break;
+
+                  default:
+                    k = f + k, 112 === h && (k = (p += k, ''));
+                } else k = '';
+                break;
+
+              default:
+                k = M(c, X(c, f, I), k, h, a + 1);
+            }
+
+            F += k;
+            k = I = r = u = q = 0;
+            f = '';
+            g = e.charCodeAt(++l);
+            break;
+
+          case 125:
+          case 59:
+            f = (0 < r ? f.replace(N, '') : f).trim();
+            if (1 < (t = f.length)) switch (0 === u && (q = f.charCodeAt(0), 45 === q || 96 < q && 123 > q) && (t = (f = f.replace(' ', ':')).length), 0 < A && void 0 !== (C = H(1, f, c, d, D, z, p.length, h, a, h)) && 0 === (t = (f = C.trim()).length) && (f = '\x00\x00'), q = f.charCodeAt(0), g = f.charCodeAt(1), q) {
+              case 0:
+                break;
+
+              case 64:
+                if (105 === g || 99 === g) {
+                  G += f + e.charAt(l);
+                  break;
+                }
+
+              default:
+                58 !== f.charCodeAt(t - 1) && (p += P(f, q, g, f.charCodeAt(2)));
+            }
+            I = r = u = q = 0;
+            f = '';
+            g = e.charCodeAt(++l);
+        }
+      }
+
+      switch (g) {
+        case 13:
+        case 10:
+          47 === b ? b = 0 : 0 === 1 + q && 107 !== h && 0 < f.length && (r = 1, f += '\x00');
+          0 < A * Y && H(0, f, c, d, D, z, p.length, h, a, h);
+          z = 1;
+          D++;
+          break;
+
+        case 59:
+        case 125:
+          if (0 === b + n + v + m) {
+            z++;
+            break;
+          }
+
+        default:
+          z++;
+          y = e.charAt(l);
+
+          switch (g) {
+            case 9:
+            case 32:
+              if (0 === n + m + b) switch (x) {
+                case 44:
+                case 58:
+                case 9:
+                case 32:
+                  y = '';
+                  break;
+
+                default:
+                  32 !== g && (y = ' ');
+              }
+              break;
+
+            case 0:
+              y = '\\0';
+              break;
+
+            case 12:
+              y = '\\f';
+              break;
+
+            case 11:
+              y = '\\v';
+              break;
+
+            case 38:
+              0 === n + b + m && (r = I = 1, y = '\f' + y);
+              break;
+
+            case 108:
+              if (0 === n + b + m + E && 0 < u) switch (l - u) {
+                case 2:
+                  112 === x && 58 === e.charCodeAt(l - 3) && (E = x);
+
+                case 8:
+                  111 === K && (E = K);
+              }
+              break;
+
+            case 58:
+              0 === n + b + m && (u = l);
+              break;
+
+            case 44:
+              0 === b + v + n + m && (r = 1, y += '\r');
+              break;
+
+            case 34:
+            case 39:
+              0 === b && (n = n === g ? 0 : 0 === n ? g : n);
+              break;
+
+            case 91:
+              0 === n + b + v && m++;
+              break;
+
+            case 93:
+              0 === n + b + v && m--;
+              break;
+
+            case 41:
+              0 === n + b + m && v--;
+              break;
+
+            case 40:
+              if (0 === n + b + m) {
+                if (0 === q) switch (2 * x + 3 * K) {
+                  case 533:
+                    break;
+
+                  default:
+                    q = 1;
+                }
+                v++;
+              }
+
+              break;
+
+            case 64:
+              0 === b + v + n + m + u + k && (k = 1);
+              break;
+
+            case 42:
+            case 47:
+              if (!(0 < n + m + v)) switch (b) {
+                case 0:
+                  switch (2 * g + 3 * e.charCodeAt(l + 1)) {
+                    case 235:
+                      b = 47;
+                      break;
+
+                    case 220:
+                      t = l, b = 42;
+                  }
+
+                  break;
+
+                case 42:
+                  47 === g && 42 === x && t + 2 !== l && (33 === e.charCodeAt(t + 2) && (p += e.substring(t, l + 1)), y = '', b = 0);
+              }
+          }
+
+          0 === b && (f += y);
+      }
+
+      K = x;
+      x = g;
+      l++;
+    }
+
+    t = p.length;
+
+    if (0 < t) {
+      r = c;
+      if (0 < A && (C = H(2, p, r, d, D, z, t, h, a, h), void 0 !== C && 0 === (p = C).length)) return G + p + F;
+      p = r.join(',') + '{' + p + '}';
+
+      if (0 !== w * E) {
+        2 !== w || L(p, 2) || (E = 0);
+
+        switch (E) {
+          case 111:
+            p = p.replace(ha, ':-moz-$1') + p;
+            break;
+
+          case 112:
+            p = p.replace(Q, '::-webkit-input-$1') + p.replace(Q, '::-moz-$1') + p.replace(Q, ':-ms-input-$1') + p;
+        }
+
+        E = 0;
+      }
+    }
+
+    return G + p + F;
+  }
+
+  function X(d, c, e) {
+    var h = c.trim().split(ia);
+    c = h;
+    var a = h.length,
+        m = d.length;
+
+    switch (m) {
+      case 0:
+      case 1:
+        var b = 0;
+
+        for (d = 0 === m ? '' : d[0] + ' '; b < a; ++b) {
+          c[b] = Z(d, c[b], e).trim();
+        }
+
+        break;
+
+      default:
+        var v = b = 0;
+
+        for (c = []; b < a; ++b) {
+          for (var n = 0; n < m; ++n) {
+            c[v++] = Z(d[n] + ' ', h[b], e).trim();
+          }
+        }
+
+    }
+
+    return c;
+  }
+
+  function Z(d, c, e) {
+    var h = c.charCodeAt(0);
+    33 > h && (h = (c = c.trim()).charCodeAt(0));
+
+    switch (h) {
+      case 38:
+        return c.replace(F, '$1' + d.trim());
+
+      case 58:
+        return d.trim() + c.replace(F, '$1' + d.trim());
+
+      default:
+        if (0 < 1 * e && 0 < c.indexOf('\f')) return c.replace(F, (58 === d.charCodeAt(0) ? '' : '$1') + d.trim());
+    }
+
+    return d + c;
+  }
+
+  function P(d, c, e, h) {
+    var a = d + ';',
+        m = 2 * c + 3 * e + 4 * h;
+
+    if (944 === m) {
+      d = a.indexOf(':', 9) + 1;
+      var b = a.substring(d, a.length - 1).trim();
+      b = a.substring(0, d).trim() + b + ';';
+      return 1 === w || 2 === w && L(b, 1) ? '-webkit-' + b + b : b;
+    }
+
+    if (0 === w || 2 === w && !L(a, 1)) return a;
+
+    switch (m) {
+      case 1015:
+        return 97 === a.charCodeAt(10) ? '-webkit-' + a + a : a;
+
+      case 951:
+        return 116 === a.charCodeAt(3) ? '-webkit-' + a + a : a;
+
+      case 963:
+        return 110 === a.charCodeAt(5) ? '-webkit-' + a + a : a;
+
+      case 1009:
+        if (100 !== a.charCodeAt(4)) break;
+
+      case 969:
+      case 942:
+        return '-webkit-' + a + a;
+
+      case 978:
+        return '-webkit-' + a + '-moz-' + a + a;
+
+      case 1019:
+      case 983:
+        return '-webkit-' + a + '-moz-' + a + '-ms-' + a + a;
+
+      case 883:
+        if (45 === a.charCodeAt(8)) return '-webkit-' + a + a;
+        if (0 < a.indexOf('image-set(', 11)) return a.replace(ja, '$1-webkit-$2') + a;
+        break;
+
+      case 932:
+        if (45 === a.charCodeAt(4)) switch (a.charCodeAt(5)) {
+          case 103:
+            return '-webkit-box-' + a.replace('-grow', '') + '-webkit-' + a + '-ms-' + a.replace('grow', 'positive') + a;
+
+          case 115:
+            return '-webkit-' + a + '-ms-' + a.replace('shrink', 'negative') + a;
+
+          case 98:
+            return '-webkit-' + a + '-ms-' + a.replace('basis', 'preferred-size') + a;
+        }
+        return '-webkit-' + a + '-ms-' + a + a;
+
+      case 964:
+        return '-webkit-' + a + '-ms-flex-' + a + a;
+
+      case 1023:
+        if (99 !== a.charCodeAt(8)) break;
+        b = a.substring(a.indexOf(':', 15)).replace('flex-', '').replace('space-between', 'justify');
+        return '-webkit-box-pack' + b + '-webkit-' + a + '-ms-flex-pack' + b + a;
+
+      case 1005:
+        return ka.test(a) ? a.replace(aa, ':-webkit-') + a.replace(aa, ':-moz-') + a : a;
+
+      case 1e3:
+        b = a.substring(13).trim();
+        c = b.indexOf('-') + 1;
+
+        switch (b.charCodeAt(0) + b.charCodeAt(c)) {
+          case 226:
+            b = a.replace(G, 'tb');
+            break;
+
+          case 232:
+            b = a.replace(G, 'tb-rl');
+            break;
+
+          case 220:
+            b = a.replace(G, 'lr');
+            break;
+
+          default:
+            return a;
+        }
+
+        return '-webkit-' + a + '-ms-' + b + a;
+
+      case 1017:
+        if (-1 === a.indexOf('sticky', 9)) break;
+
+      case 975:
+        c = (a = d).length - 10;
+        b = (33 === a.charCodeAt(c) ? a.substring(0, c) : a).substring(d.indexOf(':', 7) + 1).trim();
+
+        switch (m = b.charCodeAt(0) + (b.charCodeAt(7) | 0)) {
+          case 203:
+            if (111 > b.charCodeAt(8)) break;
+
+          case 115:
+            a = a.replace(b, '-webkit-' + b) + ';' + a;
+            break;
+
+          case 207:
+          case 102:
+            a = a.replace(b, '-webkit-' + (102 < m ? 'inline-' : '') + 'box') + ';' + a.replace(b, '-webkit-' + b) + ';' + a.replace(b, '-ms-' + b + 'box') + ';' + a;
+        }
+
+        return a + ';';
+
+      case 938:
+        if (45 === a.charCodeAt(5)) switch (a.charCodeAt(6)) {
+          case 105:
+            return b = a.replace('-items', ''), '-webkit-' + a + '-webkit-box-' + b + '-ms-flex-' + b + a;
+
+          case 115:
+            return '-webkit-' + a + '-ms-flex-item-' + a.replace(ba, '') + a;
+
+          default:
+            return '-webkit-' + a + '-ms-flex-line-pack' + a.replace('align-content', '').replace(ba, '') + a;
+        }
+        break;
+
+      case 973:
+      case 989:
+        if (45 !== a.charCodeAt(3) || 122 === a.charCodeAt(4)) break;
+
+      case 931:
+      case 953:
+        if (!0 === la.test(d)) return 115 === (b = d.substring(d.indexOf(':') + 1)).charCodeAt(0) ? P(d.replace('stretch', 'fill-available'), c, e, h).replace(':fill-available', ':stretch') : a.replace(b, '-webkit-' + b) + a.replace(b, '-moz-' + b.replace('fill-', '')) + a;
+        break;
+
+      case 962:
+        if (a = '-webkit-' + a + (102 === a.charCodeAt(5) ? '-ms-' + a : '') + a, 211 === e + h && 105 === a.charCodeAt(13) && 0 < a.indexOf('transform', 10)) return a.substring(0, a.indexOf(';', 27) + 1).replace(ma, '$1-webkit-$2') + a;
+    }
+
+    return a;
+  }
+
+  function L(d, c) {
+    var e = d.indexOf(1 === c ? ':' : '{'),
+        h = d.substring(0, 3 !== c ? e : 10);
+    e = d.substring(e + 1, d.length - 1);
+    return R(2 !== c ? h : h.replace(na, '$1'), e, c);
+  }
+
+  function ea(d, c) {
+    var e = P(c, c.charCodeAt(0), c.charCodeAt(1), c.charCodeAt(2));
+    return e !== c + ';' ? e.replace(oa, ' or ($1)').substring(4) : '(' + c + ')';
+  }
+
+  function H(d, c, e, h, a, m, b, v, n, q) {
+    for (var g = 0, x = c, w; g < A; ++g) {
+      switch (w = S[g].call(B, d, x, e, h, a, m, b, v, n, q)) {
+        case void 0:
+        case !1:
+        case !0:
+        case null:
+          break;
+
+        default:
+          x = w;
+      }
+    }
+
+    if (x !== c) return x;
+  }
+
+  function T(d) {
+    switch (d) {
+      case void 0:
+      case null:
+        A = S.length = 0;
+        break;
+
+      default:
+        if ('function' === typeof d) S[A++] = d;else if ('object' === typeof d) for (var c = 0, e = d.length; c < e; ++c) {
+          T(d[c]);
+        } else Y = !!d | 0;
+    }
+
+    return T;
+  }
+
+  function U(d) {
+    d = d.prefix;
+    void 0 !== d && (R = null, d ? 'function' !== typeof d ? w = 1 : (w = 2, R = d) : w = 0);
+    return U;
+  }
+
+  function B(d, c) {
+    var e = d;
+    33 > e.charCodeAt(0) && (e = e.trim());
+    V = e;
+    e = [V];
+
+    if (0 < A) {
+      var h = H(-1, c, e, e, D, z, 0, 0, 0, 0);
+      void 0 !== h && 'string' === typeof h && (c = h);
+    }
+
+    var a = M(O, e, c, 0, 0);
+    0 < A && (h = H(-2, a, e, e, D, z, a.length, 0, 0, 0), void 0 !== h && (a = h));
+    V = '';
+    E = 0;
+    z = D = 1;
+    return a;
+  }
+
+  var ca = /^\0+/g,
+      N = /[\0\r\f]/g,
+      aa = /: */g,
+      ka = /zoo|gra/,
+      ma = /([,: ])(transform)/g,
+      ia = /,\r+?/g,
+      F = /([\t\r\n ])*\f?&/g,
+      fa = /@(k\w+)\s*(\S*)\s*/,
+      Q = /::(place)/g,
+      ha = /:(read-only)/g,
+      G = /[svh]\w+-[tblr]{2}/,
+      da = /\(\s*(.*)\s*\)/g,
+      oa = /([\s\S]*?);/g,
+      ba = /-self|flex-/g,
+      na = /[^]*?(:[rp][el]a[\w-]+)[^]*/,
+      la = /stretch|:\s*\w+\-(?:conte|avail)/,
+      ja = /([^-])(image-set\()/,
+      z = 1,
+      D = 1,
+      E = 0,
+      w = 1,
+      O = [],
+      S = [],
+      A = 0,
+      R = null,
+      Y = 0,
+      V = '';
+  B.use = T;
+  B.set = U;
+  void 0 !== W && U(W);
+  return B;
+}
+
+var unitlessKeys = {
+  animationIterationCount: 1,
+  borderImageOutset: 1,
+  borderImageSlice: 1,
+  borderImageWidth: 1,
+  boxFlex: 1,
+  boxFlexGroup: 1,
+  boxOrdinalGroup: 1,
+  columnCount: 1,
+  columns: 1,
+  flex: 1,
+  flexGrow: 1,
+  flexPositive: 1,
+  flexShrink: 1,
+  flexNegative: 1,
+  flexOrder: 1,
+  gridRow: 1,
+  gridRowEnd: 1,
+  gridRowSpan: 1,
+  gridRowStart: 1,
+  gridColumn: 1,
+  gridColumnEnd: 1,
+  gridColumnSpan: 1,
+  gridColumnStart: 1,
+  msGridRow: 1,
+  msGridRowSpan: 1,
+  msGridColumn: 1,
+  msGridColumnSpan: 1,
+  fontWeight: 1,
+  lineHeight: 1,
+  opacity: 1,
+  order: 1,
+  orphans: 1,
+  tabSize: 1,
+  widows: 1,
+  zIndex: 1,
+  zoom: 1,
+  WebkitLineClamp: 1,
+  // SVG-related properties
+  fillOpacity: 1,
+  floodOpacity: 1,
+  stopOpacity: 1,
+  strokeDasharray: 1,
+  strokeDashoffset: 1,
+  strokeMiterlimit: 1,
+  strokeOpacity: 1,
+  strokeWidth: 1
+};
+
+function memoize(fn) {
+  var cache = {};
+  return function (arg) {
+    if (cache[arg] === undefined) cache[arg] = fn(arg);
+    return cache[arg];
+  };
+}
+
+var reactPropsRegex = /^((children|dangerouslySetInnerHTML|key|ref|autoFocus|defaultValue|defaultChecked|innerHTML|suppressContentEditableWarning|suppressHydrationWarning|valueLink|accept|acceptCharset|accessKey|action|allow|allowUserMedia|allowPaymentRequest|allowFullScreen|allowTransparency|alt|async|autoComplete|autoPlay|capture|cellPadding|cellSpacing|challenge|charSet|checked|cite|classID|className|cols|colSpan|content|contentEditable|contextMenu|controls|controlsList|coords|crossOrigin|data|dateTime|decoding|default|defer|dir|disabled|disablePictureInPicture|download|draggable|encType|form|formAction|formEncType|formMethod|formNoValidate|formTarget|frameBorder|headers|height|hidden|high|href|hrefLang|htmlFor|httpEquiv|id|inputMode|integrity|is|keyParams|keyType|kind|label|lang|list|loading|loop|low|marginHeight|marginWidth|max|maxLength|media|mediaGroup|method|min|minLength|multiple|muted|name|nonce|noValidate|open|optimum|pattern|placeholder|playsInline|poster|preload|profile|radioGroup|readOnly|referrerPolicy|rel|required|reversed|role|rows|rowSpan|sandbox|scope|scoped|scrolling|seamless|selected|shape|size|sizes|slot|span|spellCheck|src|srcDoc|srcLang|srcSet|start|step|style|summary|tabIndex|target|title|type|useMap|value|width|wmode|wrap|about|datatype|inlist|prefix|property|resource|typeof|vocab|autoCapitalize|autoCorrect|autoSave|color|inert|itemProp|itemScope|itemType|itemID|itemRef|on|results|security|unselectable|accentHeight|accumulate|additive|alignmentBaseline|allowReorder|alphabetic|amplitude|arabicForm|ascent|attributeName|attributeType|autoReverse|azimuth|baseFrequency|baselineShift|baseProfile|bbox|begin|bias|by|calcMode|capHeight|clip|clipPathUnits|clipPath|clipRule|colorInterpolation|colorInterpolationFilters|colorProfile|colorRendering|contentScriptType|contentStyleType|cursor|cx|cy|d|decelerate|descent|diffuseConstant|direction|display|divisor|dominantBaseline|dur|dx|dy|edgeMode|elevation|enableBackground|end|exponent|externalResourcesRequired|fill|fillOpacity|fillRule|filter|filterRes|filterUnits|floodColor|floodOpacity|focusable|fontFamily|fontSize|fontSizeAdjust|fontStretch|fontStyle|fontVariant|fontWeight|format|from|fr|fx|fy|g1|g2|glyphName|glyphOrientationHorizontal|glyphOrientationVertical|glyphRef|gradientTransform|gradientUnits|hanging|horizAdvX|horizOriginX|ideographic|imageRendering|in|in2|intercept|k|k1|k2|k3|k4|kernelMatrix|kernelUnitLength|kerning|keyPoints|keySplines|keyTimes|lengthAdjust|letterSpacing|lightingColor|limitingConeAngle|local|markerEnd|markerMid|markerStart|markerHeight|markerUnits|markerWidth|mask|maskContentUnits|maskUnits|mathematical|mode|numOctaves|offset|opacity|operator|order|orient|orientation|origin|overflow|overlinePosition|overlineThickness|panose1|paintOrder|pathLength|patternContentUnits|patternTransform|patternUnits|pointerEvents|points|pointsAtX|pointsAtY|pointsAtZ|preserveAlpha|preserveAspectRatio|primitiveUnits|r|radius|refX|refY|renderingIntent|repeatCount|repeatDur|requiredExtensions|requiredFeatures|restart|result|rotate|rx|ry|scale|seed|shapeRendering|slope|spacing|specularConstant|specularExponent|speed|spreadMethod|startOffset|stdDeviation|stemh|stemv|stitchTiles|stopColor|stopOpacity|strikethroughPosition|strikethroughThickness|string|stroke|strokeDasharray|strokeDashoffset|strokeLinecap|strokeLinejoin|strokeMiterlimit|strokeOpacity|strokeWidth|surfaceScale|systemLanguage|tableValues|targetX|targetY|textAnchor|textDecoration|textRendering|textLength|to|transform|u1|u2|underlinePosition|underlineThickness|unicode|unicodeBidi|unicodeRange|unitsPerEm|vAlphabetic|vHanging|vIdeographic|vMathematical|values|vectorEffect|version|vertAdvY|vertOriginX|vertOriginY|viewBox|viewTarget|visibility|widths|wordSpacing|writingMode|x|xHeight|x1|x2|xChannelSelector|xlinkActuate|xlinkArcrole|xlinkHref|xlinkRole|xlinkShow|xlinkTitle|xlinkType|xmlBase|xmlns|xmlnsXlink|xmlLang|xmlSpace|y|y1|y2|yChannelSelector|z|zoomAndPan|for|class|autofocus)|(([Dd][Aa][Tt][Aa]|[Aa][Rr][Ii][Aa]|x)-.*))$/; // https://esbench.com/bench/5bfee68a4cd7e6009ef61d23
+
+var index = memoize(function (prop) {
+  return reactPropsRegex.test(prop) || prop.charCodeAt(0) === 111
+  /* o */
+  && prop.charCodeAt(1) === 110
+  /* n */
+  && prop.charCodeAt(2) < 91;
+}
+/* Z+1 */
+);
+
+var reactIs = reactIs$1.exports;
+
+/**
+ * Copyright 2015, Yahoo! Inc.
+ * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
+ */
+var REACT_STATICS = {
+  childContextTypes: true,
+  contextType: true,
+  contextTypes: true,
+  defaultProps: true,
+  displayName: true,
+  getDefaultProps: true,
+  getDerivedStateFromError: true,
+  getDerivedStateFromProps: true,
+  mixins: true,
+  propTypes: true,
+  type: true
+};
+var KNOWN_STATICS = {
+  name: true,
+  length: true,
+  prototype: true,
+  caller: true,
+  callee: true,
+  arguments: true,
+  arity: true
+};
+var FORWARD_REF_STATICS = {
+  '$$typeof': true,
+  render: true,
+  defaultProps: true,
+  displayName: true,
+  propTypes: true
+};
+var MEMO_STATICS = {
+  '$$typeof': true,
+  compare: true,
+  defaultProps: true,
+  displayName: true,
+  propTypes: true,
+  type: true
+};
+var TYPE_STATICS = {};
+TYPE_STATICS[reactIs.ForwardRef] = FORWARD_REF_STATICS;
+TYPE_STATICS[reactIs.Memo] = MEMO_STATICS;
+
+function getStatics(component) {
+  // React v16.11 and below
+  if (reactIs.isMemo(component)) {
+    return MEMO_STATICS;
+  } // React v16.12 and above
+
+
+  return TYPE_STATICS[component['$$typeof']] || REACT_STATICS;
+}
+
+var defineProperty = Object.defineProperty;
+var getOwnPropertyNames = Object.getOwnPropertyNames;
+var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+var getPrototypeOf = Object.getPrototypeOf;
+var objectPrototype = Object.prototype;
+function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
+  if (typeof sourceComponent !== 'string') {
+    // don't hoist over string (html) components
+    if (objectPrototype) {
+      var inheritedComponent = getPrototypeOf(sourceComponent);
+
+      if (inheritedComponent && inheritedComponent !== objectPrototype) {
+        hoistNonReactStatics(targetComponent, inheritedComponent, blacklist);
+      }
+    }
+
+    var keys = getOwnPropertyNames(sourceComponent);
+
+    if (getOwnPropertySymbols) {
+      keys = keys.concat(getOwnPropertySymbols(sourceComponent));
+    }
+
+    var targetStatics = getStatics(targetComponent);
+    var sourceStatics = getStatics(sourceComponent);
+
+    for (var i = 0; i < keys.length; ++i) {
+      var key = keys[i];
+
+      if (!KNOWN_STATICS[key] && !(blacklist && blacklist[key]) && !(sourceStatics && sourceStatics[key]) && !(targetStatics && targetStatics[key])) {
+        var descriptor = getOwnPropertyDescriptor(sourceComponent, key);
+
+        try {
+          // Avoid failures from read-only properties
+          defineProperty(targetComponent, key, descriptor);
+        } catch (e) {}
+      }
+    }
+  }
+
+  return targetComponent;
+}
+
+var hoistNonReactStatics_cjs = hoistNonReactStatics;
+
+function y(){return (y=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r]);}return e}).apply(this,arguments)}var v=function(e,t){for(var n=[e[0]],r=0,o=t.length;r<o;r+=1)n.push(t[r],e[r+1]);return n},g=function(t){return null!==t&&"object"==typeof t&&"[object Object]"===(t.toString?t.toString():Object.prototype.toString.call(t))&&!reactIs$1.exports.typeOf(t)},S=Object.freeze([]),w=Object.freeze({});function E(e){return "function"==typeof e}function b(e){return e.displayName||e.name||"Component"}function _(e){return e&&"string"==typeof e.styledComponentId}var N="undefined"!=typeof process&&(process.env.REACT_APP_SC_ATTR||process.env.SC_ATTR)||"data-styled",C="undefined"!=typeof window&&"HTMLElement"in window,I=Boolean("boolean"==typeof SC_DISABLE_SPEEDY?SC_DISABLE_SPEEDY:"undefined"!=typeof process&&void 0!==process.env.REACT_APP_SC_DISABLE_SPEEDY&&""!==process.env.REACT_APP_SC_DISABLE_SPEEDY?"false"!==process.env.REACT_APP_SC_DISABLE_SPEEDY&&process.env.REACT_APP_SC_DISABLE_SPEEDY:"undefined"!=typeof process&&void 0!==process.env.SC_DISABLE_SPEEDY&&""!==process.env.SC_DISABLE_SPEEDY?"false"!==process.env.SC_DISABLE_SPEEDY&&process.env.SC_DISABLE_SPEEDY:"production"!=="production");function D(e){for(var t=arguments.length,n=new Array(t>1?t-1:0),r=1;r<t;r++)n[r-1]=arguments[r];throw new Error("An error occurred. See https://git.io/JUIaE#"+e+" for more information."+(n.length>0?" Args: "+n.join(", "):""))}var j=function(){function e(e){this.groupSizes=new Uint32Array(512),this.length=512,this.tag=e;}var t=e.prototype;return t.indexOfGroup=function(e){for(var t=0,n=0;n<e;n++)t+=this.groupSizes[n];return t},t.insertRules=function(e,t){if(e>=this.groupSizes.length){for(var n=this.groupSizes,r=n.length,o=r;e>=o;)(o<<=1)<0&&D(16,""+e);this.groupSizes=new Uint32Array(o),this.groupSizes.set(n),this.length=o;for(var s=r;s<o;s++)this.groupSizes[s]=0;}for(var i=this.indexOfGroup(e+1),a=0,c=t.length;a<c;a++)this.tag.insertRule(i,t[a])&&(this.groupSizes[e]++,i++);},t.clearGroup=function(e){if(e<this.length){var t=this.groupSizes[e],n=this.indexOfGroup(e),r=n+t;this.groupSizes[e]=0;for(var o=n;o<r;o++)this.tag.deleteRule(n);}},t.getGroup=function(e){var t="";if(e>=this.length||0===this.groupSizes[e])return t;for(var n=this.groupSizes[e],r=this.indexOfGroup(e),o=r+n,s=r;s<o;s++)t+=this.tag.getRule(s)+"/*!sc*/\n";return t},e}(),T=new Map,x=new Map,k=1,V=function(e){if(T.has(e))return T.get(e);for(;x.has(k);)k++;var t=k++;return T.set(e,t),x.set(t,e),t},z=function(e){return x.get(e)},B=function(e,t){t>=k&&(k=t+1),T.set(e,t),x.set(t,e);},M="style["+N+'][data-styled-version="5.3.3"]',G=new RegExp("^"+N+'\\.g(\\d+)\\[id="([\\w\\d-]+)"\\].*?"([^"]*)'),L=function(e,t,n){for(var r,o=n.split(","),s=0,i=o.length;s<i;s++)(r=o[s])&&e.registerName(t,r);},F=function(e,t){for(var n=(t.textContent||"").split("/*!sc*/\n"),r=[],o=0,s=n.length;o<s;o++){var i=n[o].trim();if(i){var a=i.match(G);if(a){var c=0|parseInt(a[1],10),u=a[2];0!==c&&(B(u,c),L(e,u,a[3]),e.getTag().insertRules(c,r)),r.length=0;}else r.push(i);}}},Y=function(){return "undefined"!=typeof window&&void 0!==window.__webpack_nonce__?window.__webpack_nonce__:null},q=function(e){var t=document.head,n=e||t,r=document.createElement("style"),o=function(e){for(var t=e.childNodes,n=t.length;n>=0;n--){var r=t[n];if(r&&1===r.nodeType&&r.hasAttribute(N))return r}}(n),s=void 0!==o?o.nextSibling:null;r.setAttribute(N,"active"),r.setAttribute("data-styled-version","5.3.3");var i=Y();return i&&r.setAttribute("nonce",i),n.insertBefore(r,s),r},H=function(){function e(e){var t=this.element=q(e);t.appendChild(document.createTextNode("")),this.sheet=function(e){if(e.sheet)return e.sheet;for(var t=document.styleSheets,n=0,r=t.length;n<r;n++){var o=t[n];if(o.ownerNode===e)return o}D(17);}(t),this.length=0;}var t=e.prototype;return t.insertRule=function(e,t){try{return this.sheet.insertRule(t,e),this.length++,!0}catch(e){return !1}},t.deleteRule=function(e){this.sheet.deleteRule(e),this.length--;},t.getRule=function(e){var t=this.sheet.cssRules[e];return void 0!==t&&"string"==typeof t.cssText?t.cssText:""},e}(),$=function(){function e(e){var t=this.element=q(e);this.nodes=t.childNodes,this.length=0;}var t=e.prototype;return t.insertRule=function(e,t){if(e<=this.length&&e>=0){var n=document.createTextNode(t),r=this.nodes[e];return this.element.insertBefore(n,r||null),this.length++,!0}return !1},t.deleteRule=function(e){this.element.removeChild(this.nodes[e]),this.length--;},t.getRule=function(e){return e<this.length?this.nodes[e].textContent:""},e}(),W=function(){function e(e){this.rules=[],this.length=0;}var t=e.prototype;return t.insertRule=function(e,t){return e<=this.length&&(this.rules.splice(e,0,t),this.length++,!0)},t.deleteRule=function(e){this.rules.splice(e,1),this.length--;},t.getRule=function(e){return e<this.length?this.rules[e]:""},e}(),U=C,J={isServer:!C,useCSSOMInjection:!I},X=function(){function e(e,t,n){void 0===e&&(e=w),void 0===t&&(t={}),this.options=y({},J,{},e),this.gs=t,this.names=new Map(n),this.server=!!e.isServer,!this.server&&C&&U&&(U=!1,function(e){for(var t=document.querySelectorAll(M),n=0,r=t.length;n<r;n++){var o=t[n];o&&"active"!==o.getAttribute(N)&&(F(e,o),o.parentNode&&o.parentNode.removeChild(o));}}(this));}e.registerId=function(e){return V(e)};var t=e.prototype;return t.reconstructWithOptions=function(t,n){return void 0===n&&(n=!0),new e(y({},this.options,{},t),this.gs,n&&this.names||void 0)},t.allocateGSInstance=function(e){return this.gs[e]=(this.gs[e]||0)+1},t.getTag=function(){return this.tag||(this.tag=(n=(t=this.options).isServer,r=t.useCSSOMInjection,o=t.target,e=n?new W(o):r?new H(o):new $(o),new j(e)));var e,t,n,r,o;},t.hasNameForId=function(e,t){return this.names.has(e)&&this.names.get(e).has(t)},t.registerName=function(e,t){if(V(e),this.names.has(e))this.names.get(e).add(t);else {var n=new Set;n.add(t),this.names.set(e,n);}},t.insertRules=function(e,t,n){this.registerName(e,t),this.getTag().insertRules(V(e),n);},t.clearNames=function(e){this.names.has(e)&&this.names.get(e).clear();},t.clearRules=function(e){this.getTag().clearGroup(V(e)),this.clearNames(e);},t.clearTag=function(){this.tag=void 0;},t.toString=function(){return function(e){for(var t=e.getTag(),n=t.length,r="",o=0;o<n;o++){var s=z(o);if(void 0!==s){var i=e.names.get(s),a=t.getGroup(o);if(i&&a&&i.size){var c=N+".g"+o+'[id="'+s+'"]',u="";void 0!==i&&i.forEach((function(e){e.length>0&&(u+=e+",");})),r+=""+a+c+'{content:"'+u+'"}/*!sc*/\n';}}}return r}(this)},e}(),Z=/(a)(d)/gi,K=function(e){return String.fromCharCode(e+(e>25?39:97))};function Q(e){var t,n="";for(t=Math.abs(e);t>52;t=t/52|0)n=K(t%52)+n;return (K(t%52)+n).replace(Z,"$1-$2")}var ee=function(e,t){for(var n=t.length;n;)e=33*e^t.charCodeAt(--n);return e},te=function(e){return ee(5381,e)};function ne(e){for(var t=0;t<e.length;t+=1){var n=e[t];if(E(n)&&!_(n))return !1}return !0}var re=te("5.3.3"),oe=function(){function e(e,t,n){this.rules=e,this.staticRulesId="",this.isStatic=(void 0===n||n.isStatic)&&ne(e),this.componentId=t,this.baseHash=ee(re,t),this.baseStyle=n,X.registerId(t);}return e.prototype.generateAndInjectStyles=function(e,t,n){var r=this.componentId,o=[];if(this.baseStyle&&o.push(this.baseStyle.generateAndInjectStyles(e,t,n)),this.isStatic&&!n.hash)if(this.staticRulesId&&t.hasNameForId(r,this.staticRulesId))o.push(this.staticRulesId);else {var s=_e(this.rules,e,t,n).join(""),i=Q(ee(this.baseHash,s)>>>0);if(!t.hasNameForId(r,i)){var a=n(s,"."+i,void 0,r);t.insertRules(r,i,a);}o.push(i),this.staticRulesId=i;}else {for(var c=this.rules.length,u=ee(this.baseHash,n.hash),l="",d=0;d<c;d++){var h=this.rules[d];if("string"==typeof h)l+=h;else if(h){var p=_e(h,e,t,n),f=Array.isArray(p)?p.join(""):p;u=ee(u,f+d),l+=f;}}if(l){var m=Q(u>>>0);if(!t.hasNameForId(r,m)){var y=n(l,"."+m,void 0,r);t.insertRules(r,m,y);}o.push(m);}}return o.join(" ")},e}(),se=/^\s*\/\/.*$/gm,ie=[":","[",".","#"];function ae(e){var t,n,r,o,s=void 0===e?w:e,i=s.options,a=void 0===i?w:i,c=s.plugins,u=void 0===c?S:c,l=new stylis_min(a),d=[],p=function(e){function t(t){if(t)try{e(t+"}");}catch(e){}}return function(n,r,o,s,i,a,c,u,l,d){switch(n){case 1:if(0===l&&64===r.charCodeAt(0))return e(r+";"),"";break;case 2:if(0===u)return r+"/*|*/";break;case 3:switch(u){case 102:case 112:return e(o[0]+r),"";default:return r+(0===d?"/*|*/":"")}case-2:r.split("/*|*/}").forEach(t);}}}((function(e){d.push(e);})),f=function(e,r,s){return 0===r&&-1!==ie.indexOf(s[n.length])||s.match(o)?e:"."+t};function m(e,s,i,a){void 0===a&&(a="&");var c=e.replace(se,""),u=s&&i?i+" "+s+" { "+c+" }":c;return t=a,n=s,r=new RegExp("\\"+n+"\\b","g"),o=new RegExp("(\\"+n+"\\b){2,}"),l(i||!s?"":s,u)}return l.use([].concat(u,[function(e,t,o){2===e&&o.length&&o[0].lastIndexOf(n)>0&&(o[0]=o[0].replace(r,f));},p,function(e){if(-2===e){var t=d;return d=[],t}}])),m.hash=u.length?u.reduce((function(e,t){return t.name||D(15),ee(e,t.name)}),5381).toString():"",m}var ce=r$2.createContext();ce.Consumer;var le=r$2.createContext(),de=(le.Consumer,new X),he=ae();function pe(){return react.exports.useContext(ce)||de}function fe(){return react.exports.useContext(le)||he}var ye=function(){function e(e,t){var n=this;this.inject=function(e,t){void 0===t&&(t=he);var r=n.name+t.hash;e.hasNameForId(n.id,r)||e.insertRules(n.id,r,t(n.rules,r,"@keyframes"));},this.toString=function(){return D(12,String(n.name))},this.name=e,this.id="sc-keyframes-"+e,this.rules=t;}return e.prototype.getName=function(e){return void 0===e&&(e=he),this.name+e.hash},e}(),ve=/([A-Z])/,ge=/([A-Z])/g,Se=/^ms-/,we=function(e){return "-"+e.toLowerCase()};function Ee(e){return ve.test(e)?e.replace(ge,we).replace(Se,"-ms-"):e}var be=function(e){return null==e||!1===e||""===e};function _e(e,n,r,o){if(Array.isArray(e)){for(var s,i=[],a=0,c=e.length;a<c;a+=1)""!==(s=_e(e[a],n,r,o))&&(Array.isArray(s)?i.push.apply(i,s):i.push(s));return i}if(be(e))return "";if(_(e))return "."+e.styledComponentId;if(E(e)){if("function"!=typeof(l=e)||l.prototype&&l.prototype.isReactComponent||!n)return e;var u=e(n);return _e(u,n,r,o)}var l;return e instanceof ye?r?(e.inject(r,o),e.getName(o)):e:g(e)?function e(t,n){var r,o,s=[];for(var i in t)t.hasOwnProperty(i)&&!be(t[i])&&(Array.isArray(t[i])&&t[i].isCss||E(t[i])?s.push(Ee(i)+":",t[i],";"):g(t[i])?s.push.apply(s,e(t[i],i)):s.push(Ee(i)+": "+(r=i,null==(o=t[i])||"boolean"==typeof o||""===o?"":"number"!=typeof o||0===o||r in unitlessKeys?String(o).trim():o+"px")+";"));return n?[n+" {"].concat(s,["}"]):s}(e):e.toString()}var Ne=function(e){return Array.isArray(e)&&(e.isCss=!0),e};function Ae(e){for(var t=arguments.length,n=new Array(t>1?t-1:0),r=1;r<t;r++)n[r-1]=arguments[r];return E(e)||g(e)?Ne(_e(v(S,[e].concat(n)))):0===n.length&&1===e.length&&"string"==typeof e[0]?e:Ne(_e(v(e,n)))}var Oe=function(e,t,n){return void 0===n&&(n=w),e.theme!==n.theme&&e.theme||t||n.theme},Re=/[!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~-]+/g,De=/(^-|-$)/g;function je(e){return e.replace(Re,"-").replace(De,"")}var Te=function(e){return Q(te(e)>>>0)};function xe(e){return "string"==typeof e&&("production"==="production")}var ke=function(e){return "function"==typeof e||"object"==typeof e&&null!==e&&!Array.isArray(e)},Ve=function(e){return "__proto__"!==e&&"constructor"!==e&&"prototype"!==e};function ze(e,t,n){var r=e[n];ke(t)&&ke(r)?Be(r,t):e[n]=t;}function Be(e){for(var t=arguments.length,n=new Array(t>1?t-1:0),r=1;r<t;r++)n[r-1]=arguments[r];for(var o=0,s=n;o<s.length;o++){var i=s[o];if(ke(i))for(var a in i)Ve(a)&&ze(e,i[a],a);}return e}var Me=r$2.createContext();Me.Consumer;var Fe={};function Ye(e,t,n){var o=_(e),i=!xe(e),a=t.attrs,c=void 0===a?S:a,d=t.componentId,h=void 0===d?function(e,t){var n="string"!=typeof e?"sc":je(e);Fe[n]=(Fe[n]||0)+1;var r=n+"-"+Te("5.3.3"+n+Fe[n]);return t?t+"-"+r:r}(t.displayName,t.parentComponentId):d,p=t.displayName,v=void 0===p?function(e){return xe(e)?"styled."+e:"Styled("+b(e)+")"}(e):p,g=t.displayName&&t.componentId?je(t.displayName)+"-"+t.componentId:t.componentId||h,N=o&&e.attrs?Array.prototype.concat(e.attrs,c).filter(Boolean):c,A=t.shouldForwardProp;o&&e.shouldForwardProp&&(A=t.shouldForwardProp?function(n,r,o){return e.shouldForwardProp(n,r,o)&&t.shouldForwardProp(n,r,o)}:e.shouldForwardProp);var C,I=new oe(n,g,o?e.componentStyle:void 0),P=I.isStatic&&0===c.length,O=function(e,t){return function(e,t,n,r){var o=e.attrs,i=e.componentStyle,a=e.defaultProps,c=e.foldedComponentIds,d=e.shouldForwardProp,h=e.styledComponentId,p=e.target;var m=function(e,t,n){void 0===e&&(e=w);var r=y({},t,{theme:e}),o={};return n.forEach((function(e){var t,n,s,i=e;for(t in E(i)&&(i=i(r)),i)r[t]=o[t]="className"===t?(n=o[t],s=i[t],n&&s?n+" "+s:n||s):i[t];})),[r,o]}(Oe(t,react.exports.useContext(Me),a)||w,t,o),v=m[0],g=m[1],S=function(e,t,n,r){var o=pe(),s=fe(),i=t?e.generateAndInjectStyles(w,o,s):e.generateAndInjectStyles(n,o,s);return i}(i,r,v),b=n,_=g.$as||t.$as||g.as||t.as||p,N=xe(_),A=g!==t?y({},t,{},g):t,C={};for(var I in A)"$"!==I[0]&&"as"!==I&&("forwardedAs"===I?C.as=A[I]:(d?d(I,index,_):!N||index(I))&&(C[I]=A[I]));return t.style&&g.style!==t.style&&(C.style=y({},t.style,{},g.style)),C.className=Array.prototype.concat(c,h,S!==h?S:null,t.className,g.className).filter(Boolean).join(" "),C.ref=b,react.exports.createElement(_,C)}(C,e,t,P)};return O.displayName=v,(C=r$2.forwardRef(O)).attrs=N,C.componentStyle=I,C.displayName=v,C.shouldForwardProp=A,C.foldedComponentIds=o?Array.prototype.concat(e.foldedComponentIds,e.styledComponentId):S,C.styledComponentId=g,C.target=o?e.target:e,C.withComponent=function(e){var r=t.componentId,o=function(e,t){if(null==e)return {};var n,r,o={},s=Object.keys(e);for(r=0;r<s.length;r++)n=s[r],t.indexOf(n)>=0||(o[n]=e[n]);return o}(t,["componentId"]),s=r&&r+"-"+(xe(e)?e:je(b(e)));return Ye(e,y({},o,{attrs:N,componentId:s}),n)},Object.defineProperty(C,"defaultProps",{get:function(){return this._foldedDefaultProps},set:function(t){this._foldedDefaultProps=o?Be({},e.defaultProps,t):t;}}),C.toString=function(){return "."+C.styledComponentId},i&&hoistNonReactStatics_cjs(C,e,{attrs:!0,componentStyle:!0,displayName:!0,foldedComponentIds:!0,shouldForwardProp:!0,styledComponentId:!0,target:!0,withComponent:!0}),C}var qe=function(e){return function e(t,r,o){if(void 0===o&&(o=w),!reactIs$1.exports.isValidElementType(r))return D(1,String(r));var s=function(){return t(r,o,Ae.apply(void 0,arguments))};return s.withConfig=function(n){return e(t,r,y({},o,{},n))},s.attrs=function(n){return e(t,r,y({},o,{attrs:Array.prototype.concat(o.attrs,n).filter(Boolean)}))},s}(Ye,e)};["a","abbr","address","area","article","aside","audio","b","base","bdi","bdo","big","blockquote","body","br","button","canvas","caption","cite","code","col","colgroup","data","datalist","dd","del","details","dfn","dialog","div","dl","dt","em","embed","fieldset","figcaption","figure","footer","form","h1","h2","h3","h4","h5","h6","head","header","hgroup","hr","html","i","iframe","img","input","ins","kbd","keygen","label","legend","li","link","main","map","mark","marquee","menu","menuitem","meta","meter","nav","noscript","object","ol","optgroup","option","output","p","param","picture","pre","progress","q","rp","rt","ruby","s","samp","script","section","select","small","source","span","strong","style","sub","summary","sup","table","tbody","td","textarea","tfoot","th","thead","time","title","tr","track","u","ul","var","video","wbr","circle","clipPath","defs","ellipse","foreignObject","g","image","line","linearGradient","marker","mask","path","pattern","polygon","polyline","radialGradient","rect","stop","svg","text","textPath","tspan"].forEach((function(e){qe[e]=qe(e);}));var styled = qe;
+
+const RecordIcon = styled.div `
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+`;
+
+const Container$8 = styled(motion.div) `
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+`;
+const RecordIconContainer = styled.div `
+  border: 1px solid var(--feint);
+  border-radius: 3px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  margin: 0 5px;
+  transform: translateY(3px);
+`;
+function Instructions() {
+    return (react.exports.createElement(Container$8, { exit: { scale: 0.925, opacity: 0 }, transition: { type: "spring", duration: 0.5, bounce: 0 } },
+        react.exports.createElement("p", null,
+            "Click the",
+            " ",
+            react.exports.createElement(RecordIconContainer, null,
+                react.exports.createElement(RecordIcon, null)),
+            " ",
+            "record button to start recording animations.")));
+}
+
+const tabBarHeight = 42;
+
+const Button = styled.button `
+  height: ${tabBarHeight}px;
+  flex: 0 0 ${tabBarHeight}px;
+  position: relative;
+  text-indent: -1000px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+function RecordButton({ isRecording, startRecording, stopRecording, }) {
+    return (react.exports.createElement(Button, { onClick: isRecording ? stopRecording : startRecording },
+        react.exports.createElement(RecordIcon, { style: {
+                backgroundColor: isRecording ? "var(--red)" : "rgba(255,255,255,0.5)",
+            } }),
+        isRecording ? "Stop recording" : "Start recording"));
+}
+
+const Container$7 = styled.section `
   flex: 0 0 42px;
   border-bottom: 1px solid var(--feint);
   display: flex;
@@ -9762,7 +9792,7 @@ const Underline = styled(motion.div) `
 const duration = 0.8;
 const transition = { type: "spring", duration, bounce: 0 };
 function TabBar({ state }) {
-    return (react.exports.createElement(Container$5, null,
+    return (react.exports.createElement(Container$7, null,
         react.exports.createElement(RecordButton, { isRecording: state.isRecording, startRecording: state.startRecording, stopRecording: state.stopRecording }),
         react.exports.createElement(Tabs, { layoutScroll: true }, Object.keys(state.animations).map((animationName) => (react.exports.createElement(Tab, { key: animationName, onClick: () => state.selectAnimation(animationName), initial: { opacity: 0, x: 50 }, animate: { opacity: 1, x: 0 }, transition: transition },
             react.exports.createElement(motion.span, { initial: false, animate: { opacity: animationName === state.selected ? 1 : 0.65 }, transition: { duration } }, animationName),
@@ -9780,7 +9810,7 @@ function inspect(motionId) {
         console.log(result);
     });
 }
-const Container$4 = styled.header `
+const Container$6 = styled.header `
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -9793,23 +9823,31 @@ const Container$4 = styled.header `
   }
 `;
 function ElementDetails({ name }) {
-    return (react.exports.createElement(Container$4, null,
+    return (react.exports.createElement(Container$6, null,
         react.exports.createElement("h2", null,
             react.exports.createElement("code", null, name)),
         react.exports.createElement("button", { onClick: () => inspect(name) },
             react.exports.createElement(InspectIcon, { style: { opacity: 0.5, width: 13, height: 13, fill: "var(--white)" } }))));
 }
 
-const Container$3 = styled.nav `
+const SidebarContainer = styled.section `
   flex: 0 0 var(--sidebar-width);
-  border-right: 1px solid var(--feint);
-  background: var(--background-semi);
-  backdrop-filter: blur(5px);
-  padding: calc(10px + var(--row-height)) 10px 10px;
+  background-color: transparent;
+  background-image: radial-gradient(
+    rgba(0, 0, 0, 0) 1px,
+    var(--background) 1px
+  );
+  background-size: 4px 4px;
+  backdrop-filter: blur(3px);
+  padding: calc(10px + var(--row-height)) 20px 20px;
   position: sticky;
   top: 0;
-  left: 0;
+  bottom: 0;
   z-index: 2;
+`;
+const Container$5 = styled(SidebarContainer) `
+  left: 0;
+  border-right: 1px solid var(--feint);
 
   li {
     height: var(--row-height);
@@ -9849,7 +9887,164 @@ function Sidebar({ animation }) {
             react.exports.createElement(ElementDetails, { name: elementName }),
             elementChildren));
     }
-    return react.exports.createElement(Container$3, null, children);
+    return react.exports.createElement(Container$5, null, children);
+}
+
+const mix = (min, max, progress) => -progress * min + progress * max + min;
+
+const progress = (min, max, value) => max - min === 0 ? 1 : (value - min) / (max - min);
+
+function fillOffset(offset, remaining) {
+    const min = offset[offset.length - 1];
+    for (let i = 1; i <= remaining; i++) {
+        const offsetProgress = progress(0, remaining, i);
+        offset.push(mix(min, 1, offsetProgress));
+    }
+}
+function defaultOffset(length) {
+    const offset = [0];
+    fillOffset(offset, length - 1);
+    return offset;
+}
+
+const ElementAnimationContainer = styled.ul `
+  padding-top: var(--row-height);
+  padding-left: 10px;
+
+  &:first-child {
+    padding-top: calc(var(--row-height) + 10px);
+  }
+`;
+const ValueAnimationContainer = styled.li `
+  display: flex;
+  position: relative;
+  height: var(--row-height);
+`;
+const ValueMarker = styled(motion.div) `
+  width: 10px;
+  height: 10px;
+  background-color: var(--white);
+  position: absolute;
+  top: 50%;
+  left: 0;
+  border-radius: 5px;
+  border: 3px solid var(--black);
+  z-index: 1;
+  cursor: pointer;
+`;
+const TransitionMarker = styled(motion.div) `
+  position: absolute;
+  top: calc(50% - 1px);
+  left: 0;
+  height: 2px;
+  background-color: var(--feint);
+  border-radius: 2px;
+`;
+const bufferTime = 1;
+function ValueKeyframes({ scale, animation, state }) {
+    const { elementId, valueName, keyframes, options } = animation;
+    let { delay = 0, duration = 0.3, easing, repeat, offset } = options;
+    const numKeyframes = keyframes.length;
+    offset !== null && offset !== void 0 ? offset : (offset = defaultOffset(numKeyframes));
+    const remainder = numKeyframes - offset.length;
+    remainder > 0 && fillOffset(offset, remainder);
+    const markers = [];
+    let prevTime;
+    for (let i = 0; i < numKeyframes; i++) {
+        // const value = keyframes[i]
+        const valueOffset = offset[i];
+        const time = delay + valueOffset * duration;
+        const keyframeIsSelected = isKeyframeSelected(state, elementId, valueName, i);
+        markers.push(react.exports.createElement(react.exports.Fragment, null,
+            prevTime !== undefined ? (react.exports.createElement(TransitionMarker, { initial: false, animate: {
+                    backgroundColor: keyframeIsSelected
+                        ? "var(--strong-blue)"
+                        : "var(--feint)",
+                }, transition: { duration: 0.1 }, style: {
+                    width: (time - prevTime) * scale,
+                    transform: `translateX(${(prevTime !== null && prevTime !== void 0 ? prevTime : 0) * scale}px)`,
+                } })) : null,
+            react.exports.createElement(ValueMarker, { onClick: () => state.selectKeyframe({
+                    elementName: elementId,
+                    valueName,
+                    index: i,
+                }), initial: false, animate: {
+                    backgroundColor: keyframeIsSelected
+                        ? "var(--strong-blue)"
+                        : "var(--white)",
+                }, transition: { duration: 0.1 }, style: {
+                    transform: `translateY(-50%) translateX(${time * scale}px) rotate(45deg)`,
+                } })));
+        prevTime = time;
+    }
+    return (react.exports.createElement(ValueAnimationContainer, { style: { width: (delay + duration + bufferTime) * scale } }, markers));
+}
+function Keyframes({ scale, animation, state }) {
+    const elementAnimations = [];
+    for (const elementName in animation) {
+        const valueAnimations = [];
+        for (const valueAnimation of animation[elementName]) {
+            valueAnimations.push(react.exports.createElement(ValueKeyframes, { key: valueAnimation.valueName, scale: scale, animation: valueAnimation, state: state }));
+        }
+        elementAnimations.push(react.exports.createElement(ElementAnimationContainer, { key: elementName }, valueAnimations));
+    }
+    return react.exports.createElement(react.exports.Fragment, null, elementAnimations);
+}
+function isKeyframeSelected(state, elementName, valueName, keyframeIndex) {
+    if (!state.selectedKeyframes)
+        return false;
+    return state.selectedKeyframes.some((keyframe) => keyframe.elementName === elementName &&
+        keyframe.valueName === valueName &&
+        keyframe.index === keyframeIndex);
+}
+
+const Container$4 = styled(SidebarContainer) `
+  right: 0;
+  border-left: 1px solid var(--feint);
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+
+  h2 {
+    margin-bottom: 8px;
+    font-size: 12px;
+  }
+
+  code {
+    font-size: 12px;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  ${ValueMarker} {
+    display: inline-block;
+    position: static;
+    margin-right: 6px;
+    background-color: var(--strong-blue);
+    transform: translateY(3px) rotate(45deg);
+  }
+`;
+function Header({ children }) {
+    return (react.exports.createElement("h2", null,
+        react.exports.createElement(ValueMarker, { style: { background: "var(--strong-blue)" } }),
+        children));
+}
+function SelectedKeyframes({ selectedKeyframes, animation }) {
+    const [value] = selectedKeyframes;
+    const { elementName, valueName, index } = value;
+    const elementAnimation = animation[elementName];
+    const valueAnimation = elementAnimation.find((thisAnimation) => thisAnimation.valueName === valueName);
+    if (!valueAnimation)
+        return null;
+    const { keyframes, options } = valueAnimation;
+    const { easing } = options;
+    const easingString = Array.isArray(easing) ? easing[index - 1] : easing;
+    return (react.exports.createElement(Container$4, { as: motion.div, initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 }, transition: { duration: 0.2 } },
+        react.exports.createElement(Header, null, "Value"),
+        react.exports.createElement("code", null, keyframes[index]),
+        easingString ? (react.exports.createElement(react.exports.Fragment, null,
+            react.exports.createElement(Header, null, "Easing"),
+            react.exports.createElement("code", null, easing))) : null));
 }
 
 /**
@@ -10090,9 +10285,11 @@ const keys = ['x', 'y', 'top', 'bottom', 'left', 'right', 'width', 'height'];
 
 const areBoundsEqual = (a, b) => keys.every(key => a[key] === b[key]);
 
-const Container$2 = styled.div `
-  margin-left: calc(-1 * var(--sidebar-width) - 20px);
-  padding-left: calc(var(--sidebar-width) + 20px);
+const Container$3 = styled.div `
+  margin-left: calc(-1 * var(--sidebar-width) - 40px);
+  margin-right: calc(-1 * var(--sidebar-width) - 40px);
+  margin-bottom: 10px;
+  padding-left: calc(var(--sidebar-width) + 40px);
   flex: 0 0 var(--row-height);
   background-color: var(--feint);
   position: sticky;
@@ -10100,6 +10297,7 @@ const Container$2 = styled.div `
   display: flex;
   align-items: center;
   overflow: hidden;
+  z-index: 1;
 `;
 const Marker = styled.div `
   --marker-padding: 10px;
@@ -10123,112 +10321,10 @@ function generateMarkers(totalWidth, scale) {
 }
 function TimeMarkers({ scale }) {
     const [ref, { width }] = useMeasure();
-    return react.exports.createElement(Container$2, { ref: ref }, generateMarkers(width, scale));
+    return react.exports.createElement(Container$3, { ref: ref }, generateMarkers(width, scale));
 }
 
-const mix = (min, max, progress) => -progress * min + progress * max + min;
-
-const progress = (min, max, value) => max - min === 0 ? 1 : (value - min) / (max - min);
-
-function fillOffset(offset, remaining) {
-    const min = offset[offset.length - 1];
-    for (let i = 1; i <= remaining; i++) {
-        const offsetProgress = progress(0, remaining, i);
-        offset.push(mix(min, 1, offsetProgress));
-    }
-}
-function defaultOffset(length) {
-    const offset = [0];
-    fillOffset(offset, length - 1);
-    return offset;
-}
-
-const ElementAnimationContainer = styled.ul `
-  padding-top: calc(var(--row-height) + 10px);
-  padding-left: 10px;
-`;
-const ValueAnimationContainer = styled.li `
-  display: flex;
-  position: relative;
-  height: var(--row-height);
-`;
-const ValueMarker = styled.div `
-  width: 10px;
-  height: 10px;
-  background: var(--white);
-  position: absolute;
-  top: 50%;
-  left: 0;
-  border-radius: 5px;
-  border: 3px solid var(--black);
-  z-index: 1;
-  cursor: pointer;
-`;
-const TransitionMarker = styled.div `
-  position: absolute;
-  top: calc(50% - 1px);
-  left: 0;
-  height: 2px;
-  background: var(--feint);
-  border-radius: 2px;
-`;
-const bufferTime = 1;
-function ValueKeyframes({ scale, animation, state }) {
-    const { elementId, valueName, keyframes, options } = animation;
-    let { delay = 0, duration = 0.3, easing, repeat, offset } = options;
-    const numKeyframes = keyframes.length;
-    offset !== null && offset !== void 0 ? offset : (offset = defaultOffset(numKeyframes));
-    const remainder = numKeyframes - offset.length;
-    remainder > 0 && fillOffset(offset, remainder);
-    const markers = [];
-    let prevTime;
-    for (let i = 0; i < numKeyframes; i++) {
-        // const value = keyframes[i]
-        const valueOffset = offset[i];
-        const time = delay + valueOffset * duration;
-        const keyframeIsSelected = isKeyframeSelected(state, elementId, valueName, i);
-        markers.push(react.exports.createElement(react.exports.Fragment, null,
-            prevTime !== undefined ? (react.exports.createElement(TransitionMarker, { style: {
-                    width: (time - prevTime) * scale,
-                    transform: `translateX(${(prevTime !== null && prevTime !== void 0 ? prevTime : 0) * scale}px)`,
-                    background: keyframeIsSelected
-                        ? "var(--strong-blue)"
-                        : "var(--feint)",
-                } })) : null,
-            react.exports.createElement(ValueMarker, { onClick: () => state.selectKeyframe({
-                    elementName: elementId,
-                    valueName,
-                    index: i,
-                }), style: {
-                    transform: `translateY(-50%) translateX(${time * scale}px) rotate(45deg)`,
-                    background: keyframeIsSelected
-                        ? "var(--strong-blue)"
-                        : "var(--white)",
-                } })));
-        prevTime = time;
-    }
-    return (react.exports.createElement(ValueAnimationContainer, { style: { width: (delay + duration + bufferTime) * scale } }, markers));
-}
-function Keyframes({ scale, animation, state }) {
-    const elementAnimations = [];
-    for (const elementName in animation) {
-        const valueAnimations = [];
-        for (const valueAnimation of animation[elementName]) {
-            valueAnimations.push(react.exports.createElement(ValueKeyframes, { key: valueAnimation.valueName, scale: scale, animation: valueAnimation, state: state }));
-        }
-        elementAnimations.push(react.exports.createElement(ElementAnimationContainer, { key: elementName }, valueAnimations));
-    }
-    return react.exports.createElement(react.exports.Fragment, null, elementAnimations);
-}
-function isKeyframeSelected(state, elementName, valueName, keyframeIndex) {
-    if (!state.selectedKeyframes)
-        return false;
-    return state.selectedKeyframes.some((keyframe) => keyframe.elementName === elementName &&
-        keyframe.valueName === valueName &&
-        keyframe.index === keyframeIndex);
-}
-
-const Container$1 = styled.div `
+const Container$2 = styled.div `
   display: flex;
   position: relative;
   flex-direction: column;
@@ -10236,12 +10332,12 @@ const Container$1 = styled.div `
 `;
 function Visualisation({ animation, state }) {
     const scale = 320; // 1 second = 320px
-    return (react.exports.createElement(Container$1, null,
+    return (react.exports.createElement(Container$2, null,
         react.exports.createElement(TimeMarkers, { scale: scale }),
         react.exports.createElement(Keyframes, { state: state, scale: scale, animation: animation })));
 }
 
-const Container = styled(motion.main) `
+const Container$1 = styled(motion.main) `
   flex: 1;
   display: flex;
   align-items: stretch;
@@ -10258,17 +10354,17 @@ const Content = styled.div `
 `;
 function Timeline({ state }) {
     let children = null;
-    console.log(state);
     if (state.selected) {
         const selectedAnimation = state.animations[state.selected];
         if (selectedAnimation) {
-            children = (react.exports.createElement(Container, { key: state.selected, initial: { opacity: 0 }, animate: { opacity: 1, transition: { duration: 0.3 } }, exit: { opacity: 0, transition: { duration: 0.1 } } },
+            children = (react.exports.createElement(Container$1, { key: state.selected },
                 react.exports.createElement(Content, null,
                     react.exports.createElement(Sidebar, { animation: selectedAnimation }),
-                    react.exports.createElement(Visualisation, { state: state, animation: selectedAnimation }))));
+                    react.exports.createElement(Visualisation, { state: state, animation: selectedAnimation }),
+                    react.exports.createElement(AnimatePresence, null, state.selectedKeyframes ? (react.exports.createElement(SelectedKeyframes, { selectedKeyframes: state.selectedKeyframes, animation: selectedAnimation })) : null))));
         }
     }
-    return react.exports.createElement(AnimatePresence, { exitBeforeEnter: true }, children);
+    return react.exports.createElement(react.exports.Fragment, null, children);
 }
 
 var Actions;
@@ -10286,6 +10382,8 @@ const reducer = (state, action) => {
     var _a;
     switch (action.type) {
         case Actions.Add: {
+            if (!state.isRecording)
+                return state;
             let firstAnimationName;
             const newAnimations = Object.assign({}, state.animations);
             for (const animationName in action.animations) {
@@ -10296,6 +10394,7 @@ const reducer = (state, action) => {
                     newAnimations[animationName] = animation;
                 }
             }
+            console.log(newAnimations);
             return Object.assign(Object.assign({}, state), { animations: newAnimations, selected: (_a = state.selected) !== null && _a !== void 0 ? _a : firstAnimationName });
         }
         case Actions.Clear: {
@@ -10308,7 +10407,7 @@ const reducer = (state, action) => {
             return Object.assign(Object.assign({}, state), { isRecording: false });
         }
         case Actions.SelectAnimation: {
-            return Object.assign(Object.assign({}, state), { selected: action.name });
+            return reducer(Object.assign(Object.assign({}, state), { selected: action.name }), { type: Actions.DeselectKeyframe });
         }
         case Actions.SelectKeyframe: {
             return Object.assign(Object.assign({}, state), { selectedKeyframes: [action.keyframe] });
@@ -10324,8 +10423,13 @@ function useIncomingMessages(dispatch, port) {
         if (!port)
             return;
         const listener = (message) => {
-            if (message.type === "animationstart") {
-                dispatch({ type: Actions.Add, animations: message.animations });
+            switch (message.type) {
+                case "animationstart": {
+                    return dispatch({ type: Actions.Add, animations: message.animations });
+                }
+                case "clear": {
+                    return dispatch({ type: Actions.Clear });
+                }
             }
         };
         port.onMessage.addListener(listener);
@@ -10344,58 +10448,80 @@ function useIsRecording(state, port) {
     }, [port, state.isRecording]);
 }
 
-function useEditorState(port) {
+function useEditorState(auth, port) {
     const [state, dispatch] = react.exports.useReducer(reducer, {
         animations: {},
         isRecording: false,
         hasRecorded: false,
+        auth,
     });
     useIsRecording(state, port);
     useIncomingMessages(dispatch, port);
     return Object.assign(Object.assign({}, state), { clear: () => dispatch({ type: Actions.Clear }), startRecording: () => dispatch({ type: Actions.StartRecording }), stopRecording: () => dispatch({ type: Actions.StopRecording }), selectAnimation: (name) => dispatch({ type: Actions.SelectAnimation, name }), selectKeyframe: (keyframe) => dispatch({ type: Actions.SelectKeyframe, keyframe }) });
 }
 
-/**
- * TODO
- * - Add inspect icon - .5
- * - Add timeline visualisation - 8
- * - Fix port reconnection - 1
- * - Add Github authentication - 4
- * =============================
- * - Show values when clicking on keyframe - 4
- * =============================
- * - Add transition button to each keyframe - 8
- * =============================
- * - Scrub animation - 8
- * - Pause/play/restart - 8
- * =============================
- * - Edit inspected values - 1
- * =============================
- * - Spring/glide support - 8
- * =============================
- * - Move keyframes - 8
- * =============================
- * - Delete keyframes - .5
- * =============================
- * - Add keyframes - 4
- * =============================
- * - Add new values to element - 1
- * =============================
- * - Zoom in/out timeline - 8
- * =============================
- * - Multi-select keyframes - 16
- * =============================
- * - Element-shared keyframes - 16
- */
-function Editor() {
-    const port = usePort();
-    const state = useEditorState(port);
-    return (react.exports.createElement(react.exports.Fragment, null,
-        react.exports.createElement(TabBar, { state: state }),
-        state.hasRecorded ? react.exports.createElement(Timeline, { state: state }) : react.exports.createElement(Instructions, null)));
+const Container = styled(motion.div) `
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  p,
+  a {
+    font-size: 16px;
+  }
+
+  a {
+    color: var(--blue);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+`;
+const LoginButton = styled(motion.button) `
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 16px;
+  padding: 15px 20px;
+  border-radius: 10px;
+  background: var(--strong-blue);
+  color: var(--white);
+  margin: 20px 0;
+`;
+const variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { type: "spring", duration: 0.8, bounce: 0 },
+    },
+};
+function LoginDialog({ state }) {
+    return (react.exports.createElement(Container, { initial: "hidden", animate: "visible", variants: { visible: { transition: { staggerChildren: 0.1 } } } },
+        react.exports.createElement(motion.p, { variants: variants }, "Motion Editor is exclusive for Motion One Pro members"),
+        react.exports.createElement(LoginButton, { onClick: () => chrome.tabs.create({ url: "https://motion.dev/login" }), variants: variants }, "Sign in with Github"),
+        react.exports.createElement(motion.p, { variants: variants },
+            "Or sign up for",
+            " ",
+            react.exports.createElement("a", { onClick: (e) => {
+                    e.preventDefault();
+                    chrome.tabs.create({ url: "https://motion.dev/sponsor" });
+                } }, "Motion One Pro"))));
 }
 
-const rootNode = document.getElementById("app");
-if (rootNode) {
-    reactDom.exports.render(react.exports.createElement(Editor, null), rootNode);
+function Editor({ auth = { isPro: true } }) {
+    const port = usePort();
+    const state = useEditorState(auth, port);
+    if (!auth.isPro) {
+        return react.exports.createElement(LoginDialog, { state: state });
+    }
+    return (react.exports.createElement(react.exports.Fragment, null,
+        react.exports.createElement(TabBar, { state: state }),
+        react.exports.createElement(AnimatePresence, { exitBeforeEnter: true }, state.hasRecorded ? (react.exports.createElement(Timeline, { key: "timeline", state: state })) : (react.exports.createElement(Instructions, { key: "instructions" })))));
 }
+
+chrome.storage.sync.get("auth", ({ auth }) => {
+    const rootNode = document.getElementById("app");
+    rootNode && reactDom.exports.render(react.exports.createElement(Editor, { auth: auth }), rootNode);
+});

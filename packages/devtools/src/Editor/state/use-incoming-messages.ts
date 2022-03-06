@@ -10,8 +10,13 @@ export function useIncomingMessages(
     if (!port) return
 
     const listener = (message: MotionMessage) => {
-      if (message.type === "animationstart") {
-        dispatch({ type: Actions.Add, animations: message.animations })
+      switch (message.type) {
+        case "animationstart": {
+          return dispatch({ type: Actions.Add, animations: message.animations })
+        }
+        case "clear": {
+          return dispatch({ type: Actions.Clear })
+        }
       }
     }
 

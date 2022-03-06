@@ -1,20 +1,21 @@
-import { MotionMessage } from "./types"
+import { MotionMessage, ClearAnimationsMessage } from "./types"
 
 const devToolsConnections = new Map<number, chrome.runtime.Port>()
 
 chrome.runtime.onConnect.addListener((port) => {
-  console.log("connected", port.name)
-
   switch (port.name) {
     case "client": {
       const listener = (message: MotionMessage, { sender }: any) => {
-        const port = devToolsConnections.get(sender.tab.id)
-
-        // TODO: Sender doesnt contain tab id
-        if (port) port.postMessage(message)
+        if (message.type === "requestTabId") {
+          port.postMessage({ type: "tabId", tabId: sender.tab.id })
+        } else {
+          const devToolsPort = devToolsConnections.get(sender.tab.id)
+          if (devToolsPort) devToolsPort.postMessage(message)
+        }
       }
 
       port.onMessage.addListener(listener)
+
       return
     }
     case "devtools-page": {
@@ -25,6 +26,19 @@ chrome.runtime.onConnect.addListener((port) => {
             return
           }
           case "isrecording": {
+            chrome.storage.sync.get(
+              "recordingTabs",
+              ({ recordingTabs = {} }) => {
+                if (message.isRecording) {
+                  recordingTabs[message.tabId] = true
+                } else {
+                  delete recordingTabs[message.tabId]
+                }
+
+                chrome.storage.sync.set({ recordingTabs })
+              }
+            )
+
             chrome.tabs.sendMessage(message.tabId, message)
             return
           }
@@ -43,13 +57,20 @@ chrome.runtime.onConnect.addListener((port) => {
   }
 })
 
-chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status == "complete" && tab.url && /^http/.test(tab.url)) {
+    const devToolsPort = devToolsConnections.get(tabId)
+
+    if (devToolsPort) {
+      const message: ClearAnimationsMessage = { type: "clear" }
+      devToolsPort.postMessage(message)
+    }
+
     loadClient(tabId)
   }
 })
 
-chrome.runtime.onMessage.addListener(function (request, sender) {
+chrome.runtime.onMessage.addListener((request, sender) => {
   if (!sender.tab) return
 
   const { id } = sender.tab
@@ -57,16 +78,20 @@ chrome.runtime.onMessage.addListener(function (request, sender) {
   if (typeof id !== "number") return
 
   const connection = devToolsConnections.get(id)
-
-  if (connection) {
-    console.log("sending from page to dev tools", request)
-    connection.postMessage(request)
-  }
+  connection?.postMessage(request)
 })
+
+chrome.runtime.onMessageExternal.addListener(
+  (request, sender, _sendResponse) => {
+    if (sender.url && sender.url.includes("motion.dev")) {
+      console.log(request)
+    }
+  }
+)
 
 function loadClient(tabId: number) {
   chrome.scripting.executeScript({
-    target: { tabId },
+    target: { tabId, allFrames: true },
     files: ["js/bridge.js"],
   } as any)
 }

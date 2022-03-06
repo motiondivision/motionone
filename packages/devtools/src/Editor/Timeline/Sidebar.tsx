@@ -7,16 +7,25 @@ interface Props {
   animation: AnimationMetadata
 }
 
-const Container = styled.nav`
+export const SidebarContainer = styled.section`
   flex: 0 0 var(--sidebar-width);
-  border-right: 1px solid var(--feint);
-  background: var(--background-semi);
-  backdrop-filter: blur(5px);
-  padding: calc(10px + var(--row-height)) 10px 10px;
+  background-color: transparent;
+  background-image: radial-gradient(
+    rgba(0, 0, 0, 0) 1px,
+    var(--background) 1px
+  );
+  background-size: 4px 4px;
+  backdrop-filter: blur(3px);
+  padding: calc(10px + var(--row-height)) 20px 20px;
   position: sticky;
   top: 0;
-  left: 0;
+  bottom: 0;
   z-index: 2;
+`
+
+const Container = styled(SidebarContainer)`
+  left: 0;
+  border-right: 1px solid var(--feint);
 
   li {
     height: var(--row-height);

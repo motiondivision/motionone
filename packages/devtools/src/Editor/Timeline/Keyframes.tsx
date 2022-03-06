@@ -2,6 +2,7 @@ import * as React from "react"
 import { AnimationMetadata, ValueAnimationMetadata } from "../../types"
 import { defaultOffset, fillOffset } from "@motionone/utils"
 import styled from "styled-components"
+import { motion } from "framer-motion"
 import { EditorState, EditorStateWithActions } from "../state/types"
 
 interface KeyframesProps {
@@ -17,8 +18,12 @@ interface ValueKeyframesProps {
 }
 
 const ElementAnimationContainer = styled.ul`
-  padding-top: calc(var(--row-height) + 10px);
+  padding-top: var(--row-height);
   padding-left: 10px;
+
+  &:first-child {
+    padding-top: calc(var(--row-height) + 10px);
+  }
 `
 
 const ValueAnimationContainer = styled.li`
@@ -27,10 +32,10 @@ const ValueAnimationContainer = styled.li`
   height: var(--row-height);
 `
 
-const ValueMarker = styled.div`
+export const ValueMarker = styled(motion.div)`
   width: 10px;
   height: 10px;
-  background: var(--white);
+  background-color: var(--white);
   position: absolute;
   top: 50%;
   left: 0;
@@ -40,12 +45,12 @@ const ValueMarker = styled.div`
   cursor: pointer;
 `
 
-const TransitionMarker = styled.div`
+const TransitionMarker = styled(motion.div)`
   position: absolute;
   top: calc(50% - 1px);
   left: 0;
   height: 2px;
-  background: var(--feint);
+  background-color: var(--feint);
   border-radius: 2px;
 `
 
@@ -78,12 +83,16 @@ function ValueKeyframes({ scale, animation, state }: ValueKeyframesProps) {
       <>
         {prevTime !== undefined ? (
           <TransitionMarker
+            initial={false}
+            animate={{
+              backgroundColor: keyframeIsSelected
+                ? "var(--strong-blue)"
+                : "var(--feint)",
+            }}
+            transition={{ duration: 0.1 }}
             style={{
               width: (time - prevTime) * scale,
               transform: `translateX(${(prevTime ?? 0) * scale}px)`,
-              background: keyframeIsSelected
-                ? "var(--strong-blue)"
-                : "var(--feint)",
             }}
           />
         ) : null}
@@ -95,13 +104,17 @@ function ValueKeyframes({ scale, animation, state }: ValueKeyframesProps) {
               index: i,
             })
           }
+          initial={false}
+          animate={{
+            backgroundColor: keyframeIsSelected
+              ? "var(--strong-blue)"
+              : "var(--white)",
+          }}
+          transition={{ duration: 0.1 }}
           style={{
             transform: `translateY(-50%) translateX(${
               time * scale
             }px) rotate(45deg)`,
-            background: keyframeIsSelected
-              ? "var(--strong-blue)"
-              : "var(--white)",
           }}
         />
       </>

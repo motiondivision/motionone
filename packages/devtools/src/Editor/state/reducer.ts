@@ -4,6 +4,8 @@ import { Actions, EditorAction, EditorState } from "./types"
 export const reducer: Reducer<EditorState, EditorAction> = (state, action) => {
   switch (action.type) {
     case Actions.Add: {
+      if (!state.isRecording) return state
+
       let firstAnimationName: string | undefined
 
       const newAnimations = { ...state.animations }
@@ -19,7 +21,7 @@ export const reducer: Reducer<EditorState, EditorAction> = (state, action) => {
           // Copy into existing animation
         }
       }
-
+      console.log(newAnimations)
       return {
         ...state,
         animations: newAnimations,
@@ -50,7 +52,10 @@ export const reducer: Reducer<EditorState, EditorAction> = (state, action) => {
       }
     }
     case Actions.SelectAnimation: {
-      return { ...state, selected: action.name }
+      return reducer(
+        { ...state, selected: action.name },
+        { type: Actions.DeselectKeyframe }
+      )
     }
     case Actions.SelectKeyframe: {
       return {

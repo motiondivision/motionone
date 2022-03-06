@@ -2,8 +2,9 @@ import * as React from "react"
 import { EditorStateWithActions } from "../state/types"
 import styled from "styled-components"
 import { Sidebar } from "./Sidebar"
+import { SelectedKeyframes } from "./SelectedKeyframes"
 import { Visualisation } from "./Visualisation"
-import { motion, AnimatePresence } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 
 const Container = styled(motion.main)`
   flex: 1;
@@ -24,26 +25,29 @@ const Content = styled.div`
 
 export function Timeline({ state }: { state: EditorStateWithActions }) {
   let children: any = null
-  console.log(state)
+
   if (state.selected) {
     const selectedAnimation = state.animations[state.selected]
 
     if (selectedAnimation) {
       children = (
-        <Container
-          key={state.selected}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, transition: { duration: 0.3 } }}
-          exit={{ opacity: 0, transition: { duration: 0.1 } }}
-        >
+        <Container key={state.selected}>
           <Content>
             <Sidebar animation={selectedAnimation} />
             <Visualisation state={state} animation={selectedAnimation} />
+            <AnimatePresence>
+              {state.selectedKeyframes ? (
+                <SelectedKeyframes
+                  selectedKeyframes={state.selectedKeyframes}
+                  animation={selectedAnimation}
+                />
+              ) : null}
+            </AnimatePresence>
           </Content>
         </Container>
       )
     }
   }
 
-  return <AnimatePresence exitBeforeEnter>{children}</AnimatePresence>
+  return <>{children}</>
 }

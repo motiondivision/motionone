@@ -37,3 +37,6 @@ yarn-error.log*
 
 tsconfig.tsbuildinfo
 app/js
+
+# Editor bundle
+Archive.zip

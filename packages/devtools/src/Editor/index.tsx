@@ -4,15 +4,14 @@ import { Instructions } from "./Instructions"
 import { TabBar } from "./TabBar/index"
 import { Timeline } from "./Timeline/index"
 import { useEditorState } from "./state/use-editor-state"
+import { AnimatePresence } from "framer-motion"
+import { EditorAuth } from "../types"
+import { LoginDialog } from "./LoginDialog"
 
 /**
  * TODO
- * - Add inspect icon - .5
- * - Add timeline visualisation - 8
  * - Fix port reconnection - 1
  * - Add Github authentication - 4
- * =============================
- * - Show values when clicking on keyframe - 4
  * =============================
  * - Add transition button to each keyframe - 8
  * =============================
@@ -38,14 +37,28 @@ import { useEditorState } from "./state/use-editor-state"
  * - Element-shared keyframes - 16
  */
 
-export function Editor() {
+interface Props {
+  auth: EditorAuth
+}
+
+export function Editor({ auth = { isPro: true } }: Props) {
   const port = usePort()
-  const state = useEditorState(port)
+  const state = useEditorState(auth, port)
+
+  if (!auth.isPro) {
+    return <LoginDialog state={state} />
+  }
 
   return (
     <>
       <TabBar state={state} />
-      {state.hasRecorded ? <Timeline state={state} /> : <Instructions />}
+      <AnimatePresence exitBeforeEnter>
+        {state.hasRecorded ? (
+          <Timeline key="timeline" state={state} />
+        ) : (
+          <Instructions key="instructions" />
+        )}
+      </AnimatePresence>
     </>
   )
 }

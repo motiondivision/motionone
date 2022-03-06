@@ -1,4 +1,4 @@
-import type { AnimationsMetadata } from "../../types"
+import type { AnimationsMetadata, EditorAuth } from "../../types"
 
 export enum Actions {
   Clear,
@@ -17,6 +17,7 @@ export interface SelectedKeyframeMetadata {
 }
 
 export interface EditorState {
+  auth: EditorAuth
   animations: AnimationsMetadata
   isRecording: boolean
   hasRecorded: boolean

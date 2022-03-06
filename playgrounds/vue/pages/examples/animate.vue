@@ -48,7 +48,7 @@ export default {
   setup() {
     onMounted(() => {
       setTimeout(() => {
-        const animation = animate((p) => console.log("p", p), {
+        const animation = animate((p) => {}, {
           easing: spring({ stiffness: 300, damping: 10 }),
         })
       }, 3000)
