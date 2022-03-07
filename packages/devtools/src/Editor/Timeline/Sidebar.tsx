@@ -9,6 +9,7 @@ interface Props {
 
 export const SidebarContainer = styled.section`
   flex: 0 0 var(--sidebar-width);
+  width: var(--sidebar-width);
   background-color: transparent;
   background-image: radial-gradient(
     rgba(0, 0, 0, 0) 1px,
@@ -20,7 +21,7 @@ export const SidebarContainer = styled.section`
   position: sticky;
   top: 0;
   bottom: 0;
-  z-index: 2;
+  z-index: 3;
 `
 
 const Container = styled(SidebarContainer)`

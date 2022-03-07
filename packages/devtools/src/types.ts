@@ -46,12 +46,17 @@ export interface ClearAnimationsMessage {
   type: "clear"
 }
 
+export interface ClientReadyMessage {
+  type: "clientready"
+}
+
 export type MotionMessage =
   | AnimationStartMessage
   | IsRecordingMessage
   | DevToolsInitMessage
   | LoginMessage
   | ClearAnimationsMessage
+  | ClientReadyMessage
 
 export type EditorAuth = {
   isPro: boolean

@@ -1020,12 +1020,12 @@ const stepsOrder = [
     "render",
     "postRender",
 ];
-const steps = stepsOrder.reduce((acc, key) => {
+const steps$1 = stepsOrder.reduce((acc, key) => {
     acc[key] = createRenderStep(() => (runNextFrame = true));
     return acc;
 }, {});
 const sync = stepsOrder.reduce((acc, key) => {
-    const step = steps[key];
+    const step = steps$1[key];
     acc[key] = (process, keepAlive = false, immediate = false) => {
         if (!runNextFrame)
             startLoop();
@@ -1034,14 +1034,14 @@ const sync = stepsOrder.reduce((acc, key) => {
     return acc;
 }, {});
 const cancelSync = stepsOrder.reduce((acc, key) => {
-    acc[key] = steps[key].cancel;
+    acc[key] = steps$1[key].cancel;
     return acc;
 }, {});
 const flushSync = stepsOrder.reduce((acc, key) => {
-    acc[key] = () => steps[key].process(frame);
+    acc[key] = () => steps$1[key].process(frame);
     return acc;
 }, {});
-const processStep = (stepId) => steps[stepId].process(frame);
+const processStep = (stepId) => steps$1[stepId].process(frame);
 const processFrame = (timestamp) => {
     runNextFrame = false;
     frame.delta = useDefaultElapsed
@@ -1064,7 +1064,7 @@ const startLoop = () => {
 };
 const getFrameData = () => frame;
 
-const clamp$1 = (min, max, v) => Math.min(Math.max(v, min), max);
+const clamp$2 = (min, max, v) => Math.min(Math.max(v, min), max);
 
 const safeMin = 0.001;
 const minDuration = 0.01;
@@ -1076,8 +1076,8 @@ function findSpring({ duration = 800, bounce = 0.25, velocity = 0, mass = 1, }) 
     let derivative;
     warning(duration <= maxDuration * 1000);
     let dampingRatio = 1 - bounce;
-    dampingRatio = clamp$1(minDamping, maxDamping, dampingRatio);
-    duration = clamp$1(minDuration, maxDuration, duration / 1000);
+    dampingRatio = clamp$2(minDamping, maxDamping, dampingRatio);
+    duration = clamp$2(minDuration, maxDuration, duration / 1000);
     if (dampingRatio < 1) {
         envelope = (undampedFreq) => {
             const exponentialDecay = undampedFreq * dampingRatio;
@@ -1263,7 +1263,7 @@ const progress$1 = (from, to, value) => {
 
 const mix$1 = (from, to, progress) => -progress * from + progress * to + from;
 
-const clamp = (min, max) => (v) => Math.max(Math.min(v, max), min);
+const clamp$1 = (min, max) => (v) => Math.max(Math.min(v, max), min);
 const sanitize = (v) => (v % 1 ? Number(v.toFixed(5)) : v);
 const floatRegex = /(-)?([\d]*\.?[\d])+/g;
 const colorRegex = /(#[0-9a-f]{6}|#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?[\d\.]+%?[,\s]+){2,3}\s*\/*\s*[\d\.]+%?\))/gi;
@@ -1277,7 +1277,7 @@ const number = {
     parse: parseFloat,
     transform: (v) => v,
 };
-const alpha = Object.assign(Object.assign({}, number), { transform: clamp(0, 1) });
+const alpha = Object.assign(Object.assign({}, number), { transform: clamp$1(0, 1) });
 const scale = Object.assign(Object.assign({}, number), { default: 1 });
 
 const createUnitType = (unit) => ({
@@ -1324,7 +1324,7 @@ const hsla = {
     },
 };
 
-const clampRgbUnit = clamp(0, 255);
+const clampRgbUnit = clamp$1(0, 255);
 const rgbUnit = Object.assign(Object.assign({}, number), { transform: (v) => Math.round(clampRgbUnit(v)) });
 const rgba = {
     test: isColorString('rgb', 'red'),
@@ -1692,7 +1692,7 @@ function interpolate(input, output, { clamp: isClamp = true, ease, mixer } = {})
         ? fastInterpolate(input, mixers)
         : slowInterpolate(input, mixers);
     return isClamp
-        ? (v) => interpolator(clamp$1(input[0], input[inputLength - 1], v))
+        ? (v) => interpolator(clamp$2(input[0], input[inputLength - 1], v))
         : interpolator;
 }
 
@@ -1997,25 +1997,25 @@ function distance(a, b) {
 const a = (a1, a2) => 1.0 - 3.0 * a2 + 3.0 * a1;
 const b$2 = (a1, a2) => 3.0 * a2 - 6.0 * a1;
 const c$1 = (a1) => 3.0 * a1;
-const calcBezier = (t, a1, a2) => ((a(a1, a2) * t + b$2(a1, a2)) * t + c$1(a1)) * t;
+const calcBezier$1 = (t, a1, a2) => ((a(a1, a2) * t + b$2(a1, a2)) * t + c$1(a1)) * t;
 const getSlope = (t, a1, a2) => 3.0 * a(a1, a2) * t * t + 2.0 * b$2(a1, a2) * t + c$1(a1);
-const subdivisionPrecision = 0.0000001;
-const subdivisionMaxIterations = 10;
-function binarySubdivide(aX, aA, aB, mX1, mX2) {
+const subdivisionPrecision$1 = 0.0000001;
+const subdivisionMaxIterations$1 = 10;
+function binarySubdivide$1(aX, aA, aB, mX1, mX2) {
     let currentX;
     let currentT;
     let i = 0;
     do {
         currentT = aA + (aB - aA) / 2.0;
-        currentX = calcBezier(currentT, mX1, mX2) - aX;
+        currentX = calcBezier$1(currentT, mX1, mX2) - aX;
         if (currentX > 0.0) {
             aB = currentT;
         }
         else {
             aA = currentT;
         }
-    } while (Math.abs(currentX) > subdivisionPrecision &&
-        ++i < subdivisionMaxIterations);
+    } while (Math.abs(currentX) > subdivisionPrecision$1 &&
+        ++i < subdivisionMaxIterations$1);
     return currentT;
 }
 const newtonIterations = 8;
@@ -2026,19 +2026,19 @@ function newtonRaphsonIterate(aX, aGuessT, mX1, mX2) {
         if (currentSlope === 0.0) {
             return aGuessT;
         }
-        const currentX = calcBezier(aGuessT, mX1, mX2) - aX;
+        const currentX = calcBezier$1(aGuessT, mX1, mX2) - aX;
         aGuessT -= currentX / currentSlope;
     }
     return aGuessT;
 }
 const kSplineTableSize = 11;
 const kSampleStepSize = 1.0 / (kSplineTableSize - 1.0);
-function cubicBezier(mX1, mY1, mX2, mY2) {
+function cubicBezier$1(mX1, mY1, mX2, mY2) {
     if (mX1 === mY1 && mX2 === mY2)
         return linear;
     const sampleValues = new Float32Array(kSplineTableSize);
     for (let i = 0; i < kSplineTableSize; ++i) {
-        sampleValues[i] = calcBezier(i * kSampleStepSize, mX1, mX2);
+        sampleValues[i] = calcBezier$1(i * kSampleStepSize, mX1, mX2);
     }
     function getTForX(aX) {
         let intervalStart = 0.0;
@@ -2059,10 +2059,10 @@ function cubicBezier(mX1, mY1, mX2, mY2) {
             return guessForT;
         }
         else {
-            return binarySubdivide(aX, intervalStart, intervalStart + kSampleStepSize, mX1, mX2);
+            return binarySubdivide$1(aX, intervalStart, intervalStart + kSampleStepSize, mX1, mX2);
         }
     }
-    return (t) => t === 0 || t === 1 ? t : calcBezier(getTForX(t), mY1, mY2);
+    return (t) => t === 0 || t === 1 ? t : calcBezier$1(getTForX(t), mY1, mY2);
 }
 
 function addUniqueItem(arr, item) {
@@ -2449,7 +2449,7 @@ var easingDefinitionToFunction = function (definition) {
         // If cubic bezier definition, create bezier curve
         invariant(definition.length === 4);
         var _a = __read(definition, 4), x1 = _a[0], y1 = _a[1], x2 = _a[2], y2 = _a[3];
-        return cubicBezier(x1, y1, x2, y2);
+        return cubicBezier$1(x1, y1, x2, y2);
     }
     else if (typeof definition === "string") {
         return easingLookup[definition];
@@ -6902,7 +6902,7 @@ function calcOrigin(source, target) {
     else if (sourceLength > targetLength) {
         origin = progress$1(source.min, source.max - targetLength, target.min);
     }
-    return clamp$1(0, 1, origin);
+    return clamp$2(0, 1, origin);
 }
 /**
  * Rebase the calculated viewport constraints relative to the layout.min point.
@@ -9759,7 +9759,7 @@ function RecordButton({ isRecording, startRecording, stopRecording, }) {
 }
 
 const Container$7 = styled.section `
-  flex: 0 0 42px;
+  flex: 0 0 var(--tab-bar-height);
   border-bottom: 1px solid var(--feint);
   display: flex;
 `;
@@ -9832,6 +9832,7 @@ function ElementDetails({ name }) {
 
 const SidebarContainer = styled.section `
   flex: 0 0 var(--sidebar-width);
+  width: var(--sidebar-width);
   background-color: transparent;
   background-image: radial-gradient(
     rgba(0, 0, 0, 0) 1px,
@@ -9843,7 +9844,7 @@ const SidebarContainer = styled.section `
   position: sticky;
   top: 0;
   bottom: 0;
-  z-index: 2;
+  z-index: 3;
 `;
 const Container$5 = styled(SidebarContainer) `
   left: 0;
@@ -9890,7 +9891,14 @@ function Sidebar({ animation }) {
     return react.exports.createElement(Container$5, null, children);
 }
 
+const clamp = (min, max, v) => Math.min(Math.max(v, min), max);
+
+const isNumber = (value) => typeof value === "number";
+const isEasingList = (easing) => Array.isArray(easing) && !isNumber(easing[0]);
+
 const mix = (min, max, progress) => -progress * min + progress * max + min;
+
+const noopReturn = (v) => v;
 
 const progress = (min, max, value) => max - min === 0 ? 1 : (value - min) / (max - min);
 
@@ -9921,8 +9929,8 @@ const ValueAnimationContainer = styled.li `
   height: var(--row-height);
 `;
 const ValueMarker = styled(motion.div) `
-  width: 10px;
-  height: 10px;
+  width: 16px;
+  height: 16px;
   background-color: var(--white);
   position: absolute;
   top: 50%;
@@ -9940,10 +9948,44 @@ const TransitionMarker = styled(motion.div) `
   background-color: var(--feint);
   border-radius: 2px;
 `;
+const RepeatContainer = styled.div `
+  width: 200px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+`;
+const GradientMask = styled.div `
+  background: linear-gradient(
+    to left,
+    var(--background),
+    var(--background-transparent)
+  );
+  position: absolute;
+  inset: 0;
+`;
+const RepeatCount = styled.code `
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50px;
+  transform: translateY(-50%);
+  font-weight: bold;
+  font-size: 12px;
+  border-radius: 2px;
+  padding: 2px 5px;
+  background: var(--feint-solid);
+  color: rgba(255, 255, 255, 0.5);
+`;
 const bufferTime = 1;
+function RepeatMarker({ scale, time, repeat }) {
+    return (react.exports.createElement(RepeatContainer, { style: { transform: `translateX(${time * scale}px)` } },
+        react.exports.createElement(TransitionMarker, { style: { width: "100%" } }),
+        react.exports.createElement(GradientMask, null),
+        react.exports.createElement(RepeatCount, null, `x ${repeat}`)));
+}
 function ValueKeyframes({ scale, animation, state }) {
     const { elementId, valueName, keyframes, options } = animation;
-    let { delay = 0, duration = 0.3, easing, repeat, offset } = options;
+    let { delay = 0, duration = 0.3, offset, repeat } = options;
     const numKeyframes = keyframes.length;
     offset !== null && offset !== void 0 ? offset : (offset = defaultOffset(numKeyframes));
     const remainder = numKeyframes - offset.length;
@@ -9977,7 +10019,9 @@ function ValueKeyframes({ scale, animation, state }) {
                 } })));
         prevTime = time;
     }
-    return (react.exports.createElement(ValueAnimationContainer, { style: { width: (delay + duration + bufferTime) * scale } }, markers));
+    return (react.exports.createElement(ValueAnimationContainer, { style: { width: (delay + duration + bufferTime) * scale } },
+        markers,
+        repeat ? (react.exports.createElement(RepeatMarker, { repeat: repeat, time: prevTime, scale: scale })) : null));
 }
 function Keyframes({ scale, animation, state }) {
     const elementAnimations = [];
@@ -9998,12 +10042,113 @@ function isKeyframeSelected(state, elementName, valueName, keyframeIndex) {
         keyframe.index === keyframeIndex);
 }
 
+/*
+  Bezier function generator
+
+  This has been modified from Gaëtan Renaudeau's BezierEasing
+  https://github.com/gre/bezier-easing/blob/master/src/index.js
+  https://github.com/gre/bezier-easing/blob/master/LICENSE
+  
+  I've removed the newtonRaphsonIterate algo because in benchmarking it
+  wasn't noticiably faster than binarySubdivision, indeed removing it
+  usually improved times, depending on the curve.
+
+  I also removed the lookup table, as for the added bundle size and loop we're
+  only cutting ~4 or so subdivision iterations. I bumped the max iterations up
+  to 12 to compensate and this still tended to be faster for no perceivable
+  loss in accuracy.
+
+  Usage
+    const easeOut = cubicBezier(.17,.67,.83,.67);
+    const x = easeOut(0.5); // returns 0.627...
+*/
+// Returns x(t) given t, x1, and x2, or y(t) given t, y1, and y2.
+const calcBezier = (t, a1, a2) => (((1.0 - 3.0 * a2 + 3.0 * a1) * t + (3.0 * a2 - 6.0 * a1)) * t + 3.0 * a1) * t;
+const subdivisionPrecision = 0.0000001;
+const subdivisionMaxIterations = 12;
+function binarySubdivide(x, lowerBound, upperBound, mX1, mX2) {
+    let currentX;
+    let currentT;
+    let i = 0;
+    do {
+        currentT = lowerBound + (upperBound - lowerBound) / 2.0;
+        currentX = calcBezier(currentT, mX1, mX2) - x;
+        if (currentX > 0.0) {
+            upperBound = currentT;
+        }
+        else {
+            lowerBound = currentT;
+        }
+    } while (Math.abs(currentX) > subdivisionPrecision &&
+        ++i < subdivisionMaxIterations);
+    return currentT;
+}
+function cubicBezier(mX1, mY1, mX2, mY2) {
+    // If this is a linear gradient, return linear easing
+    if (mX1 === mY1 && mX2 === mY2)
+        return noopReturn;
+    const getTForX = (aX) => binarySubdivide(aX, 0, 1, mX1, mX2);
+    // If animation is at start/end, return t without easing
+    return (t) => t === 0 || t === 1 ? t : calcBezier(getTForX(t), mY1, mY2);
+}
+
+const steps = (steps, direction = "end") => (progress) => {
+    progress =
+        direction === "end"
+            ? Math.min(progress, 0.999)
+            : Math.max(progress, 0.001);
+    const expanded = progress * steps;
+    const rounded = direction === "end" ? Math.floor(expanded) : Math.ceil(expanded);
+    return clamp(0, 1, rounded / steps);
+};
+
+const namedEasings = {
+    ease: cubicBezier(0.25, 0.1, 0.25, 1.0),
+    "ease-in": cubicBezier(0.42, 0.0, 1.0, 1.0),
+    "ease-in-out": cubicBezier(0.42, 0.0, 0.58, 1.0),
+    "ease-out": cubicBezier(0.0, 0.0, 0.58, 1.0),
+};
+const functionArgsRegex = /\((.*?)\)/;
+function getEasingFunction(definition) {
+    // If already an easing function, return
+    if (typeof definition === "function")
+        return definition;
+    // If an easing curve definition, return bezier function
+    if (Array.isArray(definition))
+        return cubicBezier(...definition);
+    // If we have a predefined easing function, return
+    if (namedEasings[definition])
+        return namedEasings[definition];
+    // If this is a steps function, attempt to create easing curve
+    if (definition.startsWith("steps")) {
+        const args = functionArgsRegex.exec(definition);
+        if (args) {
+            const argsArray = args[1].split(",");
+            return steps(parseFloat(argsArray[0]), argsArray[1].trim());
+        }
+    }
+    return noopReturn;
+}
+
+function EasingPreview({ easing, segments = 100, style }) {
+    const easingFunction = getEasingFunction(easing);
+    let d = "M0,100 ";
+    for (let i = 0; i < segments; i++) {
+        d += `L${i + 1},${easingFunction(1 - i / 100) * 100} `;
+    }
+    return (react.exports.createElement("svg", { viewBox: "-10 -10 120 120" },
+        react.exports.createElement("path", { d: d, style: Object.assign({ fill: "none", stroke: "var(--white)", strokeWidth: 2 }, style) })));
+}
+
 const Container$4 = styled(SidebarContainer) `
   right: 0;
   border-left: 1px solid var(--feint);
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 20px;
+  position: absolute;
+  top: var(--tab-bar-height);
+  width: var(--sidebar-width);
 
   h2 {
     margin-bottom: 8px;
@@ -10024,6 +10169,10 @@ const Container$4 = styled(SidebarContainer) `
     transform: translateY(3px) rotate(45deg);
   }
 `;
+const EasingContainer = styled.div `
+  border: 1px solid var(--feint-solid);
+  border-radius: 5px;
+`;
 function Header({ children }) {
     return (react.exports.createElement("h2", null,
         react.exports.createElement(ValueMarker, { style: { background: "var(--strong-blue)" } }),
@@ -10038,14 +10187,24 @@ function SelectedKeyframes({ selectedKeyframes, animation }) {
         return null;
     const { keyframes, options } = valueAnimation;
     const { easing } = options;
-    const easingString = Array.isArray(easing) ? easing[index - 1] : easing;
+    let keyframeEasing;
+    let easingString;
+    if (index && easing) {
+        keyframeEasing = isEasingList(easing) ? easing[index - 1] : easing;
+        easingString = Array.isArray(keyframeEasing)
+            ? cubicBezierAsString(keyframeEasing)
+            : keyframeEasing;
+    }
     return (react.exports.createElement(Container$4, { as: motion.div, initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 }, transition: { duration: 0.2 } },
         react.exports.createElement(Header, null, "Value"),
         react.exports.createElement("code", null, keyframes[index]),
         easingString ? (react.exports.createElement(react.exports.Fragment, null,
             react.exports.createElement(Header, null, "Easing"),
-            react.exports.createElement("code", null, easing))) : null));
+            react.exports.createElement("code", null, easingString),
+            react.exports.createElement(EasingContainer, null,
+                react.exports.createElement(EasingPreview, { easing: easing })))) : null));
 }
+const cubicBezierAsString = ([a, b, c, d]) => `cubic-bezier(${a}, ${b}, ${c}, ${d})`;
 
 /**
  * Returns a function, that, as long as it continues to be invoked, will not
@@ -10292,12 +10451,13 @@ const Container$3 = styled.div `
   padding-left: calc(var(--sidebar-width) + 40px);
   flex: 0 0 var(--row-height);
   background-color: var(--feint);
+  backdrop-filter: brightness(50%) blur(3px);
   position: sticky;
   top: 0;
   display: flex;
   align-items: center;
   overflow: hidden;
-  z-index: 1;
+  z-index: 2;
 `;
 const Marker = styled.div `
   --marker-padding: 10px;
@@ -10497,7 +10657,7 @@ const variants = {
         transition: { type: "spring", duration: 0.8, bounce: 0 },
     },
 };
-function LoginDialog({ state }) {
+function LoginDialog(_props) {
     return (react.exports.createElement(Container, { initial: "hidden", animate: "visible", variants: { visible: { transition: { staggerChildren: 0.1 } } } },
         react.exports.createElement(motion.p, { variants: variants }, "Motion Editor is exclusive for Motion One Pro members"),
         react.exports.createElement(LoginButton, { onClick: () => chrome.tabs.create({ url: "https://motion.dev/login" }), variants: variants }, "Sign in with Github"),

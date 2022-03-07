@@ -6,7 +6,7 @@ chrome.runtime.onConnect.addListener((port) => {
   switch (port.name) {
     case "client": {
       const listener = (message: MotionMessage, { sender }: any) => {
-        if (message.type === "requestTabId") {
+        if (message.type === "clientready") {
           port.postMessage({ type: "tabId", tabId: sender.tab.id })
         } else {
           const devToolsPort = devToolsConnections.get(sender.tab.id)

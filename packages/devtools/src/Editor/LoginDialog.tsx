@@ -47,7 +47,7 @@ const variants = {
   },
 }
 
-export function LoginDialog({ state }: Props) {
+export function LoginDialog(_props: Props) {
   return (
     <Container
       initial="hidden"

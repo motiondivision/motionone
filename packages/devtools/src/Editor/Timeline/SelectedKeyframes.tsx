@@ -5,6 +5,9 @@ import { SelectedKeyframeMetadata } from "../state/types"
 import { SidebarContainer } from "./Sidebar"
 import { AnimationMetadata } from "../../types"
 import { ValueMarker } from "./Keyframes"
+import { isEasingList } from "@motionone/utils"
+import { EasingPreview } from "./EasingPreview"
+import { Easing } from "@motionone/types"
 
 interface Props {
   animation: AnimationMetadata
@@ -21,6 +24,9 @@ const Container = styled(SidebarContainer)`
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 20px;
+  position: absolute;
+  top: var(--tab-bar-height);
+  width: var(--sidebar-width);
 
   h2 {
     margin-bottom: 8px;
@@ -40,6 +46,11 @@ const Container = styled(SidebarContainer)`
     background-color: var(--strong-blue);
     transform: translateY(3px) rotate(45deg);
   }
+`
+
+const EasingContainer = styled.div`
+  border: 1px solid var(--feint-solid);
+  border-radius: 5px;
 `
 
 function Header({ children }: HeaderProps) {
@@ -64,7 +75,16 @@ export function SelectedKeyframes({ selectedKeyframes, animation }: Props) {
 
   const { keyframes, options } = valueAnimation
   const { easing } = options
-  const easingString = Array.isArray(easing) ? easing[index - 1] : easing
+  let keyframeEasing: Easing
+  let easingString: string | undefined
+
+  if (index && easing) {
+    keyframeEasing = isEasingList(easing) ? easing[index - 1] : easing
+
+    easingString = Array.isArray(keyframeEasing)
+      ? cubicBezierAsString(keyframeEasing)
+      : keyframeEasing
+  }
 
   return (
     <Container
@@ -79,9 +99,15 @@ export function SelectedKeyframes({ selectedKeyframes, animation }: Props) {
       {easingString ? (
         <>
           <Header>Easing</Header>
-          <code>{easing}</code>
+          <code>{easingString}</code>
+          <EasingContainer>
+            <EasingPreview easing={easing} />
+          </EasingContainer>
         </>
       ) : null}
     </Container>
   )
 }
+
+const cubicBezierAsString = ([a, b, c, d]: [number, number, number, number]) =>
+  `cubic-bezier(${a}, ${b}, ${c}, ${d})`

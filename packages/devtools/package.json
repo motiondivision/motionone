@@ -9,7 +9,9 @@
     "dev": "concurrently -c blue,red -n tsc,rollup --kill-others \"tsc --watch -p . --preserveWatchOutput\" \"rollup --c --watch --no-watch.clearScreen\""
   },
   "devDependencies": {
+    "@motionone/animation": "^10.6.0",
     "@motionone/dom": "^10.6.0",
+    "@motionone/easing": "^10.6.0",
     "@motionone/types": "^10.6.0",
     "@motionone/utils": "^10.6.0",
     "@rollup/plugin-commonjs": "^21.0.1",

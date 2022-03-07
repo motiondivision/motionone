@@ -12,8 +12,7 @@ import { LoginDialog } from "./LoginDialog"
  * TODO
  * - Fix port reconnection - 1
  * - Add Github authentication - 4
- * =============================
- * - Add transition button to each keyframe - 8
+ * - Adding easing visualization - 4
  * =============================
  * - Scrub animation - 8
  * - Pause/play/restart - 8

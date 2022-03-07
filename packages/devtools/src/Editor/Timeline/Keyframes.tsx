@@ -17,6 +17,12 @@ interface ValueKeyframesProps {
   state: EditorStateWithActions
 }
 
+interface RepeatProps {
+  scale: number
+  time: number
+  repeat: number
+}
+
 const ElementAnimationContainer = styled.ul`
   padding-top: var(--row-height);
   padding-left: 10px;
@@ -33,8 +39,8 @@ const ValueAnimationContainer = styled.li`
 `
 
 export const ValueMarker = styled(motion.div)`
-  width: 10px;
-  height: 10px;
+  width: 16px;
+  height: 16px;
   background-color: var(--white);
   position: absolute;
   top: 50%;
@@ -54,11 +60,52 @@ const TransitionMarker = styled(motion.div)`
   border-radius: 2px;
 `
 
+const RepeatContainer = styled.div`
+  width: 200px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+`
+
+const GradientMask = styled.div`
+  background: linear-gradient(
+    to left,
+    var(--background),
+    var(--background-transparent)
+  );
+  position: absolute;
+  inset: 0;
+`
+
+const RepeatCount = styled.code`
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50px;
+  transform: translateY(-50%);
+  font-weight: bold;
+  font-size: 12px;
+  border-radius: 2px;
+  padding: 2px 5px;
+  background: var(--feint-solid);
+  color: rgba(255, 255, 255, 0.5);
+`
+
 const bufferTime = 1
+
+function RepeatMarker({ scale, time, repeat }: RepeatProps) {
+  return (
+    <RepeatContainer style={{ transform: `translateX(${time * scale}px)` }}>
+      <TransitionMarker style={{ width: "100%" }} />
+      <GradientMask />
+      <RepeatCount>{`x ${repeat}`}</RepeatCount>
+    </RepeatContainer>
+  )
+}
 
 function ValueKeyframes({ scale, animation, state }: ValueKeyframesProps) {
   const { elementId, valueName, keyframes, options } = animation
-  let { delay = 0, duration = 0.3, easing, repeat, offset } = options
+  let { delay = 0, duration = 0.3, offset, repeat } = options
 
   const numKeyframes = keyframes.length
   offset ??= defaultOffset(numKeyframes)
@@ -128,6 +175,9 @@ function ValueKeyframes({ scale, animation, state }: ValueKeyframesProps) {
       style={{ width: (delay + duration + bufferTime) * scale }}
     >
       {markers}
+      {repeat ? (
+        <RepeatMarker repeat={repeat} time={prevTime} scale={scale} />
+      ) : null}
     </ValueAnimationContainer>
   )
 }

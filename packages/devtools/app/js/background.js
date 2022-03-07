@@ -3,7 +3,7 @@ chrome.runtime.onConnect.addListener((port) => {
     switch (port.name) {
         case "client": {
             const listener = (message, { sender }) => {
-                if (message.type === "requestTabId") {
+                if (message.type === "clientready") {
                     port.postMessage({ type: "tabId", tabId: sender.tab.id });
                 }
                 else {

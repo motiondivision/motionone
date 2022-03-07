@@ -16,5 +16,6 @@ export const isCubicBezier = (
   easing: Easing | Easing[]
 ): easing is BezierDefinition => Array.isArray(easing) && isNumber(easing[0])
 
-export const isEasingList = (easing: Easing | Easing[]): easing is Easing[] =>
-  Array.isArray(easing) && !isNumber(easing[0])
+export const isEasingList = (
+  easing: Easing | Easing[] | undefined
+): easing is Easing[] => Array.isArray(easing) && !isNumber(easing[0])

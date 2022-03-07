@@ -1,6 +1,6 @@
 {
-  "name": "Motion One Editor",
-  "description": "Inspect and edit Motion One animations",
+  "name": "Motion Developer Tools",
+  "description": "Inspect and edit Motion One animations.",
   "version": "0.0.1",
   "manifest_version": 3,
   "icons": {

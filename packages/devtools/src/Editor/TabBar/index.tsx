@@ -5,7 +5,7 @@ import { RecordButton } from "./RecordButton"
 import { motion } from "framer-motion"
 
 const Container = styled.section`
-  flex: 0 0 42px;
+  flex: 0 0 var(--tab-bar-height);
   border-bottom: 1px solid var(--feint);
   display: flex;
 `

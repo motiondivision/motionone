@@ -4,7 +4,12 @@
     :animate="{ opacity: 1 }"
     :hover="{ scale: 1.2, backgroundColor: `red`, rotate: 90 }"
     :press="{ scale: 0.9 }"
-    :transition="{ duration: 1, easing: 'ease-in-out', delay: 0.5, repeat: 1 }"
+    :transition="{
+      duration: 1,
+      easing: [0.7, -0.46, 0.24, 1.31],
+      delay: 0.5,
+      repeat: 1,
+    }"
     style="width: 200px; background-color: black; height: 200px"
   >
   </Motion>

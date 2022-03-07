@@ -13,12 +13,13 @@ const Container = styled.div`
   padding-left: calc(var(--sidebar-width) + 40px);
   flex: 0 0 var(--row-height);
   background-color: var(--feint);
+  backdrop-filter: brightness(50%) blur(3px);
   position: sticky;
   top: 0;
   display: flex;
   align-items: center;
   overflow: hidden;
-  z-index: 1;
+  z-index: 2;
 `
 
 const Marker = styled.div`

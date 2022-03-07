@@ -20,7 +20,6 @@
         switch (backgroundMessage.type) {
             case "tabId": {
                 const { tabId } = backgroundMessage;
-                console.log("got tab id", tabId, recordingTabsAtLoad);
                 if (!recordingTabsAtLoad || !recordingTabsAtLoad[tabId])
                     return;
                 const message = {
@@ -28,30 +27,10 @@
                     isRecording: true,
                     tabId,
                 };
-                console.log("posting message");
                 window.postMessage(message, "*");
             }
         }
     });
-    window.addEventListener("message", ({ data }) => {
-        if (data.type === "clientready") {
-            backgroundPort === null || backgroundPort === void 0 ? void 0 : backgroundPort.postMessage({ type: "requestTabId" });
-        }
-    });
-    // const tabId = 0
-    // console.log(recordingTabs)
-    // if (!recordingTabs[tabId]) return
-    // const message: IsRecordingMessage = {
-    //   type: "isrecording",
-    //   isRecording: true,
-    //   tabId,
-    // }
-    // window.postMessage(message, "*")
-    // backgroundPort.onMessage.addListener(() => {
-    //   /**
-    //    * Receive message from backgroundPort - replace runtime.listener with this
-    //    */
-    // })
     chrome.runtime.onMessage.addListener((message) => {
         window.postMessage(message, "*");
     });
@@ -65,6 +44,7 @@
              * Events from client to backend
              */
             case "animationstart":
+            case "clientready":
             case "login": {
                 backgroundPort.postMessage(event.data);
                 return;
