@@ -8,7 +8,7 @@ import {
   isEasingGenerator,
   isEasingList,
 } from "@motionone/utils"
-import { AnimationOptions, DevTools } from "@motionone/types"
+import { AnimationOptions } from "@motionone/types"
 import {
   addTransformToElement,
   isTransform,
@@ -23,7 +23,8 @@ import { isNumber, noop } from "@motionone/utils"
 import { stopAnimation } from "./utils/stop-animation"
 
 function getDevTools() {
-  return (window as any).__MOTION_DEV_TOOLS as DevTools
+  const clientStore = (window as any).__MOTION_DEV_TOOLS as any
+  if (clientStore) return clientStore.getState()
 }
 
 export function animateStyle(
@@ -33,7 +34,7 @@ export function animateStyle(
   options: AnimationOptions = {}
 ): AnimationFactory {
   const devTools = getDevTools()
-  const isRecording = devTools?.isRecording
+  const isRecording = options.record !== false && devTools?.isRecording
 
   let animation: any
   let {
@@ -228,13 +229,15 @@ export function animateStyle(
       )
     }
 
-    devTools?.record(element as HTMLElement, key, keyframes, {
-      duration,
-      delay,
-      easing,
-      repeat,
-      offset,
-    })
+    if (isRecording) {
+      devTools?.recordAnimation(element as HTMLElement, key, keyframes, {
+        duration,
+        delay,
+        easing,
+        repeat,
+        offset,
+      })
+    }
 
     motionValue.setAnimation(animation)
 

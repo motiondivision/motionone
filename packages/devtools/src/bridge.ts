@@ -1,28 +1,39 @@
 import { IsRecordingMessage, MotionMessage } from "./types"
-;(() => {
-  const script = document.createElement("script")
-  script.src = chrome.runtime.getURL("js/client.js")
-  document.documentElement.appendChild(script)
-  script.parentNode?.removeChild(script)
 
-  let recordingTabsAtLoad: { [key: number]: boolean } | undefined = {}
-  chrome.storage.sync.get("recordingTabs", ({ recordingTabs }) => {
-    recordingTabsAtLoad = recordingTabs
-  })
+/**
+ * This is used to prevent double-loading bridge and client scripts
+ */
+;(window as any).__MOTION_BRIDGE_HAS_LOADED = true
 
-  let backgroundPort: chrome.runtime.Port | undefined
+/**
+ * Inject client script into the actual webpage
+ */
+const script = document.createElement("script")
+script.src = chrome.runtime.getURL("js/client.js")
+document.documentElement.appendChild(script)
+script.parentNode?.removeChild(script)
 
-  function connect() {
-    backgroundPort = chrome.runtime.connect({ name: "client" })
+/**
+ * Locally store tabs already recording at page load - this
+ * will be used to record animations occuring on page load
+ */
+let recordingTabsAtLoad: { [key: number]: boolean } | undefined = {}
+chrome.storage.sync.get("recordingTabs", ({ recordingTabs }) => {
+  recordingTabsAtLoad = recordingTabs
+})
 
-    backgroundPort.onDisconnect.addListener(() => {
-      backgroundPort = undefined
-    })
-  }
+/**
+ * Connect and track port to the background script
+ */
+let backgroundPort: chrome.runtime.Port | undefined
 
-  connect()
+function connect() {
+  backgroundPort = chrome.runtime.connect({ name: "client" })
 
-  backgroundPort?.onMessage.addListener((backgroundMessage) => {
+  /**
+   * Messages background script => web page
+   */
+  backgroundPort.onMessage.addListener((backgroundMessage: MotionMessage) => {
     switch (backgroundMessage.type) {
       case "tabId": {
         const { tabId } = backgroundMessage
@@ -36,31 +47,43 @@ import { IsRecordingMessage, MotionMessage } from "./types"
         }
 
         window.postMessage(message, "*")
+        return
       }
-    }
-  })
-
-  chrome.runtime.onMessage.addListener((message: MotionMessage) => {
-    window.postMessage(message, "*")
-  })
-
-  const handleMessages = (event: MessageEvent<MotionMessage>) => {
-    if (event.source != window) return
-
-    if (!backgroundPort) connect()
-
-    switch (event.data.type) {
-      /**
-       * Events from client to backend
-       */
-      case "animationstart":
-      case "clientready":
-      case "login": {
-        backgroundPort!.postMessage(event.data)
+      case "isrecording":
+      case "inspectanimation":
+      case "scrubanimation": {
+        window.postMessage(backgroundMessage, "*")
         return
       }
     }
-  }
+  })
 
-  window.addEventListener("message", handleMessages, false)
-})()
+  backgroundPort.onDisconnect.addListener(() => {
+    backgroundPort = undefined
+  })
+}
+
+connect()
+
+/**
+ * Messages web page => background script
+ */
+const handleMessages = (event: MessageEvent<MotionMessage>) => {
+  if (event.source != window) return
+
+  if (!backgroundPort) connect()
+
+  switch (event.data.type) {
+    /**
+     * Events from client to backend
+     */
+    case "animationstart":
+    case "clientready":
+    case "login": {
+      backgroundPort!.postMessage(event.data)
+      return
+    }
+  }
+}
+
+window.addEventListener("message", handleMessages, false)

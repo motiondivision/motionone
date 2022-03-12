@@ -1,32 +1,94 @@
-import { useReducer } from "react"
-import { EditorAuth } from "../../types"
-import { reducer } from "./reducer"
-import { Actions, EditorStateWithActions } from "./types"
-import { useIncomingMessages } from "./use-incoming-messages"
-import { useIsRecording } from "./use-is-recording"
+import { EditorState } from "./types"
+import create from "zustand"
+import produce from "immer"
+import { getCurrentTime } from "./selectors"
 
-export function useEditorState(
-  auth: EditorAuth,
-  port?: chrome.runtime.Port
-): EditorStateWithActions {
-  const [state, dispatch] = useReducer(reducer, {
-    animations: {},
-    isRecording: false,
-    hasRecorded: false,
-    auth,
-  })
+export const useEditorState = create<EditorState>((set, get) => ({
+  /**
+   * State
+   */
+  animations: {},
+  isRecording: false,
+  hasRecorded: false,
+  auth: {
+    isPro: false,
+  },
+  scale: 320,
+  playbackOrigin: undefined,
 
-  useIsRecording(state, port)
-  useIncomingMessages(dispatch, port)
+  /**
+   * Methods
+   */
+  clear: () => {
+    set({ selectedAnimationName: undefined, animations: {} })
+    get().stopPlaying()
+  },
+  startRecording: () => {
+    set({ isRecording: true, hasRecorded: true })
+    get().clear()
+  },
+  stopRecording: () => set({ isRecording: false }),
+  selectKeyframe: (keyframe) => set({ selectedKeyframes: [{ ...keyframe }] }),
+  deselectKeyframes: () => set({ selectedKeyframes: undefined }),
+  selectAnimation: (selectedAnimationName) => {
+    set({ selectedAnimationName })
+    get().stopPlaying()
+    get().deselectKeyframes()
+  },
+  scrubTo: (time) => {
+    const { animations, selectedAnimationName } = get()
 
-  return {
-    ...state,
-    clear: () => dispatch({ type: Actions.Clear }),
-    startRecording: () => dispatch({ type: Actions.StartRecording }),
-    stopRecording: () => dispatch({ type: Actions.StopRecording }),
-    selectAnimation: (name) =>
-      dispatch({ type: Actions.SelectAnimation, name }),
-    selectKeyframe: (keyframe) =>
-      dispatch({ type: Actions.SelectKeyframe, keyframe }),
-  }
-}
+    if (selectedAnimationName && animations[selectedAnimationName]) {
+      set({
+        isRecording: false,
+        animations: produce(animations, (draft) => {
+          draft[selectedAnimationName].currentTime = time
+        }),
+      })
+    }
+  },
+  addAnimations: (animations) => {
+    get().stopPlaying()
+    set({
+      selectedAnimationName:
+        get().selectedAnimationName ?? Object.keys(animations)[0],
+      animations: {
+        ...get().animations,
+        ...animations,
+      },
+    })
+  },
+  setScale: (scale) => set({ scale }),
+  startPlaying: () => {
+    const currentTime = getCurrentTime(get())
+
+    if (currentTime !== undefined) {
+      set({
+        isRecording: false,
+        playbackOrigin: {
+          startedAt: performance.now(),
+          originTime: currentTime * 1000,
+        },
+      })
+    }
+  },
+  stopPlaying: () => set({ playbackOrigin: undefined }),
+  updateKeyframe: (keyframe, newValue) => {
+    const { animations, selectedAnimationName } = get()
+    const { elementName, valueName, index } = keyframe
+    console.log(selectedAnimationName, newValue)
+    if (!selectedAnimationName) return
+
+    set({
+      animations: produce(animations, (draft) => {
+        const valueIndex = draft[selectedAnimationName].elements[
+          elementName
+        ].findIndex((value) => value.valueName === valueName)
+        draft[selectedAnimationName].elements[elementName][
+          valueIndex
+        ].keyframes[index] = newValue
+      }),
+      selectedKeyframes: [{ ...keyframe }],
+    })
+  },
+}))

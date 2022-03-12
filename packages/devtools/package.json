@@ -26,6 +26,10 @@
     "styled-components": "^5.3.3"
   },
   "dependencies": {
-    "react-use-measure": "^2.1.1"
+    "framesync": "^6.1.0",
+    "immer": "^9.0.12",
+    "react-merge-refs": "^1.1.0",
+    "react-use-measure": "^2.1.1",
+    "zustand": "^3.7.1"
   }
 }

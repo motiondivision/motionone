@@ -33,6 +33,22 @@
         font-weight: bold;
       }
 
+      ::-webkit-scrollbar {
+        height: 4px;
+        width: 4px;
+        background: transparent;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--feint);
+        -webkit-border-radius: 1ex;
+        -webkit-box-shadow: none;
+      }
+
+      ::-webkit-scrollbar-corner {
+        background: transparent;
+      }
+
       *,
       *::before,
       *::after {
@@ -41,6 +57,7 @@
 
       * {
         margin: 0;
+        user-select: none;
       }
 
       ul,
@@ -165,10 +182,21 @@
 
       * {
         -webkit-font-smoothing: antialiased;
+        user-select: none;
+      }
+
+      input {
+        user-select: auto;
+      }
+
+      ::selection {
+        color: var(--white);
+        background: var(--strong-blue);
       }
 
       pre,
-      code {
+      code,
+      .code {
         font-family: "JetBrains Mono", mono;
         font-weight: 400;
         font-style: normal;

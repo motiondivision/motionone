@@ -3,18 +3,17 @@ import { AnimationMetadata, ValueAnimationMetadata } from "../../types"
 import { defaultOffset, fillOffset } from "@motionone/utils"
 import styled from "styled-components"
 import { motion } from "framer-motion"
-import { EditorState, EditorStateWithActions } from "../state/types"
+import { EditorState, SelectedKeyframeMetadata } from "../state/types"
+import { RepeatIcon } from "../icons/RepeatIcon"
+import { useEditorState } from "../state/use-editor-state"
 
 interface KeyframesProps {
-  scale: number
   animation: AnimationMetadata
-  state: EditorStateWithActions
 }
 
 interface ValueKeyframesProps {
   scale: number
   animation: ValueAnimationMetadata
-  state: EditorStateWithActions
 }
 
 interface RepeatProps {
@@ -78,17 +77,23 @@ const GradientMask = styled.div`
 `
 
 const RepeatCount = styled.code`
-  display: block;
+  display: flex;
+  align-items: center;
   position: absolute;
   top: 50%;
   left: 50px;
   transform: translateY(-50%);
   font-weight: bold;
   font-size: 12px;
-  border-radius: 2px;
+  border-radius: 5px;
   padding: 2px 5px;
   background: var(--feint-solid);
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.4);
+
+  svg {
+    margin-right: 4px;
+    fill: rgba(255, 255, 255, 0.4);
+  }
 `
 
 const bufferTime = 1
@@ -98,12 +103,21 @@ function RepeatMarker({ scale, time, repeat }: RepeatProps) {
     <RepeatContainer style={{ transform: `translateX(${time * scale}px)` }}>
       <TransitionMarker style={{ width: "100%" }} />
       <GradientMask />
-      <RepeatCount>{`x ${repeat}`}</RepeatCount>
+      <RepeatCount>
+        <RepeatIcon style={{ width: 20, height: 20 }} />
+        {repeat}
+      </RepeatCount>
     </RepeatContainer>
   )
 }
 
-function ValueKeyframes({ scale, animation, state }: ValueKeyframesProps) {
+const getSelectedKeyframes = (state: EditorState) => state.selectedKeyframes
+const getSelectKeyframe = (state: EditorState) => state.selectKeyframe
+
+function ValueKeyframes({ scale, animation }: ValueKeyframesProps) {
+  const selectKeyframe = useEditorState(getSelectKeyframe)
+  const selectedKeyframes = useEditorState(getSelectedKeyframes)
+
   const { elementId, valueName, keyframes, options } = animation
   let { delay = 0, duration = 0.3, offset, repeat } = options
 
@@ -120,7 +134,7 @@ function ValueKeyframes({ scale, animation, state }: ValueKeyframesProps) {
     const valueOffset = offset[i]
     const time = delay + valueOffset * duration
     const keyframeIsSelected = isKeyframeSelected(
-      state,
+      selectedKeyframes,
       elementId,
       valueName,
       i
@@ -145,7 +159,7 @@ function ValueKeyframes({ scale, animation, state }: ValueKeyframesProps) {
         ) : null}
         <ValueMarker
           onClick={() =>
-            state.selectKeyframe({
+            selectKeyframe({
               elementName: elementId,
               valueName,
               index: i,
@@ -176,25 +190,29 @@ function ValueKeyframes({ scale, animation, state }: ValueKeyframesProps) {
     >
       {markers}
       {repeat ? (
-        <RepeatMarker repeat={repeat} time={prevTime} scale={scale} />
+        <RepeatMarker repeat={repeat} time={prevTime || 0} scale={scale} />
       ) : null}
     </ValueAnimationContainer>
   )
 }
 
-export function Keyframes({ scale, animation, state }: KeyframesProps) {
+const getTimeScale = (state: EditorState) => state.scale
+
+export function Keyframes({ animation }: KeyframesProps) {
+  const { elements } = animation
   const elementAnimations: any[] = []
 
-  for (const elementName in animation) {
+  const scale = useEditorState(getTimeScale)
+
+  for (const elementName in elements) {
     const valueAnimations: any[] = []
 
-    for (const valueAnimation of animation[elementName]) {
+    for (const valueAnimation of elements[elementName]) {
       valueAnimations.push(
         <ValueKeyframes
           key={valueAnimation.valueName}
           scale={scale}
           animation={valueAnimation}
-          state={state}
         />
       )
     }
@@ -210,14 +228,14 @@ export function Keyframes({ scale, animation, state }: KeyframesProps) {
 }
 
 function isKeyframeSelected(
-  state: EditorState,
+  selectedKeyframes: SelectedKeyframeMetadata[] | undefined,
   elementName: string,
   valueName: string,
   keyframeIndex: number
 ): boolean {
-  if (!state.selectedKeyframes) return false
+  if (!selectedKeyframes) return false
 
-  return state.selectedKeyframes.some(
+  return selectedKeyframes.some(
     (keyframe) =>
       keyframe.elementName === elementName &&
       keyframe.valueName === valueName &&

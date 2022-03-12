@@ -1,3 +1,4 @@
+import { motion } from "framer-motion"
 import * as React from "react"
 import styled from "styled-components"
 import { RecordIcon } from "../icons/RecordIcon"
@@ -9,7 +10,7 @@ interface Props {
   stopRecording: VoidFunction
 }
 
-const Button = styled.button`
+const Button = styled(motion.button)`
   height: ${tabBarHeight}px;
   flex: 0 0 ${tabBarHeight}px;
   position: relative;
@@ -25,8 +26,12 @@ export function RecordButton({
   stopRecording,
 }: Props) {
   return (
-    <Button onClick={isRecording ? stopRecording : startRecording}>
+    <Button
+      onClick={isRecording ? stopRecording : startRecording}
+      whileTap="pressed"
+    >
       <RecordIcon
+        variants={{ pressed: { scale: 0.8 } }}
         style={{
           backgroundColor: isRecording ? "var(--red)" : "rgba(255,255,255,0.5)",
         }}

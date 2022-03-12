@@ -1,11 +1,6 @@
 import { motion } from "framer-motion"
 import * as React from "react"
 import styled from "styled-components"
-import { EditorStateWithActions } from "./state/types"
-
-interface Props {
-  state: EditorStateWithActions
-}
 
 const Container = styled(motion.div)`
   flex: 1;
@@ -47,7 +42,7 @@ const variants = {
   },
 }
 
-export function LoginDialog(_props: Props) {
+export function LoginDialog() {
   return (
     <Container
       initial="hidden"

@@ -1,8 +1,10 @@
 import * as React from "react"
 import styled from "styled-components"
-import { EditorStateWithActions } from "../state/types"
 import { RecordButton } from "./RecordButton"
 import { motion } from "framer-motion"
+import { useEditorState } from "../state/use-editor-state"
+import shallow from "zustand/shallow"
+import { EditorState } from "../state/types"
 
 const Container = styled.section`
   flex: 0 0 var(--tab-bar-height);
@@ -13,7 +15,9 @@ const Container = styled.section`
 const Tabs = styled(motion.ul)`
   display: flex;
   justify-content: flex-start;
-  overflow-x: auto;
+  overflow-x: overlay;
+  overflow-y: hidden;
+  flex: 1;
 `
 
 const Tab = styled(motion.li)`
@@ -42,31 +46,49 @@ const Underline = styled(motion.div)`
 const duration = 0.8
 const transition = { type: "spring", duration, bounce: 0 }
 
-export function TabBar({ state }: { state: EditorStateWithActions }) {
+const getTabBarState = (state: EditorState) => ({
+  isRecording: state.isRecording,
+  startRecording: state.startRecording,
+  stopRecording: state.stopRecording,
+  animations: state.animations,
+  selectAnimation: state.selectAnimation,
+  selected: state.selectedAnimationName,
+})
+
+export function TabBar() {
+  const {
+    isRecording,
+    startRecording,
+    stopRecording,
+    animations,
+    selectAnimation,
+    selected,
+  } = useEditorState(getTabBarState, shallow)
+
   return (
     <Container>
       <RecordButton
-        isRecording={state.isRecording}
-        startRecording={state.startRecording}
-        stopRecording={state.stopRecording}
+        isRecording={isRecording}
+        startRecording={startRecording}
+        stopRecording={stopRecording}
       />
       <Tabs layoutScroll>
-        {Object.keys(state.animations).map((animationName) => (
+        {Object.keys(animations).map((animationName) => (
           <Tab
             key={animationName}
-            onClick={() => state.selectAnimation(animationName)}
+            onClick={() => selectAnimation(animationName)}
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={transition}
           >
             <motion.span
               initial={false}
-              animate={{ opacity: animationName === state.selected ? 1 : 0.65 }}
+              animate={{ opacity: animationName === selected ? 1 : 0.65 }}
               transition={{ duration }}
             >
               {animationName}
             </motion.span>
-            {animationName === state.selected ? (
+            {animationName === selected ? (
               <Underline layoutId="tab-underline" transition={transition} />
             ) : null}
           </Tab>

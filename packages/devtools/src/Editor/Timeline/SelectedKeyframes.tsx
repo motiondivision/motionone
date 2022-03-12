@@ -8,6 +8,8 @@ import { ValueMarker } from "./Keyframes"
 import { isEasingList } from "@motionone/utils"
 import { EasingPreview } from "./EasingPreview"
 import { Easing } from "@motionone/types"
+import { useEditorState } from "../state/use-editor-state"
+import { getUpdateKeyframe } from "../state/selectors"
 
 interface Props {
   animation: AnimationMetadata
@@ -25,8 +27,27 @@ const Container = styled(SidebarContainer)`
   padding-right: 20px;
   padding-bottom: 20px;
   position: absolute;
-  top: var(--tab-bar-height);
+  top: calc(var(--tab-bar-height) + 1px);
+  overflow-y: overlay;
+  overflow-x: hidden;
   width: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+
+  input {
+    color: var(--white);
+    border: none;
+    border-bottom: 1px solid var(--feint);
+    margin-bottom: 20px;
+    -webkit-appearance: none;
+    outline: none;
+    background: none;
+    padding-bottom: 6px;
+
+    &:focus {
+      border-color: var(--white);
+    }
+  }
 
   h2 {
     margin-bottom: 8px;
@@ -66,7 +87,7 @@ export function SelectedKeyframes({ selectedKeyframes, animation }: Props) {
   const [value] = selectedKeyframes
 
   const { elementName, valueName, index } = value
-  const elementAnimation = animation[elementName]
+  const elementAnimation = animation.elements[elementName]
   const valueAnimation = elementAnimation.find(
     (thisAnimation) => thisAnimation.valueName === valueName
   )
@@ -86,6 +107,8 @@ export function SelectedKeyframes({ selectedKeyframes, animation }: Props) {
       : keyframeEasing
   }
 
+  const updateKeyframe = useEditorState(getUpdateKeyframe)
+
   return (
     <Container
       as={motion.div}
@@ -95,7 +118,12 @@ export function SelectedKeyframes({ selectedKeyframes, animation }: Props) {
       transition={{ duration: 0.2 }}
     >
       <Header>Value</Header>
-      <code>{keyframes[index]}</code>
+      <input
+        className="code"
+        type="text"
+        value={keyframes[index]}
+        onChange={(event) => updateKeyframe(value, event.currentTarget.value)}
+      />
       {easingString ? (
         <>
           <Header>Easing</Header>

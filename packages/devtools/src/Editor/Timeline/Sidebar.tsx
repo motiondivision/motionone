@@ -21,7 +21,7 @@ export const SidebarContainer = styled.section`
   position: sticky;
   top: 0;
   bottom: 0;
-  z-index: 3;
+  z-index: 5;
 `
 
 const Container = styled(SidebarContainer)`
@@ -55,11 +55,12 @@ const Container = styled(SidebarContainer)`
 `
 
 export function Sidebar({ animation }: Props) {
+  const { elements } = animation
   const children: any[] = []
 
-  for (const elementName in animation) {
+  for (const elementName in elements) {
     const elementChildren: any[] = []
-    const elementAnimations = animation[elementName]
+    const elementAnimations = animation.elements[elementName]
 
     for (const valueAnimation of elementAnimations) {
       elementChildren.push(

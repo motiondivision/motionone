@@ -13,11 +13,14 @@ export interface ValueAnimationMetadata {
 }
 
 export interface AnimationMetadata {
-  [key: string]: ValueAnimationMetadata[]
+  currentTime: number
+  elements: {
+    [elementName: string]: ValueAnimationMetadata[]
+  }
 }
 
 export interface AnimationsMetadata {
-  [key: string]: AnimationMetadata
+  [animationName: string]: AnimationMetadata
 }
 
 export interface AnimationStartMessage {
@@ -50,6 +53,23 @@ export interface ClientReadyMessage {
   type: "clientready"
 }
 
+export interface InspectAnimationMessage {
+  type: "inspectanimation"
+  animation: AnimationMetadata
+  tabId: number
+}
+
+export interface ScrubAnimationMessage {
+  type: "scrubanimation"
+  time: number
+  tabId: number
+}
+
+export interface TabIdMessage {
+  type: "tabId"
+  tabId: number
+}
+
 export type MotionMessage =
   | AnimationStartMessage
   | IsRecordingMessage
@@ -57,6 +77,9 @@ export type MotionMessage =
   | LoginMessage
   | ClearAnimationsMessage
   | ClientReadyMessage
+  | InspectAnimationMessage
+  | ScrubAnimationMessage
+  | TabIdMessage
 
 export type EditorAuth = {
   isPro: boolean

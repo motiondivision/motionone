@@ -8,6 +8,7 @@ export enum Actions {
   SelectAnimation,
   SelectKeyframe,
   DeselectKeyframe,
+  Scrub,
 }
 
 export interface SelectedKeyframeMetadata {
@@ -16,28 +17,30 @@ export interface SelectedKeyframeMetadata {
   index: number
 }
 
+export interface PlaybackOrigin {
+  startedAt: number
+  originTime: number
+}
+
 export interface EditorState {
   auth: EditorAuth
   animations: AnimationsMetadata
+  playbackOrigin: PlaybackOrigin | undefined
   isRecording: boolean
   hasRecorded: boolean
-  selected?: string
+  selectedAnimationName?: string
   selectedKeyframes?: SelectedKeyframeMetadata[]
-}
-
-export interface EditorStateWithActions extends EditorState {
+  scale: number
+  addAnimations(animations: AnimationsMetadata): void
   clear(): void
   startRecording(): void
   stopRecording(): void
   selectAnimation(name: string): void
   selectKeyframe(keyframe: SelectedKeyframeMetadata): void
+  deselectKeyframes(): void
+  scrubTo(time: number): void
+  setScale(time: number): void
+  startPlaying(): void
+  stopPlaying(): void
+  updateKeyframe(keyframe: SelectedKeyframeMetadata, newValue: string): void
 }
-
-export type EditorAction =
-  | { type: Actions.Clear }
-  | { type: Actions.Add; animations: AnimationsMetadata }
-  | { type: Actions.StartRecording }
-  | { type: Actions.StopRecording }
-  | { type: Actions.SelectAnimation; name: string }
-  | { type: Actions.SelectKeyframe; keyframe: SelectedKeyframeMetadata }
-  | { type: Actions.DeselectKeyframe }
