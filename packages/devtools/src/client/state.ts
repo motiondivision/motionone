@@ -20,6 +20,8 @@ export interface ClientState {
     keyframes: ValueKeyframe[],
     options: AnimationOptions
   ): void
+  gsap?: any
+  registerGSAP(any?: any): void
 }
 
 export type ClientStore = UseBoundStore<ClientState, StoreApi<ClientState>>
@@ -58,7 +60,7 @@ export const store = create<ClientState>((set, get) => ({
     } = get()
 
     if (!isRecording) return
-    console.log(isRecording, options)
+
     const animationName = `Animation ${recordedAnimationCount}`
     const elementId = getElementId(element)
 
@@ -78,13 +80,14 @@ export const store = create<ClientState>((set, get) => ({
       animationName,
       valueName,
       keyframes,
-      options,
+      options: { ...options, source: "motionone" },
     })
 
     set({
       recordedAnimations: newRecordedAnimations,
     })
   },
+  registerGSAP: (gsap) => set({ gsap }),
 }))
 
 const createAnimationMetadata = (): AnimationMetadata => ({

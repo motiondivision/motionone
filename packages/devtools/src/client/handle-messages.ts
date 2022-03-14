@@ -15,7 +15,6 @@ export function handleMessages() {
           break
         }
         case "scrubanimation": {
-          console.log("client received scrubanimation")
           state.scrubTo(data.time)
           break
         }

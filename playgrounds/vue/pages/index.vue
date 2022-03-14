@@ -3,6 +3,7 @@
   <ul>
     <li><a href="/examples/render">Render</a></li>
     <li><a href="/examples/animate">Animation</a></li>
+    <li><a href="/examples/gsap">Greensock</a></li>
     <li>
       <a href="/examples/animate-prop-change">Animation on prop change</a>
     </li>

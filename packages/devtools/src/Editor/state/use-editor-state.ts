@@ -20,7 +20,11 @@ export const useEditorState = create<EditorState>((set, get) => ({
    * Methods
    */
   clear: () => {
-    set({ selectedAnimationName: undefined, animations: {} })
+    set({
+      selectedAnimationName: undefined,
+      animations: {},
+      selectedKeyframes: undefined,
+    })
     get().stopPlaying()
   },
   startRecording: () => {

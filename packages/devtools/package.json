@@ -26,8 +26,11 @@
     "styled-components": "^5.3.3"
   },
   "dependencies": {
+    "@leva-ui/plugin-bezier": "^0.9.19",
+    "@leva-ui/plugin-spring": "^0.9.18",
     "framesync": "^6.1.0",
     "immer": "^9.0.12",
+    "leva": "^0.9.23",
     "react-merge-refs": "^1.1.0",
     "react-use-measure": "^2.1.1",
     "zustand": "^3.7.1"
