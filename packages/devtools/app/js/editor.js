@@ -674,9 +674,9 @@ const useEditorState = create((set, get) => ({
     selectKeyframe: (keyframe) => set({ selectedKeyframes: [Object.assign({}, keyframe)] }),
     deselectKeyframes: () => set({ selectedKeyframes: undefined }),
     selectAnimation: (selectedAnimationName) => {
-        set({ selectedAnimationName });
         get().stopPlaying();
         get().deselectKeyframes();
+        set({ selectedAnimationName });
     },
     scrubTo: (time) => {
         const { animations, selectedAnimationName } = get();
@@ -691,7 +691,6 @@ const useEditorState = create((set, get) => ({
     },
     addAnimations: (animations) => {
         var _a;
-        get().stopPlaying();
         set({
             selectedAnimationName: (_a = get().selectedAnimationName) !== null && _a !== void 0 ? _a : Object.keys(animations)[0],
             animations: Object.assign(Object.assign({}, get().animations), animations),
@@ -714,7 +713,6 @@ const useEditorState = create((set, get) => ({
     updateKeyframe: (keyframe, newValue) => {
         const { animations, selectedAnimationName } = get();
         const { elementName, valueName, index } = keyframe;
-        console.log(selectedAnimationName, newValue);
         if (!selectedAnimationName)
             return;
         set({
@@ -731,26 +729,31 @@ function useEditAnimation(port) {
     const selectedAnimationName = useEditorState(getSelectedAnimationName);
     const selectedAnimation = useEditorState(getSelectedAnimation);
     const time = selectedAnimation === null || selectedAnimation === void 0 ? void 0 : selectedAnimation.currentTime;
+    const prevSelectedAnimation = react.exports.useRef();
     react.exports.useEffect(() => {
-        if (!port || !selectedAnimationName || !selectedAnimation)
+        if (!port)
             return;
-        const message = {
-            type: "inspectanimation",
-            animation: selectedAnimation,
-            tabId: chrome.devtools.inspectedWindow.tabId,
-        };
-        port.postMessage(message);
-    }, [port, selectedAnimationName, selectedAnimation === null || selectedAnimation === void 0 ? void 0 : selectedAnimation.elements]);
-    react.exports.useEffect(() => {
-        if (time === undefined)
-            return;
-        const message = {
-            type: "scrubanimation",
-            time,
-            tabId: chrome.devtools.inspectedWindow.tabId,
-        };
-        port === null || port === void 0 ? void 0 : port.postMessage(message);
-    }, [port, time]);
+        let message;
+        if (selectedAnimationName &&
+            selectedAnimation &&
+            prevSelectedAnimation.current !== selectedAnimation) {
+            message = {
+                type: "inspectanimation",
+                animation: selectedAnimation,
+                tabId: chrome.devtools.inspectedWindow.tabId,
+            };
+        }
+        else if (time !== undefined && prevSelectedAnimation.current) {
+            // TODO: This probably isn't firing - do we need a scrub event?
+            message = {
+                type: "scrubanimation",
+                time,
+                tabId: chrome.devtools.inspectedWindow.tabId,
+            };
+        }
+        message && port.postMessage(message);
+        prevSelectedAnimation.current = selectedAnimation;
+    }, [port, selectedAnimationName, selectedAnimation === null || selectedAnimation === void 0 ? void 0 : selectedAnimation.elements, time]);
 }
 
 const getAddAnimations = (state) => state.addAnimations;
@@ -10405,11 +10408,14 @@ function ValueKeyframes({ scale, animation }) {
                     width: (time - prevTime) * scale,
                     transform: `translateX(${(prevTime !== null && prevTime !== void 0 ? prevTime : 0) * scale}px)`,
                 } })) : null,
-            react.exports.createElement(ValueMarker, { onClick: () => selectKeyframe({
-                    elementName: elementId,
-                    valueName,
-                    index: i,
-                }), initial: false, animate: {
+            react.exports.createElement(ValueMarker, { onClick: (e) => {
+                    e.stopPropagation();
+                    selectKeyframe({
+                        elementName: elementId,
+                        valueName,
+                        index: i,
+                    });
+                }, initial: false, animate: {
                     backgroundColor: keyframeIsSelected
                         ? "var(--strong-blue)"
                         : "var(--white)",
@@ -20312,7 +20318,7 @@ function TimeMarkers({ currentTime, timelineRect, containerRef, }) {
         };
     }, [dragOrigin]);
     return (react.exports.createElement(react.exports.Fragment, null,
-        react.exports.createElement(MarkerBackground, null),
+        react.exports.createElement(MarkerBackground, { onClick: (e) => e.stopPropagation() }),
         react.exports.createElement(Container$3, { onPointerDown: (e) => {
                 const pointerX = e.pageX + containerRef.current.scrollLeft - scrubberHalfWidth;
                 const time = (pointerX - 220) / scale;
@@ -20539,23 +20545,24 @@ const Visualisation = styled$1.div `
   flex-direction: column;
   flex: 1;
 `;
-const getTimelineState = (state) => ({
-    animations: state.animations,
-    selected: state.selectedAnimationName,
-    selectedKeyframes: state.selectedKeyframes,
+const getTimelineState = ({ animations, selectedAnimationName, selectedKeyframes, deselectKeyframes, }) => ({
+    animations,
+    selectedAnimationName,
+    selectedKeyframes,
+    deselectKeyframes,
 });
 function Timeline() {
     let children = null;
     const ref = react.exports.useRef(null);
     const [measureRef, rect] = useMeasure();
-    const { animations, selected, selectedKeyframes } = useEditorState(getTimelineState);
-    if (selected) {
-        const selectedAnimation = animations[selected];
+    const { animations, selectedAnimationName, selectedKeyframes, deselectKeyframes, } = useEditorState(getTimelineState);
+    if (selectedAnimationName) {
+        const selectedAnimation = animations[selectedAnimationName];
         if (selectedAnimation) {
-            children = (react.exports.createElement(Container$1, { ref: mergeRefs([ref, measureRef]), key: selected },
+            children = (react.exports.createElement(Container$1, { ref: mergeRefs([ref, measureRef]), key: selectedAnimationName },
                 react.exports.createElement(Content, null,
                     react.exports.createElement(Sidebar, { animation: selectedAnimation }),
-                    react.exports.createElement(Visualisation, null,
+                    react.exports.createElement(Visualisation, { onClick: deselectKeyframes },
                         react.exports.createElement(TimeMarkers, { containerRef: ref, timelineRect: rect, currentTime: selectedAnimation.currentTime }),
                         react.exports.createElement(Keyframes, { animation: selectedAnimation }),
                         react.exports.createElement(PlaybackControls, null)),

@@ -31,10 +31,16 @@ const Visualisation = styled.div`
   flex: 1;
 `
 
-const getTimelineState = (state: EditorState) => ({
-  animations: state.animations,
-  selected: state.selectedAnimationName,
-  selectedKeyframes: state.selectedKeyframes,
+const getTimelineState = ({
+  animations,
+  selectedAnimationName,
+  selectedKeyframes,
+  deselectKeyframes,
+}: EditorState) => ({
+  animations,
+  selectedAnimationName,
+  selectedKeyframes,
+  deselectKeyframes,
 })
 
 export function Timeline() {
@@ -42,18 +48,25 @@ export function Timeline() {
   const ref = React.useRef<HTMLElement>(null)
   const [measureRef, rect] = useMeasure()
 
-  const { animations, selected, selectedKeyframes } =
-    useEditorState(getTimelineState)
+  const {
+    animations,
+    selectedAnimationName,
+    selectedKeyframes,
+    deselectKeyframes,
+  } = useEditorState(getTimelineState)
 
-  if (selected) {
-    const selectedAnimation = animations[selected]
+  if (selectedAnimationName) {
+    const selectedAnimation = animations[selectedAnimationName]
 
     if (selectedAnimation) {
       children = (
-        <Container ref={mergeRefs([ref, measureRef])} key={selected}>
+        <Container
+          ref={mergeRefs([ref, measureRef])}
+          key={selectedAnimationName}
+        >
           <Content>
             <Sidebar animation={selectedAnimation} />
-            <Visualisation>
+            <Visualisation onClick={deselectKeyframes}>
               <TimeMarkers
                 containerRef={ref}
                 timelineRect={rect}

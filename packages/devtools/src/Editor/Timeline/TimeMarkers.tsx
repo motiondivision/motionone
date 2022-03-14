@@ -120,7 +120,7 @@ export function TimeMarkers({
 
   return (
     <>
-      <MarkerBackground />
+      <MarkerBackground onClick={(e) => e.stopPropagation()} />
       <Container
         onPointerDown={(e) => {
           const pointerX =

@@ -158,13 +158,14 @@ function ValueKeyframes({ scale, animation }: ValueKeyframesProps) {
           />
         ) : null}
         <ValueMarker
-          onClick={() =>
+          onClick={(e) => {
+            e.stopPropagation()
             selectKeyframe({
               elementName: elementId,
               valueName,
               index: i,
             })
-          }
+          }}
           initial={false}
           animate={{
             backgroundColor: keyframeIsSelected

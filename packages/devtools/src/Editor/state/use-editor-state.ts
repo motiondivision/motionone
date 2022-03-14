@@ -35,9 +35,9 @@ export const useEditorState = create<EditorState>((set, get) => ({
   selectKeyframe: (keyframe) => set({ selectedKeyframes: [{ ...keyframe }] }),
   deselectKeyframes: () => set({ selectedKeyframes: undefined }),
   selectAnimation: (selectedAnimationName) => {
-    set({ selectedAnimationName })
     get().stopPlaying()
     get().deselectKeyframes()
+    set({ selectedAnimationName })
   },
   scrubTo: (time) => {
     const { animations, selectedAnimationName } = get()
@@ -52,7 +52,6 @@ export const useEditorState = create<EditorState>((set, get) => ({
     }
   },
   addAnimations: (animations) => {
-    get().stopPlaying()
     set({
       selectedAnimationName:
         get().selectedAnimationName ?? Object.keys(animations)[0],
@@ -80,7 +79,7 @@ export const useEditorState = create<EditorState>((set, get) => ({
   updateKeyframe: (keyframe, newValue) => {
     const { animations, selectedAnimationName } = get()
     const { elementName, valueName, index } = keyframe
-    console.log(selectedAnimationName, newValue)
+
     if (!selectedAnimationName) return
 
     set({

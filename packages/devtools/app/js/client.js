@@ -252,6 +252,7 @@ const store = create((set, get) => ({
             isRecording: true,
             recordedAnimations: undefined,
             recordedAnimationCount: 1,
+            inspectedAnimation: undefined,
         });
     },
     stopRecording: () => set({ isRecording: false }),
@@ -1099,9 +1100,9 @@ function handleInspectedAnimation() {
             animation.cancel();
         animations.length = 0;
     }
-    store.subscribe((inspectedAnimation) => {
+    store.subscribe((inspectedAnimation, prevInspectedAnimation) => {
         cancelAllAnimations();
-        if (inspectedAnimation) {
+        if (prevInspectedAnimation && inspectedAnimation) {
             createAnimations(inspectedAnimation);
         }
     }, (state) => state.inspectedAnimation);

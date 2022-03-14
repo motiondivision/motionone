@@ -36,6 +36,7 @@ export const store = create<ClientState>((set, get) => ({
       isRecording: true,
       recordedAnimations: undefined,
       recordedAnimationCount: 1,
+      inspectedAnimation: undefined,
     })
   },
   stopRecording: () => set({ isRecording: false }),

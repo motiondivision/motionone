@@ -40,10 +40,13 @@ export function handleInspectedAnimation() {
   }
 
   store.subscribe(
-    (inspectedAnimation: AnimationMetadata | undefined) => {
+    (
+      inspectedAnimation: AnimationMetadata | undefined,
+      prevInspectedAnimation: AnimationMetadata | undefined
+    ) => {
       cancelAllAnimations()
 
-      if (inspectedAnimation) {
+      if (prevInspectedAnimation && inspectedAnimation) {
         createAnimations(inspectedAnimation)
       }
     },

@@ -1,5 +1,5 @@
-import { useEffect } from "react"
-import { InspectAnimationMessage, ScrubAnimationMessage } from "../../types"
+import { useEffect, useRef } from "react"
+import { AnimationMetadata, MotionMessage } from "../../types"
 import { getSelectedAnimation, getSelectedAnimationName } from "./selectors"
 import { useEditorState } from "./use-editor-state"
 
@@ -9,27 +9,33 @@ export function useEditAnimation(port?: chrome.runtime.Port) {
 
   const time = selectedAnimation?.currentTime
 
+  const prevSelectedAnimation = useRef<AnimationMetadata | undefined>()
   useEffect(() => {
-    if (!port || !selectedAnimationName || !selectedAnimation) return
+    if (!port) return
 
-    const message: InspectAnimationMessage = {
-      type: "inspectanimation",
-      animation: selectedAnimation,
-      tabId: chrome.devtools.inspectedWindow.tabId,
+    let message: MotionMessage | undefined
+
+    if (
+      selectedAnimationName &&
+      selectedAnimation &&
+      prevSelectedAnimation.current !== selectedAnimation
+    ) {
+      message = {
+        type: "inspectanimation",
+        animation: selectedAnimation,
+        tabId: chrome.devtools.inspectedWindow.tabId,
+      }
+    } else if (time !== undefined && prevSelectedAnimation.current) {
+      // TODO: This probably isn't firing - do we need a scrub event?
+      message = {
+        type: "scrubanimation",
+        time,
+        tabId: chrome.devtools.inspectedWindow.tabId,
+      }
     }
 
-    port.postMessage(message)
-  }, [port, selectedAnimationName, selectedAnimation?.elements])
+    message && port.postMessage(message)
 
-  useEffect(() => {
-    if (time === undefined) return
-
-    const message: ScrubAnimationMessage = {
-      type: "scrubanimation",
-      time,
-      tabId: chrome.devtools.inspectedWindow.tabId,
-    }
-
-    port?.postMessage(message)
-  }, [port, time])
+    prevSelectedAnimation.current = selectedAnimation
+  }, [port, selectedAnimationName, selectedAnimation?.elements, time])
 }
