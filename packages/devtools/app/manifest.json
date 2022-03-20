@@ -1,6 +1,6 @@
 {
   "name": "Motion Developer Tools",
-  "description": "Inspect and edit Motion One animations.",
+  "description": "Inspect and edit animations made with CSS and Motion One.",
   "version": "0.0.2",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjWcsdcmAGQ8cX/DQG72r1deFTf4ONxlCor1HvW1/lLG/R60VCOuEGLR1OKNrCPHid2gFrlShfDe/1G1VTefoIMt5z7jlHNuC7i7+mQg9ybbPje2HDKUrOAN5ldo3agqnEJFh+wA2rb6ehOIZVpZ7/F8Lwja196bvWMSNn+9ktM+fYE3DJacZbf/mySPlvRt8ToG++hE6taMKN4KnMJC08vWZ33fz/oeQZ2fDMBGOYP/9S6LOGoPqYY59Z+9wniZjFN4oE4ORxuP9bek0h15FnYeEvutFY8za0wdLng5bqwDWUlgW51x6MZpJWv1JtD66PBlQVHhX9FJV6m/HUTE/qwIDAQAB",
   "manifest_version": 3,
