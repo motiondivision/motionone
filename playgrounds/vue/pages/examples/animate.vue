@@ -9,6 +9,7 @@
       :transition="{
         duration: 1,
         easing: [0.7, -0.46, 0.24, 1.31],
+        name: `Vue animation`,
       }"
       style="background-color: #fff208"
     >
@@ -17,7 +18,12 @@
       class="motion-one-box"
       :initial="{ opacity: 0, y: 50 }"
       :animate="{ opacity: 1, y: 0 }"
-      :hover="{ scale: 1.2, backgroundColor: `red`, rotate: 90 }"
+      :hover="{
+        scale: 1.2,
+        backgroundColor: `red`,
+        rotate: 90,
+        transition: { name: `Hover` },
+      }"
       :press="{ scale: 0.9 }"
       :transition="{
         duration: 1,

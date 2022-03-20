@@ -87,6 +87,7 @@ export type PlaybackOptions = {
 }
 
 export type DevToolsOptions = {
+  name?: string
   record?: boolean
 }
 

@@ -269,24 +269,26 @@
 	    return motionId;
 	}
 
+	const animationCounters = new Map();
+	const animationNamesToFlush = new Set();
 	const store = create(subscribeWithSelector((set, get) => ({
 	    inspectedAnimation: undefined,
 	    isRecording: false,
-	    recordedAnimationCount: 0,
 	    recordedAnimations: undefined,
 	    startRecording: () => {
+	        animationCounters.clear();
+	        animationNamesToFlush.clear();
 	        set({
 	            isRecording: true,
 	            recordedAnimations: undefined,
-	            recordedAnimationCount: 1,
 	            inspectedAnimation: undefined,
 	        });
 	    },
 	    stopRecording: () => set({ isRecording: false }),
 	    flushRecordedAnimations: () => {
+	        animationNamesToFlush.clear();
 	        set({
 	            recordedAnimations: undefined,
-	            recordedAnimationCount: get().recordedAnimationCount + 1,
 	        });
 	    },
 	    inspectAnimation: (inspectedAnimation) => set({ inspectedAnimation }),
@@ -297,11 +299,17 @@
 	        }
 	    },
 	    recordAnimation: (element, valueName, keyframes, options, source) => {
-	        const { isRecording, recordedAnimationCount, recordedAnimations = {}, } = get();
+	        var _a;
+	        const { isRecording, recordedAnimations = {} } = get();
 	        if (!isRecording)
 	            return;
+	        const name = options.name || "Animation";
+	        if (!animationNamesToFlush.has(name)) {
+	            animationNamesToFlush.add(name);
+	            animationCounters.set(name, ((_a = animationCounters.get(name)) !== null && _a !== void 0 ? _a : 0) + 1);
+	        }
 	        // TODO: Replace animation name with options.name if present
-	        const animationName = `Animation ${recordedAnimationCount}`;
+	        const animationName = `${name} ${animationCounters.get(name)}`;
 	        const elementId = getElementId(element);
 	        // TODO: This section probably doesn't need to be immutible
 	        const newRecordedAnimations = Object.assign({}, recordedAnimations);
@@ -449,6 +457,7 @@
 	                    valueName,
 	                    keyframes: [],
 	                    options: {
+	                        name: animationName,
 	                        duration,
 	                        repeat,
 	                        easing: [],
@@ -1226,6 +1235,7 @@
 	                easing,
 	                repeat,
 	                offset,
+	                name: options.name,
 	            }, "motion-one");
 	        }
 	        motionValue.setAnimation(animation);

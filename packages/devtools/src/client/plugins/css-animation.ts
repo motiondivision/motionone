@@ -44,6 +44,7 @@ function getAnimationsFromAnimationEvent({
           valueName,
           keyframes: [],
           options: {
+            name: animationName,
             duration,
             repeat,
             easing: [],

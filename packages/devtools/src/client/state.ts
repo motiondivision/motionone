@@ -10,7 +10,6 @@ export interface ClientState {
   isRecording: boolean
   startRecording(): void
   stopRecording(): void
-  recordedAnimationCount: number
   recordedAnimations: AnimationsMetadata | undefined
   flushRecordedAnimations(): void
   scrubTo(time: number): void
@@ -24,27 +23,31 @@ export interface ClientState {
   ): void
 }
 
+const animationCounters = new Map<string, number>()
+const animationNamesToFlush = new Set<string>()
+
 export type ClientStore = UseBoundStore<ClientState, StoreApi<ClientState>>
 
 export const store = create<ClientState>(
   subscribeWithSelector((set, get) => ({
     inspectedAnimation: undefined,
     isRecording: false,
-    recordedAnimationCount: 0,
     recordedAnimations: undefined,
     startRecording: () => {
+      animationCounters.clear()
+      animationNamesToFlush.clear()
+
       set({
         isRecording: true,
         recordedAnimations: undefined,
-        recordedAnimationCount: 1,
         inspectedAnimation: undefined,
       })
     },
     stopRecording: () => set({ isRecording: false }),
     flushRecordedAnimations: () => {
+      animationNamesToFlush.clear()
       set({
         recordedAnimations: undefined,
-        recordedAnimationCount: get().recordedAnimationCount + 1,
       })
     },
     inspectAnimation: (inspectedAnimation) => set({ inspectedAnimation }),
@@ -55,16 +58,19 @@ export const store = create<ClientState>(
       }
     },
     recordAnimation: (element, valueName, keyframes, options, source) => {
-      const {
-        isRecording,
-        recordedAnimationCount,
-        recordedAnimations = {},
-      } = get()
+      const { isRecording, recordedAnimations = {} } = get()
 
       if (!isRecording) return
 
+      const name = options.name || "Animation"
+
+      if (!animationNamesToFlush.has(name)) {
+        animationNamesToFlush.add(name)
+        animationCounters.set(name, (animationCounters.get(name) ?? 0) + 1)
+      }
+
       // TODO: Replace animation name with options.name if present
-      const animationName = `Animation ${recordedAnimationCount}`
+      const animationName = `${name} ${animationCounters.get(name)}`
       const elementId = getElementId(element)
 
       // TODO: This section probably doesn't need to be immutible

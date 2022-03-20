@@ -240,6 +240,7 @@ export function animateStyle(
           easing,
           repeat,
           offset,
+          name: options.name,
         },
         "motion-one"
       )
