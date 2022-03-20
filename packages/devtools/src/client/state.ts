@@ -70,7 +70,8 @@ export const store = create<ClientState>(
       }
 
       // TODO: Replace animation name with options.name if present
-      const animationName = `${name} ${animationCounters.get(name)}`
+      const count = animationCounters.get(name)
+      const animationName = `${name} ${count === 1 ? "" : count}`.trim()
       const elementId = getElementId(element)
 
       // TODO: This section probably doesn't need to be immutible

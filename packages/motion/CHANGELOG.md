@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.8.0] [2022-03-20]
+
+### Added
+
+- Added support for `name` in `AnimationOptions`.
+
 ## [10.7.0] [2022-03-20]
 
 ### Added
