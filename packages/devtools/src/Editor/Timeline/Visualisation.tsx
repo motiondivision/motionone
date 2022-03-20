@@ -19,11 +19,13 @@ const Container = styled.div`
 `
 
 export function Visualisation({ animation, timelineRect }: Props) {
+  const containerRef = React.useRef(null)
   return (
-    <Container>
+    <Container ref={containerRef}>
       <TimeMarkers
         timelineRect={timelineRect}
         currentTime={animation.currentTime}
+        containerRef={containerRef}
       />
       <Keyframes animation={animation} />
       <PlaybackControls />

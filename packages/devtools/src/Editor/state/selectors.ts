@@ -25,3 +25,7 @@ export const getCurrentTime = (state: EditorState) => {
 export const getUpdateKeyframe = (state: EditorState) => {
   return state.updateKeyframe
 }
+
+export const getUpdateKeyframeEasing = (state: EditorState) => {
+  return state.updateKeyframeEasing
+}

@@ -1,4 +1,5 @@
 import { EditorState } from "./types"
+import { isEasingList } from "@motionone/utils"
 import create from "zustand"
 import produce from "immer"
 import { getCurrentTime } from "./selectors"
@@ -10,7 +11,7 @@ export const useEditorState = create<EditorState>((set, get) => ({
   animations: {},
   isRecording: false,
   hasRecorded: false,
-  auth: {
+  user: {
     isPro: false,
   },
   scale: 320,
@@ -76,6 +77,9 @@ export const useEditorState = create<EditorState>((set, get) => ({
     }
   },
   stopPlaying: () => set({ playbackOrigin: undefined }),
+  /**
+   * TODO: DRY updateKeyframe/KeyframeEasing
+   */
   updateKeyframe: (keyframe, newValue) => {
     const { animations, selectedAnimationName } = get()
     const { elementName, valueName, index } = keyframe
@@ -94,4 +98,37 @@ export const useEditorState = create<EditorState>((set, get) => ({
       selectedKeyframes: [{ ...keyframe }],
     })
   },
+  updateKeyframeEasing: (keyframe, newEasing) => {
+    const { animations, selectedAnimationName } = get()
+    const { elementName, valueName, index } = keyframe
+
+    if (!selectedAnimationName) return
+
+    set({
+      animations: produce(animations, (draft) => {
+        const valueIndex = draft[selectedAnimationName].elements[
+          elementName
+        ].findIndex((value) => value.valueName === valueName)
+
+        if (
+          isEasingList(
+            draft[selectedAnimationName].elements[elementName][valueIndex]
+              .options.easing
+          )
+        ) {
+          draft[selectedAnimationName].elements[elementName][
+            valueIndex
+          ].options.easing![index - 1] = newEasing
+        } else {
+          console.log("setting easing to ", newEasing)
+          draft[selectedAnimationName].elements[elementName][
+            valueIndex
+          ].options.easing = newEasing
+        }
+      }),
+      selectedKeyframes: [{ ...keyframe }],
+    })
+  },
+  logout: () => set({ user: { isPro: false } }),
+  login: (user) => set({ user }),
 }))

@@ -1,5 +1,4 @@
-export const controlsTheme = {
-  // className: "leva-container",
+export const theme = {
   colors: {
     elevation1: "transparent",
     elevation2: "transparent",

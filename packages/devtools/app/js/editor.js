@@ -532,6 +532,31 @@ const getCurrentTime$2 = (state) => {
 const getUpdateKeyframe = (state) => {
     return state.updateKeyframe;
 };
+const getUpdateKeyframeEasing = (state) => {
+    return state.updateKeyframeEasing;
+};
+
+const isNumber = (value) => typeof value === "number";
+const isEasingGenerator = (easing) => typeof easing === "object" &&
+    Boolean(easing.createAnimation);
+const isEasingList = (easing) => Array.isArray(easing) && !isNumber(easing[0]);
+
+const mix$1 = (min, max, progress) => -progress * min + progress * max + min;
+
+const progress$1 = (min, max, value) => max - min === 0 ? 1 : (value - min) / (max - min);
+
+function fillOffset(offset, remaining) {
+    const min = offset[offset.length - 1];
+    for (let i = 1; i <= remaining; i++) {
+        const offsetProgress = progress$1(0, remaining, i);
+        offset.push(mix$1(min, 1, offsetProgress));
+    }
+}
+function defaultOffset$1(length) {
+    const offset = [0];
+    fillOffset(offset, length - 1);
+    return offset;
+}
 
 function createStore(createState) {
   let state;
@@ -650,7 +675,7 @@ const useEditorState = create((set, get) => ({
     animations: {},
     isRecording: false,
     hasRecorded: false,
-    auth: {
+    user: {
         isPro: false,
     },
     scale: 320,
@@ -710,6 +735,9 @@ const useEditorState = create((set, get) => ({
         }
     },
     stopPlaying: () => set({ playbackOrigin: undefined }),
+    /**
+     * TODO: DRY updateKeyframe/KeyframeEasing
+     */
     updateKeyframe: (keyframe, newValue) => {
         const { animations, selectedAnimationName } = get();
         const { elementName, valueName, index } = keyframe;
@@ -723,6 +751,28 @@ const useEditorState = create((set, get) => ({
             selectedKeyframes: [Object.assign({}, keyframe)],
         });
     },
+    updateKeyframeEasing: (keyframe, newEasing) => {
+        const { animations, selectedAnimationName } = get();
+        const { elementName, valueName, index } = keyframe;
+        if (!selectedAnimationName)
+            return;
+        set({
+            animations: produce(animations, (draft) => {
+                const valueIndex = draft[selectedAnimationName].elements[elementName].findIndex((value) => value.valueName === valueName);
+                if (isEasingList(draft[selectedAnimationName].elements[elementName][valueIndex]
+                    .options.easing)) {
+                    draft[selectedAnimationName].elements[elementName][valueIndex].options.easing[index - 1] = newEasing;
+                }
+                else {
+                    console.log("setting easing to ", newEasing);
+                    draft[selectedAnimationName].elements[elementName][valueIndex].options.easing = newEasing;
+                }
+            }),
+            selectedKeyframes: [Object.assign({}, keyframe)],
+        });
+    },
+    logout: () => set({ user: { isPro: false } }),
+    login: (user) => set({ user }),
 }));
 
 function useEditAnimation(port) {
@@ -1611,12 +1661,12 @@ function spring(_a) {
 spring.needsInterpolation = (a, b) => typeof a === "string" || typeof b === "string";
 const zero = (_t) => 0;
 
-const progress$1 = (from, to, value) => {
+const progress = (from, to, value) => {
     const toFromDifference = to - from;
     return toFromDifference === 0 ? 1 : (value - from) / toFromDifference;
 };
 
-const mix$1 = (from, to, progress) => -progress * from + progress * to + from;
+const mix = (from, to, progress) => -progress * from + progress * to + from;
 
 const clamp$2 = (min, max) => (v) => Math.max(Math.min(v, max), min);
 const sanitize$6 = (v) => (v % 1 ? Number(v.toFixed(5)) : v);
@@ -1886,7 +1936,7 @@ const mixColor = (from, to) => {
                 blended[key] = mixLinearColor(fromColor[key], toColor[key], v);
             }
         }
-        blended.alpha = mix$1(fromColor.alpha, toColor.alpha, v);
+        blended.alpha = mix(fromColor.alpha, toColor.alpha, v);
         return fromColorType.transform(blended);
     };
 };
@@ -1898,7 +1948,7 @@ const pipe = (...transformers) => transformers.reduce(combineFunctions);
 
 function getMixer(origin, target) {
     if (isNum(origin)) {
-        return (v) => mix$1(origin, target, v);
+        return (v) => mix(origin, target, v);
     }
     else if (color$1.test(origin)) {
         return mixColor(origin, target);
@@ -1969,7 +2019,7 @@ const mixComplex = (origin, target) => {
     }
 };
 
-const mixNumber = (from, to) => (p) => mix$1(from, to, p);
+const mixNumber = (from, to) => (p) => mix(from, to, p);
 function detectMixerFactory(v) {
     if (typeof v === 'number') {
         return mixNumber;
@@ -2004,7 +2054,7 @@ function createMixers(output, ease, customMixer) {
     return mixers;
 }
 function fastInterpolate([from, to], [mixer]) {
-    return (v) => mixer(progress$1(from, to, v));
+    return (v) => mixer(progress(from, to, v));
 }
 function slowInterpolate(input, mixers) {
     const inputLength = input.length;
@@ -2028,7 +2078,7 @@ function slowInterpolate(input, mixers) {
             }
             mixerIndex = i - 1;
         }
-        const progressInRange = progress$1(input[mixerIndex], input[mixerIndex + 1], v);
+        const progressInRange = progress(input[mixerIndex], input[mixerIndex + 1], v);
         return mixers[mixerIndex](progressInRange);
     };
 }
@@ -2100,7 +2150,7 @@ const bounceInOut = (p) => p < 0.5
 function defaultEasing(values, easing) {
     return values.map(() => easing || easeInOut).splice(0, values.length - 1);
 }
-function defaultOffset$1(values) {
+function defaultOffset(values) {
     const numValues = values.length;
     return values.map((_value, i) => i !== 0 ? i / (numValues - 1) : 0);
 }
@@ -2112,7 +2162,7 @@ function keyframes$2({ from = 0, to = 1, ease, offset, duration = 300, }) {
     const values = Array.isArray(to) ? to : [from, to];
     const times = convertOffsetToTimes(offset && offset.length === values.length
         ? offset
-        : defaultOffset$1(values), duration);
+        : defaultOffset(values), duration);
     function createInterpolator() {
         return interpolate(times, values, {
             ease: Array.isArray(ease) ? ease : defaultEasing(values, ease),
@@ -3241,14 +3291,14 @@ var isPx = function (value) {
 function mixValues(target, follow, lead, progress, shouldCrossfadeOpacity, isOnlyMember) {
     var _a, _b, _c, _d;
     if (shouldCrossfadeOpacity) {
-        target.opacity = mix$1(0, 
+        target.opacity = mix(0, 
         // (follow?.opacity as number) ?? 0,
         // TODO Reinstate this if only child
         (_a = lead.opacity) !== null && _a !== void 0 ? _a : 1, easeCrossfadeIn(progress));
-        target.opacityExit = mix$1((_b = follow.opacity) !== null && _b !== void 0 ? _b : 1, 0, easeCrossfadeOut(progress));
+        target.opacityExit = mix((_b = follow.opacity) !== null && _b !== void 0 ? _b : 1, 0, easeCrossfadeOut(progress));
     }
     else if (isOnlyMember) {
-        target.opacity = mix$1((_c = follow.opacity) !== null && _c !== void 0 ? _c : 1, (_d = lead.opacity) !== null && _d !== void 0 ? _d : 1, progress);
+        target.opacity = mix((_c = follow.opacity) !== null && _c !== void 0 ? _c : 1, (_d = lead.opacity) !== null && _d !== void 0 ? _d : 1, progress);
     }
     /**
      * Mix border radius
@@ -3265,7 +3315,7 @@ function mixValues(target, follow, lead, progress, shouldCrossfadeOpacity, isOnl
             leadRadius === 0 ||
             isPx(followRadius) === isPx(leadRadius);
         if (canMix) {
-            target[borderLabel] = Math.max(mix$1(asNumber(followRadius), asNumber(leadRadius), progress), 0);
+            target[borderLabel] = Math.max(mix(asNumber(followRadius), asNumber(leadRadius), progress), 0);
             if (percent.test(leadRadius) || percent.test(followRadius)) {
                 target[borderLabel] += "%";
             }
@@ -3278,7 +3328,7 @@ function mixValues(target, follow, lead, progress, shouldCrossfadeOpacity, isOnl
      * Mix rotation
      */
     if (follow.rotate || lead.rotate) {
-        target.rotate = mix$1(follow.rotate || 0, lead.rotate || 0, progress);
+        target.rotate = mix(follow.rotate || 0, lead.rotate || 0, progress);
     }
 }
 function getRadius(values, radiusName) {
@@ -3317,7 +3367,7 @@ function compress(min, max, easing) {
             return 0;
         if (p > max)
             return 1;
-        return easing(progress$1(min, max, p));
+        return easing(progress(min, max, p));
     };
 }
 
@@ -3447,7 +3497,7 @@ function translateAxis(axis, distance) {
 function transformAxis(axis, transforms, _a) {
     var _b = __read(_a, 3), key = _b[0], scaleKey = _b[1], originKey = _b[2];
     var axisOrigin = transforms[originKey] !== undefined ? transforms[originKey] : 0.5;
-    var originPoint = mix$1(axis.min, axis.max, axisOrigin);
+    var originPoint = mix(axis.min, axis.max, axisOrigin);
     // Apply the axis delta to the final axis
     applyAxisDelta(axis, transforms[key], transforms[scaleKey], originPoint, transforms.scale);
 }
@@ -3475,12 +3525,12 @@ function isNear(value, target, maxDistance) {
 function calcAxisDelta(delta, source, target, origin) {
     if (origin === void 0) { origin = 0.5; }
     delta.origin = origin;
-    delta.originPoint = mix$1(source.min, source.max, delta.origin);
+    delta.originPoint = mix(source.min, source.max, delta.origin);
     delta.scale = calcLength(target) / calcLength(source);
     if (isNear(delta.scale, 1, 0.0001) || isNaN(delta.scale))
         delta.scale = 1;
     delta.translate =
-        mix$1(target.min, target.max, delta.origin) - delta.originPoint;
+        mix(target.min, target.max, delta.origin) - delta.originPoint;
     if (isNear(delta.translate) || isNaN(delta.translate))
         delta.translate = 0;
 }
@@ -3527,12 +3577,12 @@ function removeAxisDelta(axis, translate, scale, origin, boxScale, originAxis, s
     if (sourceAxis === void 0) { sourceAxis = axis; }
     if (percent.test(translate)) {
         translate = parseFloat(translate);
-        var relativeProgress = mix$1(sourceAxis.min, sourceAxis.max, translate / 100);
+        var relativeProgress = mix(sourceAxis.min, sourceAxis.max, translate / 100);
         translate = relativeProgress - sourceAxis.min;
     }
     if (typeof translate !== "number")
         return;
-    var originPoint = mix$1(originAxis.min, originAxis.max, origin);
+    var originPoint = mix(originAxis.min, originAxis.max, origin);
     if (axis === originAxis)
         originPoint -= translate;
     axis.min = removePointDelta(axis.min, translate, scale, originPoint, boxScale);
@@ -4946,14 +4996,14 @@ function removeLeadSnapshots(stack) {
     stack.removeLeadSnapshot();
 }
 function mixAxisDelta(output, delta, p) {
-    output.translate = mix$1(delta.translate, 0, p);
-    output.scale = mix$1(delta.scale, 1, p);
+    output.translate = mix(delta.translate, 0, p);
+    output.scale = mix(delta.scale, 1, p);
     output.origin = delta.origin;
     output.originPoint = delta.originPoint;
 }
 function mixAxis(output, from, to, p) {
-    output.min = mix$1(from.min, to.min, p);
-    output.max = mix$1(from.max, to.max, p);
+    output.min = mix(from.min, to.min, p);
+    output.max = mix(from.max, to.max, p);
 }
 function mixBox(output, from, to, p) {
     mixAxis(output.x, from.x, to.x, p);
@@ -7187,11 +7237,11 @@ function applyConstraints(point, _a, elastic) {
     var min = _a.min, max = _a.max;
     if (min !== undefined && point < min) {
         // If we have a min point defined, and this is outside of that, constrain
-        point = elastic ? mix$1(min, point, elastic.min) : Math.max(point, min);
+        point = elastic ? mix(min, point, elastic.min) : Math.max(point, min);
     }
     else if (max !== undefined && point > max) {
         // If we have a max point defined, and this is outside of that, constrain
-        point = elastic ? mix$1(max, point, elastic.max) : Math.min(point, max);
+        point = elastic ? mix(max, point, elastic.max) : Math.min(point, max);
     }
     return point;
 }
@@ -7252,10 +7302,10 @@ function calcOrigin(source, target) {
     var sourceLength = calcLength(source);
     var targetLength = calcLength(target);
     if (targetLength > sourceLength) {
-        origin = progress$1(target.min, target.max - sourceLength, source.min);
+        origin = progress(target.min, target.max - sourceLength, source.min);
     }
     else if (sourceLength > targetLength) {
-        origin = progress$1(source.min, source.max - targetLength, target.min);
+        origin = progress(source.min, source.max - targetLength, target.min);
     }
     return clamp$3(0, 1, origin);
 }
@@ -7631,7 +7681,7 @@ var VisualElementDragControls = /** @class */ (function () {
             var axisValue = _this.getAxisMotionValue(axis);
             if (projection && projection.layout) {
                 var _a = projection.layout.actual[axis], min = _a.min, max = _a.max;
-                axisValue.set(point[axis] - mix$1(min, max, 0.5));
+                axisValue.set(point[axis] - mix(min, max, 0.5));
             }
         });
     };
@@ -7686,7 +7736,7 @@ var VisualElementDragControls = /** @class */ (function () {
              */
             var axisValue = _this.getAxisMotionValue(axis);
             var _a = _this.constraints[axis], min = _a.min, max = _a.max;
-            axisValue.set(mix$1(min, max, boxProgress[axis]));
+            axisValue.set(mix(min, max, boxProgress[axis]));
         });
     };
     VisualElementDragControls.prototype.addListeners = function () {
@@ -8842,7 +8892,7 @@ var correctBoxShadow = {
          * We could potentially improve the outcome of this by incorporating the ratio between
          * the two scales.
          */
-        var averageScale = mix$1(xScale, yScale, 0.5);
+        var averageScale = mix(xScale, yScale, 0.5);
         // Blur
         if (typeof shadow[2 + offset] === "number")
             shadow[2 + offset] /= averageScale;
@@ -10066,7 +10116,7 @@ const RecordIcon = styled$1(motion.div) `
   background-color: rgba(255, 255, 255, 0.5);
 `;
 
-const Container$b = styled$1(motion.div) `
+const Container$c = styled$1(motion.div) `
   flex: 1;
   display: flex;
   justify-content: center;
@@ -10084,7 +10134,7 @@ const RecordIconContainer = styled$1.div `
   transform: translateY(3px);
 `;
 function Instructions$1() {
-    return (react.exports.createElement(Container$b, { exit: { scale: 0.925, opacity: 0 }, transition: { type: "spring", duration: 0.5, bounce: 0 } },
+    return (react.exports.createElement(Container$c, { exit: { scale: 0.925, opacity: 0 }, transition: { type: "spring", duration: 0.5, bounce: 0 } },
         react.exports.createElement("p", null,
             "Click the",
             " ",
@@ -10132,7 +10182,7 @@ function shallow(objA, objB) {
   return true;
 }
 
-const Container$a = styled$1.section `
+const Container$b = styled$1.section `
   flex: 0 0 var(--tab-bar-height);
   border-bottom: 1px solid var(--feint);
   display: flex;
@@ -10177,7 +10227,7 @@ const getTabBarState = (state) => ({
 });
 function TabBar() {
     const { isRecording, startRecording, stopRecording, animations, selectAnimation, selected, } = useEditorState(getTabBarState, shallow);
-    return (react.exports.createElement(Container$a, null,
+    return (react.exports.createElement(Container$b, null,
         react.exports.createElement(RecordButton, { isRecording: isRecording, startRecording: startRecording, stopRecording: stopRecording }),
         react.exports.createElement(Tabs, { layoutScroll: true }, Object.keys(animations).map((animationName) => (react.exports.createElement(Tab, { key: animationName, onClick: () => selectAnimation(animationName), initial: { opacity: 0, x: 50 }, animate: { opacity: 1, x: 0 }, transition: transition },
             react.exports.createElement(motion.span, { initial: false, animate: { opacity: animationName === selected ? 1 : 0.65 }, transition: { duration } }, animationName),
@@ -10195,7 +10245,7 @@ function inspect(motionId) {
         console.log(result);
     });
 }
-const Container$9 = styled$1.header `
+const Container$a = styled$1.header `
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -10208,7 +10258,7 @@ const Container$9 = styled$1.header `
   }
 `;
 function ElementDetails({ name }) {
-    return (react.exports.createElement(Container$9, null,
+    return (react.exports.createElement(Container$a, null,
         react.exports.createElement("h2", null,
             react.exports.createElement("code", null, name)),
         react.exports.createElement("button", { onClick: () => inspect(name) },
@@ -10231,7 +10281,7 @@ const SidebarContainer = styled$1.section `
   bottom: 0;
   z-index: 5;
 `;
-const Container$8 = styled$1(SidebarContainer) `
+const Container$9 = styled$1(SidebarContainer) `
   left: 0;
   border-right: 1px solid var(--feint);
 
@@ -10274,27 +10324,137 @@ function Sidebar({ animation }) {
             react.exports.createElement(ElementDetails, { name: elementName }),
             elementChildren));
     }
-    return react.exports.createElement(Container$8, null, children);
+    return react.exports.createElement(Container$9, null, children);
 }
 
-const isNumber = (value) => typeof value === "number";
-const isEasingList = (easing) => Array.isArray(easing) && !isNumber(easing[0]);
+const scrubberHalfWidth = 16;
+const Container$8 = styled$1.div `
+  position: absolute;
+  width: 20px;
+  height: var(--row-height);
+  cursor: grabber;
 
-const mix = (min, max, progress) => -progress * min + progress * max + min;
+  svg {
+    position: relative;
+    top: 15px;
+    left: 5px;
+  }
+`;
+const Stick = styled$1.div `
+  width: 1px;
+  height: 0;
+  background-color: var(--splash);
+  position: absolute;
+  top: var(--row-height);
+  left: 10px;
+  pointer-events: none;
+`;
+function ScrubberIcon() {
+    return (react.exports.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", width: "12", height: "20" },
+        react.exports.createElement("path", { d: "M 0 2.25 C 0 1.145 0.895 0.25 2 0.25 L 9 0.25 C 10.105 0.25 11 1.145 11 2.25 L 11 14.997 C 11 15.721 10.609 16.388 9.977 16.742 L 5.5 19.25 L 1.023 16.742 C 0.391 16.388 0 15.721 0 14.997 Z", fill: "var(--splash)" })));
+}
+function Scrubber$1({ scale, currentTime, dragOrigin, setDragOrigin, stopPlaying, timelineHeight, containerRef, }) {
+    return (react.exports.createElement(Container$8, { style: {
+            transform: `translateX(${scale * currentTime + 7}px)`,
+            cursor: dragOrigin ? "grabbing" : "grab",
+        }, onPointerDown: (e) => {
+            e.stopPropagation();
+            stopPlaying();
+            setDragOrigin({
+                pointerX: e.pageX + containerRef.current.scrollLeft - scrubberHalfWidth,
+                time: currentTime,
+            });
+        } },
+        react.exports.createElement(ScrubberIcon, null),
+        react.exports.createElement(Stick, { onPointerDown: (e) => e.stopPropagation(), style: {
+                height: `calc(${Math.floor(timelineHeight)}px - var(--row-height))`,
+            } })));
+}
 
-const progress = (min, max, value) => max - min === 0 ? 1 : (value - min) / (max - min);
-
-function fillOffset(offset, remaining) {
-    const min = offset[offset.length - 1];
-    for (let i = 1; i <= remaining; i++) {
-        const offsetProgress = progress(0, remaining, i);
-        offset.push(mix(min, 1, offsetProgress));
+const MarkerBackground = styled$1.div `
+  background-color: var(--feint);
+  backdrop-filter: brightness(50%) blur(3px);
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: var(--tab-bar-height);
+  height: var(--row-height);
+  z-index: 2;
+`;
+const Container$7 = styled$1.div `
+  margin-left: calc(-1 * var(--sidebar-width) - 40px);
+  padding-left: calc(var(--sidebar-width) + 40px);
+  flex: 0 0 var(--row-height);
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  z-index: 3;
+`;
+const Marker = styled$1.div `
+  --marker-padding: 10px;
+  padding-left: var(--marker-padding);
+  color: var(--white);
+  font-weight: bold;
+  flex: 0 0 calc(var(--marker-width));
+`;
+// TODO Automatically generate from scale
+const increment = 0.5;
+function generateMarkers(totalWidth, scale) {
+    if (!totalWidth)
+        return null;
+    const numVisibleSeconds = totalWidth / scale;
+    const numMarkers = Math.ceil(numVisibleSeconds / increment);
+    const markers = [];
+    for (let i = 0; i < numMarkers; i++) {
+        const time = increment * i;
+        markers.push(react.exports.createElement(Marker, { key: time, style: { "--marker-width": increment * scale + "px" } }, time));
     }
+    return markers;
 }
-function defaultOffset(length) {
-    const offset = [0];
-    fillOffset(offset, length - 1);
-    return offset;
+const getTimeScale$1 = (state) => state.scale;
+const getScrubTo = (state) => state.scrubTo;
+function TimeMarkers({ currentTime, timelineRect, containerRef, }) {
+    const [dragOrigin, setDragOrigin] = react.exports.useState(undefined);
+    const scale = useEditorState(getTimeScale$1);
+    const scrubTo = useEditorState(getScrubTo);
+    const { stopPlaying } = useEditorState(getPlayback);
+    const markers = react.exports.useMemo(() => generateMarkers(timelineRect.width, scale), [timelineRect.width, scale]);
+    react.exports.useEffect(() => {
+        document.getElementsByTagName("body")[0].style.cursor = dragOrigin
+            ? "grabbing"
+            : "";
+        if (!dragOrigin)
+            return;
+        const handleDrag = (e) => {
+            const deltaX = e.pageX +
+                containerRef.current.scrollLeft -
+                scrubberHalfWidth -
+                dragOrigin.pointerX;
+            scrubTo(Math.max(0, dragOrigin.time + deltaX / scale));
+        };
+        const stopDrag = () => setDragOrigin(undefined);
+        window.addEventListener("pointermove", handleDrag);
+        window.addEventListener("pointerup", stopDrag);
+        return () => {
+            window.removeEventListener("pointermove", handleDrag);
+            window.removeEventListener("pointerup", stopDrag);
+        };
+    }, [dragOrigin]);
+    return (react.exports.createElement(react.exports.Fragment, null,
+        react.exports.createElement(MarkerBackground, { onClick: (e) => e.stopPropagation() }),
+        react.exports.createElement(Container$7, { onClick: (e) => e.stopPropagation(), onPointerDown: (e) => {
+                const pointerX = e.pageX + containerRef.current.scrollLeft - scrubberHalfWidth;
+                const time = (pointerX - 220) / scale;
+                stopPlaying();
+                setDragOrigin({
+                    pointerX,
+                    time,
+                });
+                scrubTo(Math.max(0, time));
+            } },
+            markers,
+            react.exports.createElement(Scrubber$1, { scale: scale, currentTime: currentTime, dragOrigin: dragOrigin, setDragOrigin: setDragOrigin, stopPlaying: stopPlaying, timelineHeight: timelineRect.height, containerRef: containerRef }))));
 }
 
 function RepeatIcon({ style }) {
@@ -10381,15 +10541,15 @@ function RepeatMarker({ scale, time, repeat }) {
             react.exports.createElement(RepeatIcon, { style: { width: 20, height: 20 } }),
             repeat)));
 }
-const getSelectedKeyframes = (state) => state.selectedKeyframes;
+const getSelectedKeyframes$1 = (state) => state.selectedKeyframes;
 const getSelectKeyframe = (state) => state.selectKeyframe;
 function ValueKeyframes({ scale, animation }) {
     const selectKeyframe = useEditorState(getSelectKeyframe);
-    const selectedKeyframes = useEditorState(getSelectedKeyframes);
+    const selectedKeyframes = useEditorState(getSelectedKeyframes$1);
     const { elementId, valueName, keyframes, options } = animation;
     let { delay = 0, duration = 0.3, offset, repeat } = options;
     const numKeyframes = keyframes.length;
-    offset !== null && offset !== void 0 ? offset : (offset = defaultOffset(numKeyframes));
+    offset !== null && offset !== void 0 ? offset : (offset = defaultOffset$1(numKeyframes));
     const remainder = numKeyframes - offset.length;
     remainder > 0 && fillOffset(offset, remainder);
     const markers = [];
@@ -10428,11 +10588,11 @@ function ValueKeyframes({ scale, animation }) {
         markers,
         repeat ? (react.exports.createElement(RepeatMarker, { repeat: repeat, time: prevTime || 0, scale: scale })) : null));
 }
-const getTimeScale$1 = (state) => state.scale;
+const getTimeScale = (state) => state.scale;
 function Keyframes({ animation }) {
     const { elements } = animation;
     const elementAnimations = [];
-    const scale = useEditorState(getTimeScale$1);
+    const scale = useEditorState(getTimeScale);
     for (const elementName in elements) {
         const valueAnimations = [];
         for (const valueAnimation of elements[elementName]) {
@@ -10440,7 +10600,7 @@ function Keyframes({ animation }) {
         }
         elementAnimations.push(react.exports.createElement(ElementAnimationContainer, { key: elementName }, valueAnimations));
     }
-    return react.exports.createElement(react.exports.Fragment, null, elementAnimations);
+    return react.exports.createElement("div", null, elementAnimations);
 }
 function isKeyframeSelected(selectedKeyframes, elementName, valueName, keyframeIndex) {
     if (!selectedKeyframes)
@@ -10448,6 +10608,533 @@ function isKeyframeSelected(selectedKeyframes, elementName, valueName, keyframeI
     return selectedKeyframes.some((keyframe) => keyframe.elementName === elementName &&
         keyframe.valueName === valueName &&
         keyframe.index === keyframeIndex);
+}
+
+function PlayIcon({ style }) {
+    return (react.exports.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 512 512", style: style },
+        react.exports.createElement("title", null, "Play"),
+        react.exports.createElement("path", { d: "M133 440a35.37 35.37 0 01-17.5-4.67c-12-6.8-19.46-20-19.46-34.33V111c0-14.37 7.46-27.53 19.46-34.33a35.13 35.13 0 0135.77.45l247.85 148.36a36 36 0 010 61l-247.89 148.4A35.5 35.5 0 01133 440z" })));
+}
+
+function PauseIcon({ style }) {
+    return (react.exports.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 512 512", style: style },
+        react.exports.createElement("title", null, "Pause"),
+        react.exports.createElement("path", { d: "M208 432h-48a16 16 0 01-16-16V96a16 16 0 0116-16h48a16 16 0 0116 16v320a16 16 0 01-16 16zM352 432h-48a16 16 0 01-16-16V96a16 16 0 0116-16h48a16 16 0 0116 16v320a16 16 0 01-16 16z" })));
+}
+
+const defaultTimestep = (1 / 60) * 1000;
+const getCurrentTime = typeof performance !== "undefined"
+    ? () => performance.now()
+    : () => Date.now();
+const onNextFrame = typeof window !== "undefined"
+    ? (callback) => window.requestAnimationFrame(callback)
+    : (callback) => setTimeout(() => callback(getCurrentTime()), defaultTimestep);
+
+function createRenderStep(runNextFrame) {
+    let toRun = [];
+    let toRunNextFrame = [];
+    let numToRun = 0;
+    let isProcessing = false;
+    let flushNextFrame = false;
+    const toKeepAlive = new WeakSet();
+    const step = {
+        schedule: (callback, keepAlive = false, immediate = false) => {
+            const addToCurrentFrame = immediate && isProcessing;
+            const buffer = addToCurrentFrame ? toRun : toRunNextFrame;
+            if (keepAlive)
+                toKeepAlive.add(callback);
+            if (buffer.indexOf(callback) === -1) {
+                buffer.push(callback);
+                if (addToCurrentFrame && isProcessing)
+                    numToRun = toRun.length;
+            }
+            return callback;
+        },
+        cancel: (callback) => {
+            const index = toRunNextFrame.indexOf(callback);
+            if (index !== -1)
+                toRunNextFrame.splice(index, 1);
+            toKeepAlive.delete(callback);
+        },
+        process: (frameData) => {
+            if (isProcessing) {
+                flushNextFrame = true;
+                return;
+            }
+            isProcessing = true;
+            [toRun, toRunNextFrame] = [toRunNextFrame, toRun];
+            toRunNextFrame.length = 0;
+            numToRun = toRun.length;
+            if (numToRun) {
+                for (let i = 0; i < numToRun; i++) {
+                    const callback = toRun[i];
+                    callback(frameData);
+                    if (toKeepAlive.has(callback)) {
+                        step.schedule(callback);
+                        runNextFrame();
+                    }
+                }
+            }
+            isProcessing = false;
+            if (flushNextFrame) {
+                flushNextFrame = false;
+                step.process(frameData);
+            }
+        },
+    };
+    return step;
+}
+
+const maxElapsed = 40;
+let useDefaultElapsed = true;
+let runNextFrame = false;
+let isProcessing = false;
+const frame = {
+    delta: 0,
+    timestamp: 0,
+};
+const stepsOrder = [
+    "read",
+    "update",
+    "preRender",
+    "render",
+    "postRender",
+];
+const steps = stepsOrder.reduce((acc, key) => {
+    acc[key] = createRenderStep(() => (runNextFrame = true));
+    return acc;
+}, {});
+const sync = stepsOrder.reduce((acc, key) => {
+    const step = steps[key];
+    acc[key] = (process, keepAlive = false, immediate = false) => {
+        if (!runNextFrame)
+            startLoop();
+        return step.schedule(process, keepAlive, immediate);
+    };
+    return acc;
+}, {});
+const cancelSync = stepsOrder.reduce((acc, key) => {
+    acc[key] = steps[key].cancel;
+    return acc;
+}, {});
+stepsOrder.reduce((acc, key) => {
+    acc[key] = () => steps[key].process(frame);
+    return acc;
+}, {});
+const processStep = (stepId) => steps[stepId].process(frame);
+const processFrame = (timestamp) => {
+    runNextFrame = false;
+    frame.delta = useDefaultElapsed
+        ? defaultTimestep
+        : Math.max(Math.min(timestamp - frame.timestamp, maxElapsed), 1);
+    frame.timestamp = timestamp;
+    isProcessing = true;
+    stepsOrder.forEach(processStep);
+    isProcessing = false;
+    if (runNextFrame) {
+        useDefaultElapsed = false;
+        onNextFrame(processFrame);
+    }
+};
+const startLoop = () => {
+    runNextFrame = true;
+    useDefaultElapsed = true;
+    if (!isProcessing)
+        onNextFrame(processFrame);
+};
+
+const Container$6 = styled$1.div `
+  background-color: var(--feint);
+  position: fixed;
+  bottom: 10px;
+  left: calc(var(--sidebar-width) + 10px);
+  border-radius: 20px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  z-index: 4;
+  backdrop-filter: blur(4px);
+
+  span {
+    display: block;
+    font-weight: bold;
+  }
+`;
+const PlaybackToggle = styled$1.button `
+  padding: 0;
+  margin-right: 8px;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--white);
+  }
+`;
+function PlaybackControls() {
+    const { playbackOrigin, startPlaying, stopPlaying, scrubTo } = useEditorState(getPlayback);
+    react.exports.useEffect(() => {
+        if (!playbackOrigin)
+            return;
+        const onFrame = ({ timestamp }) => {
+            const delta = timestamp - playbackOrigin.startedAt;
+            scrubTo((playbackOrigin.originTime + delta) / 1000);
+        };
+        sync.update(onFrame, true);
+        return () => cancelSync.update(onFrame);
+    }, [playbackOrigin]);
+    return (react.exports.createElement(Container$6, { onClick: (e) => e.stopPropagation() },
+        react.exports.createElement(PlaybackToggle, { onClick: playbackOrigin ? stopPlaying : startPlaying }, playbackOrigin ? react.exports.createElement(PauseIcon, null) : react.exports.createElement(PlayIcon, null)),
+        react.exports.createElement(CurrentTime, null)));
+}
+function CurrentTime() {
+    const currentAnimation = useEditorState(getSelectedAnimation);
+    if (!currentAnimation)
+        return null;
+    return react.exports.createElement("span", null, currentAnimation.currentTime.toFixed(2));
+}
+
+/**
+ * Returns a function, that, as long as it continues to be invoked, will not
+ * be triggered. The function will be called after it stops being called for
+ * N milliseconds. If `immediate` is passed, trigger the function on the
+ * leading edge, instead of the trailing. The function also has a property 'clear' 
+ * that is a function which will clear the timer to prevent previously scheduled executions. 
+ *
+ * @source underscore.js
+ * @see http://unscriptable.com/2009/03/20/debouncing-javascript-methods/
+ * @param {Function} function to wrap
+ * @param {Number} timeout in ms (`100`)
+ * @param {Boolean} whether to execute at the beginning (`false`)
+ * @api public
+ */
+
+function debounce$1(func, wait, immediate){
+  var timeout, args, context, timestamp, result;
+  if (null == wait) wait = 100;
+
+  function later() {
+    var last = Date.now() - timestamp;
+
+    if (last < wait && last >= 0) {
+      timeout = setTimeout(later, wait - last);
+    } else {
+      timeout = null;
+      if (!immediate) {
+        result = func.apply(context, args);
+        context = args = null;
+      }
+    }
+  }
+  var debounced = function(){
+    context = this;
+    args = arguments;
+    timestamp = Date.now();
+    var callNow = immediate && !timeout;
+    if (!timeout) timeout = setTimeout(later, wait);
+    if (callNow) {
+      result = func.apply(context, args);
+      context = args = null;
+    }
+
+    return result;
+  };
+
+  debounced.clear = function() {
+    if (timeout) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+  };
+  
+  debounced.flush = function() {
+    if (timeout) {
+      result = func.apply(context, args);
+      context = args = null;
+      
+      clearTimeout(timeout);
+      timeout = null;
+    }
+  };
+
+  return debounced;
+}
+// Adds compatibility for ES modules
+debounce$1.debounce = debounce$1;
+
+var debounce_1 = debounce$1;
+
+function useMeasure(_temp) {
+  let {
+    debounce,
+    scroll,
+    polyfill,
+    offsetSize
+  } = _temp === void 0 ? {
+    debounce: 0,
+    scroll: false,
+    offsetSize: false
+  } : _temp;
+  const ResizeObserver = polyfill || (typeof window === 'undefined' ? class ResizeObserver {} : window.ResizeObserver);
+
+  if (!ResizeObserver) {
+    throw new Error('This browser does not support ResizeObserver out of the box. See: https://github.com/react-spring/react-use-measure/#resize-observer-polyfills');
+  }
+
+  const [bounds, set] = react.exports.useState({
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0,
+    bottom: 0,
+    right: 0,
+    x: 0,
+    y: 0
+  }); // keep all state in a ref
+
+  const state = react.exports.useRef({
+    element: null,
+    scrollContainers: null,
+    resizeObserver: null,
+    lastBounds: bounds
+  }); // set actual debounce values early, so effects know if they should react accordingly
+
+  const scrollDebounce = debounce ? typeof debounce === 'number' ? debounce : debounce.scroll : null;
+  const resizeDebounce = debounce ? typeof debounce === 'number' ? debounce : debounce.resize : null; // make sure to update state only as long as the component is truly mounted
+
+  const mounted = react.exports.useRef(false);
+  react.exports.useEffect(() => {
+    mounted.current = true;
+    return () => void (mounted.current = false);
+  }); // memoize handlers, so event-listeners know when they should update
+
+  const [forceRefresh, resizeChange, scrollChange] = react.exports.useMemo(() => {
+    const callback = () => {
+      if (!state.current.element) return;
+      const {
+        left,
+        top,
+        width,
+        height,
+        bottom,
+        right,
+        x,
+        y
+      } = state.current.element.getBoundingClientRect();
+      const size = {
+        left,
+        top,
+        width,
+        height,
+        bottom,
+        right,
+        x,
+        y
+      };
+
+      if (state.current.element instanceof HTMLElement && offsetSize) {
+        size.height = state.current.element.offsetHeight;
+        size.width = state.current.element.offsetWidth;
+      }
+
+      Object.freeze(size);
+      if (mounted.current && !areBoundsEqual(state.current.lastBounds, size)) set(state.current.lastBounds = size);
+    };
+
+    return [callback, resizeDebounce ? debounce_1(callback, resizeDebounce) : callback, scrollDebounce ? debounce_1(callback, scrollDebounce) : callback];
+  }, [set, offsetSize, scrollDebounce, resizeDebounce]); // cleanup current scroll-listeners / observers
+
+  function removeListeners() {
+    if (state.current.scrollContainers) {
+      state.current.scrollContainers.forEach(element => element.removeEventListener('scroll', scrollChange, true));
+      state.current.scrollContainers = null;
+    }
+
+    if (state.current.resizeObserver) {
+      state.current.resizeObserver.disconnect();
+      state.current.resizeObserver = null;
+    }
+  } // add scroll-listeners / observers
+
+
+  function addListeners() {
+    if (!state.current.element) return;
+    state.current.resizeObserver = new ResizeObserver(scrollChange);
+    state.current.resizeObserver.observe(state.current.element);
+
+    if (scroll && state.current.scrollContainers) {
+      state.current.scrollContainers.forEach(scrollContainer => scrollContainer.addEventListener('scroll', scrollChange, {
+        capture: true,
+        passive: true
+      }));
+    }
+  } // the ref we expose to the user
+
+
+  const ref = node => {
+    if (!node || node === state.current.element) return;
+    removeListeners();
+    state.current.element = node;
+    state.current.scrollContainers = findScrollContainers(node);
+    addListeners();
+  }; // add general event listeners
+
+
+  useOnWindowScroll(scrollChange, Boolean(scroll));
+  useOnWindowResize(resizeChange); // respond to changes that are relevant for the listeners
+
+  react.exports.useEffect(() => {
+    removeListeners();
+    addListeners();
+  }, [scroll, scrollChange, resizeChange]); // remove all listeners when the components unmounts
+
+  react.exports.useEffect(() => removeListeners, []);
+  return [ref, bounds, forceRefresh];
+} // Adds native resize listener to window
+
+
+function useOnWindowResize(onWindowResize) {
+  react.exports.useEffect(() => {
+    const cb = onWindowResize;
+    window.addEventListener('resize', cb);
+    return () => void window.removeEventListener('resize', cb);
+  }, [onWindowResize]);
+}
+
+function useOnWindowScroll(onScroll, enabled) {
+  react.exports.useEffect(() => {
+    if (enabled) {
+      const cb = onScroll;
+      window.addEventListener('scroll', cb, {
+        capture: true,
+        passive: true
+      });
+      return () => void window.removeEventListener('scroll', cb, true);
+    }
+  }, [onScroll, enabled]);
+} // Returns a list of scroll offsets
+
+
+function findScrollContainers(element) {
+  const result = [];
+  if (!element || element === document.body) return result;
+  const {
+    overflow,
+    overflowX,
+    overflowY
+  } = window.getComputedStyle(element);
+  if ([overflow, overflowX, overflowY].some(prop => prop === 'auto' || prop === 'scroll')) result.push(element);
+  return [...result, ...findScrollContainers(element.parentElement)];
+} // Checks if element boundaries are equal
+
+
+const keys = ['x', 'y', 'top', 'bottom', 'left', 'right', 'width', 'height'];
+
+const areBoundsEqual = (a, b) => keys.every(key => a[key] === b[key]);
+
+function mergeRefs$1(refs) {
+  return function (value) {
+    refs.forEach(function (ref) {
+      if (typeof ref === "function") {
+        ref(value);
+      } else if (ref != null) {
+        ref.current = value;
+      }
+    });
+  };
+}
+
+const Container$5 = styled$1(motion.main) `
+  display: flex;
+  overflow: overlay;
+  flex: 1;
+  --row-height: 34px;
+  --sidebar-width: 220px;
+`;
+const Content$2 = styled$1.div `
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+`;
+const Visualisation = styled$1.div `
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  flex: 1;
+`;
+const getTimelineState = ({ animations, selectedAnimationName, deselectKeyframes, }) => ({
+    animations,
+    selectedAnimationName,
+    deselectKeyframes,
+});
+function Timeline() {
+    let children = null;
+    const ref = react.exports.useRef(null);
+    const [measureRef, rect] = useMeasure();
+    const { animations, selectedAnimationName, 
+    // TODO: Move this to within keyframes
+    deselectKeyframes, } = useEditorState(getTimelineState);
+    if (selectedAnimationName) {
+        const selectedAnimation = animations[selectedAnimationName];
+        if (selectedAnimation) {
+            children = (react.exports.createElement(Container$5, { ref: mergeRefs$1([ref, measureRef]), key: selectedAnimationName },
+                react.exports.createElement(Content$2, null,
+                    react.exports.createElement(Sidebar, { animation: selectedAnimation }),
+                    react.exports.createElement(Visualisation, { onClick: deselectKeyframes },
+                        react.exports.createElement(TimeMarkers, { containerRef: ref, timelineRect: rect, currentTime: selectedAnimation.currentTime }),
+                        react.exports.createElement(Keyframes, { animation: selectedAnimation }),
+                        react.exports.createElement(PlaybackControls, null)))));
+        }
+    }
+    return react.exports.createElement(react.exports.Fragment, null, children);
+}
+
+const Container$4 = styled$1(motion.div) `
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  p,
+  a {
+    font-size: 16px;
+  }
+
+  a {
+    color: var(--blue);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+`;
+const LoginButton = styled$1(motion.button) `
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 16px;
+  padding: 15px 20px;
+  border-radius: 10px;
+  background: var(--strong-blue);
+  color: var(--white);
+  margin: 20px 0;
+`;
+const variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { type: "spring", duration: 0.8, bounce: 0 },
+    },
+};
+function LoginDialog() {
+    return (react.exports.createElement(Container$4, { initial: "hidden", animate: "visible", variants: { visible: { transition: { staggerChildren: 0.1 } } } },
+        react.exports.createElement(motion.p, { variants: variants }, "Motion Developer Tools is available in early access for Motion One Pro members"),
+        react.exports.createElement(LoginButton, { onClick: () => chrome.tabs.create({ url: "https://motion.dev/tools/login" }), variants: variants }, "Sign in with Github"),
+        react.exports.createElement(motion.p, { variants: variants },
+            "Or sign up for",
+            " ",
+            react.exports.createElement("a", { onClick: (e) => {
+                    e.preventDefault();
+                    chrome.tabs.create({ url: "https://motion.dev/sponsor?tools=true" });
+                } }, "Motion One Pro"))));
 }
 
 function composeRefs(...o){return e=>o.forEach((o=>function(o,e){"function"==typeof o?o(e):null!=o&&(o.current=e);}(o,e)))}function useComposedRefs(...e){return react.exports.useCallback(composeRefs(...e),e)}
@@ -12409,7 +13096,7 @@ function createContextScope(n,o=[]){let r=[];const c=()=>{const t=r.map((t=>/*#_
 
 function getPlacementData({anchorRect:p,popperSize:c,arrowSize:f,arrowOffset:l=0,side:d,sideOffset:h=0,align:x,alignOffset:g=0,shouldAvoidCollisions:u=!0,collisionBoundariesRect:w,collisionTolerance:m=0}){if(!p||!c||!w)return {popperStyles:o$1,arrowStyles:n$1};const y=function(e,r,o=0,n=0,i){const p=i?i.height:0,a=t$1(r,e,"x"),s=t$1(r,e,"y"),c=s.before-o-p,f=s.after+o+p,l=a.before-o-p,d=a.after+o+p;return {top:{start:{x:a.start+n,y:c},center:{x:a.center,y:c},end:{x:a.end-n,y:c}},right:{start:{x:d,y:s.start+n},center:{x:d,y:s.center},end:{x:d,y:s.end-n}},bottom:{start:{x:a.start+n,y:f},center:{x:a.center,y:f},end:{x:a.end-n,y:f}},left:{start:{x:l,y:s.start+n},center:{x:l,y:s.center},end:{x:l,y:s.end-n}}}}(c,p,h,g,f),b=y[d][x];if(!1===u){const t=e$1(b);let o=n$1;f&&(o=i$2({popperSize:c,arrowSize:f,arrowOffset:l,side:d,align:x}));return {popperStyles:{...t,"--radix-popper-transform-origin":r$2(c,d,x,l,f)},arrowStyles:o,placedSide:d,placedAlign:x}}const S=DOMRect.fromRect({...c,...b}),$=(O=w,z=m,DOMRect.fromRect({width:O.width-2*z,height:O.height-2*z,x:O.left+z,y:O.top+z}));var O,z;const R=s$2(S,$),M=y[a$1(d)][x],D=function(t,e,r){const o=a$1(t);return e[t]&&!r[o]?o:t}(d,R,s$2(DOMRect.fromRect({...c,...M}),$)),A=function(t,e,r,o,n){const i="top"===r||"bottom"===r,p=i?"left":"top",a=i?"right":"bottom",s=i?"width":"height",c=e[s]>t[s];if(("start"===o||"center"===o)&&(n[p]&&c||n[a]&&!c))return "end";if(("end"===o||"center"===o)&&(n[a]&&c||n[p]&&!c))return "start";return o}(c,p,d,x,R),I=e$1(y[D][A]);let C=n$1;f&&(C=i$2({popperSize:c,arrowSize:f,arrowOffset:l,side:D,align:A}));return {popperStyles:{...I,"--radix-popper-transform-origin":r$2(c,D,A,l,f)},arrowStyles:C,placedSide:D,placedAlign:A}}function t$1(t,e,r){const o=t["x"===r?"left":"top"],n="x"===r?"width":"height",i=t[n],p=e[n];return {before:o-p,start:o,center:o+(i-p)/2,end:o+i-p,after:o+i}}function e$1(t){return {position:"absolute",top:0,left:0,minWidth:"max-content",willChange:"transform",transform:`translate3d(${Math.round(t.x+window.scrollX)}px, ${Math.round(t.y+window.scrollY)}px, 0)`}}function r$2(t,e,r,o,n){const i="top"===e||"bottom"===e,p=n?n.width:0,a=n?n.height:0,s=p/2+o;let c="",f="";return i?(c={start:`${s}px`,center:"center",end:t.width-s+"px"}[r],f="top"===e?`${t.height+a}px`:-a+"px"):(c="left"===e?`${t.width+a}px`:-a+"px",f={start:`${s}px`,center:"center",end:t.height-s+"px"}[r]),`${c} ${f}`}const o$1={position:"fixed",top:0,left:0,opacity:0,transform:"translate3d(0, -200%, 0)"},n$1={position:"absolute",opacity:0};function i$2({popperSize:t,arrowSize:e,arrowOffset:r,side:o,align:n}){const i=(t.width-e.width)/2,a=(t.height-e.width)/2,s={top:0,right:90,bottom:180,left:-90}[o],c=Math.max(e.width,e.height),f={width:`${c}px`,height:`${c}px`,transform:`rotate(${s}deg)`,willChange:"transform",position:"absolute",[o]:"100%",direction:p$2(o,n)};return "top"!==o&&"bottom"!==o||("start"===n&&(f.left=`${r}px`),"center"===n&&(f.left=`${i}px`),"end"===n&&(f.right=`${r}px`)),"left"!==o&&"right"!==o||("start"===n&&(f.top=`${r}px`),"center"===n&&(f.top=`${a}px`),"end"===n&&(f.bottom=`${r}px`)),f}function p$2(t,e){return ("top"!==t&&"right"!==t||"end"!==e)&&("bottom"!==t&&"left"!==t||"end"===e)?"ltr":"rtl"}function a$1(t){return {top:"bottom",right:"left",bottom:"top",left:"right"}[t]}function s$2(t,e){return {top:t.top<e.top,right:t.right>e.right,bottom:t.bottom>e.bottom,left:t.left<e.left}}
 
-const[c$2,l$1]=createContextScope("Popper");const[f$2,d$2]=c$2("Popper");const Popper=e=>{const{__scopePopper:o,children:r}=e,[t,n]=react.exports.useState(null);return react.exports.createElement(f$2,{scope:o,anchor:t,onAnchorChange:n},r)};const PopperAnchor=/*#__PURE__*/react.exports.forwardRef(((e,r)=>{const{__scopePopper:t,virtualRef:n,...p}=e,c=d$2("PopperAnchor",t),l=react.exports.useRef(null),f=useComposedRefs(r,l);return react.exports.useEffect((()=>{c.onAnchorChange((null==n?void 0:n.current)||l.current);})),n?null:/*#__PURE__*/react.exports.createElement(Primitive.div,_extends$2({},p,{ref:f}))}));const[u$2,m$2]=c$2("PopperContent");const PopperContent=/*#__PURE__*/react.exports.forwardRef(((e,n)=>{const{__scopePopper:c,side:l="bottom",sideOffset:f,align:m="center",alignOffset:w,collisionTolerance:h,avoidCollisions:x=!0,...v}=e,P=d$2("PopperContent",c),[A,g]=react.exports.useState(),E=useRect(P.anchor),[y,C]=react.exports.useState(null),S=useSize(y),[R,O]=react.exports.useState(null),_=useSize(R),b=useComposedRefs(n,(e=>C(e))),z=function(){const[e,o]=react.exports.useState(void 0);return react.exports.useEffect((()=>{let e;function r(){o({width:window.innerWidth,height:window.innerHeight});}function t(){window.clearTimeout(e),e=window.setTimeout(r,100);}return r(),window.addEventListener("resize",t),()=>window.removeEventListener("resize",t)}),[]),e}(),T=z?DOMRect.fromRect({...z,x:0,y:0}):void 0,{popperStyles:k,arrowStyles:L,placedSide:B,placedAlign:D}=getPlacementData({anchorRect:E,popperSize:S,arrowSize:_,arrowOffset:A,side:l,sideOffset:f,align:m,alignOffset:w,shouldAvoidCollisions:x,collisionBoundariesRect:T,collisionTolerance:h}),H=void 0!==B;return react.exports.createElement("div",{style:k,"data-radix-popper-content-wrapper":""},/*#__PURE__*/react.exports.createElement(u$2,{scope:c,arrowStyles:L,onArrowChange:O,onArrowOffsetChange:g},/*#__PURE__*/react.exports.createElement(Primitive.div,_extends$2({"data-side":B,"data-align":D},v,{style:{...v.style,animation:H?void 0:"none"},ref:b}))))}));const PopperArrow=/*#__PURE__*/react.exports.forwardRef((function(o,r){const{__scopePopper:t,offset:n,...i}=o,p=m$2("PopperArrow",t),{onArrowOffsetChange:c}=p;return react.exports.useEffect((()=>c(n)),[c,n]),/*#__PURE__*/react.exports.createElement("span",{style:{...p.arrowStyles,pointerEvents:"none"}},/*#__PURE__*/react.exports.createElement("span",{ref:p.onArrowChange,style:{display:"inline-block",verticalAlign:"top",pointerEvents:"auto"}},/*#__PURE__*/react.exports.createElement(Root$2,_extends$2({},i,{ref:r,style:{...i.style,display:"block"}}))))}));const Root$1=Popper;const Anchor=PopperAnchor;const Content$2=PopperContent;const Arrow$1=PopperArrow;
+const[c$2,l$1]=createContextScope("Popper");const[f$2,d$2]=c$2("Popper");const Popper=e=>{const{__scopePopper:o,children:r}=e,[t,n]=react.exports.useState(null);return react.exports.createElement(f$2,{scope:o,anchor:t,onAnchorChange:n},r)};const PopperAnchor=/*#__PURE__*/react.exports.forwardRef(((e,r)=>{const{__scopePopper:t,virtualRef:n,...p}=e,c=d$2("PopperAnchor",t),l=react.exports.useRef(null),f=useComposedRefs(r,l);return react.exports.useEffect((()=>{c.onAnchorChange((null==n?void 0:n.current)||l.current);})),n?null:/*#__PURE__*/react.exports.createElement(Primitive.div,_extends$2({},p,{ref:f}))}));const[u$2,m$2]=c$2("PopperContent");const PopperContent=/*#__PURE__*/react.exports.forwardRef(((e,n)=>{const{__scopePopper:c,side:l="bottom",sideOffset:f,align:m="center",alignOffset:w,collisionTolerance:h,avoidCollisions:x=!0,...v}=e,P=d$2("PopperContent",c),[A,g]=react.exports.useState(),E=useRect(P.anchor),[y,C]=react.exports.useState(null),S=useSize(y),[R,O]=react.exports.useState(null),_=useSize(R),b=useComposedRefs(n,(e=>C(e))),z=function(){const[e,o]=react.exports.useState(void 0);return react.exports.useEffect((()=>{let e;function r(){o({width:window.innerWidth,height:window.innerHeight});}function t(){window.clearTimeout(e),e=window.setTimeout(r,100);}return r(),window.addEventListener("resize",t),()=>window.removeEventListener("resize",t)}),[]),e}(),T=z?DOMRect.fromRect({...z,x:0,y:0}):void 0,{popperStyles:k,arrowStyles:L,placedSide:B,placedAlign:D}=getPlacementData({anchorRect:E,popperSize:S,arrowSize:_,arrowOffset:A,side:l,sideOffset:f,align:m,alignOffset:w,shouldAvoidCollisions:x,collisionBoundariesRect:T,collisionTolerance:h}),H=void 0!==B;return react.exports.createElement("div",{style:k,"data-radix-popper-content-wrapper":""},/*#__PURE__*/react.exports.createElement(u$2,{scope:c,arrowStyles:L,onArrowChange:O,onArrowOffsetChange:g},/*#__PURE__*/react.exports.createElement(Primitive.div,_extends$2({"data-side":B,"data-align":D},v,{style:{...v.style,animation:H?void 0:"none"},ref:b}))))}));const PopperArrow=/*#__PURE__*/react.exports.forwardRef((function(o,r){const{__scopePopper:t,offset:n,...i}=o,p=m$2("PopperArrow",t),{onArrowOffsetChange:c}=p;return react.exports.useEffect((()=>c(n)),[c,n]),/*#__PURE__*/react.exports.createElement("span",{style:{...p.arrowStyles,pointerEvents:"none"}},/*#__PURE__*/react.exports.createElement("span",{ref:p.onArrowChange,style:{display:"inline-block",verticalAlign:"top",pointerEvents:"auto"}},/*#__PURE__*/react.exports.createElement(Root$2,_extends$2({},i,{ref:r,style:{...i.style,display:"block"}}))))}));const Root$1=Popper;const Anchor=PopperAnchor;const Content$1=PopperContent;const Arrow$1=PopperArrow;
 
 const Presence=u=>{const{present:o,children:i}=u,s=function(n){const[u,o]=react.exports.useState(),i=react.exports.useRef({}),s=react.exports.useRef(n),c=react.exports.useRef("none"),a=n?"mounted":"unmounted",[d,m]=function(e,n){return react.exports.useReducer(((e,t)=>{const r=n[e][t];return null!=r?r:e}),e)}(a,{mounted:{UNMOUNT:"unmounted",ANIMATION_OUT:"unmountSuspended"},unmountSuspended:{MOUNT:"mounted",ANIMATION_END:"unmounted"},unmounted:{MOUNT:"mounted"}});return react.exports.useEffect((()=>{const e=r$1(i.current);c.current="mounted"===d?e:"none";}),[d]),useLayoutEffect((()=>{const e=i.current,t=s.current;if(t!==n){const u=c.current,o=r$1(e);if(n)m("MOUNT");else if("none"===o||"none"===(null==e?void 0:e.display))m("UNMOUNT");else {const e=u!==o;m(t&&e?"ANIMATION_OUT":"UNMOUNT");}s.current=n;}}),[n,m]),useLayoutEffect((()=>{if(u){const e=e=>{const n=r$1(i.current).includes(e.animationName);e.target===u&&n&&m("ANIMATION_END");},n=e=>{e.target===u&&(c.current=r$1(i.current));};return u.addEventListener("animationstart",n),u.addEventListener("animationcancel",e),u.addEventListener("animationend",e),()=>{u.removeEventListener("animationstart",n),u.removeEventListener("animationcancel",e),u.removeEventListener("animationend",e);}}}),[u,m]),{isPresent:["mounted","unmountSuspended"].includes(d),ref:react.exports.useCallback((e=>{e&&(i.current=getComputedStyle(e)),o(e);}),[])}}(o),c="function"==typeof i?i({present:s.isPresent}):react.exports.Children.only(i),a=useComposedRefs(s.ref,c.ref);return "function"==typeof i||s.isPresent?/*#__PURE__*/react.exports.cloneElement(c,{ref:a}):null};function r$1(e){return (null==e?void 0:e.animationName)||"none"}Presence.displayName="Presence";
 
@@ -12423,7 +13110,7 @@ function useControllableState({prop:o,defaultProp:r,onChange:n=(()=>{})}){const[
 
 function composeEventHandlers$1(e,n,{checkForDefaultPrevented:t=!0}={}){return function(r){if(null==e||e(r),!1===t||!r.defaultPrevented)return null==n?void 0:n(r)}}
 
-const[w$2,x$1]=createContextScope("Tooltip",[l$1]);const g$2=l$1(),E=700,[v$2,b$2]=w$2("TooltipProvider",{isOpenDelayed:!0,delayDuration:E,onOpen:()=>{},onClose:()=>{}});const[y$2,_]=w$2("Tooltip");const Tooltip=o=>{const{__scopeTooltip:t,children:r,open:i,defaultOpen:a=!1,onOpenChange:l,delayDuration:c}=o,s=b$2("Tooltip",t),u=g$2(t),[d,m]=react.exports.useState(null),f=useId(),C=react.exports.useRef(0),w=null!=c?c:s.delayDuration,x=react.exports.useRef(!1),{onOpen:E,onClose:v}=s,[_=!1,h]=useControllableState({prop:i,defaultProp:a,onChange:e=>{e&&(document.dispatchEvent(new CustomEvent("tooltip.open")),E()),null==l||l(e);}}),k=react.exports.useMemo((()=>_?x.current?"delayed-open":"instant-open":"closed"),[_]),D=react.exports.useCallback((()=>{window.clearTimeout(C.current),x.current=!1,h(!0);}),[h]),O=react.exports.useCallback((()=>{window.clearTimeout(C.current),C.current=window.setTimeout((()=>{x.current=!0,h(!0);}),w);}),[w,h]);return react.exports.useEffect((()=>()=>window.clearTimeout(C.current)),[]),/*#__PURE__*/react.exports.createElement(Root$1,u,/*#__PURE__*/react.exports.createElement(y$2,{scope:t,contentId:f,open:_,stateAttribute:k,trigger:d,onTriggerChange:m,onTriggerEnter:react.exports.useCallback((()=>{s.isOpenDelayed?O():D();}),[s.isOpenDelayed,O,D]),onOpen:react.exports.useCallback(D,[D]),onClose:react.exports.useCallback((()=>{window.clearTimeout(C.current),h(!1),v();}),[h,v])},r))};const TooltipTrigger=/*#__PURE__*/react.exports.forwardRef(((e,o)=>{const{__scopeTooltip:t,...r}=e,i=_("TooltipTrigger",t),l=g$2(t),c=useComposedRefs(o,i.onTriggerChange),s=react.exports.useRef(!1),u=react.exports.useCallback((()=>s.current=!1),[]);return react.exports.useEffect((()=>()=>document.removeEventListener("mouseup",u)),[u]),/*#__PURE__*/react.exports.createElement(Anchor,_extends$2({asChild:!0},l),/*#__PURE__*/react.exports.createElement(Primitive.button,_extends$2({"aria-describedby":i.open?i.contentId:void 0,"data-state":i.stateAttribute},r,{ref:c,onMouseEnter:composeEventHandlers$1(e.onMouseEnter,i.onTriggerEnter),onMouseLeave:composeEventHandlers$1(e.onMouseLeave,i.onClose),onMouseDown:composeEventHandlers$1(e.onMouseDown,(()=>{i.onClose(),s.current=!0,document.addEventListener("mouseup",u,{once:!0});})),onFocus:composeEventHandlers$1(e.onFocus,(()=>{s.current||i.onOpen();})),onBlur:composeEventHandlers$1(e.onBlur,i.onClose),onClick:composeEventHandlers$1(e.onClick,i.onClose)})))}));const TooltipContent=/*#__PURE__*/react.exports.forwardRef(((e,o)=>{const{forceMount:t,...r}=e,n=_("TooltipContent",e.__scopeTooltip);return react.exports.createElement(Presence,{present:t||n.open},/*#__PURE__*/react.exports.createElement(h$2,_extends$2({ref:o},r)))}));const h$2=/*#__PURE__*/react.exports.forwardRef(((e,i)=>{const{__scopeTooltip:a,children:l,"aria-label":c,portalled:s=!0,...p}=e,d=_("TooltipContent",a),m=g$2(a),f=s?Portal$1:react.exports.Fragment,{onClose:w}=d;return useEscapeKeydown((()=>w())),react.exports.useEffect((()=>(document.addEventListener("tooltip.open",w),()=>document.removeEventListener("tooltip.open",w))),[w]),/*#__PURE__*/react.exports.createElement(f,null,/*#__PURE__*/react.exports.createElement(k$1,{__scopeTooltip:a}),/*#__PURE__*/react.exports.createElement(Content$2,_extends$2({"data-state":d.stateAttribute},m,p,{ref:i,style:{...p.style,"--radix-tooltip-content-transform-origin":"var(--radix-popper-transform-origin)"}}),/*#__PURE__*/react.exports.createElement(Slottable,null,l),/*#__PURE__*/react.exports.createElement(Root$3,{id:d.contentId,role:"tooltip"},c||l)))}));const TooltipArrow=/*#__PURE__*/react.exports.forwardRef(((e,o)=>{const{__scopeTooltip:t,...r}=e,i=g$2(t);return react.exports.createElement(Arrow$1,_extends$2({},i,r,{ref:o}))}));function k$1(e){const{__scopeTooltip:o}=e,t=_("CheckTriggerMoved",o),r=useRect(t.trigger),n=null==r?void 0:r.left,i=usePrevious(n),a=null==r?void 0:r.top,l=usePrevious(a),u=t.onClose;return react.exports.useEffect((()=>{(void 0!==i&&i!==n||void 0!==l&&l!==a)&&u();}),[u,i,l,n,a]),null}const Root=Tooltip;const Trigger=TooltipTrigger;const Content$1=TooltipContent;const Arrow=TooltipArrow;
+const[w$2,x$1]=createContextScope("Tooltip",[l$1]);const g$2=l$1(),E=700,[v$2,b$2]=w$2("TooltipProvider",{isOpenDelayed:!0,delayDuration:E,onOpen:()=>{},onClose:()=>{}});const[y$2,_]=w$2("Tooltip");const Tooltip=o=>{const{__scopeTooltip:t,children:r,open:i,defaultOpen:a=!1,onOpenChange:l,delayDuration:c}=o,s=b$2("Tooltip",t),u=g$2(t),[d,m]=react.exports.useState(null),f=useId(),C=react.exports.useRef(0),w=null!=c?c:s.delayDuration,x=react.exports.useRef(!1),{onOpen:E,onClose:v}=s,[_=!1,h]=useControllableState({prop:i,defaultProp:a,onChange:e=>{e&&(document.dispatchEvent(new CustomEvent("tooltip.open")),E()),null==l||l(e);}}),k=react.exports.useMemo((()=>_?x.current?"delayed-open":"instant-open":"closed"),[_]),D=react.exports.useCallback((()=>{window.clearTimeout(C.current),x.current=!1,h(!0);}),[h]),O=react.exports.useCallback((()=>{window.clearTimeout(C.current),C.current=window.setTimeout((()=>{x.current=!0,h(!0);}),w);}),[w,h]);return react.exports.useEffect((()=>()=>window.clearTimeout(C.current)),[]),/*#__PURE__*/react.exports.createElement(Root$1,u,/*#__PURE__*/react.exports.createElement(y$2,{scope:t,contentId:f,open:_,stateAttribute:k,trigger:d,onTriggerChange:m,onTriggerEnter:react.exports.useCallback((()=>{s.isOpenDelayed?O():D();}),[s.isOpenDelayed,O,D]),onOpen:react.exports.useCallback(D,[D]),onClose:react.exports.useCallback((()=>{window.clearTimeout(C.current),h(!1),v();}),[h,v])},r))};const TooltipTrigger=/*#__PURE__*/react.exports.forwardRef(((e,o)=>{const{__scopeTooltip:t,...r}=e,i=_("TooltipTrigger",t),l=g$2(t),c=useComposedRefs(o,i.onTriggerChange),s=react.exports.useRef(!1),u=react.exports.useCallback((()=>s.current=!1),[]);return react.exports.useEffect((()=>()=>document.removeEventListener("mouseup",u)),[u]),/*#__PURE__*/react.exports.createElement(Anchor,_extends$2({asChild:!0},l),/*#__PURE__*/react.exports.createElement(Primitive.button,_extends$2({"aria-describedby":i.open?i.contentId:void 0,"data-state":i.stateAttribute},r,{ref:c,onMouseEnter:composeEventHandlers$1(e.onMouseEnter,i.onTriggerEnter),onMouseLeave:composeEventHandlers$1(e.onMouseLeave,i.onClose),onMouseDown:composeEventHandlers$1(e.onMouseDown,(()=>{i.onClose(),s.current=!0,document.addEventListener("mouseup",u,{once:!0});})),onFocus:composeEventHandlers$1(e.onFocus,(()=>{s.current||i.onOpen();})),onBlur:composeEventHandlers$1(e.onBlur,i.onClose),onClick:composeEventHandlers$1(e.onClick,i.onClose)})))}));const TooltipContent=/*#__PURE__*/react.exports.forwardRef(((e,o)=>{const{forceMount:t,...r}=e,n=_("TooltipContent",e.__scopeTooltip);return react.exports.createElement(Presence,{present:t||n.open},/*#__PURE__*/react.exports.createElement(h$2,_extends$2({ref:o},r)))}));const h$2=/*#__PURE__*/react.exports.forwardRef(((e,i)=>{const{__scopeTooltip:a,children:l,"aria-label":c,portalled:s=!0,...p}=e,d=_("TooltipContent",a),m=g$2(a),f=s?Portal$1:react.exports.Fragment,{onClose:w}=d;return useEscapeKeydown((()=>w())),react.exports.useEffect((()=>(document.addEventListener("tooltip.open",w),()=>document.removeEventListener("tooltip.open",w))),[w]),/*#__PURE__*/react.exports.createElement(f,null,/*#__PURE__*/react.exports.createElement(k$1,{__scopeTooltip:a}),/*#__PURE__*/react.exports.createElement(Content$1,_extends$2({"data-state":d.stateAttribute},m,p,{ref:i,style:{...p.style,"--radix-tooltip-content-transform-origin":"var(--radix-popper-transform-origin)"}}),/*#__PURE__*/react.exports.createElement(Slottable,null,l),/*#__PURE__*/react.exports.createElement(Root$3,{id:d.contentId,role:"tooltip"},c||l)))}));const TooltipArrow=/*#__PURE__*/react.exports.forwardRef(((e,o)=>{const{__scopeTooltip:t,...r}=e,i=g$2(t);return react.exports.createElement(Arrow$1,_extends$2({},i,r,{ref:o}))}));function k$1(e){const{__scopeTooltip:o}=e,t=_("CheckTriggerMoved",o),r=useRect(t.trigger),n=null==r?void 0:r.left,i=usePrevious(n),a=null==r?void 0:r.top,l=usePrevious(a),u=t.onClose;return react.exports.useEffect((()=>{(void 0!==i&&i!==n||void 0!==l&&l!==a)&&u();}),[u,i,l,n,a]),null}const Root=Tooltip;const Trigger=TooltipTrigger;const Content=TooltipContent;const Arrow=TooltipArrow;
 
 function _objectWithoutPropertiesLoose$2(source, excluded) {
   if (source == null) return {};
@@ -12902,7 +13589,7 @@ function sanitizeValue({
   return sanitizedNewValue;
 }
 
-const debounce$1 = (callback, wait, immediate = false) => {
+const debounce = (callback, wait, immediate = false) => {
   let timeout = 0;
   return function () {
     const args = arguments;
@@ -13692,7 +14379,7 @@ function RawLabel(props) {
   } : null;
   return React.createElement(React.Fragment, null, optional && React.createElement(OptionalToggle, null), hint !== undefined ? React.createElement(Root, null, React.createElement(Trigger, {
     asChild: true
-  }, React.createElement(StyledLabel, _extends$1({}, htmlFor, props))), React.createElement(Content$1, {
+  }, React.createElement(StyledLabel, _extends$1({}, htmlFor, props))), React.createElement(Content, {
     side: "top",
     sideOffset: 2
   }, React.createElement(StyledToolTipContent, null, hint, React.createElement(ToolTipArrow, null)))) : React.createElement(StyledLabel, _extends$1({}, htmlFor, title, props)));
@@ -13854,7 +14541,7 @@ function useCanvas2d(fn) {
   const ctx = react.exports.useRef(null);
   const hasFired = react.exports.useRef(false);
   react.exports.useEffect(() => {
-    const handleCanvas = debounce$1(() => {
+    const handleCanvas = debounce(() => {
       canvas.current.width = canvas.current.offsetWidth * window.devicePixelRatio;
       canvas.current.height = canvas.current.offsetHeight * window.devicePixelRatio;
       fn(canvas.current, ctx.current);
@@ -13944,7 +14631,7 @@ const Range = styled('div', {
   borderRadius: '$xs',
   backgroundColor: '$elevation1'
 });
-const Scrubber$1 = styled('div', {
+const Scrubber = styled('div', {
   position: 'absolute',
   width: '$scrubberWidth',
   height: '$scrubberHeight',
@@ -14026,7 +14713,7 @@ function RangeSlider({
       left: 0,
       right: `${(1 - pos) * 100}%`
     }
-  })), React.createElement(Scrubber$1, {
+  })), React.createElement(Scrubber, {
     ref: scrubberRef,
     style: {
       left: `calc(${pos} * (100% - ${scrubberWidth}))`
@@ -14474,7 +15161,7 @@ function Coordinate({
   });
 }
 
-const Container$7 = styled('div', {
+const Container$3 = styled('div', {
   display: 'grid',
   columnGap: '$colGap',
   gridAutoFlow: 'column dense',
@@ -14530,7 +15217,7 @@ function Vector$1({
     lock,
     locked
   } = settings;
-  return React.createElement(Container$7, {
+  return React.createElement(Container$3, {
     withLock: lock
   }, lock && React.createElement(Lock, {
     locked: locked,
@@ -17753,7 +18440,7 @@ var props = /*#__PURE__*/Object.freeze({
 
 const _excluded$6 = ["value", "bounds", "onDrag"],
       _excluded2$1 = ["bounds"];
-const Container$6 = styled('div', {
+const Container$2 = styled('div', {
   display: 'grid',
   columnGap: '$colGap',
   gridTemplateColumns: 'auto calc($sizes$numberInputMinWidth * 2 + $space$rowGap)'
@@ -17807,13 +18494,13 @@ function IntervalSlider(_ref) {
       left: minStyle,
       right: maxStyle
     }
-  })), React.createElement(Scrubber$1, {
+  })), React.createElement(Scrubber, {
     position: "left",
     ref: minScrubberRef,
     style: {
       left: minStyle
     }
-  }), React.createElement(Scrubber$1, {
+  }), React.createElement(Scrubber, {
     position: "right",
     ref: maxScrubberRef,
     style: {
@@ -17834,7 +18521,7 @@ function IntervalComponent() {
 
   return React.createElement(React.Fragment, null, React.createElement(Row$1, {
     input: true
-  }, React.createElement(Label$1, null, label), React.createElement(Container$6, null, React.createElement(IntervalSlider, _extends$1({
+  }, React.createElement(Label$1, null, label), React.createElement(Container$2, null, React.createElement(IntervalSlider, _extends$1({
     value: displayValue
   }, settings, {
     onDrag: onUpdate
@@ -18448,7 +19135,7 @@ const specialComponents = {
   [SpecialInputs.BUTTON_GROUP]: ButtonGroup,
   [SpecialInputs.MONITOR]: Monitor
 };
-const Control$1 = React.memo(({
+const Control = React.memo(({
   path
 }) => {
   const [input, {
@@ -18549,7 +19236,7 @@ const TreeWrapper = React.memo(({
     ref: contentRef,
     isRoot: _isRoot,
     toggled: toggled
-  }, Object.entries(tree).map(([key, value]) => isInput(value) ? React.createElement(Control$1, {
+  }, Object.entries(tree).map(([key, value]) => isInput(value) ? React.createElement(Control, {
     key: value.path,
     valueKey: value.valueKey,
     path: value.path
@@ -18724,7 +19411,7 @@ const FilterInput = React.forwardRef(({
   toggle
 }, ref) => {
   const [value, set] = react.exports.useState('');
-  const debouncedOnChange = react.exports.useMemo(() => debounce$1(setFilter, 250), [setFilter]);
+  const debouncedOnChange = react.exports.useMemo(() => debounce(setFilter, 250), [setFilter]);
 
   const clear = () => {
     setFilter('');
@@ -19169,7 +19856,7 @@ register(LevaInputs.INTERVAL, interval);
 register(LevaInputs.VECTOR3D, vector3d);
 register(LevaInputs.VECTOR2D, vector2d);
 
-function mergeRefs$1(refs) {
+function mergeRefs(refs) {
   return value => {
     refs.forEach(ref => {
       if (typeof ref === 'function') ref(value);else if (ref != null) {
@@ -19191,244 +19878,6 @@ const Components = {
   Vector: Vector$1,
   InnerLabel
 };
-
-/**
- * Returns a function, that, as long as it continues to be invoked, will not
- * be triggered. The function will be called after it stops being called for
- * N milliseconds. If `immediate` is passed, trigger the function on the
- * leading edge, instead of the trailing. The function also has a property 'clear' 
- * that is a function which will clear the timer to prevent previously scheduled executions. 
- *
- * @source underscore.js
- * @see http://unscriptable.com/2009/03/20/debouncing-javascript-methods/
- * @param {Function} function to wrap
- * @param {Number} timeout in ms (`100`)
- * @param {Boolean} whether to execute at the beginning (`false`)
- * @api public
- */
-
-function debounce(func, wait, immediate){
-  var timeout, args, context, timestamp, result;
-  if (null == wait) wait = 100;
-
-  function later() {
-    var last = Date.now() - timestamp;
-
-    if (last < wait && last >= 0) {
-      timeout = setTimeout(later, wait - last);
-    } else {
-      timeout = null;
-      if (!immediate) {
-        result = func.apply(context, args);
-        context = args = null;
-      }
-    }
-  }
-  var debounced = function(){
-    context = this;
-    args = arguments;
-    timestamp = Date.now();
-    var callNow = immediate && !timeout;
-    if (!timeout) timeout = setTimeout(later, wait);
-    if (callNow) {
-      result = func.apply(context, args);
-      context = args = null;
-    }
-
-    return result;
-  };
-
-  debounced.clear = function() {
-    if (timeout) {
-      clearTimeout(timeout);
-      timeout = null;
-    }
-  };
-  
-  debounced.flush = function() {
-    if (timeout) {
-      result = func.apply(context, args);
-      context = args = null;
-      
-      clearTimeout(timeout);
-      timeout = null;
-    }
-  };
-
-  return debounced;
-}
-// Adds compatibility for ES modules
-debounce.debounce = debounce;
-
-var debounce_1 = debounce;
-
-function useMeasure(_temp) {
-  let {
-    debounce,
-    scroll,
-    polyfill,
-    offsetSize
-  } = _temp === void 0 ? {
-    debounce: 0,
-    scroll: false,
-    offsetSize: false
-  } : _temp;
-  const ResizeObserver = polyfill || (typeof window === 'undefined' ? class ResizeObserver {} : window.ResizeObserver);
-
-  if (!ResizeObserver) {
-    throw new Error('This browser does not support ResizeObserver out of the box. See: https://github.com/react-spring/react-use-measure/#resize-observer-polyfills');
-  }
-
-  const [bounds, set] = react.exports.useState({
-    left: 0,
-    top: 0,
-    width: 0,
-    height: 0,
-    bottom: 0,
-    right: 0,
-    x: 0,
-    y: 0
-  }); // keep all state in a ref
-
-  const state = react.exports.useRef({
-    element: null,
-    scrollContainers: null,
-    resizeObserver: null,
-    lastBounds: bounds
-  }); // set actual debounce values early, so effects know if they should react accordingly
-
-  const scrollDebounce = debounce ? typeof debounce === 'number' ? debounce : debounce.scroll : null;
-  const resizeDebounce = debounce ? typeof debounce === 'number' ? debounce : debounce.resize : null; // make sure to update state only as long as the component is truly mounted
-
-  const mounted = react.exports.useRef(false);
-  react.exports.useEffect(() => {
-    mounted.current = true;
-    return () => void (mounted.current = false);
-  }); // memoize handlers, so event-listeners know when they should update
-
-  const [forceRefresh, resizeChange, scrollChange] = react.exports.useMemo(() => {
-    const callback = () => {
-      if (!state.current.element) return;
-      const {
-        left,
-        top,
-        width,
-        height,
-        bottom,
-        right,
-        x,
-        y
-      } = state.current.element.getBoundingClientRect();
-      const size = {
-        left,
-        top,
-        width,
-        height,
-        bottom,
-        right,
-        x,
-        y
-      };
-
-      if (state.current.element instanceof HTMLElement && offsetSize) {
-        size.height = state.current.element.offsetHeight;
-        size.width = state.current.element.offsetWidth;
-      }
-
-      Object.freeze(size);
-      if (mounted.current && !areBoundsEqual(state.current.lastBounds, size)) set(state.current.lastBounds = size);
-    };
-
-    return [callback, resizeDebounce ? debounce_1(callback, resizeDebounce) : callback, scrollDebounce ? debounce_1(callback, scrollDebounce) : callback];
-  }, [set, offsetSize, scrollDebounce, resizeDebounce]); // cleanup current scroll-listeners / observers
-
-  function removeListeners() {
-    if (state.current.scrollContainers) {
-      state.current.scrollContainers.forEach(element => element.removeEventListener('scroll', scrollChange, true));
-      state.current.scrollContainers = null;
-    }
-
-    if (state.current.resizeObserver) {
-      state.current.resizeObserver.disconnect();
-      state.current.resizeObserver = null;
-    }
-  } // add scroll-listeners / observers
-
-
-  function addListeners() {
-    if (!state.current.element) return;
-    state.current.resizeObserver = new ResizeObserver(scrollChange);
-    state.current.resizeObserver.observe(state.current.element);
-
-    if (scroll && state.current.scrollContainers) {
-      state.current.scrollContainers.forEach(scrollContainer => scrollContainer.addEventListener('scroll', scrollChange, {
-        capture: true,
-        passive: true
-      }));
-    }
-  } // the ref we expose to the user
-
-
-  const ref = node => {
-    if (!node || node === state.current.element) return;
-    removeListeners();
-    state.current.element = node;
-    state.current.scrollContainers = findScrollContainers(node);
-    addListeners();
-  }; // add general event listeners
-
-
-  useOnWindowScroll(scrollChange, Boolean(scroll));
-  useOnWindowResize(resizeChange); // respond to changes that are relevant for the listeners
-
-  react.exports.useEffect(() => {
-    removeListeners();
-    addListeners();
-  }, [scroll, scrollChange, resizeChange]); // remove all listeners when the components unmounts
-
-  react.exports.useEffect(() => removeListeners, []);
-  return [ref, bounds, forceRefresh];
-} // Adds native resize listener to window
-
-
-function useOnWindowResize(onWindowResize) {
-  react.exports.useEffect(() => {
-    const cb = onWindowResize;
-    window.addEventListener('resize', cb);
-    return () => void window.removeEventListener('resize', cb);
-  }, [onWindowResize]);
-}
-
-function useOnWindowScroll(onScroll, enabled) {
-  react.exports.useEffect(() => {
-    if (enabled) {
-      const cb = onScroll;
-      window.addEventListener('scroll', cb, {
-        capture: true,
-        passive: true
-      });
-      return () => void window.removeEventListener('scroll', cb, true);
-    }
-  }, [onScroll, enabled]);
-} // Returns a list of scroll offsets
-
-
-function findScrollContainers(element) {
-  const result = [];
-  if (!element || element === document.body) return result;
-  const {
-    overflow,
-    overflowX,
-    overflowY
-  } = window.getComputedStyle(element);
-  if ([overflow, overflowX, overflowY].some(prop => prop === 'auto' || prop === 'scroll')) result.push(element);
-  return [...result, ...findScrollContainers(element.parentElement)];
-} // Checks if element boundaries are equal
-
-
-const keys = ['x', 'y', 'top', 'bottom', 'left', 'right', 'width', 'height'];
-
-const areBoundsEqual = (a, b) => keys.every(key => a[key] === b[key]);
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -19710,7 +20159,7 @@ const SyledInnerLabel = styled('div', {
     }
   }
 });
-const Container$5 = styled('div', {
+const Container$1 = styled('div', {
   display: 'grid',
   gridTemplateColumns: 'auto 1fr',
   alignItems: 'center'
@@ -19799,7 +20248,7 @@ function BezierSvg({
     cy2: r(1 - y2, height)
   }), [r, x1, y1, x2, y2, width, height]);
   return React.createElement(Svg, _extends({
-    ref: mergeRefs$1([svgRef, ref])
+    ref: mergeRefs([svgRef, ref])
   }, bind(), {
     withPreview: withPreview
   }), React.createElement("line", {
@@ -19861,7 +20310,7 @@ function BezierPreview({
   value
 }) {
   const [debouncedValue, set] = react.exports.useState(value);
-  const debounceValue = react.exports.useMemo(() => debounce$1(v => set(v), 250), []);
+  const debounceValue = react.exports.useMemo(() => debounce(v => set(v), 250), []);
   react.exports.useEffect(() => void debounceValue(value), [value, debounceValue]);
   return React.createElement(DebouncedBezierPreview, {
     value: debouncedValue
@@ -20016,7 +20465,7 @@ function Bezier() {
   } = settings;
   return React.createElement(React.Fragment, null, React.createElement(Row, {
     input: true
-  }, React.createElement(Label, null, label), React.createElement(Container$5, null, React.createElement(SyledInnerLabel, {
+  }, React.createElement(Label, null, label), React.createElement(Container$1, null, React.createElement(SyledInnerLabel, {
     graph: graph,
     onClick: () => setSettings({
       graph: !graph
@@ -20051,579 +20500,77 @@ const opacity = (initialValue) => ({
     max: 1,
     step: 0.05,
 });
-const controlTypes = {
+const controlDefinitions = {
     opacity,
 };
-function createControls(name, value) {
-    const factory = controlTypes[name];
+function getControlDefinition(name, value) {
+    const factory = controlDefinitions[name];
     const config = factory ? factory(value) : { value };
     return Object.assign(Object.assign({}, config), { label: name, transient: true });
 }
 
-styled$1(SidebarContainer) `
-  right: 0;
-  border-left: 1px solid var(--feint);
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 20px;
-  position: absolute;
-  top: calc(var(--tab-bar-height) + 1px);
-  overflow-y: overlay;
-  overflow-x: hidden;
-  width: var(--sidebar-width);
-  display: flex;
-  flex-direction: column;
-
-  input {
-    color: var(--white);
-    border: none;
-    border-bottom: 1px solid var(--feint);
-    margin-bottom: 20px;
-    -webkit-appearance: none;
-    outline: none;
-    background: none;
-    padding-bottom: 6px;
-
-    &:focus {
-      border-color: var(--white);
-    }
-  }
-
-  h2 {
-    margin-bottom: 8px;
-    font-size: 12px;
-  }
-
-  code {
-    font-size: 12px;
-    margin-bottom: 20px;
-    display: block;
-  }
-
-  ${ValueMarker} {
-    display: inline-block;
-    position: static;
-    margin-right: 6px;
-    background-color: var(--strong-blue);
-    transform: translateY(3px) rotate(45deg);
-  }
-`;
-styled$1.div `
-  border: 1px solid var(--feint-solid);
-  border-radius: 5px;
-`;
-function Control({ keyframeMetadata, valueAnimation }) {
+function ValueControl({ keyframeMetadata, valueAnimation }) {
     const updateKeyframe = useEditorState(getUpdateKeyframe);
+    const updateKeyframeEasing = useEditorState(getUpdateKeyframeEasing);
     const { elementName, valueName, index } = keyframeMetadata;
     const { keyframes, options } = valueAnimation;
     const { easing } = options;
-    let keyframeEasing;
-    if (index && easing) {
-        keyframeEasing = isEasingList(easing) ? easing[index - 1] : easing;
-        keyframeEasing = Array.isArray(keyframeEasing)
-            ? [...keyframeEasing]
-            : keyframeEasing;
-    }
+    const keyframeEasing = getKeyframeEasing(easing, index);
+    // TODO Replace with uuid
+    const keyframeKey = `${elementName} ${valueName} [${index}]`;
     const controls = {
-        [`${elementName} ${valueName} [${index}]`]: Object.assign(Object.assign({}, createControls(valueName, keyframes[index])), { onChange: (newValue) => updateKeyframe(keyframeMetadata, newValue) }),
+        [keyframeKey]: Object.assign(Object.assign({}, getControlDefinition(valueName, keyframes[index])), { onChange: (newValue) => updateKeyframe(keyframeMetadata, newValue) }),
     };
+    console.log(keyframeEasing);
     if (keyframeEasing) {
-        console.log("setting ", `${elementName} ${valueName} [${index}] easing`, keyframeEasing);
-        controls[`${elementName} ${valueName} [${index}] easing`] = Object.assign(Object.assign({}, bezier(keyframeEasing)), { label: "Easing", transient: true, onChange: ([...points]) => console.log(points) });
+        if (typeof keyframeEasing === "string" &&
+            keyframeEasing.startsWith("steps")) {
+            controls[`${keyframeKey} easing freeform`] = {
+                value: keyframeEasing,
+                label: "Easing",
+                transient: true,
+                onChange: (value) => updateKeyframeEasing(keyframeMetadata, value),
+            };
+        }
+        else {
+            controls[`${keyframeKey} easing`] = Object.assign(Object.assign({}, bezier(keyframeEasing)), { label: "Easing", transient: true, onChange: ([...points]) => updateKeyframeEasing(keyframeMetadata, points) });
+        }
     }
     useControls(controls);
     return null;
 }
-function SelectedKeyframes({ selectedKeyframes, animation }) {
-    // const [value] = selectedKeyframes
-    // const { elementName, valueName, index } = value
-    // const elementAnimation = animation.elements[elementName]
-    // if (!valueAnimation) return null
-    // const { keyframes, options } = valueAnimation
-    // const { easing } = options
-    // let keyframeEasing: Easing
-    // let easingString: string | undefined
-    // if (index && easing) {
-    //   keyframeEasing = isEasingList(easing) ? easing[index - 1] : easing
-    //   easingString = Array.isArray(keyframeEasing)
-    //     ? cubicBezierAsString(keyframeEasing)
-    //     : keyframeEasing
-    // }
+function KeyframeEditControls({ selectedKeyframes }) {
+    const selectedAnimation = useEditorState(getSelectedAnimation);
+    if (!selectedAnimation)
+        return null;
     const controls = selectedKeyframes.map((keyframeMetadata) => {
         const { elementName, valueName, index } = keyframeMetadata;
-        const elementAnimation = animation.elements[elementName];
+        const elementAnimation = selectedAnimation.elements[elementName];
         if (!elementAnimation)
             return null;
-        const valueAnimation = elementAnimation.find((thisAnimation) => thisAnimation.valueName === valueName);
-        return valueAnimation ? (react.exports.createElement(Control, { key: elementName + valueName + index, valueAnimation: valueAnimation, keyframeMetadata: keyframeMetadata })) : null;
+        const valueAnimation = elementAnimation.find((animation) => animation.valueName === valueName);
+        return valueAnimation ? (react.exports.createElement(ValueControl, { key: elementName + valueName + index, valueAnimation: valueAnimation, keyframeMetadata: keyframeMetadata })) : null;
     });
     return react.exports.createElement(react.exports.Fragment, null, controls);
-    // const updateKeyframe = useEditorState(getUpdateKeyframe)
-    // const setEasing = (selectedEasing: string) => {}
-    // return (
-    //   <Container
-    //     as={motion.div}
-    //     initial={{ opacity: 0 }}
-    //     animate={{ opacity: 1 }}
-    //     exit={{ opacity: 0 }}
-    //     transition={{ duration: 0.2 }}
-    //   >
-    //     <Header>Value</Header>
-    //     <input
-    //       className="code"
-    //       type="text"
-    //       value={keyframes[index]}
-    //       onChange={(event) => updateKeyframe(value, event.currentTarget.value)}
-    //     />
-    //     {easingString ? (
-    //       <>
-    //         <Header>Easing</Header>
-    //         <select
-    //           value={getEasingName(easingString)}
-    //           name="easing"
-    //           onChange={(event) =>
-    //             updateKeyframeEasing(value, event.target.value)
-    //           }
-    //         >
-    //           <option value="linear">linear</option>
-    //           <option value="ease">ease</option>
-    //           <option value="ease-in">ease-in</option>
-    //           <option value="ease-out">ease-out</option>
-    //           <option value="ease-in-out">ease-in-out</option>
-    //           <option value="cubic-bezier">cubic-bezier</option>
-    //           <option value="steps">steps</option>
-    //         </select>
-    //         <EasingContainer>
-    //           <EasingPreview easing={easing} />
-    //         </EasingContainer>
-    //       </>
-    //     ) : null}
-    //   </Container>
-    // )
+}
+function getKeyframeEasing(easing, index) {
+    /**
+     * Don't display easing for first keyframe or accept easing generator
+     * TODO: Remove this check as to support easing generators we'll be receiving this as a
+     * serialised object of some kind.
+     */
+    if (!easing || !index || isEasingGenerator(easing))
+        return;
+    const easingDefinition = isEasingList(easing) ? easing[index - 1] : easing;
+    /**
+     * Leva is mutatative of the initial value, so if this is a bezier definition, copy.
+     */
+    return Array.isArray(easingDefinition)
+        ? [...easingDefinition]
+        : easingDefinition;
 }
 
-const scrubberHalfWidth = 16;
-const Container$4 = styled$1.div `
-  position: absolute;
-  width: 20px;
-  height: var(--row-height);
-  cursor: grabber;
-
-  svg {
-    position: relative;
-    top: 15px;
-    left: 5px;
-  }
-`;
-const Stick = styled$1.div `
-  width: 1px;
-  height: 0;
-  background-color: var(--splash);
-  position: absolute;
-  top: var(--row-height);
-  left: 10px;
-  pointer-events: none;
-`;
-function ScrubberIcon() {
-    return (react.exports.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", width: "12", height: "20" },
-        react.exports.createElement("path", { d: "M 0 2.25 C 0 1.145 0.895 0.25 2 0.25 L 9 0.25 C 10.105 0.25 11 1.145 11 2.25 L 11 14.997 C 11 15.721 10.609 16.388 9.977 16.742 L 5.5 19.25 L 1.023 16.742 C 0.391 16.388 0 15.721 0 14.997 Z", fill: "var(--splash)" })));
-}
-function Scrubber({ scale, currentTime, dragOrigin, setDragOrigin, stopPlaying, timelineHeight, containerRef, }) {
-    return (react.exports.createElement(Container$4, { style: {
-            transform: `translateX(${scale * currentTime + 7}px)`,
-            cursor: dragOrigin ? "grabbing" : "grab",
-        }, onPointerDown: (e) => {
-            e.stopPropagation();
-            stopPlaying();
-            setDragOrigin({
-                pointerX: e.pageX + containerRef.current.scrollLeft - scrubberHalfWidth,
-                time: currentTime,
-            });
-        } },
-        react.exports.createElement(ScrubberIcon, null),
-        react.exports.createElement(Stick, { onPointerDown: (e) => e.stopPropagation(), style: {
-                height: `calc(${Math.floor(timelineHeight)}px - var(--row-height))`,
-            } })));
-}
-
-const MarkerBackground = styled$1.div `
-  background-color: var(--feint);
-  backdrop-filter: brightness(50%) blur(3px);
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: var(--tab-bar-height);
-  height: var(--row-height);
-  z-index: 2;
-`;
-const Container$3 = styled$1.div `
-  margin-left: calc(-1 * var(--sidebar-width) - 40px);
-  margin-bottom: 10px;
-  padding-left: calc(var(--sidebar-width) + 40px);
-  flex: 0 0 var(--row-height);
-  position: sticky;
-  top: 0;
-  display: flex;
-  align-items: center;
-  z-index: 3;
-`;
-const Marker = styled$1.div `
-  --marker-padding: 10px;
-  padding-left: var(--marker-padding);
-  color: var(--white);
-  font-weight: bold;
-  flex: 0 0 calc(var(--marker-width));
-`;
-// TODO Automatically generate from scale
-const increment = 0.5;
-function generateMarkers(totalWidth, scale) {
-    if (!totalWidth)
-        return null;
-    const numVisibleSeconds = totalWidth / scale;
-    const numMarkers = Math.ceil(numVisibleSeconds / increment);
-    const markers = [];
-    for (let i = 0; i < numMarkers; i++) {
-        const time = increment * i;
-        markers.push(react.exports.createElement(Marker, { key: time, style: { "--marker-width": increment * scale + "px" } }, time));
-    }
-    return markers;
-}
-const getTimeScale = (state) => state.scale;
-const getScrubTo = (state) => state.scrubTo;
-function TimeMarkers({ currentTime, timelineRect, containerRef, }) {
-    const [dragOrigin, setDragOrigin] = react.exports.useState(undefined);
-    const scale = useEditorState(getTimeScale);
-    const scrubTo = useEditorState(getScrubTo);
-    const { stopPlaying } = useEditorState(getPlayback);
-    const markers = react.exports.useMemo(() => generateMarkers(timelineRect.width, scale), [timelineRect.width, scale]);
-    react.exports.useEffect(() => {
-        document.getElementsByTagName("body")[0].style.cursor = dragOrigin
-            ? "grabbing"
-            : "";
-        if (!dragOrigin)
-            return;
-        const handleDrag = (e) => {
-            const deltaX = e.pageX +
-                containerRef.current.scrollLeft -
-                scrubberHalfWidth -
-                dragOrigin.pointerX;
-            scrubTo(Math.max(0, dragOrigin.time + deltaX / scale));
-        };
-        const stopDrag = () => setDragOrigin(undefined);
-        window.addEventListener("pointermove", handleDrag);
-        window.addEventListener("pointerup", stopDrag);
-        return () => {
-            window.removeEventListener("pointermove", handleDrag);
-            window.removeEventListener("pointerup", stopDrag);
-        };
-    }, [dragOrigin]);
-    return (react.exports.createElement(react.exports.Fragment, null,
-        react.exports.createElement(MarkerBackground, { onClick: (e) => e.stopPropagation() }),
-        react.exports.createElement(Container$3, { onPointerDown: (e) => {
-                const pointerX = e.pageX + containerRef.current.scrollLeft - scrubberHalfWidth;
-                const time = (pointerX - 220) / scale;
-                stopPlaying();
-                setDragOrigin({
-                    pointerX,
-                    time,
-                });
-                scrubTo(Math.max(0, time));
-            } },
-            markers,
-            react.exports.createElement(Scrubber, { scale: scale, currentTime: currentTime, dragOrigin: dragOrigin, setDragOrigin: setDragOrigin, stopPlaying: stopPlaying, timelineHeight: timelineRect.height, containerRef: containerRef }))));
-}
-
-function PlayIcon({ style }) {
-    return (react.exports.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 512 512", style: style },
-        react.exports.createElement("title", null, "Play"),
-        react.exports.createElement("path", { d: "M133 440a35.37 35.37 0 01-17.5-4.67c-12-6.8-19.46-20-19.46-34.33V111c0-14.37 7.46-27.53 19.46-34.33a35.13 35.13 0 0135.77.45l247.85 148.36a36 36 0 010 61l-247.89 148.4A35.5 35.5 0 01133 440z" })));
-}
-
-function PauseIcon({ style }) {
-    return (react.exports.createElement("svg", { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 512 512", style: style },
-        react.exports.createElement("title", null, "Pause"),
-        react.exports.createElement("path", { d: "M208 432h-48a16 16 0 01-16-16V96a16 16 0 0116-16h48a16 16 0 0116 16v320a16 16 0 01-16 16zM352 432h-48a16 16 0 01-16-16V96a16 16 0 0116-16h48a16 16 0 0116 16v320a16 16 0 01-16 16z" })));
-}
-
-const defaultTimestep = (1 / 60) * 1000;
-const getCurrentTime = typeof performance !== "undefined"
-    ? () => performance.now()
-    : () => Date.now();
-const onNextFrame = typeof window !== "undefined"
-    ? (callback) => window.requestAnimationFrame(callback)
-    : (callback) => setTimeout(() => callback(getCurrentTime()), defaultTimestep);
-
-function createRenderStep(runNextFrame) {
-    let toRun = [];
-    let toRunNextFrame = [];
-    let numToRun = 0;
-    let isProcessing = false;
-    let flushNextFrame = false;
-    const toKeepAlive = new WeakSet();
-    const step = {
-        schedule: (callback, keepAlive = false, immediate = false) => {
-            const addToCurrentFrame = immediate && isProcessing;
-            const buffer = addToCurrentFrame ? toRun : toRunNextFrame;
-            if (keepAlive)
-                toKeepAlive.add(callback);
-            if (buffer.indexOf(callback) === -1) {
-                buffer.push(callback);
-                if (addToCurrentFrame && isProcessing)
-                    numToRun = toRun.length;
-            }
-            return callback;
-        },
-        cancel: (callback) => {
-            const index = toRunNextFrame.indexOf(callback);
-            if (index !== -1)
-                toRunNextFrame.splice(index, 1);
-            toKeepAlive.delete(callback);
-        },
-        process: (frameData) => {
-            if (isProcessing) {
-                flushNextFrame = true;
-                return;
-            }
-            isProcessing = true;
-            [toRun, toRunNextFrame] = [toRunNextFrame, toRun];
-            toRunNextFrame.length = 0;
-            numToRun = toRun.length;
-            if (numToRun) {
-                for (let i = 0; i < numToRun; i++) {
-                    const callback = toRun[i];
-                    callback(frameData);
-                    if (toKeepAlive.has(callback)) {
-                        step.schedule(callback);
-                        runNextFrame();
-                    }
-                }
-            }
-            isProcessing = false;
-            if (flushNextFrame) {
-                flushNextFrame = false;
-                step.process(frameData);
-            }
-        },
-    };
-    return step;
-}
-
-const maxElapsed = 40;
-let useDefaultElapsed = true;
-let runNextFrame = false;
-let isProcessing = false;
-const frame = {
-    delta: 0,
-    timestamp: 0,
-};
-const stepsOrder = [
-    "read",
-    "update",
-    "preRender",
-    "render",
-    "postRender",
-];
-const steps = stepsOrder.reduce((acc, key) => {
-    acc[key] = createRenderStep(() => (runNextFrame = true));
-    return acc;
-}, {});
-const sync = stepsOrder.reduce((acc, key) => {
-    const step = steps[key];
-    acc[key] = (process, keepAlive = false, immediate = false) => {
-        if (!runNextFrame)
-            startLoop();
-        return step.schedule(process, keepAlive, immediate);
-    };
-    return acc;
-}, {});
-const cancelSync = stepsOrder.reduce((acc, key) => {
-    acc[key] = steps[key].cancel;
-    return acc;
-}, {});
-stepsOrder.reduce((acc, key) => {
-    acc[key] = () => steps[key].process(frame);
-    return acc;
-}, {});
-const processStep = (stepId) => steps[stepId].process(frame);
-const processFrame = (timestamp) => {
-    runNextFrame = false;
-    frame.delta = useDefaultElapsed
-        ? defaultTimestep
-        : Math.max(Math.min(timestamp - frame.timestamp, maxElapsed), 1);
-    frame.timestamp = timestamp;
-    isProcessing = true;
-    stepsOrder.forEach(processStep);
-    isProcessing = false;
-    if (runNextFrame) {
-        useDefaultElapsed = false;
-        onNextFrame(processFrame);
-    }
-};
-const startLoop = () => {
-    runNextFrame = true;
-    useDefaultElapsed = true;
-    if (!isProcessing)
-        onNextFrame(processFrame);
-};
-
-const Container$2 = styled$1.div `
-  background-color: var(--feint);
-  position: fixed;
-  bottom: 10px;
-  left: calc(var(--sidebar-width) + 10px);
-  border-radius: 20px;
-  padding: 8px 12px;
-  display: flex;
-  align-items: center;
-  z-index: 4;
-  backdrop-filter: blur(4px);
-
-  span {
-    display: block;
-    font-weight: bold;
-  }
-`;
-const PlaybackToggle = styled$1.button `
-  padding: 0;
-  margin-right: 8px;
-
-  svg {
-    width: 16px;
-    height: 16px;
-    fill: var(--white);
-  }
-`;
-function PlaybackControls() {
-    const { playbackOrigin, startPlaying, stopPlaying, scrubTo } = useEditorState(getPlayback);
-    react.exports.useEffect(() => {
-        if (!playbackOrigin)
-            return;
-        const onFrame = ({ timestamp }) => {
-            const delta = timestamp - playbackOrigin.startedAt;
-            scrubTo((playbackOrigin.originTime + delta) / 1000);
-        };
-        sync.update(onFrame, true);
-        return () => cancelSync.update(onFrame);
-    }, [playbackOrigin]);
-    return (react.exports.createElement(Container$2, null,
-        react.exports.createElement(PlaybackToggle, { onClick: playbackOrigin ? stopPlaying : startPlaying }, playbackOrigin ? react.exports.createElement(PauseIcon, null) : react.exports.createElement(PlayIcon, null)),
-        react.exports.createElement(CurrentTime, null)));
-}
-function CurrentTime() {
-    const currentAnimation = useEditorState(getSelectedAnimation);
-    if (!currentAnimation)
-        return null;
-    return react.exports.createElement("span", null, currentAnimation.currentTime.toFixed(2));
-}
-
-function mergeRefs(refs) {
-  return function (value) {
-    refs.forEach(function (ref) {
-      if (typeof ref === "function") {
-        ref(value);
-      } else if (ref != null) {
-        ref.current = value;
-      }
-    });
-  };
-}
-
-const Container$1 = styled$1(motion.main) `
-  display: flex;
-  overflow: overlay;
-  flex: 1;
-  --row-height: 34px;
-  --sidebar-width: 220px;
-`;
-const Content = styled$1.div `
-  display: grid;
-  grid-template-columns: var(--sidebar-width) 1fr;
-`;
-const Visualisation = styled$1.div `
-  display: flex;
-  position: relative;
-  flex-direction: column;
-  flex: 1;
-`;
-const getTimelineState = ({ animations, selectedAnimationName, selectedKeyframes, deselectKeyframes, }) => ({
-    animations,
-    selectedAnimationName,
-    selectedKeyframes,
-    deselectKeyframes,
-});
-function Timeline() {
-    let children = null;
-    const ref = react.exports.useRef(null);
-    const [measureRef, rect] = useMeasure();
-    const { animations, selectedAnimationName, selectedKeyframes, deselectKeyframes, } = useEditorState(getTimelineState);
-    if (selectedAnimationName) {
-        const selectedAnimation = animations[selectedAnimationName];
-        if (selectedAnimation) {
-            children = (react.exports.createElement(Container$1, { ref: mergeRefs([ref, measureRef]), key: selectedAnimationName },
-                react.exports.createElement(Content, null,
-                    react.exports.createElement(Sidebar, { animation: selectedAnimation }),
-                    react.exports.createElement(Visualisation, { onClick: deselectKeyframes },
-                        react.exports.createElement(TimeMarkers, { containerRef: ref, timelineRect: rect, currentTime: selectedAnimation.currentTime }),
-                        react.exports.createElement(Keyframes, { animation: selectedAnimation }),
-                        react.exports.createElement(PlaybackControls, null)),
-                    react.exports.createElement(AnimatePresence, null, selectedKeyframes ? (react.exports.createElement(SelectedKeyframes, { selectedKeyframes: selectedKeyframes, animation: selectedAnimation })) : null))));
-        }
-    }
-    return react.exports.createElement(react.exports.Fragment, null, children);
-}
-
-const Container = styled$1(motion.div) `
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-
-  p,
-  a {
-    font-size: 16px;
-  }
-
-  a {
-    color: var(--blue);
-    text-decoration: underline;
-    cursor: pointer;
-  }
-`;
-const LoginButton = styled$1(motion.button) `
-  font-size: 16px;
-  font-weight: bold;
-  line-height: 16px;
-  padding: 15px 20px;
-  border-radius: 10px;
-  background: var(--strong-blue);
-  color: var(--white);
-  margin: 20px 0;
-`;
-const variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { type: "spring", duration: 0.8, bounce: 0 },
-    },
-};
-function LoginDialog() {
-    return (react.exports.createElement(Container, { initial: "hidden", animate: "visible", variants: { visible: { transition: { staggerChildren: 0.1 } } } },
-        react.exports.createElement(motion.p, { variants: variants }, "Motion Editor is exclusive for Motion One Pro members"),
-        react.exports.createElement(LoginButton, { onClick: () => chrome.tabs.create({ url: "https://motion.dev/login" }), variants: variants }, "Sign in with Github"),
-        react.exports.createElement(motion.p, { variants: variants },
-            "Or sign up for",
-            " ",
-            react.exports.createElement("a", { onClick: (e) => {
-                    e.preventDefault();
-                    chrome.tabs.create({ url: "https://motion.dev/sponsor" });
-                } }, "Motion One Pro"))));
-}
-
-const controlsTheme = {
-    // className: "leva-container",
+const theme = {
     colors: {
         elevation1: "transparent",
         elevation2: "transparent",
@@ -20645,14 +20592,13 @@ const controlsTheme = {
     },
 };
 
-const getHasRecorded = (state) => state.hasRecorded;
-const ControlsContainer = styled$1(SidebarContainer) `
+const Container = styled$1(SidebarContainer) `
   position: fixed;
   top: var(--tab-bar-height);
   right: 0;
   bottom: 0;
   width: 300px;
-  padding: 10px;
+  padding: 5px 10px;
   z-index: 10;
   border: none;
   border-left: 1px solid var(--feint);
@@ -20670,25 +20616,37 @@ const ControlsContainer = styled$1(SidebarContainer) `
     transform: translateY(3px) rotate(45deg);
   }
 `;
-const getHasSelectedKeyframes = (state) => Boolean(state.selectedKeyframes);
-function Editor({ auth = { isPro: true } }) {
-    usePort();
-    const hasRecorded = useEditorState(getHasRecorded);
-    const hasSelectedKeyframes = useEditorState(getHasSelectedKeyframes);
-    if (!auth.isPro) {
-        return react.exports.createElement(LoginDialog, null);
-    }
-    return (react.exports.createElement(react.exports.Fragment, null,
-        react.exports.createElement(TabBar, null),
-        react.exports.createElement(AnimatePresence, { exitBeforeEnter: true }, hasRecorded ? (react.exports.createElement(Timeline, { key: "timeline" })) : (react.exports.createElement(Instructions$1, { key: "instructions" }))),
-        react.exports.createElement(ControlsContainer, { style: { display: hasSelectedKeyframes ? "block" : "none" } },
-            react.exports.createElement("h2", null,
-                react.exports.createElement(ValueMarker, { style: { background: "var(--strong-blue)" } }),
-                "Edit keyframe"),
-            react.exports.createElement(Leva, { fill: true, theme: controlsTheme, flat: true, titleBar: false, hideCopyButton: true }))));
+const getSelectedKeyframes = (state) => state.selectedKeyframes;
+function KeyframeEditPanel() {
+    const selectedKeyframes = useEditorState(getSelectedKeyframes);
+    return (react.exports.createElement(Container, { style: { display: selectedKeyframes ? "block" : "none" } },
+        react.exports.createElement("h2", null,
+            react.exports.createElement(ValueMarker, { style: { background: "var(--strong-blue)" } }),
+            "Edit keyframe"),
+        react.exports.createElement(Leva, { fill: true, theme: theme, flat: true, titleBar: false, hideCopyButton: true }),
+        selectedKeyframes ? (react.exports.createElement(KeyframeEditControls, { selectedKeyframes: selectedKeyframes })) : null));
 }
 
-chrome.storage.sync.get("auth", ({ auth }) => {
+const getHasRecorded = (state) => state.hasRecorded;
+function Editor({ user = { isPro: false } }) {
+    usePort();
+    const hasRecorded = useEditorState(getHasRecorded);
+    return user.isPro ? (react.exports.createElement(react.exports.Fragment, null,
+        react.exports.createElement(TabBar, null),
+        react.exports.createElement(AnimatePresence, { exitBeforeEnter: true }, hasRecorded ? (react.exports.createElement(Timeline, { key: "timeline" })) : (react.exports.createElement(Instructions$1, { key: "instructions" }))),
+        react.exports.createElement(KeyframeEditPanel, null))) : (react.exports.createElement(LoginDialog, null));
+}
+
+chrome.storage.sync.get("user", ({ user }) => {
     const rootNode = document.getElementById("app");
-    rootNode && reactDom.exports.render(react.exports.createElement(Editor, { auth: auth }), rootNode);
+    if (!rootNode)
+        return;
+    reactDom.exports.render(react.exports.createElement(Editor, { user: user }), rootNode);
+    chrome.storage.onChanged.addListener((changes) => {
+        for (let [key, { newValue }] of Object.entries(changes)) {
+            if (key === "user") {
+                reactDom.exports.render(react.exports.createElement(Editor, { user: newValue }), rootNode);
+            }
+        }
+    });
 });

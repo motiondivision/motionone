@@ -5,12 +5,12 @@ const opacity = (initialValue: string) => ({
   step: 0.05,
 })
 
-const controlTypes = {
+const controlDefinitions = {
   opacity,
 }
 
-export function createControls(name: string, value: string) {
-  const factory = controlTypes[name]
+export function getControlDefinition(name: string, value: string) {
+  const factory = controlDefinitions[name]
   const config = factory ? factory(value) : { value }
   return {
     ...config,

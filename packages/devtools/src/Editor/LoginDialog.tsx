@@ -50,10 +50,13 @@ export function LoginDialog() {
       variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
     >
       <motion.p variants={variants}>
-        Motion Editor is exclusive for Motion One Pro members
+        Motion Developer Tools is available in early access for Motion One Pro
+        members
       </motion.p>
       <LoginButton
-        onClick={() => chrome.tabs.create({ url: "https://motion.dev/login" })}
+        onClick={() =>
+          chrome.tabs.create({ url: "https://motion.dev/tools/login" })
+        }
         variants={variants}
       >
         Sign in with Github
@@ -63,7 +66,7 @@ export function LoginDialog() {
         <a
           onClick={(e) => {
             e.preventDefault()
-            chrome.tabs.create({ url: "https://motion.dev/sponsor" })
+            chrome.tabs.create({ url: "https://motion.dev/sponsor?tools=true" })
           }}
         >
           Motion One Pro

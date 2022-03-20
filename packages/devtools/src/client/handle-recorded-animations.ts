@@ -1,5 +1,10 @@
-import { AnimationStartMessage } from "../types"
-import { store } from "./state"
+import { AnimationMetadata, AnimationStartMessage } from "../types"
+import { cssAnimation } from "./plugins/css-animation"
+import { cssTransition } from "./plugins/css-transition"
+import { motionOne } from "./plugins/motion-one"
+import { ClientState, store } from "./state"
+
+const plugins = [cssTransition, cssAnimation, motionOne]
 
 export function handleRecordedAnimations() {
   let scheduledFlush: number | undefined = undefined
@@ -25,62 +30,22 @@ export function handleRecordedAnimations() {
    * Handle newly recorded animations
    */
   store.subscribe(
-    (recordedAnimations) => {
+    (state: ClientState) => state.recordedAnimations,
+    (recordedAnimations: AnimationMetadata | undefined) => {
       if (!recordedAnimations) return
 
       if (scheduledFlush === undefined) {
         scheduledFlush = requestAnimationFrame(flushAnimations)
       }
-    },
-    (state) => state.recordedAnimations
+    }
   )
 
-  // /**
-  //  * Handle Greensock animations
-  //  */
-  // const recordedGreensockAnimations = new Set()
-
-  // function recordNewTimelineAnimations(timeline: any) {
-  //   const { recordAnimation } = store.getState()
-  //   const children = timeline.getChildren()
-  //   for (const child of children) {
-  //     // TODO: This is a timeline
-  //     if (child.labels) continue
-
-  //     if (recordedGreensockAnimations.has(child)) continue
-  //     recordedGreensockAnimations.add(child)
-
-  //     const propTweenData = child._pt
-
-  //     const values = child._ptLookup
-  //     const targets = child._targets
-
-  //     if (!values) continue
-
-  //     console.log(values, propTweenData)
-
-  //     // for (const valueName in values) {
-  //     //   const propTween = values[valueName]
-  //     //   recordAnimation(element, valueName, [propTween.s, propTween.t], {})
-  //     // }
-  //   }
-  // }
-
-  // function recordGreensockAnimations() {
-  //   const { gsap, recordAnimation } = store.getState()
-
-  //   recordNewTimelineAnimations(gsap.globalTimeline)
-  // }
-
-  // store.subscribe(
-  //   ({ gsap, isRecording }) => {
-  //     if (gsap && isRecording) {
-  //       sync.update(recordGreensockAnimations, true)
-  //     } else {
-  //       cancelSync.update(recordGreensockAnimations)
-  //       recordedGreensockAnimations.clear()
-  //     }
-  //   },
-  //   ({ gsap, isRecording }) => ({ gsap, isRecording })
-  // )
+  store.subscribe(
+    ({ isRecording }: ClientState) => isRecording,
+    (isRecording: boolean) => {
+      plugins.forEach((plugin) => {
+        isRecording ? plugin.onRecordStart() : plugin.onRecordEnd()
+      })
+    }
+  )
 }

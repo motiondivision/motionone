@@ -1,3 +1,4 @@
+import { Easing } from "@motionone/types"
 import type { AnimationsMetadata, EditorAuth } from "../../types"
 
 export enum Actions {
@@ -23,7 +24,7 @@ export interface PlaybackOrigin {
 }
 
 export interface EditorState {
-  auth: EditorAuth
+  user: EditorAuth
   animations: AnimationsMetadata
   playbackOrigin: PlaybackOrigin | undefined
   isRecording: boolean
@@ -43,4 +44,10 @@ export interface EditorState {
   startPlaying(): void
   stopPlaying(): void
   updateKeyframe(keyframe: SelectedKeyframeMetadata, newValue: string): void
+  updateKeyframeEasing(
+    keyframe: SelectedKeyframeMetadata,
+    newEasing: Easing
+  ): void
+  logout(): void
+  login(user: EditorAuth): void
 }

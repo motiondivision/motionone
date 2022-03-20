@@ -26,7 +26,6 @@ const MarkerBackground = styled.div`
 
 const Container = styled.div`
   margin-left: calc(-1 * var(--sidebar-width) - 40px);
-  margin-bottom: 10px;
   padding-left: calc(var(--sidebar-width) + 40px);
   flex: 0 0 var(--row-height);
   position: sticky;
@@ -122,6 +121,7 @@ export function TimeMarkers({
     <>
       <MarkerBackground onClick={(e) => e.stopPropagation()} />
       <Container
+        onClick={(e) => e.stopPropagation()}
         onPointerDown={(e) => {
           const pointerX =
             e.pageX + containerRef.current!.scrollLeft - scrubberHalfWidth

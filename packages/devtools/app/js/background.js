@@ -77,9 +77,19 @@ chrome.runtime.onMessage.addListener((request, sender) => {
 /**
  * Handle authentication
  */
-chrome.runtime.onMessageExternal.addListener((request, sender, _sendResponse) => {
-    if (sender.url && sender.url.includes("motion.dev")) {
-        console.log(request);
+chrome.runtime.onMessageExternal.addListener((request, sender, sendResponse) => {
+    // Only accept messages from motion.dev
+    if (!sender.url || !sender.url.includes("motion.dev"))
+        return;
+    switch (request.type) {
+        case "login": {
+            const { username, isPro } = request;
+            console.log("setting storage user to", { username, isPro });
+            chrome.storage.sync.set({ user: { username, isPro } }, () => {
+                sendResponse({ success: true });
+            });
+            break;
+        }
     }
 });
 function loadClient(tabId) {

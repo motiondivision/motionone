@@ -1,8 +1,7 @@
 import * as React from "react"
 import styled from "styled-components"
 import { Sidebar } from "./Sidebar"
-import { SelectedKeyframes } from "./SelectedKeyframes"
-import { AnimatePresence, motion } from "framer-motion"
+import { motion } from "framer-motion"
 import { EditorState } from "../state/types"
 import { useEditorState } from "../state/use-editor-state"
 import { TimeMarkers } from "./TimeMarkers"
@@ -34,12 +33,10 @@ const Visualisation = styled.div`
 const getTimelineState = ({
   animations,
   selectedAnimationName,
-  selectedKeyframes,
   deselectKeyframes,
 }: EditorState) => ({
   animations,
   selectedAnimationName,
-  selectedKeyframes,
   deselectKeyframes,
 })
 
@@ -51,7 +48,7 @@ export function Timeline() {
   const {
     animations,
     selectedAnimationName,
-    selectedKeyframes,
+    // TODO: Move this to within keyframes
     deselectKeyframes,
   } = useEditorState(getTimelineState)
 
@@ -75,14 +72,6 @@ export function Timeline() {
               <Keyframes animation={selectedAnimation} />
               <PlaybackControls />
             </Visualisation>
-            <AnimatePresence>
-              {selectedKeyframes ? (
-                <SelectedKeyframes
-                  selectedKeyframes={selectedKeyframes}
-                  animation={selectedAnimation}
-                />
-              ) : null}
-            </AnimatePresence>
           </Content>
         </Container>
       )

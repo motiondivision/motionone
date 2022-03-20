@@ -31,6 +31,6 @@
   "permissions": ["storage", "tabs", "scripting", "webNavigation"],
   "host_permissions": ["file:///*", "http://*/*", "https://*/*"],
   "externally_connectable": {
-    "matches": ["https://*.motion.dev/*"]
+    "matches": ["https://*.motion.dev/*", "*://localhost/*"]
   }
 }

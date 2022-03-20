@@ -54,7 +54,7 @@ export function PlaybackControls() {
   }, [playbackOrigin])
 
   return (
-    <Container>
+    <Container onClick={(e) => e.stopPropagation()}>
       <PlaybackToggle onClick={playbackOrigin ? stopPlaying : startPlaying}>
         {playbackOrigin ? <PauseIcon /> : <PlayIcon />}
       </PlaybackToggle>

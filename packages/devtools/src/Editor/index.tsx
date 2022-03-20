@@ -8,19 +8,22 @@ import { EditorAuth } from "../types"
 import { LoginDialog } from "./LoginDialog"
 import { useEditorState } from "./state/use-editor-state"
 import { EditorState } from "./state/types"
-import { Leva } from "leva"
-import { controlsTheme } from "./Timeline/theme"
-import styled from "styled-components"
-import { Sidebar, SidebarContainer } from "./Timeline/Sidebar"
-import { ValueMarker } from "./Timeline/Keyframes"
+import { KeyframeEditPanel } from "./KeyframeEditPanel"
 
 /**
  * TODO
  * - Fix port reconnection - 1
  * - Add Github authentication - 4
- * - Edit easing - 2
+ * - Release 10.7 of Motion One
+ * - Submit to Google - 1
  * =============================
- * - Spring/steps/glide support - 8
+ * - CSS animation names - 1
+ * =============================
+ * - Motion One label - 1
+ * =============================
+ * - Add unit tests - 8
+ * - Add uuid to keyframes - 2
+ * - Spring/glide support - 8
  * =============================
  * - Keyboard shortcuts
  *    - Space: Start/stop - 2
@@ -35,6 +38,8 @@ import { ValueMarker } from "./Timeline/Keyframes"
  * =============================
  * - Add new values to element - 1
  * =============================
+ * - Steps visualisation - 8
+ * =============================
  * - Zoom in/out timeline - 8
  * =============================
  * - Multi-select keyframes - 16
@@ -45,50 +50,17 @@ import { ValueMarker } from "./Timeline/Keyframes"
  */
 
 interface Props {
-  auth: EditorAuth
+  user: EditorAuth
 }
 
 const getHasRecorded = (state: EditorState) => state.hasRecorded
 
-const ControlsContainer = styled(SidebarContainer)`
-  position: fixed;
-  top: var(--tab-bar-height);
-  right: 0;
-  bottom: 0;
-  width: 300px;
-  padding: 10px;
-  z-index: 10;
-  border: none;
-  border-left: 1px solid var(--feint);
-
-  h2 {
-    margin-bottom: 20px;
-    font-size: 12px;
-  }
-
-  ${ValueMarker} {
-    display: inline-block;
-    position: static;
-    margin-right: 6px;
-    background-color: var(--strong-blue);
-    transform: translateY(3px) rotate(45deg);
-  }
-`
-
-const getHasSelectedKeyframes = (state: EditorState) =>
-  Boolean(state.selectedKeyframes)
-
-export function Editor({ auth = { isPro: true } }: Props) {
+export function Editor({ user = { isPro: false } }: Props) {
   usePort()
 
   const hasRecorded = useEditorState(getHasRecorded)
-  const hasSelectedKeyframes = useEditorState(getHasSelectedKeyframes)
 
-  if (!auth.isPro) {
-    return <LoginDialog />
-  }
-
-  return (
+  return user.isPro ? (
     <>
       <TabBar />
       <AnimatePresence exitBeforeEnter>
@@ -98,15 +70,9 @@ export function Editor({ auth = { isPro: true } }: Props) {
           <Instructions key="instructions" />
         )}
       </AnimatePresence>
-      <ControlsContainer
-        style={{ display: hasSelectedKeyframes ? "block" : "none" }}
-      >
-        <h2>
-          <ValueMarker style={{ background: "var(--strong-blue)" }} />
-          Edit keyframe
-        </h2>
-        <Leva fill theme={controlsTheme} flat titleBar={false} hideCopyButton />
-      </ControlsContainer>
+      <KeyframeEditPanel />
     </>
+  ) : (
+    <LoginDialog />
   )
 }

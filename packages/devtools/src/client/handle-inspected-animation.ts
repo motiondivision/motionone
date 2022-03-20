@@ -1,7 +1,7 @@
 import { BasicAnimationControls } from "@motionone/types"
 import { animateStyle } from "@motionone/dom"
 import { AnimationMetadata } from "../types"
-import { store } from "./state"
+import { ClientState, store } from "./state"
 
 export function handleInspectedAnimation() {
   const animations: BasicAnimationControls[] = []
@@ -24,6 +24,8 @@ export function handleInspectedAnimation() {
         const { valueName, keyframes, options } = valueAnimation
         const newAnimation = animateStyle(element, valueName, keyframes, {
           ...options,
+          repeat:
+            (options as any).repeat === "Infinity" ? Infinity : options.repeat,
           record: false,
         })()
         newAnimation?.pause()
@@ -40,6 +42,7 @@ export function handleInspectedAnimation() {
   }
 
   store.subscribe(
+    (state: ClientState) => state.inspectedAnimation,
     (
       inspectedAnimation: AnimationMetadata | undefined,
       prevInspectedAnimation: AnimationMetadata | undefined
@@ -49,22 +52,21 @@ export function handleInspectedAnimation() {
       if (prevInspectedAnimation && inspectedAnimation) {
         createAnimations(inspectedAnimation)
       }
-    },
-    (state) => state.inspectedAnimation
+    }
   )
 
   store.subscribe(
+    (state: ClientState) => state.inspectedAnimation?.currentTime,
     (currentTime: number | undefined) => {
       if (currentTime === undefined) return
       scrubTo(currentTime)
-    },
-    (state) => state.inspectedAnimation?.currentTime
+    }
   )
 
   store.subscribe(
-    (isRecording) => {
+    (state: ClientState) => state.isRecording,
+    (isRecording: boolean) => {
       isRecording && cancelAllAnimations()
-    },
-    (state) => state.isRecording
+    }
   )
 }

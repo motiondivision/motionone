@@ -22,9 +22,8 @@ import { getStyleName } from "./utils/get-style-name"
 import { isNumber, noop } from "@motionone/utils"
 import { stopAnimation } from "./utils/stop-animation"
 
-function getDevTools() {
-  const clientStore = (window as any).__MOTION_DEV_TOOLS as any
-  if (clientStore) return clientStore.getState()
+function getDevToolsRecord() {
+  return (window as any).__MOTION_DEV_TOOLS_RECORD
 }
 
 export function animateStyle(
@@ -33,8 +32,8 @@ export function animateStyle(
   keyframesDefinition: ValueKeyframesDefinition,
   options: AnimationOptions = {}
 ): AnimationFactory {
-  const devTools = getDevTools()
-  const isRecording = options.record !== false && devTools?.isRecording
+  const record = getDevToolsRecord()
+  const isRecording = options.record !== false && record
 
   let animation: any
   let {
@@ -74,7 +73,8 @@ export function animateStyle(
    */
   stopAnimation(
     motionValue.animation,
-    !(isEasingGenerator(easing) && motionValue.generator)
+    !(isEasingGenerator(easing) && motionValue.generator) &&
+      options.record !== false
   )
 
   /**
@@ -230,13 +230,19 @@ export function animateStyle(
     }
 
     if (isRecording) {
-      devTools?.recordAnimation(element as HTMLElement, key, keyframes, {
-        duration,
-        delay,
-        easing,
-        repeat,
-        offset,
-      })
+      record(
+        element as HTMLElement,
+        key,
+        keyframes,
+        {
+          duration,
+          delay,
+          easing,
+          repeat,
+          offset,
+        },
+        "motion-one"
+      )
     }
 
     motionValue.setAnimation(animation)

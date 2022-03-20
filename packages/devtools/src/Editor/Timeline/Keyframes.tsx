@@ -225,7 +225,7 @@ export function Keyframes({ animation }: KeyframesProps) {
     )
   }
 
-  return <>{elementAnimations}</>
+  return <div>{elementAnimations}</div>
 }
 
 function isKeyframeSelected(

@@ -4,12 +4,21 @@ export interface Storage {
   recordingTabs: Set<number>
 }
 
+export type Source = "motion-one" | "css-transition" | "css-animation"
+
 export interface ValueAnimationMetadata {
   elementId: string
   animationName: string
   valueName: string
   keyframes: ValueKeyframe[]
   options: AnimationOptions
+  source: Source
+}
+
+export interface DevToolsPlugin {
+  id: Source
+  onRecordStart: VoidFunction
+  onRecordEnd: VoidFunction
 }
 
 export interface AnimationMetadata {

@@ -5,7 +5,12 @@ import replace from "@rollup/plugin-replace"
 export default ["background", "bridge", "editor", "devtools", "client"].map(
   (name) => ({
     input: `lib/${name}.js`,
-    output: [{ format: "es", file: `app/js/${name}.js` }],
+    output: [
+      {
+        format: name === "bridge" || name === "client" ? "iife" : "es",
+        file: `app/js/${name}.js`,
+      },
+    ],
     plugins: [
       resolve(),
       commonjs(),
