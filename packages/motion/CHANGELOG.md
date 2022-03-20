@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.7.0] [2022-03-20]
+
+### Added
+
+- Added support for Motion Developer Tools.
+
 ## [10.6.2] [2022-02-08]
 
 ### Fixed

@@ -14,7 +14,6 @@ import { KeyframeEditPanel } from "./KeyframeEditPanel"
  * TODO
  * - Fix port reconnection - 1
  * - Add Github authentication - 4
- * - Release 10.7 of Motion One
  * - Submit to Google - 1
  * =============================
  * - CSS animation names - 1
