@@ -13,8 +13,9 @@ export const isEasingGenerator = (
   Boolean((easing as EasingGenerator).createAnimation)
 
 export const isCubicBezier = (
-  easing: Easing | Easing[]
+  easing: EasingGenerator | Easing | Easing[]
 ): easing is BezierDefinition => Array.isArray(easing) && isNumber(easing[0])
 
-export const isEasingList = (easing: Easing | Easing[]): easing is Easing[] =>
-  Array.isArray(easing) && !isNumber(easing[0])
+export const isEasingList = (
+  easing: EasingGenerator | Easing | Easing[] | undefined
+): easing is Easing[] => Array.isArray(easing) && !isNumber(easing[0])

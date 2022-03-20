@@ -22,12 +22,19 @@ import { getStyleName } from "./utils/get-style-name"
 import { isNumber, noop } from "@motionone/utils"
 import { stopAnimation } from "./utils/stop-animation"
 
+function getDevToolsRecord() {
+  return (window as any).__MOTION_DEV_TOOLS_RECORD
+}
+
 export function animateStyle(
   element: Element,
   key: string,
   keyframesDefinition: ValueKeyframesDefinition,
   options: AnimationOptions = {}
 ): AnimationFactory {
+  const record = getDevToolsRecord()
+  const isRecording = options.record !== false && record
+
   let animation: any
   let {
     duration = defaults.duration,
@@ -66,7 +73,8 @@ export function animateStyle(
    */
   stopAnimation(
     motionValue.animation,
-    !(isEasingGenerator(easing) && motionValue.generator)
+    !(isEasingGenerator(easing) && motionValue.generator) &&
+      options.record !== false
   )
 
   /**
@@ -130,7 +138,9 @@ export function animateStyle(
        * If this browser doesn't support partial/implicit keyframes we need to
        * explicitly provide one.
        */
-      if (!supports.partialKeyframes() && keyframes.length === 1) {
+      const needsToReadInitialKeyframe =
+        !supports.partialKeyframes() && keyframes.length === 1
+      if (isRecording || needsToReadInitialKeyframe) {
         keyframes.unshift(readInitialValue())
       }
 
@@ -216,6 +226,22 @@ export function animateStyle(
         definition && isNumber(target)
           ? definition.toDefaultUnit(target)
           : target
+      )
+    }
+
+    if (isRecording) {
+      record(
+        element as HTMLElement,
+        key,
+        keyframes,
+        {
+          duration,
+          delay,
+          easing,
+          repeat,
+          offset,
+        },
+        "motion-one"
       )
     }
 

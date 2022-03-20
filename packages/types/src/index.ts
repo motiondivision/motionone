@@ -86,7 +86,22 @@ export type PlaybackOptions = {
   direction?: PlaybackDirection
 }
 
+export type DevToolsOptions = {
+  record?: boolean
+}
+
 export type AnimationOptions = KeyframeOptions &
-  PlaybackOptions & {
+  PlaybackOptions &
+  DevToolsOptions & {
     allowWebkitAcceleration?: boolean
   }
+
+export interface DevTools {
+  record: (
+    element: HTMLElement,
+    valueName: string,
+    keyframes: any,
+    options: AnimationOptions
+  ) => void
+  isRecording: boolean
+}

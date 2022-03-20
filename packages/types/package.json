@@ -10,6 +10,6 @@
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf lib dist types && tsc -p . && rollup -c",
-    "dev": "rollup -c -w"
+    "dev": "concurrently -c blue,red -n tsc,rollup --kill-others \"tsc --watch -p . --preserveWatchOutput\" \"rollup --c --watch --no-watch.clearScreen\""
   }
 }

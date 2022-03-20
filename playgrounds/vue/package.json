@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@motionone/vue": "^10.6.2",
+    "gsap": "^3.9.1",
     "motion": "^10.6.2",
     "nuxi": "^0.10.1"
   }
