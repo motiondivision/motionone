@@ -24,5 +24,6 @@
   transform: scale(3);
   opacity: 0.4;
   width: 100px;
+  background-color: aquamarine !important;
 }
 </style>

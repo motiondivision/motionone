@@ -10790,7 +10790,7 @@ function CurrentTime() {
     const currentAnimation = useEditorState(getSelectedAnimation);
     if (!currentAnimation)
         return null;
-    return react.exports.createElement("span", null, currentAnimation.currentTime.toFixed(2));
+    return (react.exports.createElement("span", { style: { fontVariantNumeric: "tabular-nums" } }, currentAnimation.currentTime.toFixed(2)));
 }
 
 /**

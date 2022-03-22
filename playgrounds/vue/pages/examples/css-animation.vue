@@ -53,6 +53,7 @@
   100% {
     transform: scale(1);
     opacity: 0.4;
+    background-color: pink;
   }
 }
 </style>

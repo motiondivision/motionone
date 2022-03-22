@@ -68,5 +68,9 @@ function CurrentTime() {
 
   if (!currentAnimation) return null
 
-  return <span>{currentAnimation.currentTime.toFixed(2)}</span>
+  return (
+    <span style={{ fontVariantNumeric: "tabular-nums" }}>
+      {currentAnimation.currentTime.toFixed(2)}
+    </span>
+  )
 }

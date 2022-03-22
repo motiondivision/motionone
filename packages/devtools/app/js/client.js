@@ -495,14 +495,14 @@
 	    const element = target;
 	    const { transition: transitionStyle } = window.getComputedStyle(element);
 	    const transitions = splitTransitions(transitionStyle);
-	    const styleName = camelToPipe(propertyName);
+	    const nameAsPipeCase = pipeToCamel(propertyName);
 	    let valueTransition;
 	    for (const transitionDefinition of transitions) {
 	        const props = splitTransitionIntoProps(transitionDefinition);
 	        if (props[0] === "all") {
 	            valueTransition = props;
 	        }
-	        else if (props[0] === styleName) {
+	        else if (props[0] === propertyName) {
 	            valueTransition = props;
 	            break;
 	        }
@@ -517,9 +517,10 @@
 	    const keyframes = (_b = (_a = valueAnimation.effect) === null || _a === void 0 ? void 0 : _a.getKeyframes) === null || _b === void 0 ? void 0 : _b.call(_a);
 	    if (!keyframes)
 	        return;
+	    console.log(keyframes);
 	    return {
-	        valueName: propertyName,
-	        keyframes: keyframes.map((keyframe) => keyframe[propertyName]),
+	        valueName: nameAsPipeCase,
+	        keyframes: keyframes.map((keyframe) => keyframe[nameAsPipeCase]),
 	        options: {
 	            delay: parseFloat(delay),
 	            duration: parseFloat(duration),
@@ -551,7 +552,7 @@
 	    .replace(")", "")
 	    .split(",")
 	    .map(parseFloat);
-	const camelToPipe = (str) => str.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
+	const pipeToCamel = (str) => str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
 
 	const motionOne = {
 	    id: "motion-one",

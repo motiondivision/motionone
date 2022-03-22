@@ -24,7 +24,8 @@ function getRecordedAnimationFromTransitionEvent({
 
   const { transition: transitionStyle } = window.getComputedStyle(element)
   const transitions = splitTransitions(transitionStyle)
-  const styleName = camelToPipe(propertyName)
+
+  const nameAsPipeCase = pipeToCamel(propertyName)
 
   let valueTransition: TransitionDefinition | undefined
 
@@ -33,7 +34,7 @@ function getRecordedAnimationFromTransitionEvent({
 
     if (props[0] === "all") {
       valueTransition = props
-    } else if (props[0] === styleName) {
+    } else if (props[0] === propertyName) {
       valueTransition = props
       break
     }
@@ -53,10 +54,10 @@ function getRecordedAnimationFromTransitionEvent({
   const keyframes = (valueAnimation.effect as KeyframeEffect)?.getKeyframes?.()
 
   if (!keyframes) return
-
+  console.log(keyframes)
   return {
-    valueName: propertyName,
-    keyframes: keyframes.map((keyframe) => keyframe[propertyName] as string),
+    valueName: nameAsPipeCase,
+    keyframes: keyframes.map((keyframe) => keyframe[nameAsPipeCase] as string),
     options: {
       delay: parseFloat(delay),
       duration: parseFloat(duration),
@@ -102,3 +103,6 @@ const getEasingPoints = (easing: string): BezierDefinition =>
 
 export const camelToPipe = (str: string) =>
   str.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)
+
+export const pipeToCamel = (str: string) =>
+  str.replace(/-([a-z])/g, (g) => g[1].toUpperCase())
