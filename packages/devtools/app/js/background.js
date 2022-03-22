@@ -4,10 +4,11 @@ chrome.runtime.onConnect.addListener((port) => {
     switch (port.name) {
         case "client": {
             const listener = (message, { sender }) => {
-                console.log("received message from client");
                 if (message.type === "clientready") {
                     port.postMessage({ type: "tabId", tabId: sender.tab.id });
-                    clientConnections.set(sender.tab.id, port);
+                    const tabConnections = clientConnections.get(sender.tab.id) || new Map();
+                    clientConnections.set(sender.tab.id, tabConnections);
+                    tabConnections.set(sender.frameId, port);
                 }
                 else {
                     const devToolsPort = devToolsConnections.get(sender.tab.id);
@@ -20,7 +21,6 @@ chrome.runtime.onConnect.addListener((port) => {
         }
         case "devtools-page": {
             const listener = (message) => {
-                var _a, _b;
                 console.log("received message from dev tools");
                 switch (message.type) {
                     case "init": {
@@ -37,12 +37,14 @@ chrome.runtime.onConnect.addListener((port) => {
                             }
                             chrome.storage.sync.set({ recordingTabs });
                         });
-                        (_a = clientConnections.get(message.tabId)) === null || _a === void 0 ? void 0 : _a.postMessage(message);
+                        const tabConnections = clientConnections.get(message.tabId);
+                        tabConnections === null || tabConnections === void 0 ? void 0 : tabConnections.forEach((connection) => connection.postMessage(message));
                         return;
                     }
                     case "inspectanimation":
                     case "scrubanimation": {
-                        (_b = clientConnections.get(message.tabId)) === null || _b === void 0 ? void 0 : _b.postMessage(message);
+                        const tabConnections = clientConnections.get(message.tabId);
+                        tabConnections === null || tabConnections === void 0 ? void 0 : tabConnections.forEach((connection) => connection.postMessage(message));
                         return;
                     }
                 }
@@ -84,7 +86,6 @@ chrome.runtime.onMessageExternal.addListener((request, sender, sendResponse) => 
     switch (request.type) {
         case "login": {
             const { username, isPro } = request;
-            console.log("setting storage user to", { username, isPro });
             chrome.storage.sync.set({ user: { username, isPro } }, () => {
                 sendResponse({ success: true });
             });
@@ -93,6 +94,7 @@ chrome.runtime.onMessageExternal.addListener((request, sender, sendResponse) => 
     }
 });
 function loadClient(tabId) {
+    console.log("loading client", tabId);
     chrome.scripting.executeScript({
         target: { tabId },
         func: () => {

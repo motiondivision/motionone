@@ -14,7 +14,6 @@ import { KeyframeEditPanel } from "./KeyframeEditPanel"
  * TODO
  * - Fix port reconnection - 1
  * - Tab doesn't appear on all sites
- * - Twitter background-color Tweet hover
  * =============================
  * - Add unit tests - 8
  * - Add uuid to keyframes - 2

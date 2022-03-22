@@ -517,7 +517,6 @@
 	    const keyframes = (_b = (_a = valueAnimation.effect) === null || _a === void 0 ? void 0 : _a.getKeyframes) === null || _b === void 0 ? void 0 : _b.call(_a);
 	    if (!keyframes)
 	        return;
-	    console.log(keyframes);
 	    return {
 	        valueName: nameAsPipeCase,
 	        keyframes: keyframes.map((keyframe) => keyframe[nameAsPipeCase]),

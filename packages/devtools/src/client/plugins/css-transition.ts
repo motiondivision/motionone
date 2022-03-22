@@ -54,7 +54,7 @@ function getRecordedAnimationFromTransitionEvent({
   const keyframes = (valueAnimation.effect as KeyframeEffect)?.getKeyframes?.()
 
   if (!keyframes) return
-  console.log(keyframes)
+
   return {
     valueName: nameAsPipeCase,
     keyframes: keyframes.map((keyframe) => keyframe[nameAsPipeCase] as string),

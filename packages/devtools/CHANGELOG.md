@@ -2,7 +2,13 @@
 
 Motion Developer Tools adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.0.3] [2022-03-20]
+## [0.0.4] [Unreleased]
+
+### Fixed
+
+- Allowing editing and playback of recording animations within iframes.
+
+## [0.0.3] [2022-03-22]
 
 ### Fixed
 

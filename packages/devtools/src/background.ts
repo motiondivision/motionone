@@ -1,17 +1,19 @@
 import { MotionMessage, ClearAnimationsMessage } from "./types"
 
 const devToolsConnections = new Map<number, chrome.runtime.Port>()
-const clientConnections = new Map<number, chrome.runtime.Port>()
+const clientConnections = new Map<number, Map<number, chrome.runtime.Port>>()
 
 chrome.runtime.onConnect.addListener((port) => {
   switch (port.name) {
     case "client": {
       const listener = (message: MotionMessage, { sender }: any) => {
-        console.log("received message from client")
         if (message.type === "clientready") {
           port.postMessage({ type: "tabId", tabId: sender.tab.id })
 
-          clientConnections.set(sender.tab.id, port)
+          const tabConnections =
+            clientConnections.get(sender.tab.id) || new Map()
+          clientConnections.set(sender.tab.id, tabConnections)
+          tabConnections.set(sender.frameId, port)
         } else {
           const devToolsPort = devToolsConnections.get(sender.tab.id)
           if (devToolsPort) devToolsPort.postMessage(message)
@@ -44,12 +46,19 @@ chrome.runtime.onConnect.addListener((port) => {
               }
             )
 
-            clientConnections.get(message.tabId)?.postMessage(message)
+            const tabConnections = clientConnections.get(message.tabId)
+            tabConnections?.forEach((connection) =>
+              connection.postMessage(message)
+            )
+
             return
           }
           case "inspectanimation":
           case "scrubanimation": {
-            clientConnections.get(message.tabId)?.postMessage(message)
+            const tabConnections = clientConnections.get(message.tabId)
+            tabConnections?.forEach((connection) =>
+              connection.postMessage(message)
+            )
             return
           }
         }
@@ -104,8 +113,6 @@ chrome.runtime.onMessageExternal.addListener(
       case "login": {
         const { username, isPro } = request
 
-        console.log("setting storage user to", { username, isPro })
-
         chrome.storage.sync.set({ user: { username, isPro } }, () => {
           sendResponse({ success: true })
         })
@@ -116,6 +123,7 @@ chrome.runtime.onMessageExternal.addListener(
 )
 
 function loadClient(tabId: number) {
+  console.log("loading client", tabId)
   chrome.scripting.executeScript({
     target: { tabId },
     func: () => {
