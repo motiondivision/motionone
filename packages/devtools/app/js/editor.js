@@ -20485,7 +20485,7 @@ function ValueControl({ keyframeMetadata, valueAnimation }) {
         };
     }
     else {
-        controls[`${keyframeId} easing`] = Object.assign(Object.assign({}, bezier(easing)), { label: "Easing", transient: true, onChange: ([...points]) => updateKeyframeEasing(keyframeMetadata, points) });
+        controls[`${keyframeId} easing`] = Object.assign(Object.assign({}, bezier(Array.isArray(easing) ? [...easing] : easing)), { label: "Easing", transient: true, onChange: ([...points]) => updateKeyframeEasing(keyframeMetadata, points) });
     }
     useControls(controls);
     return null;

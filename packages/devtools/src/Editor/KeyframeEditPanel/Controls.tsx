@@ -43,7 +43,7 @@ function ValueControl({ keyframeMetadata, valueAnimation }: ValueControlProps) {
     }
   } else {
     controls[`${keyframeId} easing`] = {
-      ...bezier(easing as any),
+      ...bezier(Array.isArray(easing) ? [...easing] : (easing as any)),
       label: "Easing",
       transient: true,
       onChange: ([...points]: BezierDefinition) =>

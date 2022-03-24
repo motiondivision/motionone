@@ -17,7 +17,7 @@
   width: 200px;
   height: 200px;
   transition: transform 100ms cubic-bezier(0, 0, 1, 1),
-    opacity 200ms ease-out 300ms, all 0.5s ease;
+    opacity 200ms ease-out 300ms, all 0.5s cubic-bezier(0, 0, 1, 1);
 }
 
 .box:hover {

@@ -19,8 +19,8 @@ export interface ValueAnimationMetadata {
 export interface Keyframe {
   id: string
   value: string
-  easing: Easing
   offset: number
+  easing?: Easing
 }
 
 export interface DevToolsPlugin {
