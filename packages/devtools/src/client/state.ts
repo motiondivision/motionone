@@ -1,8 +1,25 @@
-import { AnimationOptions, ValueKeyframe } from "@motionone/types"
+import {
+  AnimationOptions,
+  Easing,
+  EasingGenerator,
+  ValueKeyframe,
+} from "@motionone/types"
+import {
+  defaultOffset,
+  defaults,
+  fillOffset,
+  isEasingGenerator,
+  isEasingList,
+} from "@motionone/utils"
 import create from "zustand"
 import { UseBoundStore, StoreApi } from "zustand"
 import { subscribeWithSelector } from "zustand/middleware"
-import { AnimationMetadata, AnimationsMetadata, Source } from "../types"
+import {
+  AnimationMetadata,
+  AnimationsMetadata,
+  Source,
+  Keyframe,
+} from "../types"
 import { getElementId } from "./element-id"
 import { uuid } from "./utils/uuid"
 
@@ -79,12 +96,28 @@ export const store = create<ClientState>(
         ...(newRecordedAnimations[animationName].elements[elementId] || []),
       ]
 
+      const offsets = [...(options.offset || defaultOffset(keyframes.length))]
+      const remainder = length - offsets.length
+      remainder > 0 && fillOffset(offsets, remainder)
+
       newRecordedAnimations[animationName].elements[elementId].push({
         id: uuid(),
         elementId,
         animationName,
         valueName,
-        keyframes,
+        keyframes: keyframes.reduce((acc, keyframe, index) => {
+          const id = uuid()
+          const data: Keyframe = {
+            id,
+            value: keyframe as string,
+            easing: getKeyframeEasing(options.easing, index),
+            offset: offsets[index],
+          }
+
+          acc[id] = data
+
+          return acc
+        }, {}),
         options,
         source,
       })
@@ -100,3 +133,24 @@ const createAnimationMetadata = (): AnimationMetadata => ({
   elements: {},
   currentTime: 0,
 })
+
+function getKeyframeEasing(
+  easing: EasingGenerator | Easing | Easing[] | undefined,
+  index: number
+): Easing {
+  /**
+   * Don't display easing for first keyframe or accept easing generator
+   * TODO: Remove this check as to support easing generators we'll be receiving this as a
+   * serialised object of some kind.
+   */
+  if (!easing || !index || isEasingGenerator(easing)) return defaults.easing
+
+  const easingDefinition = isEasingList(easing) ? easing[index - 1] : easing
+
+  /**
+   * Leva is mutatative of the initial value, so if this is a bezier definition, copy.
+   */
+  return Array.isArray(easingDefinition)
+    ? [...easingDefinition]
+    : easingDefinition
+}

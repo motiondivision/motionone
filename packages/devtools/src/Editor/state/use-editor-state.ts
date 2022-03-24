@@ -1,8 +1,34 @@
-import { EditorState } from "./types"
-import { isEasingList } from "@motionone/utils"
-import create from "zustand"
+import { EditorState, SelectedKeyframeMetadata } from "./types"
+import create, { GetState, SetState } from "zustand"
 import produce from "immer"
 import { getCurrentTime } from "./selectors"
+
+const makeKeyframeUpdater =
+  (get: GetState<EditorState>, set: SetState<EditorState>, key: string) =>
+  (keyframe: SelectedKeyframeMetadata, newValue: any) => {
+    const { animations, selectedAnimationName } = get()
+    const { elementName, valueName, id } = keyframe
+
+    if (!selectedAnimationName) return
+
+    set({
+      animations: produce(animations, (draft) => {
+        const elementValues = draft[selectedAnimationName].elements[elementName]
+
+        const valueIndex = elementValues.findIndex(
+          (value) => value.valueName === valueName
+        )
+
+        const keyframe = elementValues[valueIndex].keyframes[id]
+
+        elementValues[valueIndex].keyframes[id] = {
+          ...keyframe,
+          [key]: newValue,
+        }
+      }),
+      selectedKeyframes: [{ ...keyframe }],
+    })
+  }
 
 export const useEditorState = create<EditorState>((set, get) => ({
   /**
@@ -77,58 +103,8 @@ export const useEditorState = create<EditorState>((set, get) => ({
     }
   },
   stopPlaying: () => set({ playbackOrigin: undefined }),
-  /**
-   * TODO: DRY updateKeyframe/KeyframeEasing
-   */
-  updateKeyframe: (keyframe, newValue) => {
-    const { animations, selectedAnimationName } = get()
-    const { elementName, valueName, index } = keyframe
-
-    if (!selectedAnimationName) return
-
-    set({
-      animations: produce(animations, (draft) => {
-        const valueIndex = draft[selectedAnimationName].elements[
-          elementName
-        ].findIndex((value) => value.valueName === valueName)
-        draft[selectedAnimationName].elements[elementName][
-          valueIndex
-        ].keyframes[index] = newValue
-      }),
-      selectedKeyframes: [{ ...keyframe }],
-    })
-  },
-  updateKeyframeEasing: (keyframe, newEasing) => {
-    const { animations, selectedAnimationName } = get()
-    const { valueId, elementName, index } = keyframe
-
-    if (!selectedAnimationName) return
-
-    set({
-      animations: produce(animations, (draft) => {
-        const valueIndex = draft[selectedAnimationName].elements[
-          elementName
-        ].findIndex((value) => value.id === valueId)
-
-        if (
-          isEasingList(
-            draft[selectedAnimationName].elements[elementName][valueIndex]
-              .options.easing
-          )
-        ) {
-          draft[selectedAnimationName].elements[elementName][
-            valueIndex
-          ].options.easing![index - 1] = newEasing
-        } else {
-          console.log("setting easing to ", newEasing)
-          draft[selectedAnimationName].elements[elementName][
-            valueIndex
-          ].options.easing = newEasing
-        }
-      }),
-      selectedKeyframes: [{ ...keyframe }],
-    })
-  },
+  updateKeyframe: makeKeyframeUpdater(get, set, "value"),
+  updateKeyframeEasing: makeKeyframeUpdater(get, set, "easing"),
   logout: () => set({ user: { isPro: false } }),
   login: (user) => set({ user }),
 }))

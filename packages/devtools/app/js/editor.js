@@ -536,28 +536,6 @@ const getUpdateKeyframeEasing = (state) => {
     return state.updateKeyframeEasing;
 };
 
-const isNumber = (value) => typeof value === "number";
-const isEasingGenerator = (easing) => typeof easing === "object" &&
-    Boolean(easing.createAnimation);
-const isEasingList = (easing) => Array.isArray(easing) && !isNumber(easing[0]);
-
-const mix$1 = (min, max, progress) => -progress * min + progress * max + min;
-
-const progress$1 = (min, max, value) => max - min === 0 ? 1 : (value - min) / (max - min);
-
-function fillOffset(offset, remaining) {
-    const min = offset[offset.length - 1];
-    for (let i = 1; i <= remaining; i++) {
-        const offsetProgress = progress$1(0, remaining, i);
-        offset.push(mix$1(min, 1, offsetProgress));
-    }
-}
-function defaultOffset$1(length) {
-    const offset = [0];
-    fillOffset(offset, length - 1);
-    return offset;
-}
-
 function createStore(createState) {
   let state;
   const listeners = /* @__PURE__ */ new Set();
@@ -668,6 +646,21 @@ function create(createState) {
 
 function n$5(n){for(var r=arguments.length,t=Array(r>1?r-1:0),e=1;e<r;e++)t[e-1]=arguments[e];throw Error("[Immer] minified error nr: "+n+(t.length?" "+t.map((function(n){return "'"+n+"'"})).join(","):"")+". Find the full error at: https://bit.ly/3cXEKWf")}function r$6(n){return !!n&&!!n[Q$2]}function t$6(n){return !!n&&(function(n){if(!n||"object"!=typeof n)return !1;var r=Object.getPrototypeOf(n);if(null===r)return !0;var t=Object.hasOwnProperty.call(r,"constructor")&&r.constructor;return t===Object||"function"==typeof t&&Function.toString.call(t)===Z$1}(n)||Array.isArray(n)||!!n[L$3]||!!n.constructor[L$3]||s$4(n)||v$6(n))}function i$5(n,r,t){void 0===t&&(t=!1),0===o$5(n)?(t?Object.keys:nn)(n).forEach((function(e){t&&"symbol"==typeof e||r(e,n[e],n);})):n.forEach((function(t,e){return r(e,t,n)}));}function o$5(n){var r=n[Q$2];return r?r.i>3?r.i-4:r.i:Array.isArray(n)?1:s$4(n)?2:v$6(n)?3:0}function u$4(n,r){return 2===o$5(n)?n.has(r):Object.prototype.hasOwnProperty.call(n,r)}function a$4(n,r){return 2===o$5(n)?n.get(r):n[r]}function f$5(n,r,t){var e=o$5(n);2===e?n.set(r,t):3===e?(n.delete(r),n.add(t)):n[r]=t;}function c$7(n,r){return n===r?0!==n||1/n==1/r:n!=n&&r!=r}function s$4(n){return X$2&&n instanceof Map}function v$6(n){return q$4&&n instanceof Set}function p$5(n){return n.o||n.t}function l$5(n){if(Array.isArray(n))return Array.prototype.slice.call(n);var r=rn(n);delete r[Q$2];for(var t=nn(r),e=0;e<t.length;e++){var i=t[e],o=r[i];!1===o.writable&&(o.writable=!0,o.configurable=!0),(o.get||o.set)&&(r[i]={configurable:!0,writable:!0,enumerable:o.enumerable,value:n[i]});}return Object.create(Object.getPrototypeOf(n),r)}function d$5(n,e){return void 0===e&&(e=!1),y$6(n)||r$6(n)||!t$6(n)?n:(o$5(n)>1&&(n.set=n.add=n.clear=n.delete=h$5),Object.freeze(n),e&&i$5(n,(function(n,r){return d$5(r,!0)}),!0),n)}function h$5(){n$5(2);}function y$6(n){return null==n||"object"!=typeof n||Object.isFrozen(n)}function b$7(r){var t=tn[r];return t||n$5(18,r),t}function _$2(){return U$3}function j$3(n,r){r&&(b$7("Patches"),n.u=[],n.s=[],n.v=r);}function O$1(n){g$6(n),n.p.forEach(S$3),n.p=null;}function g$6(n){n===U$3&&(U$3=n.l);}function w$6(n){return U$3={p:[],l:U$3,h:n,m:!0,_:0}}function S$3(n){var r=n[Q$2];0===r.i||1===r.i?r.j():r.O=!0;}function P$2(r,e){e._=e.p.length;var i=e.p[0],o=void 0!==r&&r!==i;return e.h.g||b$7("ES5").S(e,r,o),o?(i[Q$2].P&&(O$1(e),n$5(4)),t$6(r)&&(r=M$3(e,r),e.l||x$5(e,r)),e.u&&b$7("Patches").M(i[Q$2].t,r,e.u,e.s)):r=M$3(e,i,[]),O$1(e),e.u&&e.v(e.u,e.s),r!==H$3?r:void 0}function M$3(n,r,t){if(y$6(r))return r;var e=r[Q$2];if(!e)return i$5(r,(function(i,o){return A$4(n,e,r,i,o,t)}),!0),r;if(e.A!==n)return r;if(!e.P)return x$5(n,e.t,!0),e.t;if(!e.I){e.I=!0,e.A._--;var o=4===e.i||5===e.i?e.o=l$5(e.k):e.o;i$5(3===e.i?new Set(o):o,(function(r,i){return A$4(n,e,o,r,i,t)})),x$5(n,o,!1),t&&n.u&&b$7("Patches").R(e,t,n.u,n.s);}return e.o}function A$4(e,i,o,a,c,s){if(r$6(c)){var v=M$3(e,c,s&&i&&3!==i.i&&!u$4(i.D,a)?s.concat(a):void 0);if(f$5(o,a,v),!r$6(v))return;e.m=!1;}if(t$6(c)&&!y$6(c)){if(!e.h.F&&e._<1)return;M$3(e,c),i&&i.A.l||x$5(e,c);}}function x$5(n,r,t){void 0===t&&(t=!1),n.h.F&&n.m&&d$5(r,t);}function z$3(n,r){var t=n[Q$2];return (t?p$5(t):n)[r]}function I$3(n,r){if(r in n)for(var t=Object.getPrototypeOf(n);t;){var e=Object.getOwnPropertyDescriptor(t,r);if(e)return e;t=Object.getPrototypeOf(t);}}function k$5(n){n.P||(n.P=!0,n.l&&k$5(n.l));}function E$3(n){n.o||(n.o=l$5(n.t));}function R$2(n,r,t){var e=s$4(r)?b$7("MapSet").N(r,t):v$6(r)?b$7("MapSet").T(r,t):n.g?function(n,r){var t=Array.isArray(n),e={i:t?1:0,A:r?r.A:_$2(),P:!1,I:!1,D:{},l:r,t:n,k:null,o:null,j:null,C:!1},i=e,o=en;t&&(i=[e],o=on);var u=Proxy.revocable(i,o),a=u.revoke,f=u.proxy;return e.k=f,e.j=a,f}(r,t):b$7("ES5").J(r,t);return (t?t.A:_$2()).p.push(e),e}function D$2(e){return r$6(e)||n$5(22,e),function n(r){if(!t$6(r))return r;var e,u=r[Q$2],c=o$5(r);if(u){if(!u.P&&(u.i<4||!b$7("ES5").K(u)))return u.t;u.I=!0,e=F$2(r,c),u.I=!1;}else e=F$2(r,c);return i$5(e,(function(r,t){u&&a$4(u.t,r)===t||f$5(e,r,n(t));})),3===c?new Set(e):e}(e)}function F$2(n,r){switch(r){case 2:return new Map(n);case 3:return Array.from(n)}return l$5(n)}var G$2,U$3,W$2="undefined"!=typeof Symbol&&"symbol"==typeof Symbol("x"),X$2="undefined"!=typeof Map,q$4="undefined"!=typeof Set,B$4="undefined"!=typeof Proxy&&void 0!==Proxy.revocable&&"undefined"!=typeof Reflect,H$3=W$2?Symbol.for("immer-nothing"):((G$2={})["immer-nothing"]=!0,G$2),L$3=W$2?Symbol.for("immer-draftable"):"__$immer_draftable",Q$2=W$2?Symbol.for("immer-state"):"__$immer_state",Z$1=""+Object.prototype.constructor,nn="undefined"!=typeof Reflect&&Reflect.ownKeys?Reflect.ownKeys:void 0!==Object.getOwnPropertySymbols?function(n){return Object.getOwnPropertyNames(n).concat(Object.getOwnPropertySymbols(n))}:Object.getOwnPropertyNames,rn=Object.getOwnPropertyDescriptors||function(n){var r={};return nn(n).forEach((function(t){r[t]=Object.getOwnPropertyDescriptor(n,t);})),r},tn={},en={get:function(n,r){if(r===Q$2)return n;var e=p$5(n);if(!u$4(e,r))return function(n,r,t){var e,i=I$3(r,t);return i?"value"in i?i.value:null===(e=i.get)||void 0===e?void 0:e.call(n.k):void 0}(n,e,r);var i=e[r];return n.I||!t$6(i)?i:i===z$3(n.t,r)?(E$3(n),n.o[r]=R$2(n.A.h,i,n)):i},has:function(n,r){return r in p$5(n)},ownKeys:function(n){return Reflect.ownKeys(p$5(n))},set:function(n,r,t){var e=I$3(p$5(n),r);if(null==e?void 0:e.set)return e.set.call(n.k,t),!0;if(!n.P){var i=z$3(p$5(n),r),o=null==i?void 0:i[Q$2];if(o&&o.t===t)return n.o[r]=t,n.D[r]=!1,!0;if(c$7(t,i)&&(void 0!==t||u$4(n.t,r)))return !0;E$3(n),k$5(n);}return n.o[r]===t&&"number"!=typeof t&&(void 0!==t||r in n.o)||(n.o[r]=t,n.D[r]=!0,!0)},deleteProperty:function(n,r){return void 0!==z$3(n.t,r)||r in n.t?(n.D[r]=!1,E$3(n),k$5(n)):delete n.D[r],n.o&&delete n.o[r],!0},getOwnPropertyDescriptor:function(n,r){var t=p$5(n),e=Reflect.getOwnPropertyDescriptor(t,r);return e?{writable:!0,configurable:1!==n.i||"length"!==r,enumerable:e.enumerable,value:t[r]}:e},defineProperty:function(){n$5(11);},getPrototypeOf:function(n){return Object.getPrototypeOf(n.t)},setPrototypeOf:function(){n$5(12);}},on={};i$5(en,(function(n,r){on[n]=function(){return arguments[0]=arguments[0][0],r.apply(this,arguments)};})),on.deleteProperty=function(r,t){return on.set.call(this,r,t,void 0)},on.set=function(r,t,e){return en.set.call(this,r[0],t,e,r[0])};var un=function(){function e(r){var e=this;this.g=B$4,this.F=!0,this.produce=function(r,i,o){if("function"==typeof r&&"function"!=typeof i){var u=i;i=r;var a=e;return function(n){var r=this;void 0===n&&(n=u);for(var t=arguments.length,e=Array(t>1?t-1:0),o=1;o<t;o++)e[o-1]=arguments[o];return a.produce(n,(function(n){var t;return (t=i).call.apply(t,[r,n].concat(e))}))}}var f;if("function"!=typeof i&&n$5(6),void 0!==o&&"function"!=typeof o&&n$5(7),t$6(r)){var c=w$6(e),s=R$2(e,r,void 0),v=!0;try{f=i(s),v=!1;}finally{v?O$1(c):g$6(c);}return "undefined"!=typeof Promise&&f instanceof Promise?f.then((function(n){return j$3(c,o),P$2(n,c)}),(function(n){throw O$1(c),n})):(j$3(c,o),P$2(f,c))}if(!r||"object"!=typeof r){if(void 0===(f=i(r))&&(f=r),f===H$3&&(f=void 0),e.F&&d$5(f,!0),o){var p=[],l=[];b$7("Patches").M(r,f,p,l),o(p,l);}return f}n$5(21,r);},this.produceWithPatches=function(n,r){if("function"==typeof n)return function(r){for(var t=arguments.length,i=Array(t>1?t-1:0),o=1;o<t;o++)i[o-1]=arguments[o];return e.produceWithPatches(r,(function(r){return n.apply(void 0,[r].concat(i))}))};var t,i,o=e.produce(n,r,(function(n,r){t=n,i=r;}));return "undefined"!=typeof Promise&&o instanceof Promise?o.then((function(n){return [n,t,i]})):[o,t,i]},"boolean"==typeof(null==r?void 0:r.useProxies)&&this.setUseProxies(r.useProxies),"boolean"==typeof(null==r?void 0:r.autoFreeze)&&this.setAutoFreeze(r.autoFreeze);}var i=e.prototype;return i.createDraft=function(e){t$6(e)||n$5(8),r$6(e)&&(e=D$2(e));var i=w$6(this),o=R$2(this,e,void 0);return o[Q$2].C=!0,g$6(i),o},i.finishDraft=function(r,t){var e=r&&r[Q$2];var i=e.A;return j$3(i,t),P$2(void 0,i)},i.setAutoFreeze=function(n){this.F=n;},i.setUseProxies=function(r){r&&!B$4&&n$5(20),this.g=r;},i.applyPatches=function(n,t){var e;for(e=t.length-1;e>=0;e--){var i=t[e];if(0===i.path.length&&"replace"===i.op){n=i.value;break}}e>-1&&(t=t.slice(e+1));var o=b$7("Patches").$;return r$6(n)?o(n,t):this.produce(n,(function(n){return o(n,t)}))},e}(),an=new un,fn=an.produce;an.produceWithPatches.bind(an);an.setAutoFreeze.bind(an);an.setUseProxies.bind(an);an.applyPatches.bind(an);an.createDraft.bind(an);an.finishDraft.bind(an);var produce = fn;
 
+const makeKeyframeUpdater = (get, set, key) => (keyframe, newValue) => {
+    const { animations, selectedAnimationName } = get();
+    const { elementName, valueName, id } = keyframe;
+    if (!selectedAnimationName)
+        return;
+    set({
+        animations: produce(animations, (draft) => {
+            const elementValues = draft[selectedAnimationName].elements[elementName];
+            const valueIndex = elementValues.findIndex((value) => value.valueName === valueName);
+            const keyframe = elementValues[valueIndex].keyframes[id];
+            elementValues[valueIndex].keyframes[id] = Object.assign(Object.assign({}, keyframe), { [key]: newValue });
+        }),
+        selectedKeyframes: [Object.assign({}, keyframe)],
+    });
+};
 const useEditorState = create((set, get) => ({
     /**
      * State
@@ -735,42 +728,8 @@ const useEditorState = create((set, get) => ({
         }
     },
     stopPlaying: () => set({ playbackOrigin: undefined }),
-    /**
-     * TODO: DRY updateKeyframe/KeyframeEasing
-     */
-    updateKeyframe: (keyframe, newValue) => {
-        const { animations, selectedAnimationName } = get();
-        const { elementName, valueName, index } = keyframe;
-        if (!selectedAnimationName)
-            return;
-        set({
-            animations: produce(animations, (draft) => {
-                const valueIndex = draft[selectedAnimationName].elements[elementName].findIndex((value) => value.valueName === valueName);
-                draft[selectedAnimationName].elements[elementName][valueIndex].keyframes[index] = newValue;
-            }),
-            selectedKeyframes: [Object.assign({}, keyframe)],
-        });
-    },
-    updateKeyframeEasing: (keyframe, newEasing) => {
-        const { animations, selectedAnimationName } = get();
-        const { valueId, elementName, index } = keyframe;
-        if (!selectedAnimationName)
-            return;
-        set({
-            animations: produce(animations, (draft) => {
-                const valueIndex = draft[selectedAnimationName].elements[elementName].findIndex((value) => value.id === valueId);
-                if (isEasingList(draft[selectedAnimationName].elements[elementName][valueIndex]
-                    .options.easing)) {
-                    draft[selectedAnimationName].elements[elementName][valueIndex].options.easing[index - 1] = newEasing;
-                }
-                else {
-                    console.log("setting easing to ", newEasing);
-                    draft[selectedAnimationName].elements[elementName][valueIndex].options.easing = newEasing;
-                }
-            }),
-            selectedKeyframes: [Object.assign({}, keyframe)],
-        });
-    },
+    updateKeyframe: makeKeyframeUpdater(get, set, "value"),
+    updateKeyframeEasing: makeKeyframeUpdater(get, set, "easing"),
     logout: () => set({ user: { isPro: false } }),
     login: (user) => set({ user }),
 }));
@@ -10465,6 +10424,13 @@ function RepeatIcon({ style }) {
         react.exports.createElement("path", { d: "M160 344h208a80.24 80.24 0 0080-80v-16", fill: "none", stroke: "currentColor", strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "32" })));
 }
 
+function compareKeyframeByOffset(a, b) {
+    return a.offset > b.offset ? 1 : -1;
+}
+function sortKeyframesByOffset(keyframes) {
+    return Object.values(keyframes).sort(compareKeyframeByOffset);
+}
+
 const ElementAnimationContainer = styled$1.ul `
   padding-top: var(--row-height);
   padding-left: 10px;
@@ -10547,18 +10513,13 @@ function ValueKeyframes({ scale, animation }) {
     const selectKeyframe = useEditorState(getSelectKeyframe);
     const selectedKeyframes = useEditorState(getSelectedKeyframes$1);
     const { id, elementId, valueName, keyframes, options } = animation;
-    let { delay = 0, duration = 0.3, offset, repeat } = options;
-    const numKeyframes = keyframes.length;
-    offset !== null && offset !== void 0 ? offset : (offset = defaultOffset$1(numKeyframes));
-    const remainder = numKeyframes - offset.length;
-    remainder > 0 && fillOffset(offset, remainder);
+    let { delay = 0, duration = 0.3, repeat } = options;
     const markers = [];
     let prevTime;
-    for (let i = 0; i < numKeyframes; i++) {
-        // const value = keyframes[i]
-        const valueOffset = offset[i];
-        const time = delay + valueOffset * duration;
-        const keyframeIsSelected = isKeyframeSelected(selectedKeyframes, elementId, valueName, i);
+    const orderedKeyframes = sortKeyframesByOffset(keyframes);
+    for (const { offset, id: keyframeId } of orderedKeyframes) {
+        const time = delay + offset * duration;
+        const keyframeIsSelected = isKeyframeSelected(selectedKeyframes, keyframeId);
         markers.push(react.exports.createElement(react.exports.Fragment, null,
             prevTime !== undefined ? (react.exports.createElement(TransitionMarker, { initial: false, animate: {
                     backgroundColor: keyframeIsSelected
@@ -10574,7 +10535,7 @@ function ValueKeyframes({ scale, animation }) {
                         elementName: elementId,
                         valueName,
                         valueId: id,
-                        index: i,
+                        id: keyframeId,
                     });
                 }, initial: false, animate: {
                     backgroundColor: keyframeIsSelected
@@ -10603,12 +10564,10 @@ function Keyframes({ animation }) {
     }
     return react.exports.createElement("div", null, elementAnimations);
 }
-function isKeyframeSelected(selectedKeyframes, elementName, valueName, keyframeIndex) {
+function isKeyframeSelected(selectedKeyframes, keyframeId) {
     if (!selectedKeyframes)
         return false;
-    return selectedKeyframes.some((keyframe) => keyframe.elementName === elementName &&
-        keyframe.valueName === valueName &&
-        keyframe.index === keyframeIndex);
+    return selectedKeyframes.some((keyframe) => keyframe.id === keyframeId);
 }
 
 function PlayIcon({ style }) {
@@ -20511,30 +20470,22 @@ function getControlDefinition(name, value) {
 }
 
 function ValueControl({ keyframeMetadata, valueAnimation }) {
+    const controls = {};
     const updateKeyframe = useEditorState(getUpdateKeyframe);
     const updateKeyframeEasing = useEditorState(getUpdateKeyframeEasing);
-    const { valueId, valueName, index } = keyframeMetadata;
-    const { keyframes, options } = valueAnimation;
-    const { easing } = options;
-    const keyframeEasing = getKeyframeEasing(easing, index);
-    // TODO Replace with uuid
-    const keyframeKey = `${valueId} [${index}]`;
-    const controls = {
-        [keyframeKey]: Object.assign(Object.assign({}, getControlDefinition(valueName, keyframes[index])), { onChange: (newValue) => updateKeyframe(keyframeMetadata, newValue) }),
-    };
-    if (keyframeEasing) {
-        if (typeof keyframeEasing === "string" &&
-            keyframeEasing.startsWith("steps")) {
-            controls[`${keyframeKey} easing freeform`] = {
-                value: keyframeEasing,
-                label: "Easing",
-                transient: true,
-                onChange: (value) => updateKeyframeEasing(keyframeMetadata, value),
-            };
-        }
-        else {
-            controls[`${keyframeKey} easing`] = Object.assign(Object.assign({}, bezier(keyframeEasing)), { label: "Easing", transient: true, onChange: ([...points]) => updateKeyframeEasing(keyframeMetadata, points) });
-        }
+    const { valueName, id: keyframeId } = keyframeMetadata;
+    const { value, easing } = valueAnimation.keyframes[keyframeId];
+    controls[keyframeId] = Object.assign(Object.assign({}, getControlDefinition(valueName, value)), { onChange: (newValue) => updateKeyframe(keyframeMetadata, newValue) });
+    if (typeof easing === "string" && easing.startsWith("steps")) {
+        controls[`${keyframeId} easing freeform`] = {
+            value: easing,
+            label: "Easing",
+            transient: true,
+            onChange: (value) => updateKeyframeEasing(keyframeMetadata, value),
+        };
+    }
+    else {
+        controls[`${keyframeId} easing`] = Object.assign(Object.assign({}, bezier(easing)), { label: "Easing", transient: true, onChange: ([...points]) => updateKeyframeEasing(keyframeMetadata, points) });
     }
     useControls(controls);
     return null;
@@ -20544,30 +20495,14 @@ function KeyframeEditControls({ selectedKeyframes }) {
     if (!selectedAnimation)
         return null;
     const controls = selectedKeyframes.map((keyframeMetadata) => {
-        const { elementName, valueName, index } = keyframeMetadata;
+        const { elementName, valueName, id } = keyframeMetadata;
         const elementAnimation = selectedAnimation.elements[elementName];
         if (!elementAnimation)
             return null;
         const valueAnimation = elementAnimation.find((animation) => animation.valueName === valueName);
-        return valueAnimation ? (react.exports.createElement(ValueControl, { key: elementName + valueName + index, valueAnimation: valueAnimation, keyframeMetadata: keyframeMetadata })) : null;
+        return valueAnimation ? (react.exports.createElement(ValueControl, { key: id, valueAnimation: valueAnimation, keyframeMetadata: keyframeMetadata })) : null;
     });
     return react.exports.createElement(react.exports.Fragment, null, controls);
-}
-function getKeyframeEasing(easing, index) {
-    /**
-     * Don't display easing for first keyframe or accept easing generator
-     * TODO: Remove this check as to support easing generators we'll be receiving this as a
-     * serialised object of some kind.
-     */
-    if (!easing || !index || isEasingGenerator(easing))
-        return;
-    const easingDefinition = isEasingList(easing) ? easing[index - 1] : easing;
-    /**
-     * Leva is mutatative of the initial value, so if this is a bezier definition, copy.
-     */
-    return Array.isArray(easingDefinition)
-        ? [...easingDefinition]
-        : easingDefinition;
 }
 
 const theme = {
