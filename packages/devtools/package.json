@@ -29,6 +29,7 @@
     "@leva-ui/plugin-bezier": "^0.9.19",
     "@leva-ui/plugin-plot": "^0.9.15",
     "@leva-ui/plugin-spring": "^0.9.18",
+    "@use-gesture/react": "^10.2.10",
     "framesync": "^6.1.0",
     "immer": "^9.0.12",
     "leva": "^0.9.23",

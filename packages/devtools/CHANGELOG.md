@@ -7,6 +7,7 @@ Motion Developer Tools adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Allowing editing and playback of recording animations within iframes.
+- Removed `tabs` permission.
 
 ## [0.0.3] [2022-03-22]
 

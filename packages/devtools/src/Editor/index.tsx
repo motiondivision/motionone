@@ -13,9 +13,8 @@ import { KeyframeEditPanel } from "./KeyframeEditPanel"
 /**
  * TODO
  * - Fix port reconnection - 1
+ * - Map incoming keyframes, offset and easing to object with uuid - 2
  * =============================
- * - Add unit tests - 8
- * - Add uuid to keyframes - 2
  * - Spring/glide support - 8
  * =============================
  * - Keyboard shortcuts

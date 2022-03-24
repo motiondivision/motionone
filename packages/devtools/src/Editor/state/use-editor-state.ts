@@ -100,7 +100,7 @@ export const useEditorState = create<EditorState>((set, get) => ({
   },
   updateKeyframeEasing: (keyframe, newEasing) => {
     const { animations, selectedAnimationName } = get()
-    const { elementName, valueName, index } = keyframe
+    const { valueId, elementName, index } = keyframe
 
     if (!selectedAnimationName) return
 
@@ -108,7 +108,7 @@ export const useEditorState = create<EditorState>((set, get) => ({
       animations: produce(animations, (draft) => {
         const valueIndex = draft[selectedAnimationName].elements[
           elementName
-        ].findIndex((value) => value.valueName === valueName)
+        ].findIndex((value) => value.id === valueId)
 
         if (
           isEasingList(

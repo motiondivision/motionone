@@ -269,6 +269,12 @@
 	    return motionId;
 	}
 
+	let id = 0;
+	function uuid() {
+	    id++;
+	    return id;
+	}
+
 	const store = create(subscribeWithSelector((set, get) => ({
 	    inspectedAnimation: undefined,
 	    isRecording: false,
@@ -310,6 +316,7 @@
 	            ...(newRecordedAnimations[animationName].elements[elementId] || []),
 	        ];
 	        newRecordedAnimations[animationName].elements[elementId].push({
+	            id: uuid(),
 	            elementId,
 	            animationName,
 	            valueName,

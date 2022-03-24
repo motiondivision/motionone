@@ -14,6 +14,7 @@ export enum Actions {
 
 export interface SelectedKeyframeMetadata {
   elementName: string
+  valueId: number
   valueName: string
   index: number
 }

@@ -7,6 +7,7 @@ export interface Storage {
 export type Source = "motion-one" | "css-transition" | "css-animation"
 
 export interface ValueAnimationMetadata {
+  id: number
   elementId: string
   animationName: string
   valueName: string

@@ -118,7 +118,7 @@ function ValueKeyframes({ scale, animation }: ValueKeyframesProps) {
   const selectKeyframe = useEditorState(getSelectKeyframe)
   const selectedKeyframes = useEditorState(getSelectedKeyframes)
 
-  const { elementId, valueName, keyframes, options } = animation
+  const { id, elementId, valueName, keyframes, options } = animation
   let { delay = 0, duration = 0.3, offset, repeat } = options
 
   const numKeyframes = keyframes.length
@@ -163,6 +163,7 @@ function ValueKeyframes({ scale, animation }: ValueKeyframesProps) {
             selectKeyframe({
               elementName: elementId,
               valueName,
+              valueId: id,
               index: i,
             })
           }}

@@ -25,13 +25,13 @@ interface ValueControlProps {
 function ValueControl({ keyframeMetadata, valueAnimation }: ValueControlProps) {
   const updateKeyframe = useEditorState(getUpdateKeyframe)
   const updateKeyframeEasing = useEditorState(getUpdateKeyframeEasing)
-  const { elementName, valueName, index } = keyframeMetadata
+  const { valueId, valueName, index } = keyframeMetadata
   const { keyframes, options } = valueAnimation
   const { easing } = options
   const keyframeEasing = getKeyframeEasing(easing, index)
 
   // TODO Replace with uuid
-  const keyframeKey = `${elementName} ${valueName} [${index}]`
+  const keyframeKey = `${valueId} [${index}]`
 
   const controls = {
     [keyframeKey]: {
@@ -41,7 +41,6 @@ function ValueControl({ keyframeMetadata, valueAnimation }: ValueControlProps) {
     },
   }
 
-  console.log(keyframeEasing)
   if (keyframeEasing) {
     if (
       typeof keyframeEasing === "string" &&

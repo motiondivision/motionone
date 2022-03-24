@@ -4,6 +4,7 @@ import { UseBoundStore, StoreApi } from "zustand"
 import { subscribeWithSelector } from "zustand/middleware"
 import { AnimationMetadata, AnimationsMetadata, Source } from "../types"
 import { getElementId } from "./element-id"
+import { uuid } from "./utils/uuid"
 
 export interface ClientState {
   inspectedAnimation: AnimationMetadata | undefined
@@ -79,6 +80,7 @@ export const store = create<ClientState>(
       ]
 
       newRecordedAnimations[animationName].elements[elementId].push({
+        id: uuid(),
         elementId,
         animationName,
         valueName,

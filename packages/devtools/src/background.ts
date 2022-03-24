@@ -55,6 +55,7 @@ chrome.runtime.onConnect.addListener((port) => {
           }
           case "inspectanimation":
           case "scrubanimation": {
+            // TODO: Create connection if none exists
             const tabConnections = clientConnections.get(message.tabId)
             tabConnections?.forEach((connection) =>
               connection.postMessage(message)

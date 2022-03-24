@@ -753,12 +753,12 @@ const useEditorState = create((set, get) => ({
     },
     updateKeyframeEasing: (keyframe, newEasing) => {
         const { animations, selectedAnimationName } = get();
-        const { elementName, valueName, index } = keyframe;
+        const { valueId, elementName, index } = keyframe;
         if (!selectedAnimationName)
             return;
         set({
             animations: produce(animations, (draft) => {
-                const valueIndex = draft[selectedAnimationName].elements[elementName].findIndex((value) => value.valueName === valueName);
+                const valueIndex = draft[selectedAnimationName].elements[elementName].findIndex((value) => value.id === valueId);
                 if (isEasingList(draft[selectedAnimationName].elements[elementName][valueIndex]
                     .options.easing)) {
                     draft[selectedAnimationName].elements[elementName][valueIndex].options.easing[index - 1] = newEasing;
@@ -10546,7 +10546,7 @@ const getSelectKeyframe = (state) => state.selectKeyframe;
 function ValueKeyframes({ scale, animation }) {
     const selectKeyframe = useEditorState(getSelectKeyframe);
     const selectedKeyframes = useEditorState(getSelectedKeyframes$1);
-    const { elementId, valueName, keyframes, options } = animation;
+    const { id, elementId, valueName, keyframes, options } = animation;
     let { delay = 0, duration = 0.3, offset, repeat } = options;
     const numKeyframes = keyframes.length;
     offset !== null && offset !== void 0 ? offset : (offset = defaultOffset$1(numKeyframes));
@@ -10573,6 +10573,7 @@ function ValueKeyframes({ scale, animation }) {
                     selectKeyframe({
                         elementName: elementId,
                         valueName,
+                        valueId: id,
                         index: i,
                     });
                 }, initial: false, animate: {
@@ -20512,16 +20513,15 @@ function getControlDefinition(name, value) {
 function ValueControl({ keyframeMetadata, valueAnimation }) {
     const updateKeyframe = useEditorState(getUpdateKeyframe);
     const updateKeyframeEasing = useEditorState(getUpdateKeyframeEasing);
-    const { elementName, valueName, index } = keyframeMetadata;
+    const { valueId, valueName, index } = keyframeMetadata;
     const { keyframes, options } = valueAnimation;
     const { easing } = options;
     const keyframeEasing = getKeyframeEasing(easing, index);
     // TODO Replace with uuid
-    const keyframeKey = `${elementName} ${valueName} [${index}]`;
+    const keyframeKey = `${valueId} [${index}]`;
     const controls = {
         [keyframeKey]: Object.assign(Object.assign({}, getControlDefinition(valueName, keyframes[index])), { onChange: (newValue) => updateKeyframe(keyframeMetadata, newValue) }),
     };
-    console.log(keyframeEasing);
     if (keyframeEasing) {
         if (typeof keyframeEasing === "string" &&
             keyframeEasing.startsWith("steps")) {
