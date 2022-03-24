@@ -1,6 +1,5 @@
 import { bezier } from "@leva-ui/plugin-bezier"
-import { BezierDefinition, Easing, EasingGenerator } from "@motionone/types"
-import { isEasingGenerator, isEasingList } from "@motionone/utils"
+import { BezierDefinition } from "@motionone/types"
 import { useControls } from "leva"
 import * as React from "react"
 import { ValueAnimationMetadata } from "../../types"
@@ -23,44 +22,32 @@ interface ValueControlProps {
 }
 
 function ValueControl({ keyframeMetadata, valueAnimation }: ValueControlProps) {
+  const controls = {}
   const updateKeyframe = useEditorState(getUpdateKeyframe)
   const updateKeyframeEasing = useEditorState(getUpdateKeyframeEasing)
-  const { valueId, valueName, index } = keyframeMetadata
-  const { keyframes, options } = valueAnimation
-  const { easing } = options
-  const keyframeEasing = getKeyframeEasing(easing, index)
+  const { valueName, id: keyframeId } = keyframeMetadata
+  const { value, easing } = valueAnimation.keyframes[keyframeId]
 
-  // TODO Replace with uuid
-  const keyframeKey = `${valueId} [${index}]`
-
-  const controls = {
-    [keyframeKey]: {
-      ...getControlDefinition(valueName, keyframes[index] as string),
-      onChange: (newValue: string) =>
-        updateKeyframe(keyframeMetadata, newValue),
-    },
+  controls[keyframeId] = {
+    ...getControlDefinition(valueName, value),
+    onChange: (newValue: string) => updateKeyframe(keyframeMetadata, newValue),
   }
 
-  if (keyframeEasing) {
-    if (
-      typeof keyframeEasing === "string" &&
-      keyframeEasing.startsWith("steps")
-    ) {
-      controls[`${keyframeKey} easing freeform`] = {
-        value: keyframeEasing,
-        label: "Easing",
-        transient: true,
-        onChange: (value: BezierDefinition) =>
-          updateKeyframeEasing(keyframeMetadata, value),
-      }
-    } else {
-      controls[`${keyframeKey} easing`] = {
-        ...bezier(keyframeEasing as any),
-        label: "Easing",
-        transient: true,
-        onChange: ([...points]: BezierDefinition) =>
-          updateKeyframeEasing(keyframeMetadata, points),
-      }
+  if (typeof easing === "string" && easing.startsWith("steps")) {
+    controls[`${keyframeId} easing freeform`] = {
+      value: easing,
+      label: "Easing",
+      transient: true,
+      onChange: (value: BezierDefinition) =>
+        updateKeyframeEasing(keyframeMetadata, value),
+    }
+  } else {
+    controls[`${keyframeId} easing`] = {
+      ...bezier(easing as any),
+      label: "Easing",
+      transient: true,
+      onChange: ([...points]: BezierDefinition) =>
+        updateKeyframeEasing(keyframeMetadata, points),
     }
   }
 
@@ -75,7 +62,7 @@ export function KeyframeEditControls({ selectedKeyframes }: Props) {
   if (!selectedAnimation) return null
 
   const controls = selectedKeyframes.map((keyframeMetadata) => {
-    const { elementName, valueName, index } = keyframeMetadata
+    const { elementName, valueName, id } = keyframeMetadata
     const elementAnimation = selectedAnimation.elements[elementName]
 
     if (!elementAnimation) return null
@@ -86,7 +73,7 @@ export function KeyframeEditControls({ selectedKeyframes }: Props) {
 
     return valueAnimation ? (
       <ValueControl
-        key={elementName + valueName + index}
+        key={id}
         valueAnimation={valueAnimation}
         keyframeMetadata={keyframeMetadata}
       />
@@ -94,25 +81,4 @@ export function KeyframeEditControls({ selectedKeyframes }: Props) {
   })
 
   return <>{controls}</>
-}
-
-function getKeyframeEasing(
-  easing: EasingGenerator | Easing | Easing[] | undefined,
-  index: number
-) {
-  /**
-   * Don't display easing for first keyframe or accept easing generator
-   * TODO: Remove this check as to support easing generators we'll be receiving this as a
-   * serialised object of some kind.
-   */
-  if (!easing || !index || isEasingGenerator(easing)) return
-
-  const easingDefinition = isEasingList(easing) ? easing[index - 1] : easing
-
-  /**
-   * Leva is mutatative of the initial value, so if this is a bezier definition, copy.
-   */
-  return Array.isArray(easingDefinition)
-    ? [...easingDefinition]
-    : easingDefinition
 }

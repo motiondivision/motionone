@@ -1,7 +1,8 @@
-import { BasicAnimationControls } from "@motionone/types"
+import { BasicAnimationControls, Easing } from "@motionone/types"
 import { animateStyle } from "@motionone/dom"
 import { AnimationMetadata } from "../types"
 import { ClientState, store } from "./state"
+import { sortKeyframesByOffset } from "../utils/sort-keyframes"
 
 export function handleInspectedAnimation() {
   const animations: BasicAnimationControls[] = []
@@ -21,9 +22,33 @@ export function handleInspectedAnimation() {
       if (!element) continue
 
       for (const valueAnimation of animation.elements[elementId]) {
-        const { valueName, keyframes, options } = valueAnimation
+        const {
+          valueName,
+          keyframes: editedKeyframes,
+          options,
+        } = valueAnimation
+
+        const offset: number[] = []
+        const easing: Easing[] = []
+        const keyframes: string[] = []
+
+        const orderedKeyframes = sortKeyframesByOffset(editedKeyframes)
+
+        orderedKeyframes.forEach((keyframe, index) => {
+          const {
+            value,
+            offset: keyframeOffset,
+            easing: keyframeEasing,
+          } = keyframe
+          keyframes.push(value)
+          offset.push(keyframeOffset)
+          index && easing.push(keyframeEasing)
+        })
+
         const newAnimation = animateStyle(element, valueName, keyframes, {
           ...options,
+          easing,
+          offset,
           repeat:
             (options as any).repeat === "Infinity" ? Infinity : options.repeat,
           record: false,

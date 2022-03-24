@@ -1,4 +1,4 @@
-import { AnimationOptions, ValueKeyframe } from "@motionone/types"
+import { AnimationOptions, Easing } from "@motionone/types"
 
 export interface Storage {
   recordingTabs: Set<number>
@@ -7,13 +7,20 @@ export interface Storage {
 export type Source = "motion-one" | "css-transition" | "css-animation"
 
 export interface ValueAnimationMetadata {
-  id: number
+  id: string
   elementId: string
   animationName: string
   valueName: string
-  keyframes: ValueKeyframe[]
+  keyframes: { [key: string]: Keyframe }
   options: AnimationOptions
   source: Source
+}
+
+export interface Keyframe {
+  id: string
+  value: string
+  easing: Easing
+  offset: number
 }
 
 export interface DevToolsPlugin {

@@ -14,9 +14,9 @@ export enum Actions {
 
 export interface SelectedKeyframeMetadata {
   elementName: string
-  valueId: number
+  valueId: string
   valueName: string
-  index: number
+  id: string
 }
 
 export interface PlaybackOrigin {

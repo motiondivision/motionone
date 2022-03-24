@@ -1,11 +1,11 @@
 import * as React from "react"
 import { AnimationMetadata, ValueAnimationMetadata } from "../../types"
-import { defaultOffset, fillOffset } from "@motionone/utils"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { EditorState, SelectedKeyframeMetadata } from "../state/types"
 import { RepeatIcon } from "../icons/RepeatIcon"
 import { useEditorState } from "../state/use-editor-state"
+import { sortKeyframesByOffset } from "../../utils/sort-keyframes"
 
 interface KeyframesProps {
   animation: AnimationMetadata
@@ -119,26 +119,17 @@ function ValueKeyframes({ scale, animation }: ValueKeyframesProps) {
   const selectedKeyframes = useEditorState(getSelectedKeyframes)
 
   const { id, elementId, valueName, keyframes, options } = animation
-  let { delay = 0, duration = 0.3, offset, repeat } = options
-
-  const numKeyframes = keyframes.length
-  offset ??= defaultOffset(numKeyframes)
-  const remainder = numKeyframes - offset.length
-  remainder > 0 && fillOffset(offset, remainder)
+  let { delay = 0, duration = 0.3, repeat } = options
 
   const markers: any[] = []
 
   let prevTime: number | undefined
-  for (let i = 0; i < numKeyframes; i++) {
-    // const value = keyframes[i]
-    const valueOffset = offset[i]
-    const time = delay + valueOffset * duration
-    const keyframeIsSelected = isKeyframeSelected(
-      selectedKeyframes,
-      elementId,
-      valueName,
-      i
-    )
+
+  const orderedKeyframes = sortKeyframesByOffset(keyframes)
+
+  for (const { offset, id: keyframeId } of orderedKeyframes) {
+    const time = delay + offset * duration
+    const keyframeIsSelected = isKeyframeSelected(selectedKeyframes, keyframeId)
 
     markers.push(
       <>
@@ -164,7 +155,7 @@ function ValueKeyframes({ scale, animation }: ValueKeyframesProps) {
               elementName: elementId,
               valueName,
               valueId: id,
-              index: i,
+              id: keyframeId,
             })
           }}
           initial={false}
@@ -231,16 +222,9 @@ export function Keyframes({ animation }: KeyframesProps) {
 
 function isKeyframeSelected(
   selectedKeyframes: SelectedKeyframeMetadata[] | undefined,
-  elementName: string,
-  valueName: string,
-  keyframeIndex: number
+  keyframeId: string
 ): boolean {
   if (!selectedKeyframes) return false
 
-  return selectedKeyframes.some(
-    (keyframe) =>
-      keyframe.elementName === elementName &&
-      keyframe.valueName === valueName &&
-      keyframe.index === keyframeIndex
-  )
+  return selectedKeyframes.some((keyframe) => keyframe.id === keyframeId)
 }
