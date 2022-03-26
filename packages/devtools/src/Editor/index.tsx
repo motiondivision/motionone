@@ -13,18 +13,15 @@ import { KeyframeEditPanel } from "./KeyframeEditPanel"
 /**
  * TODO
  * - Fix port reconnection - 1
- * - Map incoming keyframes, offset and easing to object with uuid - 2
+ * =============================
+ * - Add keyframes - 4
+ * =============================
+ * - Move keyframes - 8
  * =============================
  * - Spring/glide support - 8
  * =============================
  * - Keyboard shortcuts
  *    - Space: Start/stop - 2
- * =============================
- * - Move keyframes - 8
- * =============================
- * - Delete keyframes - .5
- * =============================
- * - Add keyframes - 4
  * =============================
  * - Add keyframe at scrubber position - 2
  * =============================

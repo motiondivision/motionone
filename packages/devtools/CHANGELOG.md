@@ -4,6 +4,10 @@ Motion Developer Tools adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.0.4] [Unreleased]
 
+### Added
+
+- Delete keyframes.
+
 ### Fixed
 
 - Allowing editing and playback of recording animations within iframes.

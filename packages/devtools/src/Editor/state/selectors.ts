@@ -29,3 +29,5 @@ export const getUpdateKeyframe = (state: EditorState) => {
 export const getUpdateKeyframeEasing = (state: EditorState) => {
   return state.updateKeyframeEasing
 }
+
+export const getDeleteKeyframe = (state: EditorState) => state.deleteKeyframe

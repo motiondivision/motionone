@@ -49,6 +49,7 @@ export interface EditorState {
     keyframe: SelectedKeyframeMetadata,
     newEasing: Easing
   ): void
+  deleteKeyframe(keyframe: SelectedKeyframeMetadata): void
   logout(): void
   login(user: EditorAuth): void
 }

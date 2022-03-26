@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "build": "rm -rf app/js && tsc -p . && rollup -c",
+    "test": "jest --coverage --config jest.config.js",
     "dev": "concurrently -c blue,red -n tsc,rollup --kill-others \"tsc --watch -p . --preserveWatchOutput\" \"rollup --c --watch --no-watch.clearScreen\""
   },
   "devDependencies": {

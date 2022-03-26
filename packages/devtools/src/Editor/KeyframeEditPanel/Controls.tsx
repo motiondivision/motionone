@@ -7,10 +7,13 @@ import {
   getSelectedAnimation,
   getUpdateKeyframe,
   getUpdateKeyframeEasing,
+  getDeleteKeyframe,
 } from "../state/selectors"
 import { SelectedKeyframeMetadata } from "../state/types"
 import { useEditorState } from "../state/use-editor-state"
 import { getControlDefinition } from "./definitions"
+import styled from "styled-components"
+import { TrashIcon } from "../icons/TrashIcon"
 
 interface Props {
   selectedKeyframes: SelectedKeyframeMetadata[]
@@ -21,10 +24,27 @@ interface ValueControlProps {
   keyframeMetadata: SelectedKeyframeMetadata
 }
 
+const ActionsContainer = styled.div`
+  padding: 20px 0px;
+  display: flex;
+  flex-direction: column;
+`
+
+const DeleteButton = styled.button`
+  color: var(--white);
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: 1px solid var(--feint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
 function ValueControl({ keyframeMetadata, valueAnimation }: ValueControlProps) {
   const controls = {}
   const updateKeyframe = useEditorState(getUpdateKeyframe)
   const updateKeyframeEasing = useEditorState(getUpdateKeyframeEasing)
+  const deleteKeyframe = useEditorState(getDeleteKeyframe)
   const { valueName, id: keyframeId } = keyframeMetadata
   const { value, easing } = valueAnimation.keyframes[keyframeId]
 
@@ -53,7 +73,21 @@ function ValueControl({ keyframeMetadata, valueAnimation }: ValueControlProps) {
 
   useControls(controls)
 
-  return null
+  return (
+    <ActionsContainer>
+      <DeleteButton onClick={() => deleteKeyframe(keyframeMetadata)}>
+        <TrashIcon
+          style={{
+            width: 16,
+            height: 16,
+            color: "var(--red)",
+            marginRight: 5,
+          }}
+        />
+        Delete keyframe
+      </DeleteButton>
+    </ActionsContainer>
+  )
 }
 
 export function KeyframeEditControls({ selectedKeyframes }: Props) {

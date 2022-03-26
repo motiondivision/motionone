@@ -1,13 +1,15 @@
 import { EditorState, SelectedKeyframeMetadata } from "./types"
-import create, { GetState, SetState } from "zustand"
+import create, { GetState, SetState, StateCreator } from "zustand"
 import produce from "immer"
 import { getCurrentTime } from "./selectors"
+import { sortKeyframesByOffset } from "../../utils/sort-keyframes"
+import { defaults } from "@motionone/utils"
 
 const makeKeyframeUpdater =
   (get: GetState<EditorState>, set: SetState<EditorState>, key: string) =>
   (keyframe: SelectedKeyframeMetadata, newValue: any) => {
     const { animations, selectedAnimationName } = get()
-    const { elementName, valueName, id } = keyframe
+    const { elementName, valueId, id } = keyframe
 
     if (!selectedAnimationName) return
 
@@ -16,7 +18,7 @@ const makeKeyframeUpdater =
         const elementValues = draft[selectedAnimationName].elements[elementName]
 
         const valueIndex = elementValues.findIndex(
-          (value) => value.valueName === valueName
+          (value) => value.id === valueId
         )
 
         const keyframe = elementValues[valueIndex].keyframes[id]
@@ -30,7 +32,7 @@ const makeKeyframeUpdater =
     })
   }
 
-export const useEditorState = create<EditorState>((set, get) => ({
+export const stateFactory: StateCreator<EditorState> = (set, get) => ({
   /**
    * State
    */
@@ -105,6 +107,53 @@ export const useEditorState = create<EditorState>((set, get) => ({
   stopPlaying: () => set({ playbackOrigin: undefined }),
   updateKeyframe: makeKeyframeUpdater(get, set, "value"),
   updateKeyframeEasing: makeKeyframeUpdater(get, set, "easing"),
+  deleteKeyframe: ({ elementName, valueId, id }) => {
+    const { animations, selectedAnimationName } = get()
+    if (!selectedAnimationName) return
+
+    set({
+      animations: produce(animations, (draft) => {
+        const elementValues = draft[selectedAnimationName].elements[elementName]
+        const valueAnimation = elementValues.find(
+          (value) => value.id === valueId
+        )
+
+        if (!valueAnimation) return
+
+        const orderedKeyframes = sortKeyframesByOffset(valueAnimation.keyframes)
+        const { delay = 0, duration = defaults.duration } =
+          valueAnimation.options
+
+        const timestampedKeyframes = orderedKeyframes
+          .map((keyframe) => ({
+            ...keyframe,
+            time: delay + duration * keyframe.offset,
+          }))
+          .filter((keyframe) => keyframe.id !== id)
+
+        const firstKeyframeTime = timestampedKeyframes[0].time
+        const lastKeyframeTime =
+          timestampedKeyframes[timestampedKeyframes.length - 1].time
+
+        const newDelay = firstKeyframeTime
+        const newDuration = lastKeyframeTime - firstKeyframeTime
+        valueAnimation.options.delay = newDelay
+        valueAnimation.options.duration = newDuration
+
+        for (const { time, ...keyframe } of timestampedKeyframes) {
+          valueAnimation.keyframes[keyframe.id] = {
+            ...keyframe,
+            offset: (time - newDelay) / newDuration,
+          }
+        }
+
+        delete valueAnimation.keyframes[id]
+      }),
+      selectedKeyframes: undefined,
+    })
+  },
   logout: () => set({ user: { isPro: false } }),
   login: (user) => set({ user }),
-}))
+})
+
+export const useEditorState = create<EditorState>(stateFactory)
