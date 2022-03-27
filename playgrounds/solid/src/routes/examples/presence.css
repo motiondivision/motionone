@@ -1,0 +1,17 @@
+.container {
+  width: 100px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.container button {
+  cursor: pointer;
+}
+.box {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  background-color: red;
+}

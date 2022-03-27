@@ -1,0 +1,40 @@
+{
+  "name": "@motionone/solid",
+  "version": "10.5.0",
+  "description": "A tiny, performant animation library for Solid",
+  "license": "MIT",
+  "author": "David Di Biase",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "solid": "./dist/source/index.jsx",
+      "import": "./dist/esm/index.js",
+      "browser": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "node": "./dist/cjs/index.js"
+    }
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "rm -rf lib dist types && tsc -p . && rollup -c",
+    "test": "jest --coverage --config jest.config.js",
+    "measure": "bundlesize"
+  },
+  "dependencies": {
+    "@motionone/dom": "^10.5.0",
+    "tslib": "^2.3.1"
+  },
+  "devDependencies": {
+    "@babel/preset-typescript": "^7.16.7",
+    "rollup-preset-solid": "^1.4.0",
+    "solid-js": "^1.3.13"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.3.13"
+  }
+}
