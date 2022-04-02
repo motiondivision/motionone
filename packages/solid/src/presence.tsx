@@ -3,10 +3,13 @@ import {
   Component,
   Accessor,
   createSignal,
-  createEffect,
+  createComputed,
+  Index,
+  onMount,
   JSX,
+  onCleanup,
 } from "solid-js"
-import { mountedStates } from "@motionone/dom"
+import { mountedStates, MotionState } from "@motionone/dom"
 
 type PresenceProps = {
   when: Accessor<boolean>
@@ -24,14 +27,8 @@ const resolveChildren = (resolved: JSX.Element | Function): Element[] | [] => {
 }
 
 export const Presence: Component<PresenceProps> = (props) => {
-  let mounting = true
   const [els, setEls] = createSignal<Element[]>([])
   const doneCallbacks = new WeakMap<Element, VoidFunction>()
-  const resolve = () => {
-    const els = resolveChildren(props.children)
-    setEls(els)
-    return els
-  }
   const removeDoneCallback = (el: Element) => {
     const prevDoneCallback = doneCallbacks.get(el)
     if (prevDoneCallback) {
@@ -39,41 +36,51 @@ export const Presence: Component<PresenceProps> = (props) => {
     }
     doneCallbacks.delete(el)
   }
-  const enter = (el: Element) => {
-    const state = mountedStates.get(el)
-    if (!state) return
-    removeDoneCallback(el)
-    state.setActive("exit", false)
-  }
-  const exit = (el: Element, done: VoidFunction) => {
-    const state = mountedStates.get(el)
-    if (!state) return done()
-    removeDoneCallback(el)
-    doneCallbacks.set(el, done)
-    state.setActive("exit", true)
-    el.addEventListener("motioncomplete", done)
-  }
-  // TODO: Clean-up the effect and ask about not using the microtask.
-  createEffect(
+  createComputed(
     on(
-      () => props.when(),
+      () => props.when() === true,
       () => {
-        if (mounting === true) {
-          mounting = false
-          return
+        if (!!props.when()) {
+          setEls(resolveChildren(props.children))
         }
-        const els = resolve()
-        queueMicrotask(() => {
-          for (let i in els) {
-            if (!!props.when()) {
-              enter(els[i])
-            } else if (!props.when()) {
-              exit(els[i], () => setEls([]))
-            }
-          }
-        })
       }
     )
   )
-  return <>{els()}</>
+  const Element: Component<{
+    index: number
+    el: Element
+    when: Accessor<boolean>
+  }> = (props) => {
+    let state: MotionState | undefined
+    onMount(() => {
+      state = mountedStates.get(props.el)
+      removeDoneCallback(props.el)
+      state!.setActive("exit", false)
+      createComputed(
+        on(props.when, () => {
+          if (!props.when()) {
+            const done = () => {
+              setEls((els) => {
+                const newEls = [...els]
+                newEls.splice(props.index, 1)
+                return newEls
+              })
+            }
+            doneCallbacks.set(props.el, done)
+            props.el.addEventListener("motioncomplete", done)
+            state!.setActive("exit", true)
+            onCleanup(() =>
+              props.el.removeEventListener("motioncomplete", done)
+            )
+          }
+        })
+      )
+    })
+    return props.el
+  }
+  return (
+    <Index each={els()}>
+      {(el, index) => <Element index={index} when={props.when} el={el()} />}
+    </Index>
+  )
 }
