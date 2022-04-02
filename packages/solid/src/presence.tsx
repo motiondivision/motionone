@@ -65,8 +65,8 @@ export const Presence: Component<PresenceProps> = (props) => {
       const exitElement = () => {
         doneCallbacks.set(props.el, done)
         props.el.addEventListener("motioncomplete", done)
-        state!.setActive("exit", true)
         onCleanup(() => props.el.removeEventListener("motioncomplete", done))
+        state!.setActive("exit", true)
       }
       createComputed(on(props.when, () => !props.when() && exitElement()))
     })
