@@ -1,8 +1,10 @@
 import { createAnimationsFromTimeline, timeline } from ".."
-import { spring } from "../../js/easing/spring"
-import { createSpringGenerator } from "../../js/easing/spring/generator"
-import { pregenerateKeyframes } from "../../js/easing/utils/pregenerate-keyframes"
-import { defaultOffset } from "../../js/utils/offset"
+import {
+  spring as createSpringGenerator,
+  pregenerateKeyframes,
+} from "@motionone/generators"
+import { spring } from "../../easing/spring"
+import { defaultOffset } from "@motionone/utils"
 import { stagger } from "../../utils/stagger"
 
 describe("createAnimationsFromTimeline", () => {

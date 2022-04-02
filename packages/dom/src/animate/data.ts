@@ -1,16 +1,26 @@
-import type { AnimationData } from "./types"
+import type { ElementAnimationData } from "../types"
+import { MotionValue } from "@motionone/types"
 
-const data = new WeakMap<Element, AnimationData>()
+const data = new WeakMap<Element, ElementAnimationData>()
 
-export function getAnimationData(element: Element): AnimationData {
+export function getAnimationData(element: Element): ElementAnimationData {
   if (!data.has(element)) {
     data.set(element, {
       transforms: [],
-      animations: {},
-      generators: {},
-      prevGeneratorState: {},
+      values: new Map(),
     })
   }
 
   return data.get(element)!
+}
+
+export function getMotionValue(
+  motionValues: Map<string, MotionValue>,
+  name: string
+) {
+  if (!motionValues.has(name)) {
+    motionValues.set(name, new MotionValue())
+  }
+
+  return motionValues.get(name)!
 }

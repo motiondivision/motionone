@@ -1,6 +1,5 @@
 import type { CssPropertyDefinition, CssPropertyDefinitionMap } from "../types"
-import { addUniqueItem } from "../../utils/array"
-import { noopReturn } from "../../utils/noop"
+import { addUniqueItem, noopReturn } from "@motionone/utils"
 import { getAnimationData } from "../data"
 
 /**
@@ -80,6 +79,10 @@ export const addTransformToElement = (element: HTMLElement, name: string) => {
   const { transforms } = getAnimationData(element)
   addUniqueItem(transforms, name)
 
+  /**
+   * TODO: An optimisation here could be to cache the transform in element data
+   * and only update if this has changed.
+   */
   element.style.transform = buildTransformTemplate(transforms)
 }
 

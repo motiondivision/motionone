@@ -1,5 +1,5 @@
 import { invariant } from "hey-listen"
-import { noop } from "../utils/noop"
+import { noop } from "@motionone/utils"
 import { animateStyle } from "../animate/animate-style"
 import { style } from "../animate/style"
 import {

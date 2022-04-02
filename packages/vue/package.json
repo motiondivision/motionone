@@ -1,16 +1,16 @@
 {
   "name": "@motionone/vue",
-  "version": "10.5.0",
+  "version": "10.7.0",
   "description": "A tiny, performant animation library for Vue",
   "author": "Matt Perry",
   "license": "MIT",
   "main": "dist/motion-vue.cjs.js",
   "module": "dist/motion-vue.esm.js",
-  "types": "types/index.d.ts",
+  "types": "dist/index.d.ts",
   "sideEffects": false,
   "scripts": {
-    "build": "cross-env NODE_ENV=production rollup --config rollup.config.js",
-    "build-vue:ssr": "cross-env NODE_ENV=production rollup --config rollup.config.js --format cjs && npm run build-vue:ssr && npm run build-vue:es && npm run build-vue:unpkg",
+    "build": "cross-env NODE_ENV=production rollup --config rollup.config.js && npm run build-vue:ssr && npm run build-vue:es && npm run build-vue:unpkg",
+    "build-vue:ssr": "cross-env NODE_ENV=production rollup --config rollup.config.js --format cjs",
     "build-vue:es": "cross-env NODE_ENV=production rollup --config rollup.config.js --format es",
     "build-vue:unpkg": "cross-env NODE_ENV=production rollup --config rollup.config.js --format iife",
     "dev": "yarn build-vue:es -w",
@@ -18,7 +18,7 @@
     "measure": "bundlesize"
   },
   "dependencies": {
-    "@motionone/dom": "^10.5.0",
+    "@motionone/dom": "^10.7.0",
     "tslib": "^2.3.1"
   },
   "devDependencies": {

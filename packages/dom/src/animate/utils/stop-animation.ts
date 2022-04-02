@@ -1,19 +1,23 @@
-import type { BasicAnimationControls } from "../types"
+import type { BasicAnimationControls } from "@motionone/types"
 
 export interface WithCommitStyles {
   commitStyles: VoidFunction
   cancel: VoidFunction
 }
 
-export function stopAnimation(animation?: BasicAnimationControls) {
-  if (!animation) return
+export function stopAnimation(
+  animation?: BasicAnimationControls,
+  needsCommit = true
+) {
+  if (!animation || animation.playState === "finished") return
 
   // Suppress error thrown by WAAPI
   try {
-    /**
-     * commitStyles has overhead so we only want to commit and cancel
-     */
-    animation.playState !== "finished" && animation.commitStyles()
-    animation.cancel()
+    if (animation.stop) {
+      animation.stop()
+    } else {
+      needsCommit && animation.commitStyles()
+      animation.cancel()
+    }
   } catch (e) {}
 }

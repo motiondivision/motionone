@@ -27,61 +27,14 @@
     "@rollup/plugin-replace": "^3.0.0",
     "@types/jest": "^27.0.3",
     "bundlesize": "^0.18.1",
+    "concurrently": "^7.0.0",
     "jest": "^27.4.4",
     "lerna": "^4.0.0",
     "prettier": "^2.5.1",
     "rollup-plugin-terser": "^7.0.2",
     "ts-jest": "^27.1.1",
-    "turbo": "latest",
+    "turbo": "^1.1.4",
     "webpack-cli": "^4.9.1"
   },
-  "turbo": {
-    "npmClient": "yarn",
-    "baseBranch": "origin/main",
-    "pipeline": {
-      "build": {
-        "dependsOn": [
-          "^build"
-        ],
-        "outputs": [
-          "dist/**",
-          ".next/**"
-        ]
-      },
-      "lint": {
-        "outputs": []
-      },
-      "test": {
-        "dependsOn": [
-          "build"
-        ],
-        "outputs": []
-      },
-      "deploy": {
-        "dependsOn": [
-          "build",
-          "test",
-          "lint"
-        ]
-      },
-      "measure": {
-        "dependsOn": [
-          "build"
-        ]
-      },
-      "publish": {
-        "dependsOn": [
-          "build",
-          "test",
-          "lint"
-        ]
-      },
-      "dev": {
-        "dependsOn": [
-          "build"
-        ],
-        "cache": false
-      }
-    }
-  }
+  "packageManager": "yarn@1.22.17"
 }

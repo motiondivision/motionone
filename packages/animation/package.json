@@ -1,0 +1,29 @@
+{
+  "name": "@motionone/animation",
+  "version": "10.7.0",
+  "description": "A semi-polyfill WAAPI animation.",
+  "license": "MIT",
+  "author": "Matt Perry",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
+  "types": "types/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "rm -rf lib dist types && tsc -p . && rollup -c",
+    "test": "jest --coverage --config jest.config.js",
+    "dev": "concurrently -c blue,red -n tsc,rollup --kill-others \"tsc --watch -p . --preserveWatchOutput\" \"rollup --c --watch --no-watch.clearScreen\"",
+    "measure": "bundlesize"
+  },
+  "dependencies": {
+    "@motionone/easing": "^10.7.0",
+    "@motionone/types": "^10.7.0",
+    "@motionone/utils": "^10.7.0",
+    "tslib": "^2.3.1"
+  },
+  "bundlesize": [
+    {
+      "path": "./dist/size-index.js",
+      "maxSize": "1.5 kB"
+    }
+  ]
+}

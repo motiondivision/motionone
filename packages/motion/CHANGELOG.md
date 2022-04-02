@@ -2,6 +2,42 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.7.0] [2022-03-20]
+
+### Added
+
+- Added support for Motion Developer Tools.
+
+## [10.6.2] [2022-02-08]
+
+### Fixed
+
+- Fixed velocity calculations of critically and overdamped animations.
+
+## [10.6.1] [2022-02-06]
+
+### Fixed
+
+- Fixed velocity transfer of interrupted generated animations. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/43)
+
+## [10.6.0] [2022-01-22]
+
+### Added
+
+- Custom animations by passing function to `animate`.
+
+## [10.5.2] [2022-01-16]
+
+### Fixed
+
+- Fixing types for `Presence`. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/44)
+
+## [10.5.1] [2022-01-15]
+
+### Fixed
+
+- Fixing "default slot" warning in Vue `Presence` component. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/45)
+
 ## [10.5.0] [2022-01-01]
 
 ### Added

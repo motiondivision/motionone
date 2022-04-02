@@ -1,26 +1,30 @@
-import { getAnimationData } from "./data"
-import type {
-  AnimationFactory,
-  AnimationOptions,
-  ValueKeyframesDefinition,
-} from "./types"
+import { getAnimationData, getMotionValue } from "./data"
+import type { AnimationFactory, ValueKeyframesDefinition } from "./types"
 import { isCssVar, registerCssVariable } from "./utils/css-var"
-import { noop } from "../utils/noop"
-import { ms } from "./utils/time"
+import { Animation } from "@motionone/animation"
+import {
+  defaults,
+  time,
+  isEasingGenerator,
+  isEasingList,
+} from "@motionone/utils"
+import { AnimationOptions } from "@motionone/types"
 import {
   addTransformToElement,
   isTransform,
   transformDefinitions,
 } from "./utils/transforms"
-import { convertEasing, isCustomEasing, isEasingList } from "./utils/easing"
+import { convertEasing } from "./utils/easing"
 import { supports } from "./utils/feature-detection"
-import { NumberAnimation } from "../js/NumberAnimation"
 import { hydrateKeyframes, keyframesList } from "./utils/keyframes"
 import { style } from "./style"
-import { defaults } from "./utils/defaults"
 import { getStyleName } from "./utils/get-style-name"
-import { isNumber } from "../utils/is-number"
+import { isNumber, noop } from "@motionone/utils"
 import { stopAnimation } from "./utils/stop-animation"
+
+function getDevToolsRecord() {
+  return (window as any).__MOTION_DEV_TOOLS_RECORD
+}
 
 export function animateStyle(
   element: Element,
@@ -28,6 +32,9 @@ export function animateStyle(
   keyframesDefinition: ValueKeyframesDefinition,
   options: AnimationOptions = {}
 ): AnimationFactory {
+  const record = getDevToolsRecord()
+  const isRecording = options.record !== false && record
+
   let animation: any
   let {
     duration = defaults.duration,
@@ -50,6 +57,8 @@ export function animateStyle(
   valueIsTransform && addTransformToElement(element as HTMLElement, key)
   const name = getStyleName(key)
 
+  const motionValue = getMotionValue(data.values, name)
+
   /**
    * Get definition of value, this will be used to convert numerical
    * keyframes into the default value type.
@@ -62,7 +71,11 @@ export function animateStyle(
    * this is fired now and we return a factory function to create
    * the actual animation that can get called in batch,
    */
-  stopAnimation(data.animations[name])
+  stopAnimation(
+    motionValue.animation,
+    !(isEasingGenerator(easing) && motionValue.generator) &&
+      options.record !== false
+  )
 
   /**
    * Batchable factory function containing all DOM reads.
@@ -80,13 +93,13 @@ export function animateStyle(
       readInitialValue
     )
 
-    if (isCustomEasing(easing)) {
+    if (isEasingGenerator(easing)) {
       const custom = easing.createAnimation(
         keyframes,
         readInitialValue as any,
         valueIsTransform,
         name,
-        data
+        motionValue
       )
       easing = custom.easing
       if (custom.keyframes !== undefined) keyframes = custom.keyframes
@@ -125,14 +138,16 @@ export function animateStyle(
        * If this browser doesn't support partial/implicit keyframes we need to
        * explicitly provide one.
        */
-      if (!supports.partialKeyframes() && keyframes.length === 1) {
+      const needsToReadInitialKeyframe =
+        !supports.partialKeyframes() && keyframes.length === 1
+      if (isRecording || needsToReadInitialKeyframe) {
         keyframes.unshift(readInitialValue())
       }
 
       const animationOptions = {
-        delay: ms(delay),
-        duration: ms(duration),
-        endDelay: ms(endDelay),
+        delay: time.ms(delay),
+        duration: time.ms(duration),
+        endDelay: time.ms(endDelay),
         easing: !isEasingList(easing) ? convertEasing(easing) : undefined,
         direction,
         iterations: repeat + 1,
@@ -198,7 +213,7 @@ export function animateStyle(
         style.set(element, name, latest)
       }
 
-      animation = new NumberAnimation(render, keyframes as any, {
+      animation = new Animation(render, keyframes as any, {
         ...options,
         duration,
         easing,
@@ -214,18 +229,23 @@ export function animateStyle(
       )
     }
 
-    data.animations[name] = animation
+    if (isRecording) {
+      record(
+        element as HTMLElement,
+        key,
+        keyframes,
+        {
+          duration,
+          delay,
+          easing,
+          repeat,
+          offset,
+        },
+        "motion-one"
+      )
+    }
 
-    /**
-     * When an animation finishes, delete the reference to the previous animation.
-     */
-    animation?.finished
-      .then(() => {
-        data.animations[name] = undefined
-        data.generators[name] = undefined
-        data.prevGeneratorState[name] = undefined
-      })
-      .catch(noop)
+    motionValue.setAnimation(animation)
 
     return animation
   }

@@ -1,6 +1,6 @@
 {
   "name": "@motionone/dom",
-  "version": "10.5.0",
+  "version": "10.7.0",
   "description": "A tiny, performant animation library for the DOM",
   "license": "MIT",
   "author": "Matt Perry",
@@ -11,10 +11,14 @@
   "scripts": {
     "build": "rm -rf lib dist types && tsc -p . && webpack --config webpack.config.js && rollup -c",
     "test": "jest --coverage --config jest.config.js",
-    "dev": "rollup -c -w",
+    "dev": "concurrently -c blue,red -n tsc,rollup --kill-others \"tsc --watch -p . --preserveWatchOutput\" \"rollup --c --watch --no-watch.clearScreen\"",
     "measure": "bundlesize"
   },
   "dependencies": {
+    "@motionone/animation": "^10.7.0",
+    "@motionone/generators": "^10.7.0",
+    "@motionone/types": "^10.7.0",
+    "@motionone/utils": "^10.7.0",
     "hey-listen": "^1.0.8",
     "tslib": "^2.3.1"
   },
@@ -25,23 +29,23 @@
   "bundlesize": [
     {
       "path": "./dist/size-animate.js",
-      "maxSize": "3.4 kB"
+      "maxSize": "3.6 kB"
     },
     {
       "path": "./dist/size-animate-style.js",
-      "maxSize": "2.9 kB"
+      "maxSize": "3.2 kB"
     },
     {
       "path": "./dist/size-timeline.js",
-      "maxSize": "4.3 kB"
+      "maxSize": "4.5 kB"
     },
     {
       "path": "./dist/size-spring.js",
-      "maxSize": "1 kB"
+      "maxSize": "1.1 kB"
     },
     {
       "path": "./dist/size-webpack-animate.js",
-      "maxSize": "3.4 kB"
+      "maxSize": "3.6 kB"
     }
   ]
 }

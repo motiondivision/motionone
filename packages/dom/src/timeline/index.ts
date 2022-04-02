@@ -1,19 +1,24 @@
 import { invariant } from "hey-listen"
-import { progress } from "../utils/progress"
-import { resolveOption } from "../utils/stagger"
-import { defaultOffset, fillOffset } from "../js/utils/offset"
-import { animateStyle } from "../animate/animate-style"
 import type {
   AnimationOptions,
-  AnimationOptionsWithOverrides,
   Easing,
   PlaybackOptions,
   UnresolvedValueKeyframe,
+} from "@motionone/types"
+import {
+  progress,
+  defaultOffset,
+  fillOffset,
+  defaults,
+  isEasingGenerator,
+} from "@motionone/utils"
+import { resolveOption } from "../utils/stagger"
+import { animateStyle } from "../animate/animate-style"
+import type {
+  AnimationOptionsWithOverrides,
   ValueKeyframesDefinition,
 } from "../animate/types"
-import { createAnimations } from "../animate/utils/controls"
-import { defaults } from "../animate/utils/defaults"
-import { isCustomEasing } from "../animate/utils/easing"
+import { wrapAnimationWithControls } from "../animate/utils/controls"
 import { keyframesList } from "../animate/utils/keyframes"
 import { getOptions } from "../animate/utils/options"
 import { resolveElements } from "../animate/utils/resolve-elements"
@@ -52,10 +57,10 @@ export function timeline(
     .map((definition) => animateStyle(...definition))
     .filter(Boolean)
 
-  return createAnimations(
+  return wrapAnimationWithControls(
     animationFactories,
     // Get the duration from the first animation definition
-    animationDefinitions[0]?.[3].duration ?? defaults.duration
+    animationDefinitions[0]?.[3].duration
   )
 }
 
@@ -113,7 +118,7 @@ export function createAnimationsFromTimeline(
           easing = defaultOptions.easing || defaults.easing,
         } = valueOptions
 
-        if (isCustomEasing(easing)) {
+        if (isEasingGenerator(easing)) {
           const valueIsTransform = isTransform(key)
 
           invariant(

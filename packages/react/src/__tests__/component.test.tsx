@@ -38,7 +38,7 @@ describe("motion", () => {
       const { rerender } = render(<Component />)
       rerender(<Component />)
 
-      setTimeout(() => reject(false), 100)
+      setTimeout(() => reject(false), 200)
     })
 
     expect(element).toHaveStyle("opacity: 0.8")

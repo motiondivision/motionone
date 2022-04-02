@@ -1,9 +1,9 @@
 import type {
   AcceptedElements,
   AnimationListOptions,
-  Easing,
   MotionKeyframesDefinition,
 } from "../animate/types"
+import type { Easing } from "@motionone/types"
 
 export type TimelineSegment =
   | [AcceptedElements, MotionKeyframesDefinition]

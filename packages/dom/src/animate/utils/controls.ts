@@ -1,11 +1,7 @@
-import { noop } from "../../utils/noop"
-import type {
-  AnimationControls,
-  AnimationFactory,
-  AnimationWithCommitStyles,
-} from "../types"
+import { defaults, noop, time } from "@motionone/utils"
+import type { AnimationControls } from "@motionone/types"
+import type { AnimationFactory, AnimationWithCommitStyles } from "../types"
 import { stopAnimation } from "./stop-animation"
-import { ms } from "./time"
 
 interface MotionState {
   animations: AnimationWithCommitStyles[]
@@ -15,9 +11,9 @@ interface MotionState {
 
 const createAnimation = (factory: AnimationFactory) => factory()
 
-export const createAnimations = (
+export const wrapAnimationWithControls = (
   animationFactory: AnimationFactory[],
-  duration: number
+  duration: number = defaults.duration
 ) =>
   new Proxy(
     {
@@ -54,7 +50,8 @@ export const controls = {
         }
         return target.finished
       case "stop":
-        return () => target.animations.forEach(stopAnimation)
+        return () =>
+          target.animations.forEach((animation) => stopAnimation(animation))
       default:
         return () => target.animations.forEach((animation) => animation[key]())
     }
@@ -62,7 +59,7 @@ export const controls = {
   set: (target: MotionState, key: string, value: number) => {
     switch (key) {
       case "currentTime":
-        value = ms(value)
+        value = time.ms(value)
       case "currentTime":
       case "playbackRate":
         for (let i = 0; i < target.animations.length; i++) {
