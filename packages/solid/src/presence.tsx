@@ -4,7 +4,7 @@ import {
   Accessor,
   createSignal,
   createComputed,
-  Index,
+  For,
   onMount,
   JSX,
   onCleanup,
@@ -19,9 +19,9 @@ const resolveChildren = (resolved: JSX.Element | Function): Element[] | [] => {
   if (typeof resolved === "function") {
     return [resolved()]
   } else if (typeof resolved === "object") {
-    return (Array.isArray(resolved) ? resolved : [resolved]).filter(
-      (el) => el instanceof Element
-    ) as Element[]
+    return (
+      Array.isArray(resolved) ? resolved.map((item) => item()) : [resolved]
+    ).filter((el) => el instanceof Element) as Element[]
   }
   return []
 }
@@ -47,7 +47,7 @@ export const Presence: Component<PresenceProps> = (props) => {
     )
   )
   const Element: Component<{
-    index: number
+    index: Accessor<number>
     el: Element
     when: Accessor<boolean>
   }> = (props) => {
@@ -56,31 +56,25 @@ export const Presence: Component<PresenceProps> = (props) => {
       state = mountedStates.get(props.el)
       removeDoneCallback(props.el)
       state!.setActive("exit", false)
-      createComputed(
-        on(props.when, () => {
-          if (!props.when()) {
-            const done = () => {
-              setEls((els) => {
-                const newEls = [...els]
-                newEls.splice(props.index, 1)
-                return newEls
-              })
-            }
-            doneCallbacks.set(props.el, done)
-            props.el.addEventListener("motioncomplete", done)
-            state!.setActive("exit", true)
-            onCleanup(() =>
-              props.el.removeEventListener("motioncomplete", done)
-            )
-          }
+      const done = () =>
+        setEls((els) => {
+          const newEls = [...els]
+          newEls.splice(props.index(), 1)
+          return newEls
         })
-      )
+      const exitElement = () => {
+        doneCallbacks.set(props.el, done)
+        props.el.addEventListener("motioncomplete", done)
+        state!.setActive("exit", true)
+        onCleanup(() => props.el.removeEventListener("motioncomplete", done))
+      }
+      createComputed(on(props.when, () => !props.when() && exitElement()))
     })
     return props.el
   }
   return (
-    <Index each={els()}>
-      {(el, index) => <Element index={index} when={props.when} el={el()} />}
-    </Index>
+    <For each={els()}>
+      {(el, index) => <Element index={index} when={props.when} el={el} />}
+    </For>
   )
 }

@@ -5,13 +5,27 @@
   flex-direction: column;
   justify-content: flex-end;
 }
+.big_container {
+  width: 200px;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
 
 .container button {
   cursor: pointer;
 }
-.box {
+.container .box {
   width: 100px;
   height: 100px;
   border-radius: 10px;
   background-color: red;
+}
+.big_container .box {
+  width: 200px;
+  margin-bottom: 10px;
+  height: 200px;
+  border-radius: 10px;
+  background-color: blue;
 }
