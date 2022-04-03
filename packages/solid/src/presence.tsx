@@ -57,7 +57,7 @@ export const Presence: Component<PresenceProps> = (props) => {
       removeDoneCallback(props.el)
       state!.setActive("exit", false)
       const done = () =>
-        setEls((els) => {
+        setEls((els: Element[]) => {
           const newEls = [...els]
           newEls.splice(props.index(), 1)
           return newEls
@@ -74,7 +74,9 @@ export const Presence: Component<PresenceProps> = (props) => {
   }
   return (
     <For each={els()}>
-      {(el, index) => <Element index={index} when={props.when} el={el} />}
+      {(el: Element, index: number) => (
+        <Element index={index} when={props.when} el={el} />
+      )}
     </For>
   )
 }
