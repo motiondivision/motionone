@@ -1,10 +1,13 @@
-import { createSignal } from "solid-js"
+import { createSignal, onMount } from "solid-js"
 import { Motion } from "../../../../../packages/solid/src/index"
 
 export default function AnimatePropChange() {
   const [isSelected, setSelected] = createSignal(true)
+  let ref!: HTMLButtonElement
+  onMount(() => console.log(ref))
   return (
-    <Motion.Div
+    <Motion
+      tag="button"
       onClick={() => setSelected(!isSelected())}
       initial={{ opacity: 0.6 }}
       animate={{
@@ -14,6 +17,7 @@ export default function AnimatePropChange() {
       }}
       transition={{ duration: 1 }}
       style={{ width: "200px", "background-color": "red", height: "200px" }}
+      ref={ref}
     />
   )
 }

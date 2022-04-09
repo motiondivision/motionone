@@ -1,19 +1,17 @@
-import { JSX } from "solid-js"
-import { MotionBaseComponent, MotionProxy, MotionComponent } from "./types"
+import { MotionProxy, MotionProxyComponent } from "./types"
 import { Motion } from "./component"
 
-const MotionBase: MotionBaseComponent = (props) => (
-  <Motion tag="div" {...props} />
-)
+const components = new Map<string, MotionProxyComponent<any>>()
 
-const components = new Map<string, MotionComponent<any>>()
-
-const motionProxy = new Proxy(MotionBase, {
-  get: (_, tag: keyof JSX.IntrinsicElements) => {
-    tag = tag.toLowerCase() as keyof JSX.IntrinsicElements
+const motionProxy = new Proxy(Motion, {
+  get: (_, tag: string) => {
+    tag = tag.toLowerCase()
     let component = components.get(tag)
     if (!component) {
-      component = (props) => <Motion {...props} tag={tag} />
+      component = (props) => {
+        delete props.tag
+        return <Motion {...props} tag={tag} />
+      }
       components.set(tag, component)
     }
     return component

@@ -1,4 +1,4 @@
-import type { MotionComponentProps, MotionTagProp } from "./types"
+import type { ElementTag, MotionComponent, MotionComponentProps } from "./types"
 import { Dynamic } from "solid-js/web"
 import {
   onMount,
@@ -10,39 +10,38 @@ import {
 import { createMotionState, createStyles } from "@motionone/dom"
 import { MotionContext } from "./context"
 
-export const Motion = (
-  props: MotionComponentProps & { tag: MotionTagProp<any> }
+export const Motion: MotionComponent = (
+  props: MotionComponentProps & { tag?: ElementTag; ref?: any }
 ) => {
-  const [, attrs] = splitProps(props, [
-    "tag",
-    "initial",
-    "animate",
-    "press",
-    "hover",
-    "inView",
-    "variants",
-    "style",
-    "transition",
-    "onMotionStart",
-    "onMotionComplete",
-    "onHoverStart",
-    "onHoverEnd",
-    "onPressStart",
-    "onPressEnd",
-    "onViewEnter",
-    "onViewLeave",
-  ])
+  const [stateProps, , attrs] = splitProps(
+    props,
+    [
+      "initial",
+      "animate",
+      "inView",
+      "hover",
+      "press",
+      "variants",
+      "transition",
+      "exit",
+    ],
+    [
+      "tag",
+      "ref",
+      "style",
+      "onMotionStart",
+      "onMotionComplete",
+      "onHoverStart",
+      "onHoverEnd",
+      "onPressStart",
+      "onPressEnd",
+      "onViewEnter",
+      "onViewLeave",
+    ]
+  )
 
-  const state = createMotionState(props, useContext(MotionContext))
-  const update = () => {
-    state.update({
-      ...props,
-      animate: props.animate,
-      transition: props.transition,
-      exit: props.exit,
-    })
-  }
-  createEffect(update)
+  const state = createMotionState(stateProps, useContext(MotionContext))
+  createEffect(() => state.update({ ...stateProps }))
 
   onMount(() => {
     onCleanup(state.mount(root))
@@ -52,9 +51,15 @@ export const Motion = (
   return (
     <MotionContext.Provider value={state}>
       <Dynamic
-        ref={root}
-        component={props.tag}
-        style={createStyles({ ...props.style, ...state.getTarget() })}
+        ref={(el: Element) => {
+          root = el
+          props.ref?.(el)
+        }}
+        component={props.tag || "div"}
+        style={{
+          ...props.style,
+          ...createStyles(state.getTarget()),
+        }}
         on:motionstart={props.onMotionStart}
         on:motioncomplete={props.onMotionComplete}
         on:hoverstart={props.onHoverStart}

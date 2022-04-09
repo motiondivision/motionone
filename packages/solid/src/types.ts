@@ -1,4 +1,4 @@
-import type { JSX, Component } from "solid-js"
+import type { JSX } from "solid-js"
 import type { Options } from "@motionone/dom"
 import type {
   MotionEvent,
@@ -19,7 +19,7 @@ export interface MotionEventHandlers {
   onViewLeave?: (event: ViewEvent) => void
 }
 
-export type MotionTagProp<T> = Component<T> | keyof JSX.IntrinsicElements
+export type ElementTag = keyof JSX.IntrinsicElements
 
 export type MotionComponentProps<T = {}> = T &
   Options &
@@ -33,17 +33,22 @@ export type MotionComponentProps<T = {}> = T &
     transition?: AnimationOptionsWithOverrides
   }
 
-export type MotionBaseComponent = {
+export type MotionComponent = {
+  // <Motion />
   (props: MotionComponentProps<JSX.IntrinsicElements["div"]>): JSX.Element
-  <T>(props: MotionComponentProps<T> & { tag: Component<T> }): JSX.Element
-  <T extends keyof JSX.IntrinsicElements>(
+  // <Motion tag="div" />
+  <T extends ElementTag>(
     props: MotionComponentProps<JSX.IntrinsicElements[T]> & { tag: T }
   ): JSX.Element
 }
-export type MotionComponent<T> = (props: MotionComponentProps<T>) => JSX.Element
 
-export type MotionProxy = MotionBaseComponent & {
-  [K in keyof JSX.IntrinsicElements as Capitalize<K>]: MotionComponent<
+export type MotionProxyComponent<T> = (
+  props: MotionComponentProps<T>
+) => JSX.Element
+
+export type MotionProxy = MotionComponent & {
+  // <Motion.Div />
+  [K in ElementTag as Capitalize<K>]: MotionProxyComponent<
     JSX.IntrinsicElements[K]
   >
 }
