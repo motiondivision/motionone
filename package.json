@@ -34,7 +34,8 @@
     "rollup-plugin-terser": "^7.0.2",
     "ts-jest": "^27.1.1",
     "turbo": "^1.1.4",
-    "webpack-cli": "^4.9.1"
+    "webpack-cli": "^4.9.1",
+    "typescript": "^4.6.3"
   },
   "packageManager": "yarn@1.22.17"
 }

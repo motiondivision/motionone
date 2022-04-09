@@ -1,50 +1,60 @@
-import type { MotionComponentProps } from "./types"
+import type { MotionComponentProps, MotionTagProp } from "./types"
 import { Dynamic } from "solid-js/web"
 import {
-  Component,
   onMount,
   onCleanup,
   useContext,
-  createComputed,
+  createEffect,
+  splitProps,
 } from "solid-js"
 import { createMotionState, createStyles } from "@motionone/dom"
 import { MotionContext } from "./context"
 
-/**
- * Primitive for creating a Motion component
- */
-export const createMotionComponent: Component<MotionComponentProps> = (
-  props
+export const Motion = (
+  props: MotionComponentProps & { tag: MotionTagProp<any> }
 ) => {
-  let root: Element
+  const [, attrs] = splitProps(props, [
+    "tag",
+    "initial",
+    "animate",
+    "press",
+    "hover",
+    "inView",
+    "variants",
+    "style",
+    "transition",
+    "onMotionStart",
+    "onMotionComplete",
+    "onHoverStart",
+    "onHoverEnd",
+    "onPressStart",
+    "onPressEnd",
+    "onViewEnter",
+    "onViewLeave",
+  ])
+
   const state = createMotionState(props, useContext(MotionContext))
-  const unwrap = (val: any) => (typeof val === "function" ? val() : val)
   const update = () => {
     state.update({
       ...props,
-      animate: unwrap(props.animate),
-      transition: unwrap(props.transition),
-      exit: unwrap(props.exit),
+      animate: props.animate,
+      transition: props.transition,
+      exit: props.exit,
     })
   }
-  ;["animate", "transition", "hover", "press", "inView", "exit"].forEach(
-    (key: string) => {
-      typeof props[key] === "function" && createComputed(update)
-    }
-  )
+  createEffect(update)
+
   onMount(() => {
-    update()
     onCleanup(state.mount(root))
   })
+
+  let root!: Element
   return (
     <MotionContext.Provider value={state}>
       <Dynamic
-        ref={(ref: Element) => (root = ref)}
-        children={props.children}
-        component={props.tag || "div"}
+        ref={root}
+        component={props.tag}
         style={createStyles({ ...props.style, ...state.getTarget() })}
-        class={props.class}
-        onClick={props.onClick}
         on:motionstart={props.onMotionStart}
         on:motioncomplete={props.onMotionComplete}
         on:hoverstart={props.onHoverStart}
@@ -53,6 +63,7 @@ export const createMotionComponent: Component<MotionComponentProps> = (
         on:pressend={props.onPressEnd}
         on:viewenter={props.onViewEnter}
         on:viewleave={props.onViewLeave}
+        {...attrs}
       />
     </MotionContext.Provider>
   )

@@ -1,60 +1,61 @@
-import type { Component, PropsWithChildren, Accessor } from "solid-js";
-import type { Options } from "@motionone/dom";
-import { htmlElements, svgElements } from "./utils/supported-elements";
+import type { JSX, Component } from "solid-js"
+import type { Options } from "@motionone/dom"
 import type {
   MotionEvent,
   VariantDefinition,
   AnimationOptionsWithOverrides,
   CustomPointerEvent,
-  ViewEvent
-} from "@motionone/dom";
+  ViewEvent,
+} from "@motionone/dom"
 
 export interface MotionEventHandlers {
-  onMotionStart?: (event: MotionEvent) => void;
-  onMotionComplete?: (event: MotionEvent) => void;
-  onHoverStart?: (event: CustomPointerEvent) => void;
-  onHoverEnd?: (event: CustomPointerEvent) => void;
-  onPressStart?: (event: CustomPointerEvent) => void;
-  onPressEnd?: (event: CustomPointerEvent) => void;
-  onViewEnter?: (event: ViewEvent) => void;
-  onViewLeave?: (event: ViewEvent) => void;
+  onMotionStart?: (event: MotionEvent) => void
+  onMotionComplete?: (event: MotionEvent) => void
+  onHoverStart?: (event: CustomPointerEvent) => void
+  onHoverEnd?: (event: CustomPointerEvent) => void
+  onPressStart?: (event: CustomPointerEvent) => void
+  onPressEnd?: (event: CustomPointerEvent) => void
+  onViewEnter?: (event: ViewEvent) => void
+  onViewLeave?: (event: ViewEvent) => void
 }
 
-type UnionStringArray<T extends Readonly<string[]>> = T[number];
+export type MotionTagProp<T> = Component<T> | keyof JSX.IntrinsicElements
 
-export type HTMLElements = UnionStringArray<typeof htmlElements>;
-export type SVGElements = UnionStringArray<typeof svgElements>;
-
-export type MotionComponentProps = Options &
-  PropsWithChildren &
+export type MotionComponentProps<T = {}> = T &
+  Options &
   MotionEventHandlers & {
-    style?: object;
-    class?: string;
-    tag: string;
-    animate?: Accessor<VariantDefinition>;
-    exit?: Accessor<VariantDefinition>;
-    hover?: Accessor<VariantDefinition>;
-    press?: Accessor<VariantDefinition>;
-    transition?: Accessor<AnimationOptionsWithOverrides> | AnimationOptionsWithOverrides;
-  };
+    children?: JSX.Element
+    style?: JSX.CSSProperties
+    animate?: VariantDefinition
+    exit?: VariantDefinition
+    hover?: VariantDefinition
+    press?: VariantDefinition
+    transition?: AnimationOptionsWithOverrides
+  }
 
-export type MotionHTMLComponents = {
-  [Element in keyof HTMLElements as Capitalize<HTMLElements>]: Component<MotionComponentProps>;
-};
-export type MotionSVGComponents = {
-  [Element in keyof SVGElements as Capitalize<HTMLElements>]: Component<MotionComponentProps>;
-};
+export type MotionBaseComponent = {
+  (props: MotionComponentProps<JSX.IntrinsicElements["div"]>): JSX.Element
+  <T>(props: MotionComponentProps<T> & { tag: Component<T> }): JSX.Element
+  <T extends keyof JSX.IntrinsicElements>(
+    props: MotionComponentProps<JSX.IntrinsicElements[T]> & { tag: T }
+  ): JSX.Element
+}
+export type MotionComponent<T> = (props: MotionComponentProps<T>) => JSX.Element
 
-export type MotionDOMComponents = MotionHTMLComponents & MotionSVGComponents;
+export type MotionProxy = MotionBaseComponent & {
+  [K in keyof JSX.IntrinsicElements as Capitalize<K>]: MotionComponent<
+    JSX.IntrinsicElements[K]
+  >
+}
 
-export type KeyframeType = Keyframe[] | PropertyIndexedKeyframes;
-export type MovedElement = [el: Element, x: number, y: number];
-export type MoveIntegration = (allElements: Element[]) => void;
+export type KeyframeType = Keyframe[] | PropertyIndexedKeyframes
+export type MovedElement = [el: Element, x: number, y: number]
+export type MoveIntegration = (allElements: Element[]) => void
 export type ExitIntegration = (
   exitingElements: Element[],
   finish: (elements: Element[]) => void
-) => void;
+) => void
 export type EnterIntegration = (
   enteringElements: Element[],
   finish?: ((elements: Element[]) => void) | undefined
-) => void;
+) => void

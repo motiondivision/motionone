@@ -1,6 +1,6 @@
 {
   "name": "@motionone/solid",
-  "version": "10.5.0",
+  "version": "10.7.0",
   "description": "A tiny, performant animation library for Solid",
   "license": "MIT",
   "author": "David Di Biase",
@@ -26,7 +26,7 @@
     "measure": "bundlesize"
   },
   "dependencies": {
-    "@motionone/dom": "^10.5.0",
+    "@motionone/dom": "^10.7.0",
     "tslib": "^2.3.1"
   },
   "devDependencies": {
