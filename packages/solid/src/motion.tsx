@@ -14,7 +14,11 @@ import {
   splitProps,
 } from "solid-js"
 import { createMotionState, createStyles } from "@motionone/dom"
-import { MotionContext } from "./context"
+import {
+  UnmountContext,
+  ParentStateContext,
+  OngoingStateContext,
+} from "./context"
 
 const MotionComp: MotionComponent = (
   props: MotionComponentProps & { tag?: ElementTag; ref?: any }
@@ -46,37 +50,45 @@ const MotionComp: MotionComponent = (
     ]
   )
 
-  const state = createMotionState(options, useContext(MotionContext))
+  const state =
+    useContext(OngoingStateContext)?.() ??
+    createMotionState(options, useContext(ParentStateContext))
+
   createEffect(() => state.update({ ...options }))
 
+  const addUnmount = useContext(UnmountContext)
   onMount(() => {
-    onCleanup(state.mount(root))
+    const unmount = state.mount(root)
+    if (addUnmount) addUnmount(unmount)
+    else onCleanup(unmount)
   })
 
   let root!: Element
   return (
-    <MotionContext.Provider value={state}>
-      <Dynamic
-        ref={(el: Element) => {
-          root = el
-          props.ref?.(el)
-        }}
-        component={props.tag || "div"}
-        style={{
-          ...props.style,
-          ...createStyles(state.getTarget()),
-        }}
-        on:motionstart={props.onMotionStart}
-        on:motioncomplete={props.onMotionComplete}
-        on:hoverstart={props.onHoverStart}
-        on:hoverend={props.onHoverEnd}
-        on:pressstart={props.onPressStart}
-        on:pressend={props.onPressEnd}
-        on:viewenter={props.onViewEnter}
-        on:viewleave={props.onViewLeave}
-        {...attrs}
-      />
-    </MotionContext.Provider>
+    <ParentStateContext.Provider value={state}>
+      <OngoingStateContext.Provider value={undefined}>
+        <Dynamic
+          ref={(el: Element) => {
+            root = el
+            props.ref?.(el)
+          }}
+          component={props.tag || "div"}
+          style={{
+            ...props.style,
+            ...createStyles(state.getTarget()),
+          }}
+          on:motionstart={props.onMotionStart}
+          on:motioncomplete={props.onMotionComplete}
+          on:hoverstart={props.onHoverStart}
+          on:hoverend={props.onHoverEnd}
+          on:pressstart={props.onPressStart}
+          on:pressend={props.onPressEnd}
+          on:viewenter={props.onViewEnter}
+          on:viewleave={props.onViewLeave}
+          {...attrs}
+        />
+      </OngoingStateContext.Provider>
+    </ParentStateContext.Provider>
   )
 }
 

@@ -1,9 +1,12 @@
 {
   "name": "@motionone/solid",
   "version": "10.7.0",
-  "description": "A tiny, performant animation library for Solid",
+  "description": "A tiny, performant animation library for SolidJS",
   "license": "MIT",
   "author": "David Di Biase",
+  "contributors": [
+    "Damian Tarnawski <gthetarnav@gmail.com>"
+  ],
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
@@ -27,7 +30,8 @@
   },
   "dependencies": {
     "@motionone/dom": "^10.7.0",
-    "tslib": "^2.3.1"
+    "tslib": "^2.3.1",
+    "solid-transition-group": "^0.0.10"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.16.7",

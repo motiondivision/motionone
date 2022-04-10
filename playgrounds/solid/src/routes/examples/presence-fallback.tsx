@@ -9,7 +9,20 @@ export default function PresenceInitial() {
   return (
     <div class="container">
       <Presence>
-        <Show when={toggle()}>
+        <Show
+          when={toggle()}
+          fallback={
+            <Motion
+              class="box"
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0 }}
+              style={{
+                "background-color": "blue",
+              }}
+            />
+          }
+        >
           <Motion
             class="box"
             initial={{ opacity: 0, scale: 0 }}

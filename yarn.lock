@@ -13941,6 +13941,11 @@ solid-start@next:
   optionalDependencies:
     solid-start-node next
 
+solid-transition-group@^0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/solid-transition-group/-/solid-transition-group-0.0.10.tgz#774110616ac06c1054b7fd6e3c1bf1cf3e584558"
+  integrity sha512-b3O9z6BUP60CG1WnTdqFuvHms0reDNYwQF+eAEEaSaoDEmiOu9+Lu7zQgWGySJjaAdSAClhmFCmx/eAjQgfIoA==
+
 sorcery@^0.10.0:
   version "0.10.0"
   resolved "https://registry.npmjs.org/sorcery/-/sorcery-0.10.0.tgz"

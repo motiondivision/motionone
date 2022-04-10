@@ -1,82 +1,69 @@
-import {
-  on,
-  Component,
-  Accessor,
-  createSignal,
-  createComputed,
-  For,
-  onMount,
-  JSX,
-  onCleanup,
-} from "solid-js"
+import { Component } from "solid-js"
 import { mountedStates, MotionState } from "@motionone/dom"
+import { Transition } from "solid-transition-group"
+import { UnmountContext, OngoingStateContext } from "./context"
 
-type PresenceProps = {
-  when: Accessor<boolean>
-}
+export const Presence: Component = (props) => {
+  let ongoingState: MotionState | undefined
+  let removeListener: VoidFunction | undefined
 
-const resolveChildren = (resolved: JSX.Element | Function): Element[] | [] => {
-  if (typeof resolved === "function") {
-    return [resolved()]
-  } else if (typeof resolved === "object") {
-    return (
-      Array.isArray(resolved) ? resolved.map((item) => item()) : [resolved]
-    ).filter((el) => el instanceof Element) as Element[]
-  }
-  return []
-}
-
-export const Presence: Component<PresenceProps> = (props) => {
-  const [els, setEls] = createSignal<Element[]>([])
-  const doneCallbacks = new WeakMap<Element, VoidFunction>()
-  const removeDoneCallback = (el: Element) => {
-    const prevDoneCallback = doneCallbacks.get(el)
-    if (prevDoneCallback) {
-      el.removeEventListener("motioncomplete", prevDoneCallback)
+  const onEnter = (el: Element, done: VoidFunction) => {
+    if (removeListener) {
+      removeListener?.()
+      removeListener = undefined
     }
-    doneCallbacks.delete(el)
+
+    const state = ongoingState ?? mountedStates.get(el)
+    const onComplete = () => {
+      removeListener = undefined
+      done()
+      ongoingState = undefined
+    }
+
+    if (!state) return onComplete()
+
+    state.setActive("exit", false)
+    el.addEventListener("motioncomplete", onComplete)
+    removeListener = () => {
+      el.removeEventListener("motioncomplete", onComplete)
+      onComplete()
+    }
   }
-  createComputed(
-    on(
-      () => props.when() === true,
-      () => {
-        if (!!props.when()) {
-          setEls(resolveChildren(props.children))
-        }
-      }
-    )
-  )
-  const Element: Component<{
-    index: Accessor<number>
-    el: Element
-    when: Accessor<boolean>
-  }> = (props) => {
-    let state: MotionState | undefined
-    onMount(() => {
-      state = mountedStates.get(props.el)
-      removeDoneCallback(props.el)
-      state!.setActive("exit", false)
-      const done = () =>
-        setEls((els: Element[]) => {
-          const newEls = [...els]
-          newEls.splice(props.index(), 1)
-          return newEls
-        })
-      const exitElement = () => {
-        doneCallbacks.set(props.el, done)
-        props.el.addEventListener("motioncomplete", done)
-        onCleanup(() => props.el.removeEventListener("motioncomplete", done))
-        state!.setActive("exit", true)
-      }
-      createComputed(on(props.when, () => !props.when() && exitElement()))
-    })
-    return props.el
+
+  const onExit = (el: Element, done: VoidFunction) => {
+    if (removeListener) {
+      removeListener?.()
+      removeListener = undefined
+    }
+
+    const state = mountedStates.get(el)
+    const onComplete = () => {
+      removeListener = undefined
+      unmounts.forEach((f) => f())
+      done()
+      ongoingState = undefined
+    }
+
+    if (!state) return onComplete()
+
+    ongoingState = state
+    state.setActive("exit", true)
+    el.addEventListener("motioncomplete", onComplete)
+    removeListener = () => {
+      el.removeEventListener("motioncomplete", onComplete)
+      onComplete()
+    }
   }
+
+  const unmounts = new Set<VoidFunction>()
+
   return (
-    <For each={els()}>
-      {(el: Element, index: number) => (
-        <Element index={index} when={props.when} el={el} />
-      )}
-    </For>
+    <UnmountContext.Provider value={(fn) => unmounts.add(fn)}>
+      <OngoingStateContext.Provider value={() => ongoingState}>
+        <Transition onEnter={onEnter} onExit={onExit} appear>
+          {props.children}
+        </Transition>
+      </OngoingStateContext.Provider>
+    </UnmountContext.Provider>
   )
 }

@@ -19,6 +19,9 @@ export default function Home() {
           <a href="/examples/presence-initial">Presence</a>
         </li>
         <li>
+          <a href="/examples/presence-fallback">Presence with Fallback</a>
+        </li>
+        <li>
           <a href="/examples/presence-multiple">Presence (Multiple Nodes)</a>
         </li>
       </ul>
