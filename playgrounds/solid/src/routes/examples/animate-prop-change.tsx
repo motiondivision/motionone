@@ -1,5 +1,5 @@
 import { createSignal, onMount } from "solid-js"
-import { Motion } from "../../../../../packages/solid/src/index"
+import { Motion } from "../../../../../packages/solid/src"
 
 export default function AnimatePropChange() {
   const [isSelected, setSelected] = createSignal(true)

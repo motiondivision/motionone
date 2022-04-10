@@ -1,4 +1,10 @@
-import type { ElementTag, MotionComponent, MotionComponentProps } from "./types"
+import type {
+  ElementTag,
+  MotionComponent,
+  MotionComponentProps,
+  MotionProxy,
+  MotionProxyComponent,
+} from "./types"
 import { Dynamic } from "solid-js/web"
 import {
   onMount,
@@ -10,10 +16,10 @@ import {
 import { createMotionState, createStyles } from "@motionone/dom"
 import { MotionContext } from "./context"
 
-export const Motion: MotionComponent = (
+const MotionComp: MotionComponent = (
   props: MotionComponentProps & { tag?: ElementTag; ref?: any }
 ) => {
-  const [stateProps, , attrs] = splitProps(
+  const [options, , attrs] = splitProps(
     props,
     [
       "initial",
@@ -40,8 +46,8 @@ export const Motion: MotionComponent = (
     ]
   )
 
-  const state = createMotionState(stateProps, useContext(MotionContext))
-  createEffect(() => state.update({ ...stateProps }))
+  const state = createMotionState(options, useContext(MotionContext))
+  createEffect(() => state.update({ ...options }))
 
   onMount(() => {
     onCleanup(state.mount(root))
@@ -73,3 +79,13 @@ export const Motion: MotionComponent = (
     </MotionContext.Provider>
   )
 }
+
+export const Motion = new Proxy(MotionComp, {
+  get: (_, tag: string): MotionProxyComponent<any> => {
+    tag = tag.toLowerCase()
+    return (props) => {
+      delete props.tag
+      return <MotionComp {...props} tag={tag} />
+    }
+  },
+}) as MotionProxy

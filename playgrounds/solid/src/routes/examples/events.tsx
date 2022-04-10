@@ -1,4 +1,4 @@
-import { Motion } from "../../../../../packages/solid/src/index"
+import { Motion } from "../../../../../packages/solid/src"
 
 export default function Events() {
   const log = (event) => {

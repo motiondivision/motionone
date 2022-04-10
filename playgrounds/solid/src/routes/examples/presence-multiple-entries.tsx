@@ -1,6 +1,5 @@
 import { createSignal } from "solid-js"
-import { Motion } from "../../../../../packages/solid/src/index"
-import { Presence } from "../../../../../packages/solid/src/presence"
+import { Motion, Presence } from "../../../../../packages/solid/src"
 
 import "./presence.css"
 
