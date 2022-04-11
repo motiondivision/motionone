@@ -8,6 +8,9 @@ export default function PresenceInitial() {
 
   return (
     <div class="container">
+      <button onClick={() => setToggle(!toggle())}>
+        {toggle() ? "Hide" : "Show"}
+      </button>
       <Presence>
         <Show when={toggle()}>
           <Motion
@@ -18,9 +21,6 @@ export default function PresenceInitial() {
           />
         </Show>
       </Presence>
-      <button onClick={() => setToggle(!toggle())}>
-        {toggle() ? "Hide" : "Show"}
-      </button>
     </div>
   )
 }

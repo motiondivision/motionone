@@ -14,17 +14,11 @@ import {
   splitProps,
 } from "solid-js"
 import { createMotionState, createStyles } from "@motionone/dom"
-import {
-  UnmountContext,
-  ParentStateContext,
-  OngoingStateContext,
-} from "./context"
+import { PresenceContext, ParentStateContext } from "./context"
 
 const MotionComp: MotionComponent = (
   props: MotionComponentProps & { tag?: ElementTag; ref?: any }
 ) => {
-  console.log(props.children)
-
   const [options, , attrs] = splitProps(
     props,
     [
@@ -52,44 +46,50 @@ const MotionComp: MotionComponent = (
     ]
   )
 
-  const state =
-    useContext(OngoingStateContext)?.() ??
-    createMotionState(options, useContext(ParentStateContext))
+  const {
+    cleanup = onCleanup,
+    mount = onMount,
+    initial,
+  } = useContext(PresenceContext)
 
-  const { cleanup = onCleanup, mount = onMount } = useContext(UnmountContext)
+  const state = createMotionState(
+    initial()
+      ? options
+      : {
+          ...options,
+          initial: false,
+        },
+    useContext(ParentStateContext)
+  )
+
   mount(() => {
-    console.log("mount")
-
     cleanup(state.mount(root))
-
     createEffect(() => state.update({ ...options }))
   })
 
   let root!: Element
   return (
     <ParentStateContext.Provider value={state}>
-      <OngoingStateContext.Provider value={undefined}>
-        <Dynamic
-          ref={(el: Element) => {
-            root = el
-            props.ref?.(el)
-          }}
-          component={props.tag || "div"}
-          style={{
-            ...props.style,
-            ...createStyles(state.getTarget()),
-          }}
-          on:motionstart={props.onMotionStart}
-          on:motioncomplete={props.onMotionComplete}
-          on:hoverstart={props.onHoverStart}
-          on:hoverend={props.onHoverEnd}
-          on:pressstart={props.onPressStart}
-          on:pressend={props.onPressEnd}
-          on:viewenter={props.onViewEnter}
-          on:viewleave={props.onViewLeave}
-          {...attrs}
-        />
-      </OngoingStateContext.Provider>
+      <Dynamic
+        ref={(el: Element) => {
+          root = el
+          props.ref?.(el)
+        }}
+        component={props.tag || "div"}
+        style={{
+          ...props.style,
+          ...createStyles(state.getTarget()),
+        }}
+        on:motionstart={props.onMotionStart}
+        on:motioncomplete={props.onMotionComplete}
+        on:hoverstart={props.onHoverStart}
+        on:hoverend={props.onHoverEnd}
+        on:pressstart={props.onPressStart}
+        on:pressend={props.onPressEnd}
+        on:viewenter={props.onViewEnter}
+        on:viewleave={props.onViewLeave}
+        {...attrs}
+      />
     </ParentStateContext.Provider>
   )
 }
