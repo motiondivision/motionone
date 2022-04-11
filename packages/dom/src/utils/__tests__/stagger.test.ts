@@ -1,3 +1,4 @@
+import { getEasingFunction } from "@motionone/animation"
 import { stagger, getFromIndex } from "../stagger"
 
 describe("stagger", () => {
@@ -21,6 +22,13 @@ describe("stagger", () => {
 
   test("Accepts easing", () => {
     expect(stagger(0.1, { easing: "linear" })(5, 10)).toEqual(0.5)
+
+    const expectedEaseIn = getEasingFunction("ease-in")(0.5)
+    expect(stagger(0.1, { easing: "ease-in" })(5, 10)).toEqual(expectedEaseIn)
+
+    const expectedEaseOut = getEasingFunction("ease-out")(0.5)
+    expect(stagger(0.1, { easing: "ease-out" })(5, 10)).toEqual(expectedEaseOut)
+
     expect(stagger(0.1, { easing: (v: number) => v / 2 })(4, 10)).toEqual(0.2)
   })
 })

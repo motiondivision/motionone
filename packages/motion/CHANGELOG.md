@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.7.1] [2022-04-11]
+
+### Fixed
+
+- Fixed `stagger` calculations with easings.
+
 ## [10.7.0] [2022-03-20]
 
 ### Added
