@@ -12,9 +12,9 @@ export default function PresenceInitial() {
         <Show when={toggle()}>
           <Motion
             class="box"
-            initial={{ opacity: 0, scale: 0 }}
+            initial={{ opacity: 0, scale: 0.6 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0 }}
+            exit={{ opacity: 0, scale: 0.6 }}
           />
         </Show>
       </Presence>

@@ -23,6 +23,8 @@ import {
 const MotionComp: MotionComponent = (
   props: MotionComponentProps & { tag?: ElementTag; ref?: any }
 ) => {
+  console.log(props.children)
+
   const [options, , attrs] = splitProps(
     props,
     [
@@ -54,13 +56,13 @@ const MotionComp: MotionComponent = (
     useContext(OngoingStateContext)?.() ??
     createMotionState(options, useContext(ParentStateContext))
 
-  createEffect(() => state.update({ ...options }))
+  const { cleanup = onCleanup, mount = onMount } = useContext(UnmountContext)
+  mount(() => {
+    console.log("mount")
 
-  const addUnmount = useContext(UnmountContext)
-  onMount(() => {
-    const unmount = state.mount(root)
-    if (addUnmount) addUnmount(unmount)
-    else onCleanup(unmount)
+    cleanup(state.mount(root))
+
+    createEffect(() => state.update({ ...options }))
   })
 
   let root!: Element

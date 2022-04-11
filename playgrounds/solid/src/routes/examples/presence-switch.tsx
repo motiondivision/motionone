@@ -1,0 +1,41 @@
+import { createSignal, Switch, Match } from "solid-js"
+import { Motion, Presence } from "../../../../../packages/solid/src"
+
+import "./presence.css"
+
+const options = {
+  initial: { opacity: 0, scale: 0 },
+  animate: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 0 },
+}
+
+export default function PresenceInitial() {
+  const [show, setShow] = createSignal(1)
+  const toggle = () => setShow((p) => (p === 2 ? 0 : ++p))
+
+  return (
+    <div class="container">
+      <button onClick={toggle}>TOGGLE</button>
+      <Presence>
+        <Switch>
+          <Match when={show() === 1}>
+            <Motion class="box" {...options}>
+              1
+            </Motion>
+          </Match>
+          <Match when={show() === 2}>
+            <Motion
+              class="box"
+              style={{
+                "background-color": "blue",
+              }}
+              {...options}
+            >
+              2
+            </Motion>
+          </Match>
+        </Switch>
+      </Presence>
+    </div>
+  )
+}

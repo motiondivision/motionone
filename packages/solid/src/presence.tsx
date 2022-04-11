@@ -1,68 +1,128 @@
-import { Component } from "solid-js"
+import {
+  Component,
+  createSignal,
+  children,
+  createComputed,
+  untrack,
+  onMount,
+  on,
+  createMemo,
+  onCleanup,
+} from "solid-js"
 import { mountedStates, MotionState } from "@motionone/dom"
-import { Transition } from "solid-transition-group"
 import { UnmountContext, OngoingStateContext } from "./context"
+import { ResolvedChildren } from "solid-js/types/reactive/signal"
+
+const getSingleElement = (resolved: ResolvedChildren): Element | undefined => {
+  resolved = Array.isArray(resolved) ? resolved[0] : resolved
+  return resolved instanceof Element ? resolved : undefined
+}
+
+const elIdArray: Element[] = []
 
 export const Presence: Component = (props) => {
-  let ongoingState: MotionState | undefined
-  let removeListener: VoidFunction | undefined
-
-  const onEnter = (el: Element, done: VoidFunction) => {
-    if (removeListener) {
-      removeListener?.()
-      removeListener = undefined
-    }
-
-    const state = ongoingState ?? mountedStates.get(el)
-    const onComplete = () => {
-      removeListener = undefined
-      done()
-      ongoingState = undefined
-    }
-
-    if (!state) return onComplete()
-
-    state.setActive("exit", false)
-    el.addEventListener("motioncomplete", onComplete)
-    removeListener = () => {
-      el.removeEventListener("motioncomplete", onComplete)
-      onComplete()
-    }
-  }
-
-  const onExit = (el: Element, done: VoidFunction) => {
-    if (removeListener) {
-      removeListener?.()
-      removeListener = undefined
-    }
-
-    const state = mountedStates.get(el)
-    const onComplete = () => {
-      removeListener = undefined
-      unmounts.forEach((f) => f())
-      done()
-      ongoingState = undefined
-    }
-
-    if (!state) return onComplete()
-
-    ongoingState = state
-    state.setActive("exit", true)
-    el.addEventListener("motioncomplete", onComplete)
-    removeListener = () => {
-      el.removeEventListener("motioncomplete", onComplete)
-      onComplete()
-    }
-  }
+  let exitState: MotionState | undefined
 
   const unmounts = new Set<VoidFunction>()
+  const mounts = new Set<VoidFunction>()
+
+  const unmountAll = () => {
+    unmounts.forEach((f) => f())
+    unmounts.clear()
+  }
+  const mountAll = () => {
+    mounts.forEach((f) => f())
+    mounts.clear()
+  }
+  onCleanup(() => {
+    unmountAll()
+    mounts.clear()
+  })
 
   return (
-    <UnmountContext.Provider value={(fn) => unmounts.add(fn)}>
-      <OngoingStateContext.Provider value={() => ongoingState}>
-        <Transition onEnter={onEnter} onExit={onExit} appear>
-          {props.children}
-        </Transition>
+    <UnmountContext.Provider
+      value={{
+        cleanup: (fn) => unmounts.add(fn),
+        mount: (fn) => mounts.add(fn),
+      }}
+    >
+      <OngoingStateContext.Provider value={() => exitState}>
+        {untrack(() => {
+          const resolved = children(() => props.children)
+          const resolvedChild = createMemo(() => getSingleElement(resolved()))
+          const [el, setEl] = createSignal<Element>()
+
+          // initial run (appear)
+          {
+            const newEl = resolvedChild()
+            if (newEl) {
+              setEl(newEl)
+              elIdArray.push(newEl)
+              mountAll()
+            }
+          }
+
+          createComputed(
+            on(
+              resolvedChild,
+              (newEl) => {
+                newEl && elIdArray.push(newEl)
+                const prevEl = el()
+                console.log("---")
+                console.log("new in array", elIdArray.indexOf(newEl!))
+                console.log("prev in array", elIdArray.indexOf(prevEl!))
+
+                // exit
+                if (!newEl) {
+                  console.log("exit")
+
+                  if (!prevEl) return setEl()
+                  const state = mountedStates.get(prevEl)
+                  if (!state) return setEl()
+
+                  state.setActive("exit", true)
+                  const onComplete = () => {
+                    prevEl.removeEventListener("motioncomplete", onComplete)
+                    setEl()
+                    unmountAll()
+                  }
+                  prevEl.addEventListener("motioncomplete", onComplete)
+                }
+
+                // exit -> enter
+                else if (prevEl) {
+                  console.log("exit -> enter")
+
+                  const state = mountedStates.get(prevEl)
+
+                  const onComplete = () => {
+                    prevEl.removeEventListener("motioncomplete", onComplete)
+                    unmountAll()
+                    setEl(newEl)
+                    mountAll()
+                  }
+
+                  if (!state) onComplete()
+                  else {
+                    state.setActive("exit", true)
+                    prevEl.addEventListener("motioncomplete", onComplete)
+                  }
+                }
+
+                // enter
+                else {
+                  console.log("enter")
+
+                  setEl(newEl)
+                  mountAll()
+                }
+              },
+              { defer: true }
+            )
+          )
+
+          return el
+        })}
       </OngoingStateContext.Provider>
     </UnmountContext.Provider>
   )

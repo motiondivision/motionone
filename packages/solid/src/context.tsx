@@ -6,4 +6,7 @@ export const ParentStateContext = createContext<MotionState>()
 export const OngoingStateContext =
   createContext<() => MotionState | undefined>()
 
-export const UnmountContext = createContext<(fn: VoidFunction) => void>()
+export const UnmountContext = createContext<{
+  cleanup?: (fn: VoidFunction) => void
+  mount?: (fn: VoidFunction) => void
+}>({})
