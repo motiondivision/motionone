@@ -53,12 +53,7 @@ const MotionComp: MotionComponent = (
   } = useContext(PresenceContext)
 
   const state = createMotionState(
-    initial()
-      ? options
-      : {
-          ...options,
-          initial: false,
-        },
+    initial() ? options : { ...options, initial: false },
     useContext(ParentStateContext)
   )
 

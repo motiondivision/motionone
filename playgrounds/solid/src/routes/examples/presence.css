@@ -25,10 +25,8 @@
   align-items: center;
   font-size: 24px;
 }
-.big_container .box {
-  width: 200px;
-  margin-bottom: 10px;
-  height: 200px;
-  border-radius: 10px;
+.box.smaller {
+  width: 66px;
+  height: 66px;
   background-color: blue;
 }

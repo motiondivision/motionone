@@ -31,27 +31,22 @@ export const Presence: Component<{ initial?: boolean }> = (props) => {
   let listener: VoidFunction | undefined
   let complete: VoidFunction | undefined
 
-  const runComplete = () => {
-    complete?.()
-    complete = undefined
-  }
-
-  const unmounts = new Set<VoidFunction>()
-  const mounts = new Set<VoidFunction>()
+  let unmounts: VoidFunction[] = []
+  let mounts: VoidFunction[] = []
 
   const unmountAll = () => {
     unmounts.forEach((f) => f())
-    unmounts.clear()
+    unmounts = []
   }
   const mountAll = () => {
     mounts.forEach((f) => f())
-    mounts.clear()
+    mounts = []
   }
 
   onCleanup(() => {
     unmountAll()
-    mounts.clear()
     listener?.()
+    mounts = []
     listener = undefined
     complete = undefined
   })
@@ -59,8 +54,8 @@ export const Presence: Component<{ initial?: boolean }> = (props) => {
   return (
     <PresenceContext.Provider
       value={{
-        cleanup: (fn) => unmounts.add(fn),
-        mount: (fn) => mounts.add(fn),
+        cleanup: (fn) => unmounts.push(fn),
+        mount: (fn) => mounts.push(fn),
         initial: () => initial,
       }}
     >
@@ -69,49 +64,45 @@ export const Presence: Component<{ initial?: boolean }> = (props) => {
         const resolvedChild = createMemo(() => getSingleElement(resolved()))
         const [el, setEl] = createSignal<Element>()
 
+        const enterTransition = (el: Element) => {
+          setEl(el)
+          mountAll()
+        }
+
+        const exitTransition = (
+          el: Element | undefined,
+          done: VoidFunction
+        ) => {
+          complete = () => {
+            complete = undefined
+            unmountAll()
+            done()
+          }
+
+          if (!el) return complete()
+          const state = mountedStates.get(el)
+          if (!state) return complete()
+
+          state.setActive("exit", true)
+          exitting = true
+          listener = addCompleteListener(el, () => {
+            exitting = false
+            complete?.()
+          })
+        }
+
         createComputed(
           on(resolvedChild, (newEl) => {
-            runComplete(), listener?.(), (listener = undefined)
+            complete?.(), listener?.(), (listener = undefined)
             const prevEl = el()
 
             // exit
-            if (!newEl) {
-              complete = () => (setEl(), unmountAll())
-
-              if (!prevEl) return runComplete()
-              const state = mountedStates.get(prevEl)
-              if (!state) return runComplete()
-
-              state.setActive("exit", true)
-              listener = addCompleteListener(prevEl, runComplete)
-            }
-
+            if (!newEl) exitTransition(prevEl, setEl)
             // exit -> enter
-            else if (prevEl) {
-              complete = () => {
-                unmountAll()
-                if (exitting) return
-                setEl(newEl)
-                mountAll()
-              }
-
-              const state = mountedStates.get(prevEl)
-              if (!state) runComplete()
-              else {
-                state.setActive("exit", true)
-                exitting = true
-                listener = addCompleteListener(prevEl, () => {
-                  exitting = false
-                  runComplete()
-                })
-              }
-            }
-
+            else if (prevEl)
+              exitTransition(prevEl, () => !exitting && enterTransition(newEl))
             // enter
-            else {
-              setEl(newEl)
-              mountAll()
-            }
+            else enterTransition(newEl)
           })
         )
 
