@@ -3,7 +3,6 @@ import type { Options } from "@motionone/dom"
 import type {
   MotionEvent,
   VariantDefinition,
-  AnimationOptionsWithOverrides,
   CustomPointerEvent,
   ViewEvent,
 } from "@motionone/dom"
@@ -26,11 +25,7 @@ export type MotionComponentProps<T = {}> = T &
   MotionEventHandlers & {
     children?: JSX.Element
     style?: JSX.CSSProperties
-    animate?: VariantDefinition
     exit?: VariantDefinition
-    hover?: VariantDefinition
-    press?: VariantDefinition
-    transition?: AnimationOptionsWithOverrides
   }
 
 export type MotionComponent = {
