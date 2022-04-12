@@ -14,7 +14,7 @@ import {
   splitProps,
 } from "solid-js"
 import { createMotionState, createStyles } from "@motionone/dom"
-import { PresenceContext, ParentStateContext } from "./context"
+import { PresenceContext, ParentContext } from "./context"
 
 const MotionComp: MotionComponent = (
   props: MotionComponentProps & { tag?: ElementTag; ref?: any }
@@ -47,24 +47,26 @@ const MotionComp: MotionComponent = (
   )
 
   const {
-    cleanup = onCleanup,
-    mount = onMount,
+    addCleanup = onCleanup,
+    addMount = onMount,
     initial,
   } = useContext(PresenceContext)
 
+  const { state: parentState, root: parentRoot } = useContext(ParentContext)
+
   const state = createMotionState(
     initial() ? options : { ...options, initial: false },
-    useContext(ParentStateContext)
+    parentState
   )
 
-  mount(() => {
-    cleanup(state.mount(root))
+  addMount(() => {
+    addCleanup(state.mount(root), parentRoot ?? root)
     createEffect(() => state.update({ ...options }))
   })
 
   let root!: Element
   return (
-    <ParentStateContext.Provider value={state}>
+    <ParentContext.Provider value={{ state, root }}>
       <Dynamic
         ref={(el: Element) => {
           root = el
@@ -85,7 +87,7 @@ const MotionComp: MotionComponent = (
         on:viewleave={props.onViewLeave}
         {...attrs}
       />
-    </ParentStateContext.Provider>
+    </ParentContext.Provider>
   )
 }
 

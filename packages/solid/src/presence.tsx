@@ -8,10 +8,11 @@ import {
   on,
   createMemo,
   onCleanup,
+  batch,
 } from "solid-js"
-import { mountedStates } from "@motionone/dom"
-import { PresenceContext } from "./context"
 import { ResolvedChildren } from "solid-js/types/reactive/signal"
+import { mountedStates } from "@motionone/dom"
+import { PresenceContext, ParentContext } from "./context"
 
 const getSingleElement = (resolved: ResolvedChildren): Element | undefined => {
   resolved = Array.isArray(resolved) ? resolved[0] : resolved
@@ -23,91 +24,112 @@ const addCompleteListener = (el: Element, fn: VoidFunction): VoidFunction => {
   return () => el.removeEventListener("motioncomplete", fn)
 }
 
-export const Presence: Component<{ initial?: boolean }> = (props) => {
+export const Presence: Component<{
+  initial?: boolean
+  exitBeforeEnter?: boolean
+}> = (props) => {
   let { initial = true } = props
   onMount(() => (initial = true))
 
-  let exitting: boolean = false
+  let exiting: boolean = false
   let listener: VoidFunction | undefined
   let complete: VoidFunction | undefined
-
-  let unmounts: VoidFunction[] = []
   let mounts: VoidFunction[] = []
 
-  const unmountAll = () => {
-    unmounts.forEach((f) => f())
-    unmounts = []
+  const unmounts = new Map<Element, VoidFunction[]>()
+  const unmountRoot = (el: Element) => {
+    const fns = unmounts.get(el)
+    if (!fns) return
+    fns.forEach((f) => f())
+    unmounts.delete(el)
   }
-  const mountAll = () => {
-    mounts.forEach((f) => f())
-    mounts = []
+  const addUnmount = (fn: VoidFunction, el: Element) => {
+    let fns = unmounts.get(el)
+    if (!fns) unmounts.set(el, (fns = []))
+    fns.push(fn)
   }
 
   onCleanup(() => {
-    unmountAll()
+    ;[...unmounts.values()].forEach((fns) => fns.forEach((f) => f()))
+    unmounts.clear()
     listener?.()
     mounts = []
-    listener = undefined
-    complete = undefined
+    complete = listener = undefined
   })
 
   return (
     <PresenceContext.Provider
       value={{
-        cleanup: (fn) => unmounts.push(fn),
-        mount: (fn) => mounts.push(fn),
+        addCleanup: addUnmount,
+        addMount: (fn) => mounts.push(fn),
         initial: () => initial,
       }}
     >
-      {untrack(() => {
-        const resolved = children(() => props.children)
-        const resolvedChild = createMemo(() => getSingleElement(resolved()))
-        const [el, setEl] = createSignal<Element>()
+      <ParentContext.Provider value={{}}>
+        {untrack(() => {
+          // children need to be accessed under a context provider
+          const resolved = children(() => props.children)
+          const resolvedChild = createMemo(() => getSingleElement(resolved()))
+          const [el, setEl] = createSignal<Element>()
+          const [el2, setEl2] = createSignal<Element>()
 
-        const enterTransition = (el: Element) => {
-          setEl(el)
-          mountAll()
-        }
+          createComputed(
+            on(resolvedChild, (newEl) => {
+              complete?.(), listener?.(), (listener = undefined)
+              const prevEl = el()
 
-        const exitTransition = (
-          el: Element | undefined,
-          done: VoidFunction
-        ) => {
-          complete = () => {
-            complete = undefined
-            unmountAll()
-            done()
+              // exit
+              if (!newEl) exitTransition(prevEl, setEl)
+              // switching between elements
+              else if (prevEl) {
+                // exit -> enter
+                if (props.exitBeforeEnter)
+                  exitTransition(
+                    prevEl,
+                    () => !exiting && enterTransition(newEl)
+                  )
+                // exit & enter
+                else
+                  batch(() => {
+                    enterTransition(newEl)
+                    exitTransition(setEl2(prevEl), setEl2)
+                  })
+              }
+              // enter
+              else enterTransition(newEl)
+            })
+          )
+
+          return [el, el2]
+
+          function enterTransition(el: Element) {
+            setEl(el)
+            onMount(() => {
+              mounts.forEach((f) => f())
+              mounts = []
+            })
           }
 
-          if (!el) return complete()
-          const state = mountedStates.get(el)
-          if (!state) return complete()
+          function exitTransition(el: Element | undefined, done: VoidFunction) {
+            complete = () => {
+              complete = undefined
+              el && unmountRoot(el)
+              done()
+            }
 
-          state.setActive("exit", true)
-          exitting = true
-          listener = addCompleteListener(el, () => {
-            exitting = false
-            complete?.()
-          })
-        }
+            if (!el) return complete()
+            const state = mountedStates.get(el)
+            if (!state) return complete()
 
-        createComputed(
-          on(resolvedChild, (newEl) => {
-            complete?.(), listener?.(), (listener = undefined)
-            const prevEl = el()
-
-            // exit
-            if (!newEl) exitTransition(prevEl, setEl)
-            // exit -> enter
-            else if (prevEl)
-              exitTransition(prevEl, () => !exitting && enterTransition(newEl))
-            // enter
-            else enterTransition(newEl)
-          })
-        )
-
-        return el
-      })}
+            state.setActive("exit", true)
+            exiting = true
+            listener = addCompleteListener(el, () => {
+              exiting = false
+              complete?.()
+            })
+          }
+        })}
+      </ParentContext.Provider>
     </PresenceContext.Provider>
   )
 }
