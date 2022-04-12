@@ -1,7 +1,7 @@
 {
   "name": "motion",
   "description": "A tiny, performant animation library for the web",
-  "version": "10.7.0",
+  "version": "10.7.1",
   "license": "MIT",
   "author": "Matt Perry",
   "main": "dist/main.cjs.js",
@@ -24,9 +24,9 @@
   },
   "dependencies": {
     "@motionone/animation": "^10.7.0",
-    "@motionone/dom": "^10.7.0",
-    "@motionone/react": "^10.7.0",
-    "@motionone/svelte": "^10.7.0",
-    "@motionone/vue": "^10.7.0"
+    "@motionone/dom": "^10.7.1",
+    "@motionone/react": "^10.7.1",
+    "@motionone/svelte": "^10.7.1",
+    "@motionone/vue": "^10.7.1"
   }
 }
