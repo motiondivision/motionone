@@ -124,10 +124,8 @@ export const Presence: Component<{
 
           function enterTransition(el: Element) {
             setEl(el)
-            onMount(() => {
-              mounts.forEach((f) => f())
-              mounts = []
-            })
+            mounts.forEach((f) => f())
+            mounts = []
           }
 
           function exitTransition(el: Element | undefined, done: VoidFunction) {

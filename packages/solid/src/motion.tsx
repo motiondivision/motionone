@@ -12,6 +12,8 @@ import {
   useContext,
   createEffect,
   splitProps,
+  getOwner,
+  runWithOwner,
 } from "solid-js"
 import { createMotionState, createStyles } from "@motionone/dom"
 import { PresenceContext, ParentContext } from "./context"
@@ -48,7 +50,7 @@ const MotionComp: MotionComponent = (
 
   const {
     addCleanup = onCleanup,
-    addMount = onMount,
+    addMount = (f: VoidFunction) => f(),
     initial,
   } = useContext(PresenceContext)
 
@@ -59,10 +61,12 @@ const MotionComp: MotionComponent = (
     parentState
   )
 
-  addMount(() => {
+  const mount = () => {
     addCleanup(state.mount(root), parentRoot ?? root)
     createEffect(() => state.update({ ...options }))
-  })
+  }
+  const owner = getOwner()!
+  addMount(runWithOwner.bind(void 0, owner, onMount.bind(void 0, mount)))
 
   let root!: Element
   return (
