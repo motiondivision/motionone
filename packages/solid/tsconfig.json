@@ -1,8 +1,11 @@
 {
   "extends": "config/ts-base.json",
   "$schema": "https://json.schemastore.org/tsconfig",
-  "include": ["src/**/*.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["**/__tests__/*"],
+  "include": [
+    "src/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./lib",
@@ -10,6 +13,7 @@
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     "allowJs": true,
-    "checkJs": false
+    "checkJs": false,
+    "isolatedModules": false
   }
 }
