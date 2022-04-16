@@ -65,6 +65,8 @@ const MotionComp: MotionComponent = (
     addCleanup(state.mount(root), parentRoot ?? root)
     createEffect(() => state.update({ ...options }))
   }
+  // when under Presence, mount() happens in the Presence owner
+  // hence mount() needs to be explicitly run with Motion owner to connect effects to it
   const owner = getOwner()!
   addMount(runWithOwner.bind(void 0, owner, onMount.bind(void 0, mount)))
 
