@@ -1,6 +1,6 @@
 {
   "name": "playgrounds-solid",
-  "version": "10.7.0",
+  "version": "10.7.2",
   "private": true,
   "scripts": {
     "dev": "solid-start dev",

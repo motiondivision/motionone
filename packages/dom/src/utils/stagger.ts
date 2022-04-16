@@ -23,7 +23,7 @@ export function stagger(
     let delay = duration * distance
 
     if (easing) {
-      const maxDelay = total * i
+      const maxDelay = total * duration
       const easingFunction = getEasingFunction(easing)
       delay = easingFunction(delay / maxDelay) * maxDelay
     }

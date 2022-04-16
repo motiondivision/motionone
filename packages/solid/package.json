@@ -1,11 +1,11 @@
 {
   "name": "@motionone/solid",
-  "version": "10.7.0",
+  "version": "10.7.2",
   "description": "A tiny, performant animation library for SolidJS",
   "license": "MIT",
-  "author": "David Di Biase",
   "contributors": [
-    "Damian Tarnawski <gthetarnav@gmail.com>"
+    "Damian Tarnawski <gthetarnav@gmail.com>",
+    "David Di Biase <dave.dibiase@gmail.com>"
   ],
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",

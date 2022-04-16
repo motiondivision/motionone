@@ -13,7 +13,7 @@
       style="background-color: #fff208"
     >
     </Motion>
-    <Motion
+    <!-- <Motion
       class="motion-one-box"
       :initial="{ opacity: 0, y: 50 }"
       :animate="{ opacity: 1, y: 0 }"
@@ -52,7 +52,7 @@
       }"
       style="background-color: #57eb64"
     >
-    </Motion>
+    </Motion> -->
   </div>
 </template>
 

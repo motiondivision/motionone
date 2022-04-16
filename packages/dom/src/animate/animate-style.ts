@@ -138,9 +138,10 @@ export function animateStyle(
        * If this browser doesn't support partial/implicit keyframes we need to
        * explicitly provide one.
        */
-      const needsToReadInitialKeyframe =
-        !supports.partialKeyframes() && keyframes.length === 1
-      if (isRecording || needsToReadInitialKeyframe) {
+      if (
+        keyframes.length === 1 &&
+        (!supports.partialKeyframes() || isRecording)
+      ) {
         keyframes.unshift(readInitialValue())
       }
 
