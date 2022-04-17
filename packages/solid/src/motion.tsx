@@ -13,10 +13,7 @@ import { createMotionState, createStyles } from "@motionone/dom"
 import { PresenceContext, ParentContext } from "./context"
 
 const MotionComp = (
-  props: MotionComponentProps<JSX.IntrinsicElements["div"]> & {
-    tag?: keyof JSX.IntrinsicElements
-    ref?: any
-  }
+  props: MotionComponentProps & { tag?: string; ref?: any }
 ) => {
   const [options, , attrs] = splitProps(
     props,
@@ -47,10 +44,9 @@ const MotionComp = (
 
   const {
     addCleanup = onCleanup,
-    addMount = (f: VoidFunction) => f(),
+    addMount,
     initial,
   } = useContext(PresenceContext)
-
   const { state: parentState, root: parentRoot } = useContext(ParentContext)
 
   const state = createMotionState(
@@ -64,8 +60,12 @@ const MotionComp = (
   }
   // when under Presence component, mount() happens in the Presence owner
   // hence it needs to be explicitly run with Motion owner to connect effects to it
-  const owner = getOwner()!
-  addMount(runWithOwner.bind(void 0, owner, onMount.bind(void 0, mount)))
+  if (addMount) {
+    const owner = getOwner()!
+    addMount(runWithOwner.bind(void 0, owner, onMount.bind(void 0, mount)))
+  } else {
+    onMount(mount)
+  }
 
   let root!: Element
   return (

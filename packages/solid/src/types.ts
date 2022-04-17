@@ -38,7 +38,7 @@ export type AnimationOptionsWithOverrides = AnimationOptions & {
   [K in keyof KeyframesDefinition]: AnimationOptions
 }
 
-export type MotionComponentProps<T = {}> = T &
+export type MotionComponentProps<T = {}> = Omit<T, "style"> &
   MotionEventHandlers & {
     initial?: false | VariantDefinition
     animate?: VariantDefinition
@@ -49,6 +49,7 @@ export type MotionComponentProps<T = {}> = T &
     variants?: Record<string, Variant>
     transition?: AnimationOptionsWithOverrides
     children?: JSX.Element
+    style?: JSX.CSSProperties
   }
 
 export type MotionComponent<T> = (props: MotionComponentProps<T>) => JSX.Element
