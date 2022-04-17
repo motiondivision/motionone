@@ -13,7 +13,10 @@ import { createMotionState, createStyles } from "@motionone/dom"
 import { PresenceContext, ParentContext } from "./context"
 
 const MotionComp = (
-  props: MotionComponentProps & { tag?: keyof JSX.IntrinsicElements; ref?: any }
+  props: MotionComponentProps<JSX.IntrinsicElements["div"]> & {
+    tag?: keyof JSX.IntrinsicElements
+    ref?: any
+  }
 ) => {
   const [options, , attrs] = splitProps(
     props,

@@ -38,22 +38,17 @@ export type AnimationOptionsWithOverrides = AnimationOptions & {
   [K in keyof KeyframesDefinition]: AnimationOptions
 }
 
-export interface Options {
-  initial?: false | VariantDefinition
-  animate?: VariantDefinition
-  inView?: VariantDefinition
-  hover?: VariantDefinition
-  press?: VariantDefinition
-  variants?: Record<string, Variant>
-  transition?: AnimationOptionsWithOverrides
-}
-
 export type MotionComponentProps<T = {}> = T &
-  Options &
   MotionEventHandlers & {
-    children?: JSX.Element
-    style?: JSX.CSSProperties
+    initial?: false | VariantDefinition
+    animate?: VariantDefinition
+    inView?: VariantDefinition
+    hover?: VariantDefinition
+    press?: VariantDefinition
     exit?: VariantDefinition
+    variants?: Record<string, Variant>
+    transition?: AnimationOptionsWithOverrides
+    children?: JSX.Element
   }
 
 export type MotionComponent<T> = (props: MotionComponentProps<T>) => JSX.Element
