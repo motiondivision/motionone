@@ -13,7 +13,7 @@ export default function PresenceInitial() {
       </button>
       <Presence>
         <Show when={toggle()}>
-          <motion
+          <motion.div
             class="box"
             initial={{ opacity: 0, scale: 0.6 }}
             animate={{ opacity: 1, scale: 1 }}

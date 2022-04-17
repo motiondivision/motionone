@@ -1,11 +1,10 @@
 import type { JSX } from "solid-js"
-import type { Options } from "@motionone/dom"
 import type {
-  MotionEvent,
-  VariantDefinition,
-  CustomPointerEvent,
-  ViewEvent,
+  ValueKeyframesDefinition,
+  MotionKeyframesDefinition,
 } from "@motionone/dom"
+import type { MotionEvent, CustomPointerEvent, ViewEvent } from "@motionone/dom"
+import { AnimationOptions } from "@motionone/types"
 
 export interface MotionEventHandlers {
   onMotionStart?: (event: MotionEvent) => void
@@ -18,7 +17,36 @@ export interface MotionEventHandlers {
   onViewLeave?: (event: ViewEvent) => void
 }
 
-export type ElementTag = keyof JSX.IntrinsicElements
+export type SolidCSSPropertyKeys = Exclude<
+  keyof {
+    [K in keyof JSX.CSSProperties as string extends K ? never : K]: never
+  },
+  "transition"
+>
+
+export type KeyframesDefinition = MotionKeyframesDefinition & {
+  [K in SolidCSSPropertyKeys]?: ValueKeyframesDefinition
+}
+
+export type Variant = KeyframesDefinition & {
+  transition?: AnimationOptionsWithOverrides
+}
+
+export type VariantDefinition = string | Variant
+
+export type AnimationOptionsWithOverrides = AnimationOptions & {
+  [K in keyof KeyframesDefinition]: AnimationOptions
+}
+
+export interface Options {
+  initial?: false | VariantDefinition
+  animate?: VariantDefinition
+  inView?: VariantDefinition
+  hover?: VariantDefinition
+  press?: VariantDefinition
+  variants?: Record<string, Variant>
+  transition?: AnimationOptionsWithOverrides
+}
 
 export type MotionComponentProps<T = {}> = T &
   Options &
@@ -28,22 +56,8 @@ export type MotionComponentProps<T = {}> = T &
     exit?: VariantDefinition
   }
 
-export type MotionComponent = {
-  // <motion />
-  (props: MotionComponentProps<JSX.IntrinsicElements["div"]>): JSX.Element
-  // <motion tag="div" />
-  <T extends ElementTag>(
-    props: MotionComponentProps<JSX.IntrinsicElements[T]> & { tag: T }
-  ): JSX.Element
-}
+export type MotionComponent<T> = (props: MotionComponentProps<T>) => JSX.Element
 
-export type MotionProxyComponent<T> = (
-  props: MotionComponentProps<T>
-) => JSX.Element
-
-export type MotionProxy = MotionComponent & {
-  // <motion.div />
-  [K in ElementTag]: MotionProxyComponent<
-    JSX.IntrinsicElements[K]
-  >
+export type Motion = {
+  [K in keyof JSX.IntrinsicElements]: MotionComponent<JSX.IntrinsicElements[K]>
 }

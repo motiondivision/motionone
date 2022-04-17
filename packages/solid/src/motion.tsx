@@ -1,10 +1,4 @@
-import type {
-  ElementTag,
-  MotionComponent,
-  MotionComponentProps,
-  MotionProxy,
-  MotionProxyComponent,
-} from "./types"
+import type { MotionComponentProps, Motion, MotionComponent } from "./types"
 import { Dynamic } from "solid-js/web"
 import {
   onMount,
@@ -18,8 +12,8 @@ import {
 import { createMotionState, createStyles } from "@motionone/dom"
 import { PresenceContext, ParentContext } from "./context"
 
-const MotionComp: MotionComponent = (
-  props: MotionComponentProps & { tag?: ElementTag; ref?: any }
+const MotionComp = (
+  props: MotionComponentProps & { tag?: keyof JSX.IntrinsicElements; ref?: any }
 ) => {
   const [options, , attrs] = splitProps(
     props,
@@ -100,13 +94,6 @@ const MotionComp: MotionComponent = (
 /**
  * Renders an animatable HTML or SVG element.
  *
- * @example
- * ```tsx
- * <motion>defaults to div</Motion>
- * <motion.Button>set to button with parameter</motion.button>
- * <motion tag="button">set to button with tag prop</motion>
- * ```
- *
  * Animation props:
  * - `animate` a target of values to animate to. Accepts all the same values and keyframes as Motion One's [animate function](https://motion.dev/dom/animate). This prop is **reactive** – changing it will animate the transition element to the new state.
  * - `transition` for changing type of animation
@@ -115,7 +102,7 @@ const MotionComp: MotionComponent = (
  *
  * @example
  * ```tsx
- * <motion initial={{ opacity: 0 }} animate={{ opacity: 1 }}/>
+ * <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}/>
  * ```
  *
  * Interaction animation props:
@@ -126,15 +113,18 @@ const MotionComp: MotionComponent = (
  *
  * @example
  * ```tsx
- * <motion hover={{ scale: 1.2 }} press={{ scale: 0.9 }}/>
+ * <motion.div hover={{ scale: 1.2 }} press={{ scale: 0.9 }}/>
  * ```
  */
-export const motion = new Proxy(MotionComp, {
-  get: (_, tag: string): MotionProxyComponent<any> => {
-    tag = tag.toLowerCase()
-    return (props) => {
-      delete props.tag
-      return <MotionComp {...props} tag={tag} />
-    }
-  },
-}) as MotionProxy
+export const motion = new Proxy(
+  {},
+  {
+    get: (_, tag: string): MotionComponent<any> => {
+      tag = tag.toLowerCase()
+      return (props) => {
+        delete props.tag
+        return <MotionComp {...props} tag={tag} />
+      }
+    },
+  }
+) as Motion

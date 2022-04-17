@@ -6,8 +6,7 @@ export default function AnimatePropChange() {
   let ref!: HTMLButtonElement
   onMount(() => console.log(ref))
   return (
-    <motion
-      tag="button"
+    <motion.button
       onClick={() => setSelected(!isSelected())}
       initial={{ opacity: 0.6 }}
       animate={{

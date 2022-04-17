@@ -26,7 +26,9 @@
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf lib dist types && tsc -p . && rollup -c",
-    "test": "jest --coverage --config jest.config.js",
+    "test": "yarn test:browser && yarn test:ssr",
+    "test:browser": "jest --coverage --config jest.config.js",
+    "test:ssr": "jest --config jest.ssrconfig.js",
     "measure": "bundlesize"
   },
   "dependencies": {

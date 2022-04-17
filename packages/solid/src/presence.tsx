@@ -10,7 +10,7 @@ import {
   onCleanup,
   batch,
 } from "solid-js"
-import { ResolvedChildren } from "solid-js/types/reactive/signal"
+import type { ResolvedChildren } from "solid-js/types/reactive/signal"
 import { mountedStates } from "@motionone/dom"
 import { PresenceContext, ParentContext } from "./context"
 
@@ -35,7 +35,7 @@ const addCompleteListener = (el: Element, fn: VoidFunction): VoidFunction => {
  * ```tsx
  * <Presence exitBeforeEnter>
  *   <Show when={toggle()}>
- *     <Motion
+ *     <motion.div
  *       initial={{ opacity: 0 }}
  *       animate={{ opacity: 1 }}
  *       exit={{ opacity: 0 }}

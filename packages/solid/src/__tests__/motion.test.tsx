@@ -1,25 +1,14 @@
 import { createRoot, createSignal } from "solid-js"
 import { screen, render, fireEvent } from "solid-testing-library"
 import { motion } from "../motion"
-import "config/waapi-polyfill"
 
 const duration = 0.001
 
 describe("motion", () => {
-  test("Renders element as Div by default to HTML", async () => {
-    await render(() => <motion data-testid="box"></motion>)
-    const component = await screen.findByTestId("box")
-    expect(component.tagName).toEqual(`DIV`)
-  })
   test("Renders element as proxy Motion.Tag to HTML", async () => {
     await render(() => <motion.span data-testid="box"></motion.span>)
     const component = await screen.findByTestId("box")
     expect(component.tagName).toEqual(`SPAN`)
-  })
-  test("Renders element as 'tag' prop to HTML", async () => {
-    await render(() => <motion tag="li" data-testid="box"></motion>)
-    const component = await screen.findByTestId("box")
-    expect(component.tagName).toEqual(`LI`)
   })
   test("renders children to HTML", async () => {
     await render(() => (
@@ -40,7 +29,10 @@ describe("motion", () => {
 
   test("Applies initial as style to DOM node", async () => {
     await render(() => (
-      <motion data-testid="box" initial={{ opacity: 0.5, x: 100 }}></motion>
+      <motion.div
+        data-testid="box"
+        initial={{ opacity: 0.5, x: 100 }}
+      ></motion.div>
     ))
     const component = await screen.findByTestId("box")
     expect(component.style.opacity).toBe("0.5")
@@ -96,7 +88,7 @@ describe("motion", () => {
       createRoot((dispose) => {
         const Component = (props: any) => {
           return (
-            <motion
+            <motion.div
               initial={{ opacity: 0 }}
               animate={props.animate}
               onMotionComplete={({ detail }) => {
@@ -151,7 +143,7 @@ describe("motion", () => {
     const element = await new Promise<HTMLElement>((resolve) => {
       let ref!: HTMLDivElement
       render(() => (
-        <motion
+        <motion.div
           ref={ref}
           hover={{ scale: 2 }}
           onHoverStart={() => captured.push(0)}
