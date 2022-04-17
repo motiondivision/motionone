@@ -1,11 +1,11 @@
-import { Motion } from "../../../../../packages/solid/src"
+import { motion } from "../../../../../packages/solid/src"
 
 export default function Events() {
   const log = (event) => {
     console.log(event)
   }
   return (
-    <Motion.Div
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       hover={{ scale: 1.2 }}

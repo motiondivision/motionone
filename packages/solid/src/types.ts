@@ -29,9 +29,9 @@ export type MotionComponentProps<T = {}> = T &
   }
 
 export type MotionComponent = {
-  // <Motion />
+  // <motion />
   (props: MotionComponentProps<JSX.IntrinsicElements["div"]>): JSX.Element
-  // <Motion tag="div" />
+  // <motion tag="div" />
   <T extends ElementTag>(
     props: MotionComponentProps<JSX.IntrinsicElements[T]> & { tag: T }
   ): JSX.Element
@@ -42,8 +42,8 @@ export type MotionProxyComponent<T> = (
 ) => JSX.Element
 
 export type MotionProxy = MotionComponent & {
-  // <Motion.Div />
-  [K in ElementTag as Capitalize<K>]: MotionProxyComponent<
+  // <motion.div />
+  [K in ElementTag]: MotionProxyComponent<
     JSX.IntrinsicElements[K]
   >
 }

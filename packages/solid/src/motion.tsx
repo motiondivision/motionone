@@ -102,9 +102,9 @@ const MotionComp: MotionComponent = (
  *
  * @example
  * ```tsx
- * <Motion>defaults to div</Motion>
- * <Motion.Button>set to button with parameter</Motion.Button>
- * <Motion tag="button">set to button with tag prop</Motion>
+ * <motion>defaults to div</Motion>
+ * <motion.Button>set to button with parameter</motion.button>
+ * <motion tag="button">set to button with tag prop</motion>
  * ```
  *
  * Animation props:
@@ -115,7 +115,7 @@ const MotionComp: MotionComponent = (
  *
  * @example
  * ```tsx
- * <Motion initial={{ opacity: 0 }} animate={{ opacity: 1 }}/>
+ * <motion initial={{ opacity: 0 }} animate={{ opacity: 1 }}/>
  * ```
  *
  * Interaction animation props:
@@ -126,10 +126,10 @@ const MotionComp: MotionComponent = (
  *
  * @example
  * ```tsx
- * <Motion hover={{ scale: 1.2 }} press={{ scale: 0.9 }}/>
+ * <motion hover={{ scale: 1.2 }} press={{ scale: 0.9 }}/>
  * ```
  */
-export const Motion = new Proxy(MotionComp, {
+export const motion = new Proxy(MotionComp, {
   get: (_, tag: string): MotionProxyComponent<any> => {
     tag = tag.toLowerCase()
     return (props) => {

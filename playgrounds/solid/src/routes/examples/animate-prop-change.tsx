@@ -1,12 +1,12 @@
 import { createSignal, onMount } from "solid-js"
-import { Motion } from "../../../../../packages/solid/src"
+import { motion } from "../../../../../packages/solid/src"
 
 export default function AnimatePropChange() {
   const [isSelected, setSelected] = createSignal(true)
   let ref!: HTMLButtonElement
   onMount(() => console.log(ref))
   return (
-    <Motion
+    <motion
       tag="button"
       onClick={() => setSelected(!isSelected())}
       initial={{ opacity: 0.6 }}

@@ -1,36 +1,36 @@
 import { createRoot, createSignal } from "solid-js"
 import { screen, render, fireEvent } from "solid-testing-library"
-import { Motion } from "../motion"
+import { motion } from "../motion"
 import "config/waapi-polyfill"
 
 const duration = 0.001
 
 describe("motion", () => {
   test("Renders element as Div by default to HTML", async () => {
-    await render(() => <Motion data-testid="box"></Motion>)
+    await render(() => <motion data-testid="box"></motion>)
     const component = await screen.findByTestId("box")
     expect(component.tagName).toEqual(`DIV`)
   })
   test("Renders element as proxy Motion.Tag to HTML", async () => {
-    await render(() => <Motion.Span data-testid="box"></Motion.Span>)
+    await render(() => <motion.span data-testid="box"></motion.span>)
     const component = await screen.findByTestId("box")
     expect(component.tagName).toEqual(`SPAN`)
   })
   test("Renders element as 'tag' prop to HTML", async () => {
-    await render(() => <Motion tag="li" data-testid="box"></Motion>)
+    await render(() => <motion tag="li" data-testid="box"></motion>)
     const component = await screen.findByTestId("box")
     expect(component.tagName).toEqual(`LI`)
   })
   test("renders children to HTML", async () => {
     await render(() => (
-      <Motion.Div
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         data-testid="box"
       >
-        <Motion.A href="foo" />
-        <Motion.Svg viewBox="0 0 1 1" />
-      </Motion.Div>
+        <motion.a href="foo" />
+        <motion.svg viewBox="0 0 1 1" />
+      </motion.div>
     ))
     const component = await screen.findByTestId("box")
     expect(component.innerHTML).toEqual(
@@ -40,7 +40,7 @@ describe("motion", () => {
 
   test("Applies initial as style to DOM node", async () => {
     await render(() => (
-      <Motion data-testid="box" initial={{ opacity: 0.5, x: 100 }}></Motion>
+      <motion data-testid="box" initial={{ opacity: 0.5, x: 100 }}></motion>
     ))
     const component = await screen.findByTestId("box")
     expect(component.style.opacity).toBe("0.5")
@@ -57,7 +57,7 @@ describe("motion", () => {
       const Component = () => {
         let ref!: HTMLDivElement
         return (
-          <Motion.Div
+          <motion.div
             ref={ref}
             initial={{ opacity: 0.4 }}
             animate={{ opacity: [0, 0.8] }}
@@ -77,7 +77,7 @@ describe("motion", () => {
       const Component = () => {
         const animate = { opacity: 0.4 }
         return (
-          <Motion.Div
+          <motion.div
             initial={animate}
             animate={animate}
             onMotionComplete={() => reject(false)}
@@ -96,7 +96,7 @@ describe("motion", () => {
       createRoot((dispose) => {
         const Component = (props: any) => {
           return (
-            <Motion
+            <motion
               initial={{ opacity: 0 }}
               animate={props.animate}
               onMotionComplete={({ detail }) => {
@@ -119,7 +119,7 @@ describe("motion", () => {
     const element = await new Promise<HTMLElement>((resolve) => {
       let ref!: HTMLDivElement
       render(() => (
-        <Motion.Div
+        <motion.div
           ref={ref}
           initial={{ opacity: 0.5 }}
           animate={{ opacity: 0.9 }}
@@ -135,7 +135,7 @@ describe("motion", () => {
     const element = await new Promise<HTMLElement>((resolve) => {
       let ref!: HTMLDivElement
       render(() => (
-        <Motion.Div
+        <motion.div
           ref={ref}
           initial={{ opacity: 0.5 }}
           animate={{ opacity: 0.9, transition: { duration: 10 } }}
@@ -151,7 +151,7 @@ describe("motion", () => {
     const element = await new Promise<HTMLElement>((resolve) => {
       let ref!: HTMLDivElement
       render(() => (
-        <Motion
+        <motion
           ref={ref}
           hover={{ scale: 2 }}
           onHoverStart={() => captured.push(0)}
