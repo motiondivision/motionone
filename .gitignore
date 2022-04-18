@@ -40,3 +40,6 @@ app/js
 
 # Editor bundle
 Archive.zip
+
+# VSC Settings
+.vscode/settings.json
