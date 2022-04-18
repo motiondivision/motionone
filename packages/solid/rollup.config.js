@@ -7,5 +7,10 @@ module.exports = [
     targets: ["esm", "cjs"],
     input: "src/index.ts",
   }),
-  createSizeBuild({ input: "dist/esm/index.js", output: "dist/size.js" }, pkg),
+  createSizeBuild(
+    { input: "dist/esm/index.js", output: "dist/size.js" },
+    pkg,
+    [],
+    ["solid-js/web"]
+  ),
 ]

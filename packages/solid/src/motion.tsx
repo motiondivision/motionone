@@ -123,7 +123,6 @@ export const motion = new Proxy(
   {},
   {
     get: (_, tag: string): MotionComponent<any> => {
-      tag = tag.toLowerCase()
       return (props) => {
         delete props.tag
         return <MotionComp {...props} tag={tag} />

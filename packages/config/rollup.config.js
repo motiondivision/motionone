@@ -22,7 +22,7 @@ module.exports = {
       },
     ]
   },
-  createSizeBuild: ({ input, output }, pkg, plugins = []) => ({
+  createSizeBuild: ({ input, output }, pkg, plugins = [], external = []) => ({
     input,
     output: {
       format: "es",
@@ -30,6 +30,6 @@ module.exports = {
       file: output,
     },
     plugins: [resolve(), ...plugins, terser({ output: { comments: false } })],
-    external: [...Object.keys(pkg.peerDependencies || {})],
+    external: [...Object.keys(pkg.peerDependencies || {}), ...external],
   }),
 }
