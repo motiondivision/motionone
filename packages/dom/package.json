@@ -1,6 +1,6 @@
 {
   "name": "@motionone/dom",
-  "version": "10.7.2",
+  "version": "10.8.0-beta.0",
   "description": "A tiny, performant animation library for the DOM",
   "license": "MIT",
   "author": "Matt Perry",
@@ -15,10 +15,10 @@
     "measure": "bundlesize"
   },
   "dependencies": {
-    "@motionone/animation": "^10.7.0",
-    "@motionone/generators": "^10.7.0",
-    "@motionone/types": "^10.7.0",
-    "@motionone/utils": "^10.7.0",
+    "@motionone/animation": "^10.8.0-beta.0",
+    "@motionone/generators": "^10.8.0-beta.0",
+    "@motionone/types": "^10.8.0-beta.0",
+    "@motionone/utils": "^10.8.0-beta.0",
     "hey-listen": "^1.0.8",
     "tslib": "^2.3.1"
   },
