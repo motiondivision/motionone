@@ -3,13 +3,9 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "include": [
     "src/**/*.ts",
-    "**/*.ts",
-    "**/*.tsx"
+    "src/**/*.tsx"
   ],
   "compilerOptions": {
-    "rootDir": "./src",
-    "outDir": "./lib",
-    "declarationDir": "./types",
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     "allowJs": true,

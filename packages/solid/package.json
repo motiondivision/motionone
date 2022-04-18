@@ -7,13 +7,12 @@
     "Damian Tarnawski <gthetarnav@gmail.com>",
     "David Di Biase <dave.dibiase@gmail.com>"
   ],
+  "files": [
+    "dist"
+  ],
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
-  "types": "types/index.d.ts",
-  "files": [
-    "dist",
-    "types"
-  ],
+  "types": "dist/types/index.d.ts",
   "exports": {
     ".": {
       "solid": "./dist/source/index.jsx",
@@ -23,9 +22,15 @@
       "node": "./dist/cjs/index.js"
     }
   },
+  "bundlesize": [
+    {
+      "path": "./dist/size.js",
+      "maxSize": "5.5 kB"
+    }
+  ],
   "sideEffects": false,
   "scripts": {
-    "build": "rm -rf lib dist types && tsc -p . && rollup -c",
+    "build": "rm -rf dist && rollup -c",
     "test": "yarn test:browser && yarn test:ssr",
     "test:browser": "jest --coverage --config jest.config.js",
     "test:ssr": "jest --config jest.ssrconfig.js",
