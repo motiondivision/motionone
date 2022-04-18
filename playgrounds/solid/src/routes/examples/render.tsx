@@ -1,5 +1,5 @@
-// import { Motion } from "@motionone/solid"
-import { Motion } from "../../../../../packages/solid/src"
+import { Motion } from "@motionone/solid"
+// import { Motion } from "../../../../../packages/solid/src"
 
 export default function Render() {
   return (

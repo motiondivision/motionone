@@ -70,7 +70,7 @@ export type MotionProxyComponent<T> = (
 ) => JSX.Element
 
 export type MotionProxy = MotionComponent & {
-  // <Motion.Div />
+  // <Motion.div />
   [K in keyof JSX.IntrinsicElements]: MotionProxyComponent<
     JSX.IntrinsicElements[K]
   >

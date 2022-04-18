@@ -36,7 +36,7 @@ const addCompleteListener = (el: Element, fn: VoidFunction): VoidFunction => {
  * ```tsx
  * <Presence exitBeforeEnter>
  *   <Show when={toggle()}>
- *     <motion.div
+ *     <Motion.div
  *       initial={{ opacity: 0 }}
  *       animate={{ opacity: 1 }}
  *       exit={{ opacity: 0 }}
