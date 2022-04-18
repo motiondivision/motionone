@@ -52,9 +52,7 @@ export const Presence: Component<{
   let { initial = true } = props
   onMount(() => (initial = true))
 
-  let exiting: boolean = false
-  let listener: VoidFunction | undefined
-  let complete: VoidFunction | undefined
+  let exitListener: VoidFunction | undefined
   let mounts: VoidFunction[] = []
 
   const unmounts = new Map<Element, VoidFunction[]>()
@@ -73,9 +71,8 @@ export const Presence: Component<{
   onCleanup(() => {
     ;[...unmounts.values()].forEach((fns) => fns.forEach((f) => f()))
     unmounts.clear()
-    listener?.()
+    exitListener?.()
     mounts = []
-    complete = listener = undefined
   })
 
   return (
@@ -98,55 +95,46 @@ export const Presence: Component<{
 
           createComputed(
             on(resolvedChild, (newEl) => {
-              complete?.(), listener?.(), (listener = undefined)
-              const prevEl = el()
-
-              // exit
-              if (!newEl) exitTransition(prevEl, setEl)
-              // switching between elements
-              else if (prevEl) {
+              exitListener?.()
+              batch(() => {
                 // exit -> enter
-                if (props.exitBeforeEnter)
-                  exitTransition(
-                    prevEl,
-                    () => !exiting && enterTransition(newEl)
-                  )
+                if (props.exitBeforeEnter) {
+                  setEl()
+                  exitTransition(() => !exitListener && enterTransition(newEl))
+                }
                 // exit & enter
-                else
-                  batch(() => {
-                    enterTransition(newEl)
-                    exitTransition(setEl2(prevEl), setEl2)
-                  })
-              }
-              // enter
-              else enterTransition(newEl)
+                else {
+                  enterTransition(newEl)
+                  exitTransition()
+                }
+              })
             })
           )
 
           return [el, el2]
 
-          function enterTransition(el: Element) {
+          function enterTransition(el?: Element) {
             setEl(el)
             mounts.forEach((f) => f())
             mounts = []
           }
 
-          function exitTransition(el: Element | undefined, done: VoidFunction) {
-            complete = () => {
-              complete = undefined
-              el && unmountRoot(el)
-              done()
+          function exitTransition(done?: VoidFunction) {
+            const complete = () => {
+              setEl2()
+              exitEl && unmountRoot(exitEl)
+              done?.()
             }
 
-            if (!el) return complete()
-            const state = mountedStates.get(el)
+            const exitEl = setEl2(el() ?? el2())
+            if (!exitEl) return complete()
+            const state = mountedStates.get(exitEl)
             if (!state) return complete()
 
             state.setActive("exit", true)
-            exiting = true
-            listener = addCompleteListener(el, () => {
-              exiting = false
-              complete?.()
+            exitListener = addCompleteListener(exitEl, () => {
+              exitListener = undefined
+              complete()
             })
           }
         })}

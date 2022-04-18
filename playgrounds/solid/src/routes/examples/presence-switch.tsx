@@ -20,19 +20,30 @@ export default function PresenceInitial() {
       <Presence exitBeforeEnter>
         <Switch>
           <Match when={show() === 1}>
-            <Motion.div class="box" {...options} transition={{ duration: 1 }}>
+            <Motion.div class="box 1" {...options} transition={{ duration: 1 }}>
               1
             </Motion.div>
           </Match>
           <Match when={show() === 2}>
             <Motion.div
-              class="box"
+              class="box 2"
               style={{
                 "background-color": "blue",
               }}
               {...options}
             >
               2
+            </Motion.div>
+          </Match>
+          <Match when={show() === 0}>
+            <Motion.div
+              class="box 0"
+              style={{
+                "background-color": "green",
+              }}
+              {...options}
+            >
+              0
             </Motion.div>
           </Match>
         </Switch>

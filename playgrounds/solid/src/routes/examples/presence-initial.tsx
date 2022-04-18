@@ -12,7 +12,7 @@ export default function PresenceInitial() {
       <button onClick={() => setToggle(!toggle())}>
         {toggle() ? "Hide" : "Show"}
       </button>
-      <Presence>
+      <Presence exitBeforeEnter>
         <Show when={toggle()}>
           <Motion.div
             class="box"
