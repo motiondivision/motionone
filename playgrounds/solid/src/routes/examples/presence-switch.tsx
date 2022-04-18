@@ -1,5 +1,6 @@
 import { createSignal, Switch, Match } from "solid-js"
-import { motion, Presence } from "../../../../../packages/solid/src"
+import { motion, Presence } from "@motionone/solid"
+// import { motion } from "../../../../../packages/solid/src"
 
 import "./presence.css"
 

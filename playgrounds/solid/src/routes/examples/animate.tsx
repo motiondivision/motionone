@@ -1,4 +1,5 @@
-import { motion } from "../../../../../packages/solid/src"
+// import { motion } from "../../../../../packages/solid/src"
+import { motion } from "@motionone/solid"
 
 export default function Animate() {
   return (
