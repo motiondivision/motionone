@@ -1,5 +1,5 @@
 import { renderToString } from "solid-js/web"
-import { motion } from ".."
+import { motion, Presence } from ".."
 
 describe("ssr", () => {
   test("Renders", () => {
@@ -70,5 +70,34 @@ describe("ssr", () => {
       <motion.div hover={{ opacity: 1 }} press={{ opacity: 1 }} variants={{}} />
     ))
     expect(div).toBe('<div data-hk="0-0-0-0-0" style="" ></div>')
+  })
+
+  test("Renders Presence", () => {
+    const html = renderToString(() => (
+      <Presence>
+        <motion.div />
+      </Presence>
+    ))
+    expect(html).toBe('<div data-hk="0-0-0-0-0-0-0-0" style="" ></div>')
+  })
+
+  test("Renders Presence with initial styles", () => {
+    const html = renderToString(() => (
+      <Presence>
+        <motion.div initial={{ opacity: 1 }} />
+      </Presence>
+    ))
+    expect(html).toBe(
+      '<div data-hk="0-0-0-0-0-0-0-0" style="opacity:1" ></div>'
+    )
+  })
+
+  test("Renders Presence without initial styles", () => {
+    const html = renderToString(() => (
+      <Presence initial={false}>
+        <motion.div initial={{ opacity: 1 }} />
+      </Presence>
+    ))
+    expect(html).toBe('<div data-hk="0-0-0-0-0-0-0-0" style="" ></div>')
   })
 })

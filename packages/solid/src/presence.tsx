@@ -13,6 +13,7 @@ import {
 import type { ResolvedChildren } from "solid-js/types/reactive/signal"
 import { mountedStates } from "@motionone/dom"
 import { PresenceContext, ParentContext } from "./context"
+import { isServer } from "solid-js/web"
 
 const getSingleElement = (resolved: ResolvedChildren): Element | undefined => {
   resolved = Array.isArray(resolved) ? resolved[0] : resolved
@@ -87,6 +88,8 @@ export const Presence: Component<{
     >
       <ParentContext.Provider value={{}}>
         {untrack(() => {
+          if (isServer) return props.children
+
           // children need to be accessed under a context provider
           const resolved = children(() => props.children)
           const resolvedChild = createMemo(() => getSingleElement(resolved()))
