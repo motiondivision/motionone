@@ -1,7 +1,7 @@
 import type {
   MotionComponentProps,
   MotionProxy,
-  MotionComponent,
+  MotionProxyComponent,
 } from "./types"
 import { Dynamic } from "solid-js/web"
 import {
@@ -12,6 +12,7 @@ import {
   splitProps,
   getOwner,
   runWithOwner,
+  untrack,
 } from "solid-js"
 import { createMotionState, createStyles } from "@motionone/dom"
 import { PresenceContext, ParentContext } from "./context"
@@ -79,7 +80,7 @@ const MotionComp = (
           root = el
           props.ref?.(el)
         }}
-        component={props.tag || "div"}
+        component={untrack(() => props.tag || "div")}
         style={{
           ...props.style,
           ...createStyles(state.getTarget()),
@@ -123,14 +124,11 @@ const MotionComp = (
  * <Motion.div hover={{ scale: 1.2 }} press={{ scale: 0.9 }}/>
  * ```
  */
-export const Motion = new Proxy(
-  {},
-  {
-    get: (_, tag: string): MotionComponent<any> => {
-      return (props) => {
-        delete props.tag
-        return <MotionComp {...props} tag={tag} />
-      }
+export const Motion = new Proxy(MotionComp, {
+  get:
+    (_, tag: string): MotionProxyComponent<any> =>
+    (props) => {
+      delete props.tag
+      return <MotionComp {...props} tag={tag} />
     },
-  }
-) as MotionProxy
+}) as MotionProxy

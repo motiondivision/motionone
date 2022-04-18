@@ -5,10 +5,20 @@ import { Motion } from "../motion"
 const duration = 0.001
 
 describe("motion", () => {
+  test("Renders element as Div by default to HTML", async () => {
+    await render(() => <Motion data-testid="box"></Motion>)
+    const component = await screen.findByTestId("box")
+    expect(component.tagName).toEqual(`DIV`)
+  })
   test("Renders element as proxy Motion.Tag to HTML", async () => {
     await render(() => <Motion.span data-testid="box"></Motion.span>)
     const component = await screen.findByTestId("box")
     expect(component.tagName).toEqual(`SPAN`)
+  })
+  test("Renders element as 'tag' prop to HTML", async () => {
+    await render(() => <Motion tag="li" data-testid="box"></Motion>)
+    const component = await screen.findByTestId("box")
+    expect(component.tagName).toEqual(`LI`)
   })
   test("renders children to HTML", async () => {
     await render(() => (
