@@ -1,6 +1,6 @@
 {
   "name": "@motionone/solid",
-  "version": "10.7.2",
+  "version": "10.7.0",
   "description": "A tiny, performant animation library for SolidJS",
   "license": "MIT",
   "contributors": [
