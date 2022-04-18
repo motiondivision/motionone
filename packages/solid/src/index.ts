@@ -1,3 +1,3 @@
 export * from "./types"
-export { motion } from "./motion"
+export { Motion } from "./motion"
 export { Presence } from "./presence"

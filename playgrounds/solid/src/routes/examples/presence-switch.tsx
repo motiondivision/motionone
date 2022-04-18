@@ -1,6 +1,6 @@
 import { createSignal, Switch, Match } from "solid-js"
-import { motion, Presence } from "@motionone/solid"
-// import { motion } from "../../../../../packages/solid/src"
+// import { Motion, Presence } from "@motionone/solid"
+import { Motion, Presence } from "../../../../../packages/solid/src"
 
 import "./presence.css"
 
@@ -20,12 +20,12 @@ export default function PresenceInitial() {
       <Presence exitBeforeEnter>
         <Switch>
           <Match when={show() === 1}>
-            <motion.div class="box" {...options} transition={{ duration: 1 }}>
+            <Motion.div class="box" {...options} transition={{ duration: 1 }}>
               1
-            </motion.div>
+            </Motion.div>
           </Match>
           <Match when={show() === 2}>
-            <motion.div
+            <Motion.div
               class="box"
               style={{
                 "background-color": "blue",
@@ -33,7 +33,7 @@ export default function PresenceInitial() {
               {...options}
             >
               2
-            </motion.div>
+            </Motion.div>
           </Match>
         </Switch>
       </Presence>

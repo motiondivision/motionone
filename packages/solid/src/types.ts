@@ -54,6 +54,6 @@ export type MotionComponentProps<T = {}> = Omit<T, "style"> &
 
 export type MotionComponent<T> = (props: MotionComponentProps<T>) => JSX.Element
 
-export type Motion = {
+export type MotionProxy = {
   [K in keyof JSX.IntrinsicElements]: MotionComponent<JSX.IntrinsicElements[K]>
 }

@@ -1,4 +1,8 @@
-import type { MotionComponentProps, Motion, MotionComponent } from "./types"
+import type {
+  MotionComponentProps,
+  MotionProxy,
+  MotionComponent,
+} from "./types"
 import { Dynamic } from "solid-js/web"
 import {
   onMount,
@@ -105,7 +109,7 @@ const MotionComp = (
  *
  * @example
  * ```tsx
- * <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}/>
+ * <Motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}/>
  * ```
  *
  * Interaction animation props:
@@ -116,10 +120,10 @@ const MotionComp = (
  *
  * @example
  * ```tsx
- * <motion.div hover={{ scale: 1.2 }} press={{ scale: 0.9 }}/>
+ * <Motion.div hover={{ scale: 1.2 }} press={{ scale: 0.9 }}/>
  * ```
  */
-export const motion = new Proxy(
+export const Motion = new Proxy(
   {},
   {
     get: (_, tag: string): MotionComponent<any> => {
@@ -129,4 +133,4 @@ export const motion = new Proxy(
       }
     },
   }
-) as Motion
+) as MotionProxy

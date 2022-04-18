@@ -1,6 +1,6 @@
 import { createSignal, Show } from "solid-js"
-import { motion, Presence } from "@motionone/solid"
-// import { motion } from "../../../../../packages/solid/src"
+// import { Motion, Presence } from "@motionone/solid"
+import { Motion, Presence } from "../../../../../packages/solid/src"
 
 import "./presence.css"
 
@@ -14,7 +14,7 @@ export default function PresenceInitial() {
       </button>
       <Presence>
         <Show when={toggle()}>
-          <motion.div
+          <Motion.div
             class="box"
             initial={{ opacity: 0, scale: 0.6 }}
             animate={{ opacity: 1, scale: 1 }}
