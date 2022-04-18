@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.8.0] [Unreleased]
+
+### Added
+
+- [Motion One for SolidJS](https://motion.dev/solid).
+
 ## [10.7.2] [2022-04-16]
 
 ### Fixed
