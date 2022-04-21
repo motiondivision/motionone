@@ -198,9 +198,17 @@ export function animateStyle(
 
       /**
        * If we can't animate the value natively then we can fallback to the numbers-only
-       * polyfill for transforms. All keyframes must be numerical.
+       * polyfill for transforms.
        */
-    } else if (valueIsTransform && keyframes.every(isNumber)) {
+    } else if (valueIsTransform) {
+      /**
+       * If any keyframe is a string (because we measured it from the DOM), we need to convert
+       * it into a number before passing to the Animation polyfill.
+       */
+      keyframes = keyframes.map((value) =>
+        typeof value === "string" ? parseFloat(value) : value
+      )
+
       /**
        * If we only have a single keyframe, we need to create an initial keyframe by reading
        * the current value from the DOM.
