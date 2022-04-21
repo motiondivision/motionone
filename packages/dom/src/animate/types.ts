@@ -78,7 +78,7 @@ export interface AnimationWithCommitStyles extends Animation {
 
 export type AnimationListOptions = Omit<
   AnimationOptionsWithOverrides,
-  "delay"
+  "delay" | "direction" | "repeat"
 > & {
   delay?: number | OptionResolver<number>
   at?: NextTime
