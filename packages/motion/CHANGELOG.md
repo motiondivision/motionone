@@ -8,6 +8,10 @@ Motion One adheres to [Semantic Versioning](http://semver.org/).
 
 - [Motion One for SolidJS](https://motion.dev/solid).
 
+### Fixed
+
+- Remove `repeat` and `direction` from `timeline` segment options. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/67)
+
 ## [10.7.2] [2022-04-16]
 
 ### Fixed
