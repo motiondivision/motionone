@@ -22,7 +22,7 @@ const getSingleElement = (resolved: ResolvedChildren): Element | undefined => {
 
 const addCompleteListener = (el: Element, fn: VoidFunction): VoidFunction => {
   el.addEventListener("motioncomplete", fn)
-  return () => el.removeEventListener("motioncomplete", fn)
+  return onCleanup(el.removeEventListener.bind(el, "motioncomplete", fn))
 }
 
 /**
@@ -52,7 +52,7 @@ export const Presence: Component<{
   let { initial = true } = props
   onMount(() => (initial = true))
 
-  let exitListener: VoidFunction | undefined
+  let exitting = false
   let mounts: VoidFunction[] = []
 
   const unmounts = new Map<Element, VoidFunction[]>()
@@ -71,7 +71,6 @@ export const Presence: Component<{
   onCleanup(() => {
     ;[...unmounts.values()].forEach((fns) => fns.forEach((f) => f()))
     unmounts.clear()
-    exitListener?.()
     mounts = []
   })
 
@@ -95,12 +94,11 @@ export const Presence: Component<{
 
           createComputed(
             on(resolvedChild, (newEl) => {
-              exitListener?.()
               batch(() => {
                 // exit -> enter
                 if (props.exitBeforeEnter) {
                   setEl()
-                  exitTransition(() => !exitListener && enterTransition(newEl))
+                  exitTransition(() => !exitting && enterTransition(newEl))
                 }
                 // exit & enter
                 else {
@@ -132,8 +130,9 @@ export const Presence: Component<{
             if (!state) return complete()
 
             state.setActive("exit", true)
-            exitListener = addCompleteListener(exitEl, () => {
-              exitListener = undefined
+            exitting = true
+            addCompleteListener(exitEl, () => {
+              exitting = false
               complete()
             })
           }

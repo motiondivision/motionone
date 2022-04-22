@@ -3,7 +3,7 @@ import { MotionState } from "@motionone/dom"
 
 export const ParentContext = createContext<{
   state?: MotionState
-  root?: Element
+  root?: () => Element
 }>({})
 
 export const PresenceContext = createContext<{
