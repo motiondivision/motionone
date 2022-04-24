@@ -22,7 +22,9 @@ export const Motion = defineComponent({
       type: String,
       default: "div",
     },
-    initial: variants,
+    initial: {
+      type: [Object, Boolean],
+    },
     animate: variants,
     inView: variants,
     hover: variants,
@@ -48,6 +50,8 @@ export const Motion = defineComponent({
         initial:
           presenceState?.initial === false
             ? presenceState.initial
+            : props.initial === true
+            ? undefined
             : props.initial,
       },
       parentState
@@ -57,7 +61,10 @@ export const Motion = defineComponent({
 
     onMounted(() => {
       const unmount = state.mount(root.value!)
-      state.update({ ...props })
+      state.update({
+        ...props,
+        initial: props.initial === true ? undefined : props.initial,
+      })
 
       return unmount
     })
@@ -83,7 +90,10 @@ export const Motion = defineComponent({
         }
       }
 
-      state.update({ ...props })
+      state.update({
+        ...props,
+        initial: props.initial === true ? undefined : props.initial,
+      })
     })
 
     return {
