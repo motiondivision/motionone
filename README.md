@@ -1,4 +1,4 @@
-![icon-yellow](https://user-images.githubusercontent.com/7850794/164965191-331c6f9d-9f3e-40f3-b808-0d24ab0f5bf1.png)
+<img width="200" height="200" alt="Motion One logo" src="https://user-images.githubusercontent.com/7850794/164965191-331c6f9d-9f3e-40f3-b808-0d24ab0f5bf1.png" style="border-radius: 10px; overflow: hidden;" />
 
 # Motion One Pro
 
