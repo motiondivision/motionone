@@ -6,13 +6,13 @@ This is the private Motion One Pro repo. It contains the source code for all Mot
 
 Additionally, this is also the repo for all Motion One and Motion DevTools bug reports and feature requests.
 
-## Source code
+## 🕵️‍♂️ Source code
 
 - [Motion One](https://github.com/motiondivision/motionone/tree/main/packages/motion)
 - [Motion One for Vue](https://github.com/motiondivision/motionone/tree/main/packages/vue)
 - [Motion One for Solid](https://github.com/motiondivision/motionone/tree/main/packages/solid) (alpha)
 
-## Develop
+## 💻 Develop
 
 `yarn dev` will spin up all the included playgrounds and watch changes to the libraries.
 
