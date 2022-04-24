@@ -1,3 +1,5 @@
+![icon-yellow](https://user-images.githubusercontent.com/7850794/164965191-331c6f9d-9f3e-40f3-b808-0d24ab0f5bf1.png)
+
 # Motion One Pro
 
 This is the private Motion One Pro repo. It contains the source code for all Motion One libraries, as well as framework-specific playgrounds.
