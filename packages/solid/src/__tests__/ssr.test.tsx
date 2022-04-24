@@ -21,6 +21,15 @@ describe("ssr", () => {
     )
   })
 
+  test("Renders svg with attrs", () => {
+    const html = renderToString(() => (
+      <Motion.rect initial={{ height: 50 }} width="50" x="0" y="100" />
+    ))
+    expect(html).toBe(
+      `<rect data-hk=\"0-0-0-0-0\" style=\"height:50\" width=\"50\" x=\"0\" y=\"100\"></rect>`
+    )
+  })
+
   test("Children render inherited initial", () => {
     const html = renderToString(() => (
       <Motion.div
