@@ -1,4 +1,4 @@
-<img width="100" height="100" alt="Motion One logo" src="https://user-images.githubusercontent.com/7850794/164965509-2a8dc49e-2ed7-4243-a2c9-481b03bbc31a.png" />
+<img width="100" height="100" alt="Motion One logo" src="https://user-images.githubusercontent.com/7850794/164965523-3eced4c4-6020-467e-acde-f11b7900ad62.png" />
 
 # Motion One Pro
 
