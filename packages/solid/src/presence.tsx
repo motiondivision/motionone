@@ -20,9 +20,10 @@ const getSingleElement = (resolved: ResolvedChildren): Element | undefined => {
   return resolved instanceof Element ? resolved : undefined
 }
 
-const addCompleteListener = (el: Element, fn: VoidFunction): VoidFunction => {
-  el.addEventListener("motioncomplete", fn)
-  return onCleanup(el.removeEventListener.bind(el, "motioncomplete", fn))
+const addCompleteListener = (el: Element, fn: VoidFunction) => {
+  const options: AddEventListenerOptions = { once: true }
+  el.addEventListener("motioncomplete", fn, options)
+  onCleanup(el.removeEventListener.bind(el, "motioncomplete", fn, options))
 }
 
 /**
@@ -119,10 +120,9 @@ export const Presence: Component<{
             const exitEl = setEl2(el() ?? el2())
             if (!exitEl) return complete()
             const state = mountedStates.get(exitEl)
-            if (!state) return complete()
+            if (!state || !(state.getOptions() as any).exit) return complete()
 
-            state.setActive("exit", true)
-            exitting = true
+            state.setActive("exit", (exitting = true))
             addCompleteListener(exitEl, () => {
               exitting = false
               complete()

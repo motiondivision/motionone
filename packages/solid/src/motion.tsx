@@ -4,16 +4,7 @@ import type {
   MotionProxyComponent,
 } from "./types"
 import { Dynamic } from "solid-js/web"
-import {
-  onMount,
-  onCleanup,
-  useContext,
-  createEffect,
-  splitProps,
-  getOwner,
-  runWithOwner,
-  untrack,
-} from "solid-js"
+import { useContext, createEffect, splitProps, untrack } from "solid-js"
 import { createMotionState, createStyles } from "@motionone/dom"
 import { PresenceContext, ParentContext } from "./context"
 
@@ -47,29 +38,17 @@ const MotionComp = (
     ]
   )
 
-  const {
-    addCleanup = onCleanup,
-    addMount,
-    initial,
-  } = useContext(PresenceContext)
+  const { addCleanup, addMount, initial } = useContext(PresenceContext)
 
   const state = createMotionState(
     initial() ? options : { ...options, initial: false },
     useContext(ParentContext)
   )
 
-  const mount = () => {
+  addMount(() => {
     addCleanup(state.mount(root))
     createEffect(() => state.update({ ...options }))
-  }
-  // when under Presence component, mount() happens in the Presence owner
-  // hence it needs to be explicitly run with Motion owner to connect effects to it
-  if (addMount) {
-    const owner = getOwner()!
-    addMount(runWithOwner.bind(void 0, owner, onMount.bind(void 0, mount)))
-  } else {
-    onMount(mount)
-  }
+  })
 
   let root!: Element
   return (

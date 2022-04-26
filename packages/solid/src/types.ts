@@ -44,6 +44,7 @@ export type Options = {
   inView?: VariantDefinition
   hover?: VariantDefinition
   press?: VariantDefinition
+  exit?: VariantDefinition
   variants?: Record<string, Variant>
   transition?: AnimationOptionsWithOverrides
 }
@@ -51,7 +52,6 @@ export type Options = {
 export type MotionComponentProps<T = {}> = Omit<T, "style"> &
   MotionEventHandlers &
   Options & {
-    exit?: VariantDefinition
     children?: JSX.Element
     style?: JSX.CSSProperties
   }
@@ -75,3 +75,14 @@ export type MotionProxy = MotionComponent & {
     JSX.IntrinsicElements[K]
   >
 }
+
+declare module "solid-js" {
+  namespace JSX {
+    interface Directives {
+      motion: Options
+    }
+  }
+}
+
+// export only here so the `JSX` import won't be shaken off the tree:
+export type E = JSX.Element
