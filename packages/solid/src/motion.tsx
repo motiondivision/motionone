@@ -52,15 +52,14 @@ const MotionComp = (
     addMount,
     initial,
   } = useContext(PresenceContext)
-  const { state: parentState, root: parentRoot } = useContext(ParentContext)
 
   const state = createMotionState(
     initial() ? options : { ...options, initial: false },
-    parentState
+    useContext(ParentContext)
   )
 
   const mount = () => {
-    addCleanup(state.mount(root), parentRoot?.() ?? root)
+    addCleanup(state.mount(root))
     createEffect(() => state.update({ ...options }))
   }
   // when under Presence component, mount() happens in the Presence owner
@@ -74,7 +73,7 @@ const MotionComp = (
 
   let root!: Element
   return (
-    <ParentContext.Provider value={{ state, root: () => root }}>
+    <ParentContext.Provider value={state}>
       <Dynamic
         ref={(el: Element) => {
           root = el

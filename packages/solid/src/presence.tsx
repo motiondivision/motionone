@@ -54,35 +54,23 @@ export const Presence: Component<{
 
   let exitting = false
   let mounts: VoidFunction[] = []
-
-  const unmounts = new Map<Element, VoidFunction[]>()
-  const unmountRoot = (el: Element) => {
-    const fns = unmounts.get(el)
-    if (!fns) return
-    fns.forEach((f) => f())
-    unmounts.delete(el)
-  }
-  const addUnmount = (fn: VoidFunction, el: Element) => {
-    let fns = unmounts.get(el)
-    if (!fns) unmounts.set(el, (fns = []))
-    fns.push(fn)
-  }
+  let newUnmounts: VoidFunction[] = []
+  let exitUnmounts: VoidFunction[] = []
 
   onCleanup(() => {
-    ;[...unmounts.values()].forEach((fns) => fns.forEach((f) => f()))
-    unmounts.clear()
-    mounts = []
+    exitUnmounts.concat(newUnmounts).forEach((f) => f())
+    newUnmounts = exitUnmounts = mounts = []
   })
 
   return (
     <PresenceContext.Provider
       value={{
-        addCleanup: addUnmount,
+        addCleanup: (fn) => newUnmounts.push(fn),
         addMount: (fn) => mounts.push(fn),
         initial: () => initial,
       }}
     >
-      <ParentContext.Provider value={{}}>
+      <ParentContext.Provider value={undefined}>
         {untrack(() => {
           if (isServer) return props.children
 
@@ -94,6 +82,9 @@ export const Presence: Component<{
 
           createComputed(
             on(resolvedChild, (newEl) => {
+              exitUnmounts.push(...newUnmounts)
+              newUnmounts = []
+
               batch(() => {
                 // exit -> enter
                 if (props.exitBeforeEnter) {
@@ -120,7 +111,8 @@ export const Presence: Component<{
           function exitTransition(done?: VoidFunction) {
             const complete = () => {
               setEl2()
-              exitEl && unmountRoot(exitEl)
+              exitUnmounts.forEach((f) => f())
+              exitUnmounts = []
               done?.()
             }
 
