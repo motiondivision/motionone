@@ -8,7 +8,19 @@ import { useContext, createEffect, splitProps, untrack } from "solid-js"
 import { createMotionState, createStyles } from "@motionone/dom"
 import { PresenceContext, ParentContext } from "./context"
 
-const MotionComp = (
+/**
+ * MotionComponent provides a raw Solid component for creating animated HTML elements.
+ * This component allows for direct access to the component in situations where
+ * utilizing the <Motion> proxy is not preferred. In all other cases <Motion> is
+ * recommended.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <MotionComponent initial={{ opacity: 0 }} animate={{ opacity: 1 }}/>
+ * ```
+ */
+export const MotionComponent = (
   props: MotionComponentProps & { tag?: string; ref?: any }
 ) => {
   const [options, , attrs] = splitProps(
@@ -80,6 +92,7 @@ const MotionComp = (
 /**
  * Renders an animatable HTML or SVG element.
  *
+ * @component
  * Animation props:
  * - `animate` a target of values to animate to. Accepts all the same values and keyframes as Motion One's [animate function](https://motion.dev/dom/animate). This prop is **reactive** – changing it will animate the transition element to the new state.
  * - `transition` for changing type of animation
@@ -102,11 +115,11 @@ const MotionComp = (
  * <Motion.div hover={{ scale: 1.2 }} press={{ scale: 0.9 }}/>
  * ```
  */
-export const Motion = new Proxy(MotionComp, {
+export const Motion = new Proxy(MotionComponent, {
   get:
     (_, tag: string): MotionProxyComponent<any> =>
     (props) => {
       delete props.tag
-      return <MotionComp {...props} tag={tag} />
+      return <MotionComponent {...props} tag={tag} />
     },
 }) as MotionProxy
