@@ -10,7 +10,7 @@ Additionally, this is also the repo for all Motion One and Motion DevTools bug r
 
 - [Motion One](https://github.com/motiondivision/motionone/tree/main/packages/motion)
 - [Motion One for Vue](https://github.com/motiondivision/motionone/tree/main/packages/vue)
-- [Motion One for Solid](https://github.com/motiondivision/motionone/tree/main/packages/solid) (alpha)
+- [Motion One for Solid](https://github.com/motiondivision/motionone/tree/main/packages/solid)
 
 ## 💻 Develop
 
