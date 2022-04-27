@@ -4,7 +4,13 @@ import {
   MotionState,
   style,
 } from "@motionone/dom"
-import { Accessor, createEffect, useContext } from "solid-js"
+import {
+  Accessor,
+  createEffect,
+  getOwner,
+  runWithOwner,
+  useContext,
+} from "solid-js"
 import {
   defaultPresenceContextState,
   PresenceContext,
@@ -12,9 +18,33 @@ import {
 } from "./context"
 import { Options } from "./types"
 
+/** @internal */
+export function createAndBindMotionState(
+  target: Accessor<Element>,
+  options: Accessor<Options>,
+  presenceState: PresenceContextState,
+  parentState?: MotionState
+): MotionState {
+  const { addCleanup, addMount, initial } = presenceState
+
+  const state = createMotionState(
+    initial() ? options() : { ...options(), initial: false },
+    parentState
+  )
+
+  addMount(
+    runWithOwner.bind(void 0, getOwner()!, () => {
+      addCleanup(state.mount(target()))
+      createEffect(() => state.update(options()))
+    })
+  )
+
+  return state
+}
+
 /**
  * createMotion provides MotionOne as a compact Solid primitive.
- * 
+ *
  * @param target Target Element to animate.
  * @param options Options to effect the animation.
  * @param presenceState Optional PresenceContext override, defaults to current parent.
@@ -25,22 +55,18 @@ export function createMotion(
   options: Options | Accessor<Options>,
   presenceState: PresenceContextState = defaultPresenceContextState
 ): MotionState {
-  const { addCleanup, addMount, initial } = presenceState
-
   const getOptions = () => (typeof options === "function" ? options() : options)
-  const state = createMotionState(
-    initial() ? getOptions() : { ...getOptions(), initial: false }
+
+  const state = createAndBindMotionState(
+    () => target,
+    getOptions,
+    presenceState
   )
 
   const styles = createStyles(state.getTarget())
   for (const key in styles) {
     style.set(target, key, styles[key])
   }
-
-  addMount(() => {
-    addCleanup(state.mount(target))
-    createEffect(() => state.update(getOptions()))
-  })
 
   return state
 }

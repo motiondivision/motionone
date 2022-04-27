@@ -4,9 +4,10 @@ import type {
   MotionProxyComponent,
 } from "./types"
 import { Dynamic } from "solid-js/web"
-import { useContext, createEffect, splitProps, untrack } from "solid-js"
-import { createMotionState, createStyles } from "@motionone/dom"
+import { useContext, splitProps, untrack } from "solid-js"
+import { createStyles } from "@motionone/dom"
 import { PresenceContext, ParentContext } from "./context"
+import { createAndBindMotionState } from "./primitives"
 
 /**
  * MotionComponent provides a raw Solid component for creating animated HTML elements.
@@ -50,17 +51,12 @@ export const MotionComponent = (
     ]
   )
 
-  const { addCleanup, addMount, initial } = useContext(PresenceContext)
-
-  const state = createMotionState(
-    initial() ? options : { ...options, initial: false },
+  const state = createAndBindMotionState(
+    () => root,
+    () => ({ ...options }),
+    useContext(PresenceContext),
     useContext(ParentContext)
   )
-
-  addMount(() => {
-    addCleanup(state.mount(root))
-    createEffect(() => state.update({ ...options }))
-  })
 
   let root!: Element
   return (
