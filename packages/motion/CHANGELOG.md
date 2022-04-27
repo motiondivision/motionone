@@ -6,7 +6,13 @@ Motion One adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- [Motion One for SolidJS](https://motion.dev/solid).
+- [Motion One for Solid](https://motion.dev/solid).
+
+### Fixed
+
+- Remove `repeat` and `direction` from `timeline` segment options. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/67)
+- Converting all transform values into numbers before forwarding to animation polyfill. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/68)
+- Fixed `initial="false"` typechecking in Motion One for Vue.
 
 ## [10.7.2] [2022-04-16]
 
