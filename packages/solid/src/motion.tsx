@@ -9,18 +9,7 @@ import { createStyles } from "@motionone/dom"
 import { PresenceContext, ParentContext } from "./context"
 import { createAndBindMotionState } from "./primitives"
 
-/**
- * MotionComponent provides a raw Solid component for creating animated HTML elements.
- * This component allows for direct access to the component in situations where
- * utilizing the <Motion> proxy is not preferred. In all other cases <Motion> is
- * recommended.
- *
- * @component
- * @example
- * ```tsx
- * <MotionComponent initial={{ opacity: 0 }} animate={{ opacity: 1 }}/>
- * ```
- */
+/** @internal */
 export const MotionComponent = (
   props: MotionComponentProps & { tag?: string; ref?: any }
 ) => {

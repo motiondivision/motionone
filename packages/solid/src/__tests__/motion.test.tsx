@@ -4,7 +4,7 @@ import { Motion } from "../motion"
 
 const duration = 0.001
 
-describe("motion", () => {
+describe("Motion", () => {
   test("Renders element as Div by default to HTML", async () => {
     await render(() => <Motion data-testid="box"></Motion>)
     const component = await screen.findByTestId("box")
