@@ -53,7 +53,7 @@ export const Presence: Component<{
   let { initial = true } = props
   onMount(() => (initial = true))
 
-  let exitting = false
+  let exiting = false
   let mounts: VoidFunction[] = []
   let newUnmounts: VoidFunction[] = []
   let exitUnmounts: VoidFunction[] = []
@@ -90,7 +90,7 @@ export const Presence: Component<{
                 // exit -> enter
                 if (props.exitBeforeEnter) {
                   setEl()
-                  exitTransition(() => !exitting && enterTransition(newEl))
+                  exitTransition(() => !exiting && enterTransition(newEl))
                 }
                 // exit & enter
                 else {
@@ -122,9 +122,9 @@ export const Presence: Component<{
             const state = mountedStates.get(exitEl)
             if (!state || !(state.getOptions() as any).exit) return complete()
 
-            state.setActive("exit", (exitting = true))
+            state.setActive("exit", (exiting = true))
             addCompleteListener(exitEl, () => {
-              exitting = false
+              exiting = false
               complete()
             })
           }
