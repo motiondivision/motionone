@@ -1,6 +1,6 @@
 {
   "name": "@motionone/react",
-  "version": "10.8.0-beta.3",
+  "version": "10.8.0-beta.4",
   "description": "A tiny, performant animation library for React",
   "license": "MIT",
   "author": "Matt Perry",
@@ -14,7 +14,7 @@
     "measure": "bundlesize"
   },
   "dependencies": {
-    "@motionone/dom": "^10.8.0-beta.3",
+    "@motionone/dom": "^10.8.0-beta.4",
     "hey-listen": "^1.0.8",
     "tslib": "^2.3.1"
   },
@@ -44,5 +44,6 @@
       "path": "./dist/size.js",
       "maxSize": "5.5 kB"
     }
-  ]
+  ],
+  "gitHead": "ce1d84ad98c4b29ab9906152109fadc41cc4e2fd"
 }
