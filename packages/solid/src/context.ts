@@ -1,13 +1,19 @@
-import { createContext } from "solid-js"
+import { createContext, onCleanup, onMount } from "solid-js"
 import { MotionState } from "@motionone/dom"
 
-export const ParentContext = createContext<{
-  state?: MotionState
-  root?: Element
-}>({})
-
-export const PresenceContext = createContext<{
-  addCleanup?: (fn: VoidFunction, el: Element) => void
-  addMount?: (fn: VoidFunction) => void
+export interface PresenceContextState {
+  addCleanup: (fn: VoidFunction) => void
+  addMount: (fn: VoidFunction) => void
   initial: () => boolean
-}>({ initial: () => true })
+}
+
+export const defaultPresenceContextState: PresenceContextState = {
+  initial: () => true,
+  addCleanup: onCleanup,
+  addMount: onMount,
+}
+export const ParentContext = createContext<MotionState>()
+
+export const PresenceContext = createContext<PresenceContextState>(
+  defaultPresenceContextState
+)

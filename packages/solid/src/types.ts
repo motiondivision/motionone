@@ -38,22 +38,51 @@ export type AnimationOptionsWithOverrides = AnimationOptions & {
   [K in keyof KeyframesDefinition]: AnimationOptions
 }
 
+export type Options = {
+  initial?: false | VariantDefinition
+  animate?: VariantDefinition
+  inView?: VariantDefinition
+  hover?: VariantDefinition
+  press?: VariantDefinition
+  exit?: VariantDefinition
+  variants?: Record<string, Variant>
+  transition?: AnimationOptionsWithOverrides
+}
+
 export type MotionComponentProps<T = {}> = Omit<T, "style"> &
-  MotionEventHandlers & {
-    initial?: false | VariantDefinition
-    animate?: VariantDefinition
-    inView?: VariantDefinition
-    hover?: VariantDefinition
-    press?: VariantDefinition
-    exit?: VariantDefinition
-    variants?: Record<string, Variant>
-    transition?: AnimationOptionsWithOverrides
+  MotionEventHandlers &
+  Options & {
     children?: JSX.Element
     style?: JSX.CSSProperties
   }
 
-export type MotionComponent<T> = (props: MotionComponentProps<T>) => JSX.Element
-
-export type Motion = {
-  [K in keyof JSX.IntrinsicElements]: MotionComponent<JSX.IntrinsicElements[K]>
+export type MotionComponent = {
+  // <Motion />
+  (props: MotionComponentProps<JSX.IntrinsicElements["div"]>): JSX.Element
+  // <Motion tag="div" />
+  <T extends keyof JSX.IntrinsicElements>(
+    props: MotionComponentProps<JSX.IntrinsicElements[T]> & { tag: T }
+  ): JSX.Element
 }
+
+export type MotionProxyComponent<T> = (
+  props: MotionComponentProps<T>
+) => JSX.Element
+
+export type MotionProxy = MotionComponent & {
+  // <Motion.div />
+  [K in keyof JSX.IntrinsicElements]: MotionProxyComponent<
+    JSX.IntrinsicElements[K]
+  >
+}
+
+declare module "solid-js" {
+  namespace JSX {
+    interface Directives {
+      motion: Options
+    }
+  }
+}
+
+// export only here so the `JSX` import won't be shaken off the tree:
+export type E = JSX.Element

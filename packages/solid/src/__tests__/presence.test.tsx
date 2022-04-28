@@ -1,6 +1,7 @@
+import { mountedStates } from "@motionone/dom"
 import { createRoot, createSignal, Show } from "solid-js"
 import { screen, render } from "solid-testing-library"
-import { Presence, motion, VariantDefinition } from ".."
+import { Presence, Motion, VariantDefinition } from ".."
 
 const TestComponent = (
   props: {
@@ -13,11 +14,11 @@ const TestComponent = (
   return (
     <Presence initial={props.initial ?? true}>
       <Show when={props.show ?? true}>
-        <motion.div
+        <Motion.div
           data-testid="child"
           animate={props.animate}
           exit={props.exit}
-        ></motion.div>
+        />
       </Show>
     </Presence>
   )
@@ -61,6 +62,35 @@ describe("Presence", () => {
         setTimeout(() => {
           expect(component.style.opacity).toBe("0")
           expect(component.isConnected).toBeFalsy()
+          resolve()
+        }, 100)
+      })
+    }))
+
+  test("All children have their state unmounted", () =>
+    createRoot(async () => {
+      const [show, setShow] = createSignal(true)
+      render(() => (
+        <Presence>
+          <Show when={show()}>
+            <Motion.div
+              data-testid="child1"
+              exit={{ opacity: 0, transition: { duration: 0.001 } }}
+            >
+              <Motion data-testid="child2"></Motion>
+            </Motion.div>
+          </Show>
+        </Presence>
+      ))
+      const child1 = await screen.findByTestId("child1")
+      const child2 = await screen.findByTestId("child2")
+
+      setShow(false)
+
+      return new Promise<void>((resolve) => {
+        setTimeout(() => {
+          expect(mountedStates.get(child1)).toBeUndefined()
+          expect(mountedStates.get(child2)).toBeUndefined()
           resolve()
         }, 100)
       })

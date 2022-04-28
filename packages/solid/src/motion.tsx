@@ -1,18 +1,16 @@
-import type { MotionComponentProps, Motion, MotionComponent } from "./types"
+import type {
+  MotionComponentProps,
+  MotionProxy,
+  MotionProxyComponent,
+} from "./types"
 import { Dynamic } from "solid-js/web"
-import {
-  onMount,
-  onCleanup,
-  useContext,
-  createEffect,
-  splitProps,
-  getOwner,
-  runWithOwner,
-} from "solid-js"
-import { createMotionState, createStyles } from "@motionone/dom"
+import { useContext, splitProps, untrack } from "solid-js"
+import { createStyles } from "@motionone/dom"
 import { PresenceContext, ParentContext } from "./context"
+import { createAndBindMotionState } from "./primitives"
 
-const MotionComp = (
+/** @internal */
+export const MotionComponent = (
   props: MotionComponentProps & { tag?: string; ref?: any }
 ) => {
   const [options, , attrs] = splitProps(
@@ -42,40 +40,22 @@ const MotionComp = (
     ]
   )
 
-  const {
-    addCleanup = onCleanup,
-    addMount,
-    initial,
-  } = useContext(PresenceContext)
-  const { state: parentState, root: parentRoot } = useContext(ParentContext)
-
-  const state = createMotionState(
-    initial() ? options : { ...options, initial: false },
-    parentState
+  const state = createAndBindMotionState(
+    () => root,
+    () => ({ ...options }),
+    useContext(PresenceContext),
+    useContext(ParentContext)
   )
-
-  const mount = () => {
-    addCleanup(state.mount(root), parentRoot ?? root)
-    createEffect(() => state.update({ ...options }))
-  }
-  // when under Presence component, mount() happens in the Presence owner
-  // hence it needs to be explicitly run with Motion owner to connect effects to it
-  if (addMount) {
-    const owner = getOwner()!
-    addMount(runWithOwner.bind(void 0, owner, onMount.bind(void 0, mount)))
-  } else {
-    onMount(mount)
-  }
 
   let root!: Element
   return (
-    <ParentContext.Provider value={{ state, root }}>
+    <ParentContext.Provider value={state}>
       <Dynamic
         ref={(el: Element) => {
           root = el
           props.ref?.(el)
         }}
-        component={props.tag || "div"}
+        component={untrack(() => props.tag || "div")}
         style={{
           ...props.style,
           ...createStyles(state.getTarget()),
@@ -97,6 +77,7 @@ const MotionComp = (
 /**
  * Renders an animatable HTML or SVG element.
  *
+ * @component
  * Animation props:
  * - `animate` a target of values to animate to. Accepts all the same values and keyframes as Motion One's [animate function](https://motion.dev/dom/animate). This prop is **reactive** – changing it will animate the transition element to the new state.
  * - `transition` for changing type of animation
@@ -105,7 +86,7 @@ const MotionComp = (
  *
  * @example
  * ```tsx
- * <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}/>
+ * <Motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}/>
  * ```
  *
  * Interaction animation props:
@@ -116,17 +97,14 @@ const MotionComp = (
  *
  * @example
  * ```tsx
- * <motion.div hover={{ scale: 1.2 }} press={{ scale: 0.9 }}/>
+ * <Motion.div hover={{ scale: 1.2 }} press={{ scale: 0.9 }}/>
  * ```
  */
-export const motion = new Proxy(
-  {},
-  {
-    get: (_, tag: string): MotionComponent<any> => {
-      return (props) => {
-        delete props.tag
-        return <MotionComp {...props} tag={tag} />
-      }
+export const Motion = new Proxy(MotionComponent, {
+  get:
+    (_, tag: string): MotionProxyComponent<any> =>
+    (props) => {
+      delete props.tag
+      return <MotionComponent {...props} tag={tag} />
     },
-  }
-) as Motion
+}) as MotionProxy

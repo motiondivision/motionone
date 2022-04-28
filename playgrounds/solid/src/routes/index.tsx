@@ -16,6 +16,9 @@ export default function Home() {
           <a href="/examples/events">Events</a>
         </li>
         <li>
+          <a href="/examples/motion-primitive">Motion Primitive</a>
+        </li>
+        <li>
           <a href="/examples/presence-initial">Presence</a>
         </li>
         <li>

@@ -1,8 +1,9 @@
-import { motion } from "../../../../../packages/solid/src"
+// import { Motion } from "../../../../../packages/solid/src"
+import { Motion } from "@motionone/solid"
 
 export default function Animate() {
   return (
-    <motion.div
+    <Motion
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       hover={{ scale: 1.2 }}

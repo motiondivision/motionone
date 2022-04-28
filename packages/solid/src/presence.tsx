@@ -13,15 +13,17 @@ import {
 import type { ResolvedChildren } from "solid-js/types/reactive/signal"
 import { mountedStates } from "@motionone/dom"
 import { PresenceContext, ParentContext } from "./context"
+import { isServer } from "solid-js/web"
 
 const getSingleElement = (resolved: ResolvedChildren): Element | undefined => {
   resolved = Array.isArray(resolved) ? resolved[0] : resolved
   return resolved instanceof Element ? resolved : undefined
 }
 
-const addCompleteListener = (el: Element, fn: VoidFunction): VoidFunction => {
-  el.addEventListener("motioncomplete", fn)
-  return () => el.removeEventListener("motioncomplete", fn)
+const addCompleteListener = (el: Element, fn: VoidFunction) => {
+  const options: AddEventListenerOptions = { once: true }
+  el.addEventListener("motioncomplete", fn, options)
+  onCleanup(el.removeEventListener.bind(el, "motioncomplete", fn, options))
 }
 
 /**
@@ -35,7 +37,7 @@ const addCompleteListener = (el: Element, fn: VoidFunction): VoidFunction => {
  * ```tsx
  * <Presence exitBeforeEnter>
  *   <Show when={toggle()}>
- *     <motion.div
+ *     <Motion.div
  *       initial={{ opacity: 0 }}
  *       animate={{ opacity: 1 }}
  *       exit={{ opacity: 0 }}
@@ -51,42 +53,28 @@ export const Presence: Component<{
   let { initial = true } = props
   onMount(() => (initial = true))
 
-  let exiting: boolean = false
-  let listener: VoidFunction | undefined
-  let complete: VoidFunction | undefined
+  let exiting = false
   let mounts: VoidFunction[] = []
-
-  const unmounts = new Map<Element, VoidFunction[]>()
-  const unmountRoot = (el: Element) => {
-    const fns = unmounts.get(el)
-    if (!fns) return
-    fns.forEach((f) => f())
-    unmounts.delete(el)
-  }
-  const addUnmount = (fn: VoidFunction, el: Element) => {
-    let fns = unmounts.get(el)
-    if (!fns) unmounts.set(el, (fns = []))
-    fns.push(fn)
-  }
+  let newUnmounts: VoidFunction[] = []
+  let exitUnmounts: VoidFunction[] = []
 
   onCleanup(() => {
-    ;[...unmounts.values()].forEach((fns) => fns.forEach((f) => f()))
-    unmounts.clear()
-    listener?.()
-    mounts = []
-    complete = listener = undefined
+    exitUnmounts.concat(newUnmounts).forEach((f) => f())
+    newUnmounts = exitUnmounts = mounts = []
   })
 
   return (
     <PresenceContext.Provider
       value={{
-        addCleanup: addUnmount,
+        addCleanup: (fn) => newUnmounts.push(fn),
         addMount: (fn) => mounts.push(fn),
         initial: () => initial,
       }}
     >
-      <ParentContext.Provider value={{}}>
+      <ParentContext.Provider value={undefined}>
         {untrack(() => {
+          if (isServer) return props.children
+
           // children need to be accessed under a context provider
           const resolved = children(() => props.children)
           const resolvedChild = createMemo(() => getSingleElement(resolved()))
@@ -95,55 +83,49 @@ export const Presence: Component<{
 
           createComputed(
             on(resolvedChild, (newEl) => {
-              complete?.(), listener?.(), (listener = undefined)
-              const prevEl = el()
+              exitUnmounts.push(...newUnmounts)
+              newUnmounts = []
 
-              // exit
-              if (!newEl) exitTransition(prevEl, setEl)
-              // switching between elements
-              else if (prevEl) {
+              batch(() => {
                 // exit -> enter
-                if (props.exitBeforeEnter)
-                  exitTransition(
-                    prevEl,
-                    () => !exiting && enterTransition(newEl)
-                  )
+                if (props.exitBeforeEnter) {
+                  setEl()
+                  exitTransition(() => !exiting && enterTransition(newEl))
+                }
                 // exit & enter
-                else
-                  batch(() => {
-                    enterTransition(newEl)
-                    exitTransition(setEl2(prevEl), setEl2)
-                  })
-              }
-              // enter
-              else enterTransition(newEl)
+                else {
+                  enterTransition(newEl)
+                  exitTransition()
+                }
+              })
             })
           )
 
           return [el, el2]
 
-          function enterTransition(el: Element) {
+          function enterTransition(el?: Element) {
             setEl(el)
             mounts.forEach((f) => f())
             mounts = []
           }
 
-          function exitTransition(el: Element | undefined, done: VoidFunction) {
-            complete = () => {
-              complete = undefined
-              el && unmountRoot(el)
-              done()
+          function exitTransition(done?: VoidFunction) {
+            const complete = () => {
+              setEl2()
+              exitUnmounts.forEach((f) => f())
+              exitUnmounts = []
+              done?.()
             }
 
-            if (!el) return complete()
-            const state = mountedStates.get(el)
-            if (!state) return complete()
+            const exitEl = setEl2(el() ?? el2())
+            if (!exitEl) return complete()
+            const state = mountedStates.get(exitEl)
+            if (!state || !(state.getOptions() as any).exit) return complete()
 
-            state.setActive("exit", true)
-            exiting = true
-            listener = addCompleteListener(el, () => {
+            state.setActive("exit", (exiting = true))
+            addCompleteListener(exitEl, () => {
               exiting = false
-              complete?.()
+              complete()
             })
           }
         })}

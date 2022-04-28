@@ -1,6 +1,6 @@
 {
   "name": "@motionone/svelte",
-  "version": "10.8.0-beta.1",
+  "version": "10.8.0-beta.4",
   "description": "A tiny, performant animation library for Svelte",
   "author": "Matt Perry",
   "license": "MIT",
@@ -14,7 +14,7 @@
     "test": "jest --coverage --config jest.config.js"
   },
   "dependencies": {
-    "@motionone/dom": "^10.8.0-beta.1",
+    "@motionone/dom": "^10.8.0-beta.4",
     "tslib": "^2.3.1"
   },
   "devDependencies": {
@@ -29,5 +29,6 @@
     "svelte-check": "^2.2.6",
     "svelte-jester": "^2.1.5",
     "svelte-preprocess": "^4.9.4"
-  }
+  },
+  "gitHead": "ce1d84ad98c4b29ab9906152109fadc41cc4e2fd"
 }
