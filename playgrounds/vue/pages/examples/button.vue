@@ -1,17 +1,29 @@
 <template>
   <div class="container">
-    <Motion tag="button" @click="onClick">
+    <Motion
+      tag="button"
+      data-motion-id="Submit button"
+      :initial="false"
+      :animate="
+        state.isSending
+          ? { backgroundColor: `#31a6fa` }
+          : { backgroundColor: `#0d63f8` }
+      "
+      @click="onClick"
+    >
       <Motion
         tag="span"
+        data-motion-id="Button label"
         :initial="false"
         :animate="
           state.isSending ? { opacity: 0, y: -10 } : { opacity: 1, y: 0 }
         "
-        >Send</Motion
+        >Submit</Motion
       >
       <Motion
         tag="div"
         class="dots"
+        data-motion-id="Dots container"
         :initial="false"
         :animate="
           state.isSending
@@ -22,6 +34,7 @@
         <Motion
           tag="div"
           class="dot"
+          data-motion-id="Dot 1"
           :animate="
             state.isSending
               ? {
@@ -38,6 +51,7 @@
         <Motion
           tag="div"
           class="dot"
+          data-motion-id="Dot 2"
           :animate="
             state.isSending
               ? {
@@ -55,6 +69,7 @@
         <Motion
           tag="div"
           class="dot"
+          data-motion-id="Dot 3"
           :animate="
             state.isSending
               ? {
