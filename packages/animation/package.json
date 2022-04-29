@@ -23,7 +23,7 @@
   "bundlesize": [
     {
       "path": "./dist/size-index.js",
-      "maxSize": "1.5 kB"
+      "maxSize": "1.55 kB"
     }
   ]
 }
