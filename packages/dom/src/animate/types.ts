@@ -2,8 +2,8 @@ import type {
   AnimationOptions,
   BasicAnimationControls,
   UnresolvedValueKeyframe,
+  OptionResolver,
 } from "@motionone/types"
-import type { OptionResolver } from "../utils/stagger"
 import type { NextTime } from "../timeline/types"
 import { ValueKeyframe } from "@motionone/types"
 

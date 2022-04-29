@@ -46,6 +46,7 @@ export function animateStyle(
     offset,
     allowWebkitAcceleration = false,
   } = options
+
   const data = getAnimationData(element)
   let canAnimateNatively = supports.waapi()
   const valueIsTransform = isTransform(key)
@@ -146,7 +147,7 @@ export function animateStyle(
       }
 
       const animationOptions = {
-        delay: time.ms(delay),
+        delay: time.ms(delay as number),
         duration: time.ms(duration),
         endDelay: time.ms(endDelay),
         easing: !isEasingList(easing) ? convertEasing(easing) : undefined,
@@ -245,7 +246,7 @@ export function animateStyle(
         keyframes,
         {
           duration,
-          delay,
+          delay: delay as number,
           easing,
           repeat,
           offset,

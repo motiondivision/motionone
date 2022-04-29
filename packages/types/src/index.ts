@@ -79,8 +79,10 @@ export type KeyframeOptions = {
   offset?: number[]
 }
 
+export type OptionResolver<T> = (i: number, total: number) => T
+
 export type PlaybackOptions = {
-  delay?: number
+  delay?: number | OptionResolver<number>
   endDelay?: number
   repeat?: number
   direction?: PlaybackDirection

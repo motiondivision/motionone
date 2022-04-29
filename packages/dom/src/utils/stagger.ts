@@ -1,4 +1,4 @@
-import type { Easing } from "@motionone/types"
+import type { Easing, OptionResolver } from "@motionone/types"
 import type { EasingFunction } from "@motionone/easing"
 import { isNumber } from "@motionone/utils"
 import { getEasingFunction } from "@motionone/animation"
@@ -10,8 +10,6 @@ export type StaggerOptions = {
   from?: From
   easing?: EasingFunction | Easing
 }
-
-export type OptionResolver<T> = (i: number, total: number) => T
 
 export function stagger(
   duration: number = 0.1,

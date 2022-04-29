@@ -59,6 +59,9 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
     )
 
     this.tick = (timestamp: number) => {
+      // TODO: Temporary fix for OptionsResolver typing
+      delay = delay as number
+
       if (this.pauseTime) timestamp = this.pauseTime
 
       let t = (timestamp - this.startTime!) * this.rate
