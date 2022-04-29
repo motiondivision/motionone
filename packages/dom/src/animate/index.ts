@@ -1,7 +1,7 @@
 import type {
   AcceptedElements,
   AnimationFactory,
-  AnimationOptionsWithOverrides,
+  AnimationListOptions,
   MotionKeyframesDefinition,
 } from "./types"
 import { animateStyle } from "./animate-style"
@@ -14,7 +14,7 @@ import { AnimationControls } from "@motionone/types"
 export function animate(
   elements: AcceptedElements,
   keyframes: MotionKeyframesDefinition,
-  options: AnimationOptionsWithOverrides = {}
+  options: AnimationListOptions = {}
 ): AnimationControls {
   elements = resolveElements(elements)
   const numElements = elements.length

@@ -2,7 +2,13 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
-## [10.8.0] [2022-04-29]
+## [10.8.1] [2022-04-29]
+
+### Fixed
+
+- Fixing types for `stagger` `delay` option.
+
+## [10.8.0] [2022-04-28]
 
 ### Added
 
