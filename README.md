@@ -12,6 +12,10 @@ Additionally, this is also the repo for all Motion One and Motion DevTools bug r
 - [Motion One for Vue](https://github.com/motiondivision/motionone/tree/main/packages/vue)
 - [Motion One for Solid](https://github.com/motiondivision/motionone/tree/main/packages/solid)
 
+## 🛠 DevTools
+
+Create Motion One and CSS animations faster than ever with [Motion DevTools](https://motion.dev/tools).
+
 ## 💻 Develop
 
 `yarn dev` will spin up all the included playgrounds and watch changes to the libraries.

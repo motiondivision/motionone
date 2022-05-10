@@ -8,6 +8,10 @@ A new animation library, built on the Web Animations API for the smallest filesi
 
 Full docs are available at [motion.dev](https://motion.dev).
 
+## 🛠 DevTools
+
+Create Motion One and CSS animations faster than ever with [Motion DevTools](https://motion.dev/tools).
+
 ## 🙌 Sponsors
 
 A huge thank you to all sponsors of this project, with a special shoutout to:
