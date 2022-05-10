@@ -1,6 +1,5 @@
 ---
 name: "Motion DevTools: Bug report"
-about: Let us know about some broken functionality
 title: "[Bug] [DevTools] "
 labels: Bug
 assignees: ""

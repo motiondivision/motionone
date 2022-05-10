@@ -1,6 +1,5 @@
 ---
 name: "Motion DevTools: Feature request"
-about: Propose a feature for Motion DevTools
 title: "[Feature] [DevTools]"
 labels: Feature
 assignees: ""

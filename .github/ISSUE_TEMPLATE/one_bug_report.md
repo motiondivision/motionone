@@ -1,6 +1,5 @@
 ---
 name: "Motion One: Bug report"
-about: Let us know about broken functionality in a Motion One library
 title: "[Bug] "
 labels: Bug
 assignees: ""
