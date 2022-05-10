@@ -1,7 +1,7 @@
 ---
-name: Feature request
-about: Propose a feature
-title: "[FEATURE]"
+name: "Motion One: Feature request"
+about: Propose a feature for Motion One
+title: "[Feature] "
 labels: Feature
 assignees: ""
 ---
