@@ -15,7 +15,7 @@ export const MotionComponent = (
   props: MotionComponentProps & {
     tag?: string
     ref?: any
-    style: JSX.CSSProperties | string
+    style?: JSX.CSSProperties | string
   }
 ) => {
   const [options, , attrs] = splitProps(
@@ -51,6 +51,7 @@ export const MotionComponent = (
     useContext(PresenceContext),
     useContext(ParentContext)
   )
+  const style = createStyles(state.getTarget())
 
   let root!: Element
   return (
@@ -61,7 +62,7 @@ export const MotionComponent = (
           props.ref?.(el)
         }}
         component={untrack(() => props.tag || "div")}
-        style={combineStyle(props.style, createStyles(state.getTarget()))}
+        style={props.style ? combineStyle(props.style, style) : style}
         on:motionstart={props.onMotionStart}
         on:motioncomplete={props.onMotionComplete}
         on:hoverstart={props.onHoverStart}
