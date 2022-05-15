@@ -4,14 +4,19 @@ import type {
   MotionProxyComponent,
 } from "./types"
 import { Dynamic } from "solid-js/web"
-import { useContext, splitProps, untrack } from "solid-js"
+import { useContext, splitProps, untrack, JSX } from "solid-js"
 import { createStyles } from "@motionone/dom"
 import { PresenceContext, ParentContext } from "./context"
 import { createAndBindMotionState } from "./primitives"
+import { combineStyle } from "@solid-primitives/props"
 
 /** @internal */
 export const MotionComponent = (
-  props: MotionComponentProps & { tag?: string; ref?: any }
+  props: MotionComponentProps & {
+    tag?: string
+    ref?: any
+    style: JSX.CSSProperties | string
+  }
 ) => {
   const [options, , attrs] = splitProps(
     props,
@@ -56,10 +61,7 @@ export const MotionComponent = (
           props.ref?.(el)
         }}
         component={untrack(() => props.tag || "div")}
-        style={{
-          ...props.style,
-          ...createStyles(state.getTarget()),
-        }}
+        style={combineStyle(props.style, createStyles(state.getTarget()))}
         on:motionstart={props.onMotionStart}
         on:motioncomplete={props.onMotionComplete}
         on:hoverstart={props.onHoverStart}

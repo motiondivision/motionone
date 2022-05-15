@@ -1,4 +1,4 @@
-import type { JSX } from "solid-js"
+import type { JSX, ParentProps } from "solid-js"
 import type {
   ValueKeyframesDefinition,
   MotionKeyframesDefinition,
@@ -49,24 +49,19 @@ export type Options = {
   transition?: AnimationOptionsWithOverrides
 }
 
-export type MotionComponentProps<T = {}> = Omit<T, "style"> &
-  MotionEventHandlers &
-  Options & {
-    children?: JSX.Element
-    style?: JSX.CSSProperties
-  }
+export type MotionComponentProps = ParentProps<MotionEventHandlers & Options>
 
 export type MotionComponent = {
   // <Motion />
-  (props: MotionComponentProps<JSX.IntrinsicElements["div"]>): JSX.Element
+  (props: JSX.IntrinsicElements["div"] & MotionComponentProps): JSX.Element
   // <Motion tag="div" />
   <T extends keyof JSX.IntrinsicElements>(
-    props: MotionComponentProps<JSX.IntrinsicElements[T]> & { tag: T }
+    props: JSX.IntrinsicElements[T] & MotionComponentProps & { tag: T }
   ): JSX.Element
 }
 
 export type MotionProxyComponent<T> = (
-  props: MotionComponentProps<T>
+  props: T & MotionComponentProps
 ) => JSX.Element
 
 export type MotionProxy = MotionComponent & {

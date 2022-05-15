@@ -38,7 +38,8 @@
   },
   "dependencies": {
     "@motionone/dom": "^10.8.1",
-    "tslib": "^2.3.1"
+    "tslib": "^2.3.1",
+    "@solid-primitives/props": "^2.1.1"
   },
   "devDependencies": {
     "@babel/preset-env": "7.16.11",
@@ -46,11 +47,11 @@
     "@testing-library/jest-dom": "^5.16.4",
     "rollup-preset-solid": "^1.4.0",
     "solid-jest": "^0.2.0",
-    "solid-js": "^1.3.13",
+    "solid-js": "^1.4.1",
     "solid-testing-library": "^0.3.0"
   },
   "peerDependencies": {
-    "solid-js": "^1.3.13"
+    "solid-js": "^1.4.1"
   },
   "gitHead": "ce1d84ad98c4b29ab9906152109fadc41cc4e2fd"
 }
