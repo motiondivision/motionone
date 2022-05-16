@@ -27,6 +27,7 @@
     "@motionone/dom": "^10.8.1",
     "@motionone/react": "^10.8.1",
     "@motionone/svelte": "^10.8.1",
+    "@motionone/types": "^10.8.1",
     "@motionone/vue": "^10.8.1"
   },
   "gitHead": "ce1d84ad98c4b29ab9906152109fadc41cc4e2fd"
