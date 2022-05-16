@@ -1,6 +1,11 @@
 import { renderToString } from "solid-js/web"
 import { Motion, Presence } from ".."
 
+jest.mock("solid-js/web", () => ({
+  ...jest.requireActual("solid-js/web"),
+  template: jest.fn(),
+}))
+
 describe("ssr", () => {
   test("Renders", () => {
     const html = renderToString(() => <Motion.div />)
@@ -18,6 +23,25 @@ describe("ssr", () => {
     ))
     expect(html).toBe(
       `<div data-hk=\"0-0-0-0-0\" style=\"--motion-scale:1.2;opacity:1;transform:scale(var(--motion-scale))\" ></div>`
+    )
+  })
+
+  test("Renders initial and style", () => {
+    const html1 = renderToString(() => (
+      <Motion.div
+        style={{ margin: "24px" }}
+        initial={{ scale: 1.2, opacity: 1 }}
+      />
+    ))
+    expect(html1).toBe(
+      `<div data-hk=\"0-0-0-0-0\" style=\"margin:24px;--motion-scale:1.2;opacity:1;transform:scale(var(--motion-scale))\" ></div>`
+    )
+
+    const html2 = renderToString(() => (
+      <Motion.div style={`margin: 24px`} initial={{ scale: 1.2, opacity: 1 }} />
+    ))
+    expect(html2).toBe(
+      `<div data-hk=\"0-0-0-0-0\" style=\"margin:24px;--motion-scale:1.2;opacity:1;transform:scale(var(--motion-scale))\" ></div>`
     )
   })
 

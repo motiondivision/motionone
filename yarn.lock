@@ -2836,6 +2836,18 @@
   resolved "https://registry.yarnpkg.com/@soda/get-current-script/-/get-current-script-1.0.2.tgz#a53515db25d8038374381b73af20bb4f2e508d87"
   integrity sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==
 
+"@solid-primitives/props@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@solid-primitives/props/-/props-2.1.1.tgz#2c80d1a6cbd872e3eaa67058b6f1b6363168d559"
+  integrity sha512-t2J9FtaPYyiZWkk3vrrjObUYvbc6YG2GcGlZBZf6fCEspQwUxDj0PhwvNfp9KeY+rG8gkglKgugeFZvTpZpEng==
+  dependencies:
+    "@solid-primitives/utils" "^1.5.2"
+
+"@solid-primitives/utils@^1.5.2":
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/@solid-primitives/utils/-/utils-1.5.2.tgz#5cccf267b4549002897a5e63fd24858126f9bf7a"
+  integrity sha512-dZUHjzasuqS2lDO+PQCY1+jFmtWHlaP3tUvkX1Jr06LI/Ipa2P/ZNVSvuIoqQ0Bg+Ny27LvtrXxflZNeGtptvA==
+
 "@sveltejs/kit@next":
   version "1.0.0-next.326"
   resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-1.0.0-next.326.tgz#fe9bfe68ebbdc7ede9b9faf9d504e8fa83f17311"
@@ -12647,6 +12659,11 @@ solid-js@^1.3.13, solid-js@^1.3.3:
   version "1.3.17"
   resolved "https://registry.yarnpkg.com/solid-js/-/solid-js-1.3.17.tgz#d02eb088253916dddf075c6484b9f2701db39fcb"
   integrity sha512-BFCosxa4hRm+LF7S+kBL5bNr4RtuZif6AaR5FdQkBpV1E6QNLAOFm4HWgEN8vL2aCWEKl384cT8Etw8ziW8aag==
+
+solid-js@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/solid-js/-/solid-js-1.4.1.tgz#8714838a59e31695e7e6ecfe69494b1428d2dfb3"
+  integrity sha512-ts480PccmUW9WAludSXET2dbBevjv+l6XMmN/OyG/a/xA8ZQoX4hNBN3gGhW785ZZv90fowbUSuSQUwOISm3YA==
 
 solid-meta@^0.27.3:
   version "0.27.3"

@@ -1,5 +1,5 @@
 import {
-  Component,
+  FlowComponent,
   createSignal,
   children,
   createComputed,
@@ -46,7 +46,7 @@ const addCompleteListener = (el: Element, fn: VoidFunction) => {
  * </Presence>
  * ```
  */
-export const Presence: Component<{
+export const Presence: FlowComponent<{
   initial?: boolean
   exitBeforeEnter?: boolean
 }> = (props) => {
