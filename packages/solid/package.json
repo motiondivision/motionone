@@ -1,6 +1,6 @@
 {
   "name": "@motionone/solid",
-  "version": "10.8.1",
+  "version": "10.8.2",
   "description": "A tiny, performant animation library for SolidJS",
   "license": "MIT",
   "contributors": [
@@ -37,9 +37,9 @@
     "measure": "bundlesize"
   },
   "dependencies": {
-    "@motionone/dom": "^10.8.1",
-    "tslib": "^2.3.1",
-    "@solid-primitives/props": "^2.1.1"
+    "@motionone/dom": "^10.8.2",
+    "@solid-primitives/props": "^2.1.1",
+    "tslib": "^2.3.1"
   },
   "devDependencies": {
     "@babel/preset-env": "7.16.11",
