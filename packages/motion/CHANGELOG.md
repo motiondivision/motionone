@@ -4,6 +4,10 @@ Motion One adheres to [Semantic Versioning](http://semver.org/).
 
 ## [10.8.2] [2022-05-16]
 
+### Updated
+
+- Solid `1.4`
+
 ### Fixed
 
 - Exporting `@motionone/types` types via `motion`. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/78)
