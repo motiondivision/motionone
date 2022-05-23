@@ -5,6 +5,7 @@ interface TestAnimationOptions {
   startTime?: number
   currentTime?: number
   playbackRate?: number
+  playState?: AnimationPlayState
 }
 
 function isPromise(p: Promise<any>): p is Promise<any> {
@@ -23,6 +24,7 @@ function testAnimation({
   startTime = 0,
   currentTime = 0,
   playbackRate = 1,
+  playState = "idle",
 }: TestAnimationOptions): BasicAnimationControls {
   return {
     play: () => {},
@@ -32,7 +34,7 @@ function testAnimation({
     finish: () => {},
     reverse: () => {},
     stop: () => {},
-    playState: "idle",
+    playState,
     finished: new Promise(() => {}),
     startTime,
     currentTime,
@@ -84,5 +86,13 @@ describe("Animation controls Proxy", () => {
   test("Unsupported functions/values are undefined", () => {
     const controls = wrapAnimationWithControls([() => testAnimation({})], 1)
     expect((controls as any).wooooo).toEqual(undefined)
+  })
+
+  test("Reads playState", () => {
+    const controls = wrapAnimationWithControls(
+      [() => testAnimation({ playState: "finished" })],
+      1
+    )
+    expect(controls.playState).toEqual("finished")
   })
 })

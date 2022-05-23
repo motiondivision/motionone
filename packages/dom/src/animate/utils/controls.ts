@@ -43,6 +43,7 @@ export const controls = {
         let time = activeAnimation?.[key] || 0
         return time ? time / 1000 : 0
       case "playbackRate":
+      case "playState":
         return activeAnimation?.[key]
       case "finished":
         if (!target.finished) {
