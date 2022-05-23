@@ -2,7 +2,13 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
-## [10.8.3] [2022-05-22]
+## [10.9.0] [2022-05-23]
+
+### Added
+
+- Adding support for `playState` prop.
+
+## [10.8.3] [2022-05-23]
 
 ### Fixed
 
