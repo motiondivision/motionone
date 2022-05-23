@@ -25,7 +25,7 @@
   "bundlesize": [
     {
       "path": "./dist/size.js",
-      "maxSize": "5.7 kB"
+      "maxSize": "5.9 kB"
     }
   ],
   "sideEffects": false,
@@ -52,6 +52,5 @@
   },
   "peerDependencies": {
     "solid-js": "^1.4.1"
-  },
-  "gitHead": "ce1d84ad98c4b29ab9906152109fadc41cc4e2fd"
+  }
 }

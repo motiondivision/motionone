@@ -49,6 +49,5 @@
       "path": "./dist/motion-vue.min.js",
       "maxSize": "5.5 kB"
     }
-  ],
-  "gitHead": "ce1d84ad98c4b29ab9906152109fadc41cc4e2fd"
+  ]
 }

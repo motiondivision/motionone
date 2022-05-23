@@ -29,6 +29,5 @@
     "svelte-check": "^2.2.6",
     "svelte-jester": "^2.1.5",
     "svelte-preprocess": "^4.9.4"
-  },
-  "gitHead": "ce1d84ad98c4b29ab9906152109fadc41cc4e2fd"
+  }
 }
