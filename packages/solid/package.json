@@ -1,6 +1,6 @@
 {
   "name": "@motionone/solid",
-  "version": "10.8.2",
+  "version": "10.8.3",
   "description": "A tiny, performant animation library for SolidJS",
   "license": "MIT",
   "contributors": [
@@ -25,7 +25,7 @@
   "bundlesize": [
     {
       "path": "./dist/size.js",
-      "maxSize": "5.7 kB"
+      "maxSize": "5.9 kB"
     }
   ],
   "sideEffects": false,
@@ -37,7 +37,7 @@
     "measure": "bundlesize"
   },
   "dependencies": {
-    "@motionone/dom": "^10.8.2",
+    "@motionone/dom": "^10.8.3",
     "@solid-primitives/props": "^2.1.1",
     "tslib": "^2.3.1"
   },
@@ -52,6 +52,5 @@
   },
   "peerDependencies": {
     "solid-js": "^1.4.1"
-  },
-  "gitHead": "ce1d84ad98c4b29ab9906152109fadc41cc4e2fd"
+  }
 }

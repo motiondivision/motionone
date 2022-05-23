@@ -40,6 +40,7 @@ export interface AnimationControls extends BasicAnimationControls {
   finished: Promise<any>
   duration: number
   playbackRate: number
+  playState: AnimationPlayState
 }
 
 export type CustomAnimationSettings = {
