@@ -34,14 +34,16 @@ const getActiveAnimation = (
 
 export const controls = {
   get: (target: MotionState, key: string) => {
+    const activeAnimation = getActiveAnimation(target)
+
     switch (key) {
       case "duration":
         return target.duration
       case "currentTime":
-        let time = getActiveAnimation(target)?.[key] || 0
+        let time = activeAnimation?.[key] || 0
         return time ? time / 1000 : 0
       case "playbackRate":
-        return getActiveAnimation(target)?.[key]
+        return activeAnimation?.[key]
       case "finished":
         if (!target.finished) {
           target.finished = Promise.all(
@@ -53,7 +55,9 @@ export const controls = {
         return () =>
           target.animations.forEach((animation) => stopAnimation(animation))
       default:
-        return () => target.animations.forEach((animation) => animation[key]())
+        return typeof activeAnimation?.[key] === "undefined"
+          ? undefined
+          : () => target.animations.forEach((animation) => animation[key]())
     }
   },
   set: (target: MotionState, key: string, value: number) => {

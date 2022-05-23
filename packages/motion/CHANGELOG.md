@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.8.3] [2022-05-22]
+
+### Fixed
+
+- Fixing reflection of playback controls so unsupported props aren't executed as functions.
+
 ## [10.8.2] [2022-05-16]
 
 ### Fixed
