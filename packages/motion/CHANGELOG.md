@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.10.0] Unreleased
+
+### Added
+
+- Added support for [timeline labels](https://motion.dev/dom/timeline#labels). These allow you to to reference parts of the timeline using a name rather than a timestamp.
+
 ## [10.9.0] [2022-05-23]
 
 ### Added

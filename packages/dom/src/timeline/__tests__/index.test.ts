@@ -244,6 +244,132 @@ describe("createAnimationsFromTimeline", () => {
     ])
   })
 
+  test("It sets labels from strings", () => {
+    const animations = createAnimationsFromTimeline([
+      [a, { x: 100 }, { duration: 1 }],
+      "my label",
+      [a, { opacity: 0 }, { duration: 1 }],
+      [b, { y: 500 }, { duration: 1, at: "my label" }],
+    ])
+
+    expect(animations).toEqual([
+      [
+        a,
+        "x",
+        [null, 100, null],
+        {
+          duration: 2,
+          easing: ["ease", "ease"],
+          offset: [0, 0.5, 1],
+        },
+      ],
+      [
+        a,
+        "opacity",
+        [null, null, 0],
+        {
+          duration: 2,
+          easing: ["linear", "ease", "ease"],
+          offset: [0, 0.5, 1],
+        },
+      ],
+      [
+        b,
+        "y",
+        [null, null, 500],
+        {
+          duration: 2,
+          easing: ["linear", "ease", "ease"],
+          offset: [0, 0.5, 1],
+        },
+      ],
+    ])
+  })
+
+  test("It sets annotated labels with absolute at times", () => {
+    const animations = createAnimationsFromTimeline([
+      [a, { x: 100 }, { duration: 1 }],
+      { name: "my label", at: 0 },
+      [a, { opacity: 0 }, { duration: 1 }],
+      [b, { y: 500 }, { duration: 1, at: "my label" }],
+    ])
+
+    expect(animations).toEqual([
+      [
+        a,
+        "x",
+        [null, 100, null],
+        {
+          duration: 2,
+          easing: ["ease", "ease"],
+          offset: [0, 0.5, 1],
+        },
+      ],
+      [
+        a,
+        "opacity",
+        [null, null, 0],
+        {
+          duration: 2,
+          easing: ["linear", "ease", "ease"],
+          offset: [0, 0.5, 1],
+        },
+      ],
+      [
+        b,
+        "y",
+        [null, 500, null],
+        {
+          duration: 2,
+          easing: ["ease", "ease"],
+          offset: [0, 0.5, 1],
+        },
+      ],
+    ])
+  })
+
+  test("It sets annotated labels with relative at times", () => {
+    const animations = createAnimationsFromTimeline([
+      [a, { x: 100 }, { duration: 1 }],
+      { name: "my label", at: "-1" },
+      [a, { opacity: 0 }, { duration: 1 }],
+      [b, { y: 500 }, { duration: 1, at: "my label" }],
+    ])
+
+    expect(animations).toEqual([
+      [
+        a,
+        "x",
+        [null, 100, null],
+        {
+          duration: 2,
+          easing: ["ease", "ease"],
+          offset: [0, 0.5, 1],
+        },
+      ],
+      [
+        a,
+        "opacity",
+        [null, null, 0],
+        {
+          duration: 2,
+          easing: ["linear", "ease", "ease"],
+          offset: [0, 0.5, 1],
+        },
+      ],
+      [
+        b,
+        "y",
+        [null, 500, null],
+        {
+          duration: 2,
+          easing: ["ease", "ease"],
+          offset: [0, 0.5, 1],
+        },
+      ],
+    ])
+  })
+
   test("It advances time by the maximum defined in individual value options", () => {
     const animations = createAnimationsFromTimeline([
       [a, { x: 1, y: 1 }, { duration: 1, y: { duration: 2 } }],
