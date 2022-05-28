@@ -5,9 +5,16 @@ import type {
 } from "../animate/types"
 import type { Easing } from "@motionone/types"
 
+export interface AnnotatedLabel {
+  name: string
+  at: NextTime
+}
+
 export type TimelineSegment =
   | [AcceptedElements, MotionKeyframesDefinition]
   | [AcceptedElements, MotionKeyframesDefinition, AnimationListOptions]
+  | string
+  | AnnotatedLabel
 
 export type TimelineDefinition = TimelineSegment[]
 

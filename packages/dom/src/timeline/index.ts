@@ -11,6 +11,7 @@ import {
   fillOffset,
   defaults,
   isEasingGenerator,
+  isString,
 } from "@motionone/utils"
 import { resolveOption } from "../utils/stagger"
 import { animateStyle } from "../animate/animate-style"
@@ -83,7 +84,23 @@ export function createAnimationsFromTimeline(
    * These will later get converted into relative offsets in a second pass.
    */
   for (let i = 0; i < definition.length; i++) {
-    const [elementDefinition, keyframes, options = {}] = definition[i]
+    const segment = definition[i]
+
+    /**
+     * If this is a timeline label, mark it and skip the rest of this iteration.
+     */
+    if (isString(segment)) {
+      timeLabels.set(segment, currentTime)
+      continue
+    } else if (!Array.isArray(segment)) {
+      timeLabels.set(
+        segment.name,
+        calcNextTime(currentTime, segment.at, prevTime, timeLabels)
+      )
+      continue
+    }
+
+    const [elementDefinition, keyframes, options = {}] = segment
 
     /**
      * If a relative or absolute time value has been specified we need to resolve
