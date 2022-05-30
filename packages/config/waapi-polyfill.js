@@ -1293,7 +1293,9 @@
               /**
                * EDIT: Adding commitStyles
                */
-              commitStyles: function () {},
+              commitStyles: function () {
+                b.applyDirtiedAnimation(this)
+              },
               finish: function () {
                 this._idle ||
                   ((this.currentTime =

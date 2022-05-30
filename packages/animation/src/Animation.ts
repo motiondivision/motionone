@@ -73,6 +73,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
 
       // Rebase on delay
       t = Math.max(t - delay, 0)
+
       /**
        * If this animation has finished, set the current time
        * to the total duration.

@@ -7,6 +7,7 @@ Motion One adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Animations finishing in reverse apply their initial styles instead of their final styles by cancelling the animation. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/51)
+- When `Animation` polyfill is reversed, animation no longer finishes instantly. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/50)
 
 ## [10.10.0] [2022-05-28]
 

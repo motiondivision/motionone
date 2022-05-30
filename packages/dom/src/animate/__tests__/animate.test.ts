@@ -50,7 +50,7 @@ describe("animate", () => {
     })
   })
 
-  test("Applies initial keyframe if a reverse animation finishes", async () => {
+  test.only("Applies initial keyframe if a reverse animation finishes", async () => {
     const div = document.createElement("div")
     const animation = animate(
       div,
