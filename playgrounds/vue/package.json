@@ -6,7 +6,7 @@
     "dev": "nuxi dev"
   },
   "devDependencies": {
-    "nuxt3": "latest"
+    "nuxt": "npm:nuxt3@latest"
   },
   "dependencies": {
     "@motionone/vue": "^10.10.0",

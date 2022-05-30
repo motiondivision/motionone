@@ -175,13 +175,9 @@ export function animateStyle(
         })
       }
 
-      const target = keyframes[keyframes.length - 1]
       animation.finished
         .then(() => {
-          // Apply styles to target
-          style.set(element, name, target)
-
-          // Ensure fill modes don't persist
+          animation.commitStyles()
           animation.cancel()
         })
         .catch(noop)
