@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.10.2] [2022-06-24]
+
+### Fixed
+
+- Gracefully failing when no elements are found. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/95)
+
 ## [10.10.1] [2022-06-24]
 
 ### Fixed
