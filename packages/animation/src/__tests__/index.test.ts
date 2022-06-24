@@ -92,14 +92,15 @@ describe("animateNumber", () => {
       duration: 0.2,
       delay: 0.1,
       offset: [0.5],
+      easing: "linear",
     })
     await animation.finished
     expect(output).toEqual([
-      0, 0, 0, 0, 0.8022760787498554, 0.9999998390921971, 1,
+      0, 0, 0, 0, 0.4999999999999998, 0.9999999999999998, 1,
     ])
   })
 
-  test("Respects ease", async () => {
+  test("Respects ease as string", async () => {
     const output: number[] = []
     const animation = new Animation((v) => output.push(v), [0, 1], {
       duration: 0.2,
@@ -107,6 +108,28 @@ describe("animateNumber", () => {
     })
     await animation.finished
     expect(output).toEqual([0.25, 0.5, 0.7499999999999999, 1])
+  })
+
+  test("Respects ease as string with multiple keyframes", async () => {
+    const output: number[] = []
+    const animation = new Animation((v) => output.push(v), [0, 0.5, 1], {
+      duration: 0.2,
+      easing: "ease-out",
+    })
+    await animation.finished
+    expect(output).toEqual([
+      0.3784135053574573, 0.6846233151445631, 0.9065962544700596, 1,
+    ])
+  })
+
+  test("Respects ease as array with multiple keyframes", async () => {
+    const output: number[] = []
+    const animation = new Animation((v) => output.push(v), [0, 0.5, 1], {
+      duration: 0.2,
+      easing: ["ease-out"],
+    })
+    await animation.finished
+    expect(output).toEqual([0.34231165757228155, 0.5, 0.8423116575722815, 1])
   })
 
   test("Respects repeat", async () => {
