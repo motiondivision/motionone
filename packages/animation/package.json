@@ -1,6 +1,6 @@
 {
   "name": "@motionone/animation",
-  "version": "10.9.0",
+  "version": "10.10.1",
   "description": "A semi-polyfill WAAPI animation.",
   "license": "MIT",
   "author": "Matt Perry",
