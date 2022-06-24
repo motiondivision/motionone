@@ -15,5 +15,8 @@ export function resolveElements(
     elements = [elements]
   }
 
-  return Array.from(elements)
+  /**
+   * Return an empty array
+   */
+  return Array.from(elements || [])
 }
