@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.10.1] [2022-06-24]
+
+### Fixed
+
+- Fixed incorrect handling of `easing` string vs array in polyfill. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/96)
+
 ## [10.10.0] [2022-05-28]
 
 ### Added
