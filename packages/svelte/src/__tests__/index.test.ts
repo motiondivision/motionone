@@ -35,24 +35,27 @@ describe("Motion", () => {
   })
 
   test("Children render inherited initial", async () => {
-    const { getByTestId } = render(TestParentWithGrandchild, {
-      parentProps: {
-        initial: "hidden",
-        variants: {
-          hidden: { opacity: 0, backgroundColor: "red" },
+    const { getByTestId } = render(
+      TestParentWithGrandchild as any,
+      {
+        parentProps: {
+          initial: "hidden",
+          variants: {
+            hidden: { opacity: 0, backgroundColor: "red" },
+          },
         },
-      },
-      childProps: {
-        variants: {
-          hidden: { y: 100, backgroundColor: "purple" },
+        childProps: {
+          variants: {
+            hidden: { y: 100, backgroundColor: "purple" },
+          },
         },
-      },
-      grandchildProps: {
-        variants: {
-          hidden: { backgroundColor: "green" },
+        grandchildProps: {
+          variants: {
+            hidden: { backgroundColor: "green" },
+          },
         },
-      },
-    } as any)
+      } as any
+    )
 
     expect(getByTestId("parent")).toHaveStyle(
       "background-color: red; opacity: 0"
