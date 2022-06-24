@@ -8,7 +8,10 @@ import TestParentWithGrandchild from "./TestParentWithGrandchild.svelte"
 const duration = 0.01
 
 function renderBox(props: any) {
-  const { getByTestId } = render(Motion, { "data-testid": "box", ...props })
+  const { getByTestId } = render(Motion, {
+    "data-testid": "box",
+    ...props,
+  } as any)
 
   return getByTestId("box")
 }
