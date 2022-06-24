@@ -46,7 +46,7 @@ describe("Motion", () => {
           hidden: { backgroundColor: "green" },
         },
       },
-    })
+    } as any)
 
     expect(getByTestId("parent")).toHaveStyle(
       "background-color: red; opacity: 0"
@@ -64,7 +64,7 @@ describe("Motion", () => {
         initial: { opacity: 0.4 },
         animate: { opacity: [0, 0.8] },
         transition: { duration },
-      })
+      } as any)
       getByTestId("box").addEventListener(
         "motioncomplete",
         ({ detail }: any) => {
@@ -86,7 +86,7 @@ describe("Motion", () => {
         initial: animate,
         animate,
         transition: { duration },
-      })
+      } as any)
       getByTestId("box").addEventListener("motioncomplete", () => {
         reject(false)
       })
@@ -108,10 +108,10 @@ describe("Motion", () => {
         transition: { duration },
       }
 
-      const { getByTestId, rerender } = render(Motion, props)
+      const { getByTestId, rerender } = render(Motion, props as any)
       getByTestId("box").addEventListener("motioncomplete", () => {
         if (!completeCount) {
-          rerender(props)
+          rerender(props as any)
         } else {
           reject(false)
         }
