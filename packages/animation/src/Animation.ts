@@ -3,7 +3,12 @@ import type {
   AnimationOptions,
   Easing,
 } from "@motionone/types"
-import { isEasingGenerator, isEasingList, defaults } from "@motionone/utils"
+import {
+  isEasingGenerator,
+  isEasingList,
+  defaults,
+  noopReturn,
+} from "@motionone/utils"
 import { getEasingFunction } from "./utils/easing"
 import { interpolate as createInterpolate } from "./utils/interpolate"
 
@@ -48,14 +53,16 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
       if (custom.duration !== undefined) duration = custom.duration
     }
 
+    const animationEasing = isEasingList(easing)
+      ? noopReturn
+      : getEasingFunction(easing)
+
     const totalDuration = duration * (repeat + 1)
 
     const interpolate = createInterpolate(
       keyframes,
       offset,
-      isEasingList(easing)
-        ? easing.map(getEasingFunction)
-        : getEasingFunction(easing)
+      isEasingList(easing) ? easing.map(getEasingFunction) : noopReturn
     )
 
     this.tick = (timestamp: number) => {
@@ -73,6 +80,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
 
       // Rebase on delay
       t = Math.max(t - delay, 0)
+
       /**
        * If this animation has finished, set the current time
        * to the total duration.
@@ -122,9 +130,8 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
         iterationProgress = 1 - iterationProgress
       }
 
-      const latest = interpolate(
-        t >= totalDuration ? 1 : Math.min(iterationProgress, 1)
-      )
+      const p = t >= totalDuration ? 1 : Math.min(iterationProgress, 1)
+      const latest = interpolate(animationEasing(p))
 
       output(latest)
 
