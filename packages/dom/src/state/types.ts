@@ -3,6 +3,7 @@ import {
   MotionKeyframes,
   MotionKeyframesDefinition,
 } from "../animate/types"
+import { InViewOptions } from "../in-view"
 
 export interface Target {
   [key: string]: string | number
@@ -28,6 +29,7 @@ export interface Options {
   press?: VariantDefinition
   variants?: Variants
   transition?: AnimationOptionsWithOverrides
+  view?: Omit<InViewOptions, "onEnter" | "onLeave">
 }
 
 export interface MotionStateContext {
