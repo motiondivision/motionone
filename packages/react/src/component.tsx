@@ -23,6 +23,7 @@ export function createMotionComponent<Props extends ElementProps>(
       press,
       hover,
       inView,
+      view,
       variants,
       style,
       transition,
@@ -44,6 +45,7 @@ export function createMotionComponent<Props extends ElementProps>(
       press,
       hover,
       inView,
+      view,
       variants,
       transition,
     }
