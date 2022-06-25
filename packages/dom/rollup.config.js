@@ -6,6 +6,7 @@ const sizeBundles = [
   ["animate/animate-style.js", "size-animate-style.js"],
   ["timeline/index.js", "size-timeline.js"],
   ["easing/spring/index.js", "size-spring.js"],
+  ["in-view/index.js", "size-in-view.js"],
 ].map(([input, output]) =>
   createSizeBuild({ input: `lib/${input}`, output: `dist/${output}` }, pkg)
 )

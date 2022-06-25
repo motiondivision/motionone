@@ -1,12 +1,6 @@
 import { createTestMotionState } from "./utils"
 import "config/waapi-polyfill"
 
-/**
- * TODO
- *  - viewport options
- *  - listener-only
- */
-
 type MockIntersectionObserverEntry = {
   isIntersecting: boolean
 }

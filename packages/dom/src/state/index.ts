@@ -187,10 +187,14 @@ export function createMotionState(
       const remove = gestureSubscriptions[name]
 
       if (isGestureActive && !remove) {
-        gestureSubscriptions[name] = gestures[name].subscribe(element, {
-          enable: setGesture(name, true),
-          disable: setGesture(name, false),
-        })
+        gestureSubscriptions[name] = gestures[name].subscribe(
+          element,
+          {
+            enable: setGesture(name, true),
+            disable: setGesture(name, false),
+          },
+          options
+        )
       } else if (!isGestureActive && remove) {
         remove()
         delete gestureSubscriptions[name]
