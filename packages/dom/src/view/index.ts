@@ -1,4 +1,4 @@
-export interface InViewOptions {
+export interface ViewOptions {
   root?: Element
   once?: boolean
   margin?: string
@@ -12,9 +12,9 @@ const thresholds = {
   all: 1,
 }
 
-export function inView(
+export function view(
   element: Element,
-  { root, once, margin, amount = "some", onEnter, onLeave }: InViewOptions = {}
+  { root, once, margin, amount = "some", onEnter, onLeave }: ViewOptions = {}
 ): VoidFunction {
   let stopObservation = () => {}
 
@@ -23,7 +23,6 @@ export function inView(
     return stopObservation
   }
 
-  let hasIntersected = false
   let isIntersecting = false
 
   const onIntersectionChange = (entry: IntersectionObserverEntry) => {
@@ -31,15 +30,9 @@ export function inView(
      * If no change in intersection, early return. If only meant to fire
      * once and we've already intersected, early return.
      */
-    if (
-      entry.isIntersecting === isIntersecting ||
-      (once && entry.isIntersecting && hasIntersected)
-    ) {
-      return
-    }
+    if (entry.isIntersecting === isIntersecting) return
 
     isIntersecting = entry.isIntersecting
-    hasIntersected = hasIntersected || isIntersecting
 
     if (isIntersecting) {
       onEnter?.(entry)
@@ -57,6 +50,7 @@ export function inView(
       threshold: typeof amount === "number" ? amount : thresholds[amount],
     }
   )
+
   observer.observe(element)
 
   stopObservation = () => {

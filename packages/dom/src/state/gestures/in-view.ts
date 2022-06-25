@@ -1,11 +1,11 @@
 import { dispatchViewEvent } from "../utils/events"
 import { Gesture } from "./types"
-import { inView as inViewDom } from "../../in-view/index"
+import { view } from "../../view/index"
 
 export const inView: Gesture = {
   isActive: (options) => Boolean(options.inView),
   subscribe: (element, { enable, disable }, { view }) =>
-    inViewDom(element, {
+    view(element, {
       onEnter: (entry) => {
         enable()
         dispatchViewEvent(element, "viewenter", entry)

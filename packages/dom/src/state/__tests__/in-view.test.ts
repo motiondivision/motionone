@@ -1,34 +1,6 @@
 import { createTestMotionState } from "./utils"
 import "config/waapi-polyfill"
-
-type MockIntersectionObserverEntry = {
-  isIntersecting: boolean
-}
-
-type MockIntersectionObserverCallback = (
-  entries: MockIntersectionObserverEntry[]
-) => void
-
-let activeIntersectionObserver: MockIntersectionObserverCallback | undefined =
-  undefined
-
-window.IntersectionObserver = class MockIntersectionObserver {
-  callback: MockIntersectionObserverCallback
-
-  constructor(callback: MockIntersectionObserverCallback) {
-    this.callback = callback
-  }
-
-  observe(_element: Element) {
-    activeIntersectionObserver = this.callback
-  }
-
-  unobserve(_element: Element) {
-    activeIntersectionObserver = undefined
-  }
-
-  disconnect() {}
-} as any
+import { getActiveObserver } from "../../view/__tests__/mock-intersection-observer"
 
 describe("inView", () => {
   test("Animate to inView when element enters viewport", async () => {
@@ -42,9 +14,9 @@ describe("inView", () => {
     expect(element).toHaveStyle("background-color: blue")
 
     await new Promise<void>((resolve) => {
-      expect(activeIntersectionObserver).toBeTruthy()
+      expect(getActiveObserver()).toBeTruthy()
 
-      activeIntersectionObserver?.([{ isIntersecting: true }])
+      getActiveObserver()?.([{ isIntersecting: true }])
 
       setTimeout(resolve, 50)
     })
@@ -59,7 +31,7 @@ describe("inView", () => {
     })
     const receivedEvent = await new Promise<boolean>((resolve) => {
       element.addEventListener("viewenter", () => resolve(true))
-      activeIntersectionObserver?.([{ isIntersecting: true }])
+      getActiveObserver()?.([{ isIntersecting: true }])
     })
 
     expect(receivedEvent).toEqual(true)
@@ -73,10 +45,10 @@ describe("inView", () => {
 
     const receivedEvent = await new Promise<boolean>((resolve) => {
       element.addEventListener("viewleave", () => resolve(true))
-      activeIntersectionObserver?.([{ isIntersecting: true }])
+      getActiveObserver()?.([{ isIntersecting: true }])
 
       setTimeout(() => {
-        activeIntersectionObserver?.([{ isIntersecting: false }])
+        getActiveObserver()?.([{ isIntersecting: false }])
       }, 20)
     })
 
@@ -93,15 +65,15 @@ describe("inView", () => {
     await new Promise<void>((resolve) => {
       element.addEventListener("motioncomplete", ({ detail }) => {
         if (detail.target.backgroundColor === "red") {
-          activeIntersectionObserver?.([{ isIntersecting: false }])
+          getActiveObserver()?.([{ isIntersecting: false }])
         } else if (detail.target.backgroundColor === "blue") {
           resolve()
         }
       })
 
-      expect(activeIntersectionObserver).toBeTruthy()
+      expect(getActiveObserver()).toBeTruthy()
 
-      activeIntersectionObserver?.([{ isIntersecting: true }])
+      getActiveObserver()?.([{ isIntersecting: true }])
     })
 
     expect(element).toHaveStyle("background-color: blue")
