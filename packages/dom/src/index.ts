@@ -5,7 +5,7 @@ export { stagger } from "./utils/stagger"
 export { spring } from "./easing/spring/index"
 export { glide } from "./easing/glide/index"
 export { style } from "./animate/style"
-export * from "./view/index"
+export * from "./gestures/in-view"
 
 export { wrapAnimationWithControls } from "./animate/utils/controls"
 export { getAnimationData } from "./animate/data"

@@ -1,6 +1,6 @@
 import { createTestMotionState } from "./utils"
 import "config/waapi-polyfill"
-import { getActiveObserver } from "../../view/__tests__/mock-intersection-observer"
+import { getActiveObserver } from "../../gestures/__tests__/mock-intersection-observer"
 
 describe("inView", () => {
   test("Animate to inView when element enters viewport", async () => {
@@ -16,7 +16,7 @@ describe("inView", () => {
     await new Promise<void>((resolve) => {
       expect(getActiveObserver()).toBeTruthy()
 
-      getActiveObserver()?.([{ isIntersecting: true }])
+      getActiveObserver()?.([{ target: element, isIntersecting: true }])
 
       setTimeout(resolve, 50)
     })
@@ -31,7 +31,7 @@ describe("inView", () => {
     })
     const receivedEvent = await new Promise<boolean>((resolve) => {
       element.addEventListener("viewenter", () => resolve(true))
-      getActiveObserver()?.([{ isIntersecting: true }])
+      getActiveObserver()?.([{ target: element, isIntersecting: true }])
     })
 
     expect(receivedEvent).toEqual(true)
@@ -45,10 +45,10 @@ describe("inView", () => {
 
     const receivedEvent = await new Promise<boolean>((resolve) => {
       element.addEventListener("viewleave", () => resolve(true))
-      getActiveObserver()?.([{ isIntersecting: true }])
+      getActiveObserver()?.([{ target: element, isIntersecting: true }])
 
       setTimeout(() => {
-        getActiveObserver()?.([{ isIntersecting: false }])
+        getActiveObserver()?.([{ target: element, isIntersecting: false }])
       }, 20)
     })
 
@@ -65,7 +65,7 @@ describe("inView", () => {
     await new Promise<void>((resolve) => {
       element.addEventListener("motioncomplete", ({ detail }) => {
         if (detail.target.backgroundColor === "red") {
-          getActiveObserver()?.([{ isIntersecting: false }])
+          getActiveObserver()?.([{ target: element, isIntersecting: false }])
         } else if (detail.target.backgroundColor === "blue") {
           resolve()
         }
@@ -73,7 +73,7 @@ describe("inView", () => {
 
       expect(getActiveObserver()).toBeTruthy()
 
-      getActiveObserver()?.([{ isIntersecting: true }])
+      getActiveObserver()?.([{ target: element, isIntersecting: true }])
     })
 
     expect(element).toHaveStyle("background-color: blue")

@@ -1,13 +1,13 @@
 export type MockIntersectionObserverEntry = {
   isIntersecting: boolean
+  target: Element
 }
 
 export type MockIntersectionObserverCallback = (
   entries: MockIntersectionObserverEntry[]
 ) => void
 
-let activeIntersectionObserver: MockIntersectionObserverCallback | undefined =
-  undefined
+let activeIntersectionObserver: MockIntersectionObserverCallback | undefined
 
 export const getActiveObserver = () => activeIntersectionObserver
 
@@ -26,5 +26,7 @@ window.IntersectionObserver = class MockIntersectionObserver {
     activeIntersectionObserver = undefined
   }
 
-  disconnect() {}
+  disconnect() {
+    activeIntersectionObserver = undefined
+  }
 } as any
