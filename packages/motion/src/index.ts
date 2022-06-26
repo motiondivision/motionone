@@ -1,4 +1,4 @@
-export { timeline, stagger, spring, glide, style, view } from "@motionone/dom"
+export { timeline, stagger, spring, glide, style, inView } from "@motionone/dom"
 export { animate } from "./animate"
 
 export * from "@motionone/types"
