@@ -30,7 +30,7 @@ export const Motion = defineComponent({
     hover: objectType,
     press: objectType,
     exit: objectType,
-    view: objectType,
+    inViewOptions: objectType,
     transition: objectType,
     style: objectType,
   },

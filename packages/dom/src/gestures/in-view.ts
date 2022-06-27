@@ -3,7 +3,7 @@ import { resolveElements } from "../utils/resolve-elements"
 
 export type ViewChangeHandler = (entry: IntersectionObserverEntry) => void
 
-export interface ViewOptions {
+export interface InViewOptions {
   root?: Element
   margin?: string
   amount?: "any" | "all" | number
@@ -17,7 +17,7 @@ const thresholds = {
 export function inView(
   elements: AcceptedElements,
   onStart: (entry: IntersectionObserverEntry) => void | ViewChangeHandler,
-  { root, margin: rootMargin, amount = "any" }: ViewOptions = {}
+  { root, margin: rootMargin, amount = "any" }: InViewOptions = {}
 ): VoidFunction {
   /**
    * If this browser doesn't support IntersectionObserver, return a dummy stop function.

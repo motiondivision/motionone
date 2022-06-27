@@ -20,7 +20,7 @@
   export let hover: VariantDefinition | undefined = undefined
   export let press: VariantDefinition | undefined = undefined
   export let inView: VariantDefinition | undefined = undefined
-  export let view: ViewOptions | undefined = undefined
+  export let inViewOptions: InViewOptions | undefined = undefined
   export let variants: Variants | undefined = undefined
   export let transition: AnimationOptionsWithOverrides | undefined = undefined
 
@@ -31,7 +31,7 @@
       hover,
       press,
       inView,
-      view,
+      inViewOptions,
       variants,
       transition,
     },
@@ -49,7 +49,7 @@
       hover,
       press,
       inView,
-      view,
+      inViewOptions,
       variants,
       transition,
     })
