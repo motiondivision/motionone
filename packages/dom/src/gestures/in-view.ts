@@ -67,22 +67,3 @@ export function inView(
 
   return () => observer.disconnect()
 }
-
-// function polyfillIntersectionObserver(
-//   elements: Element[],
-//   onStart: ViewChangeHandler
-// ) {
-//   requestAnimationFrame(() => {
-//     elements.forEach((element) => {
-//       onStart({
-//         boundingClientRect: new DOMRectReadOnly(),
-//         intersectionRatio: 1,
-//         intersectionRect: new DOMRectReadOnly(),
-//         isIntersecting: true,
-//         rootBounds: null,
-//         target: element,
-//         time: performance.now(),
-//       })
-//     })
-//   })
-// }
