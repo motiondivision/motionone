@@ -6,7 +6,7 @@ import type {
 } from "./types"
 import { animateStyle } from "./animate-style"
 import { getOptions } from "./utils/options"
-import { resolveElements } from "./utils/resolve-elements"
+import { resolveElements } from "../utils/resolve-elements"
 import { wrapAnimationWithControls } from "./utils/controls"
 import { resolveOption } from "../utils/stagger"
 import { AnimationControls } from "@motionone/types"

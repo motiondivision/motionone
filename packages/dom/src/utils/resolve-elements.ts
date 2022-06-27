@@ -1,4 +1,4 @@
-import type { AcceptedElements } from "../types"
+import { AcceptedElements } from "../animate/types"
 
 export function resolveElements(
   elements: AcceptedElements,

@@ -19,7 +19,7 @@ export function dispatchPointerEvent(
 export function dispatchViewEvent(
   element: Element,
   name: MotionEventNames,
-  entry: IntersectionObserverEntry
+  entry?: IntersectionObserverEntry
 ) {
   element.dispatchEvent(
     new CustomEvent(name, { detail: { originalEntry: entry } })

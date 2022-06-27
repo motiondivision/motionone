@@ -24,6 +24,7 @@ export const MotionComponent = (
       "initial",
       "animate",
       "inView",
+      "inViewOptions",
       "hover",
       "press",
       "variants",

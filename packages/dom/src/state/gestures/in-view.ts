@@ -1,36 +1,26 @@
 import { dispatchViewEvent } from "../utils/events"
 import { Gesture } from "./types"
+import { inView as inViewDom } from "../../gestures/in-view"
 
-/**
- * TODO: Support viewport options
- */
 export const inView: Gesture = {
   isActive: (options) => Boolean(options.inView),
-  subscribe: (element, { enable, disable }) => {
-    let isVisible = false
+  subscribe: (element, { enable, disable }, { inViewOptions = {} }) => {
+    const { once, ...viewOptions } = inViewOptions
 
-    if (typeof IntersectionObserver !== "undefined") {
-      const observer = new IntersectionObserver(([entry]) => {
-        if (!isVisible && entry.isIntersecting) {
-          enable()
-          dispatchViewEvent(element, "viewenter", entry)
-        } else if (isVisible && !entry.isIntersecting) {
-          disable()
-          dispatchViewEvent(element, "viewleave", entry)
+    return inViewDom(
+      element,
+      (enterEntry) => {
+        enable()
+        dispatchViewEvent(element, "viewenter", enterEntry)
+
+        if (!once) {
+          return (leaveEntry) => {
+            disable()
+            dispatchViewEvent(element, "viewleave", leaveEntry)
+          }
         }
-
-        isVisible = entry.isIntersecting
-      })
-
-      observer.observe(element)
-
-      return () => {
-        observer.unobserve(element)
-        observer.disconnect()
-      }
-    } else {
-      enable()
-      return () => {}
-    }
+      },
+      viewOptions
+    )
   },
 }

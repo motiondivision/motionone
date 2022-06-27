@@ -2,6 +2,13 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.11.0] [2022-06-24]
+
+### Added
+
+- `inView` function for detecting when elements enter and leave the viewport.
+- Adding `view` options prop to Motion One for Vue and Solid.
+
 ## [10.10.2] [2022-06-24]
 
 ### Fixed

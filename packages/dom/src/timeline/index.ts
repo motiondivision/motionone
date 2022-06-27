@@ -22,7 +22,7 @@ import type {
 import { wrapAnimationWithControls } from "../animate/utils/controls"
 import { keyframesList } from "../animate/utils/keyframes"
 import { getOptions } from "../animate/utils/options"
-import { resolveElements } from "../animate/utils/resolve-elements"
+import { resolveElements } from "../utils/resolve-elements"
 import { isTransform } from "../animate/utils/transforms"
 import type {
   ElementSequence,

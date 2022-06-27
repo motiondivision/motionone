@@ -10,7 +10,7 @@ import {
 import { createMotionState, createStyles, style } from "@motionone/dom"
 import { contextId, presenceId, PresenceState } from "./context"
 
-const variants = {
+const objectType = {
   type: Object,
 }
 
@@ -25,17 +25,14 @@ export const Motion = defineComponent({
     initial: {
       type: [Object, Boolean],
     },
-    animate: variants,
-    inView: variants,
-    hover: variants,
-    press: variants,
-    exit: variants,
-    transition: {
-      type: Object,
-    },
-    style: {
-      type: Object,
-    },
+    animate: objectType,
+    inView: objectType,
+    hover: objectType,
+    press: objectType,
+    exit: objectType,
+    inViewOptions: objectType,
+    transition: objectType,
+    style: objectType,
   },
   setup(props) {
     const root = ref<Element | null>(null)
