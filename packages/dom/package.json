@@ -49,7 +49,7 @@
     },
     {
       "path": "./dist/size-in-view.js",
-      "maxSize": "0.6 kB"
+      "maxSize": "0.53 kB"
     }
   ]
 }

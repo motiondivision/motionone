@@ -62,4 +62,19 @@ describe("view", () => {
     getActiveObserver()?.([{ target: element, isIntersecting: true }])
     expect(onEnter).toBeCalledTimes(1)
   })
+
+  test("Only fires onEnter once if it returns something other than a function", async () => {
+    const onEnter = () => 5
+    const mockOnEnter = jest.fn(onEnter)
+    const element = document.createElement("div")
+    inView(element, mockOnEnter as any)
+
+    expect(getActiveObserver()).toBeTruthy()
+    getActiveObserver()?.([{ target: element, isIntersecting: true }])
+
+    expect(mockOnEnter).toBeCalledTimes(1)
+    getActiveObserver()?.([{ target: element, isIntersecting: false }])
+    getActiveObserver()?.([{ target: element, isIntersecting: true }])
+    expect(mockOnEnter).toBeCalledTimes(1)
+  })
 })

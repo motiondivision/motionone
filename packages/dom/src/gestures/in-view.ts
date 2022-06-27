@@ -14,40 +14,22 @@ const thresholds = {
   all: 1,
 }
 
-function polyfillIntersectionObserver(
-  elements: Element[],
-  onStart: ViewChangeHandler
-) {
-  requestAnimationFrame(() => {
-    elements.forEach((element) => {
-      onStart({
-        boundingClientRect: new DOMRectReadOnly(),
-        intersectionRatio: 1,
-        intersectionRect: new DOMRectReadOnly(),
-        isIntersecting: true,
-        rootBounds: null,
-        target: element,
-        time: performance.now(),
-      })
-    })
-  })
-}
-
 export function inView(
   elements: AcceptedElements,
   onStart: (entry: IntersectionObserverEntry) => void | ViewChangeHandler,
   { root, margin: rootMargin, amount = "any" }: ViewOptions = {}
 ): VoidFunction {
-  const resolvedElements = resolveElements(elements)
-
   /**
-   * If this browser doesn't support IntersectionObserver, resolve
-   * onStart immediately with a dummy IntersectionObserverEntry.
+   * If this browser doesn't support IntersectionObserver, return a dummy stop function.
+   * Default triggering of onStart is tricky - it could be used for starting/stopping
+   * videos, lazy loading content etc. We could provide an option to enable a fallback, or
+   * provide a fallback callback option.
    */
   if (typeof IntersectionObserver === "undefined") {
-    polyfillIntersectionObserver(resolvedElements, onStart)
     return () => {}
   }
+
+  const resolvedElements = resolveElements(elements)
 
   const activeIntersections = new WeakMap<Element, ViewChangeHandler>()
 
@@ -63,7 +45,7 @@ export function inView(
 
       if (entry.isIntersecting) {
         const newOnEnd = onStart(entry)
-        if (newOnEnd) {
+        if (typeof newOnEnd === "function") {
           activeIntersections.set(entry.target, newOnEnd)
         } else {
           observer.unobserve(entry.target)
@@ -85,3 +67,22 @@ export function inView(
 
   return () => observer.disconnect()
 }
+
+// function polyfillIntersectionObserver(
+//   elements: Element[],
+//   onStart: ViewChangeHandler
+// ) {
+//   requestAnimationFrame(() => {
+//     elements.forEach((element) => {
+//       onStart({
+//         boundingClientRect: new DOMRectReadOnly(),
+//         intersectionRatio: 1,
+//         intersectionRect: new DOMRectReadOnly(),
+//         isIntersecting: true,
+//         rootBounds: null,
+//         target: element,
+//         time: performance.now(),
+//       })
+//     })
+//   })
+// }
