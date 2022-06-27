@@ -8,7 +8,7 @@
     MotionState,
     Variants,
     VariantDefinition,
-    ViewOptions,
+    InViewOptions,
   } from "@motionone/dom"
 
   const parentState = getContext<MotionState | undefined>(contextKey)

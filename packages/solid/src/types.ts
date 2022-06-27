@@ -47,7 +47,7 @@ export type Options = {
   press?: VariantDefinition
   exit?: VariantDefinition
   variants?: Record<string, Variant>
-  view?: ViewOptions
+  inViewOptions?: ViewOptions
   transition?: AnimationOptionsWithOverrides
 }
 
