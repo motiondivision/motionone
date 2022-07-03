@@ -1,9 +1,9 @@
 import type {
-  AcceptedElements,
   AnimationListOptions,
   MotionKeyframesDefinition,
 } from "../animate/types"
 import type { Easing } from "@motionone/types"
+import { ElementOrSelector } from "../types"
 
 export interface AnnotatedLabel {
   name: string
@@ -11,8 +11,8 @@ export interface AnnotatedLabel {
 }
 
 export type TimelineSegment =
-  | [AcceptedElements, MotionKeyframesDefinition]
-  | [AcceptedElements, MotionKeyframesDefinition, AnimationListOptions]
+  | [ElementOrSelector, MotionKeyframesDefinition]
+  | [ElementOrSelector, MotionKeyframesDefinition, AnimationListOptions]
   | string
   | AnnotatedLabel
 

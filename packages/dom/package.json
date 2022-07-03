@@ -50,6 +50,14 @@
     {
       "path": "./dist/size-in-view.js",
       "maxSize": "0.5 kB"
+    },
+    {
+      "path": "./dist/size-scroll.js",
+      "maxSize": "0.55 kB"
+    },
+    {
+      "path": "./dist/size-resize.js",
+      "maxSize": "0.55 kB"
     }
   ]
 }

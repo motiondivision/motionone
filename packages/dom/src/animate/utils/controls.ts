@@ -11,7 +11,7 @@ interface MotionState {
 
 const createAnimation = (factory: AnimationFactory) => factory()
 
-export const wrapAnimationWithControls = (
+export const withControls = (
   animationFactory: AnimationFactory[],
   duration: number = defaults.duration
 ) =>

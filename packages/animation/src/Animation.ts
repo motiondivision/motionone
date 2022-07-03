@@ -69,9 +69,12 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
       // TODO: Temporary fix for OptionsResolver typing
       delay = delay as number
 
-      if (this.pauseTime) timestamp = this.pauseTime
-
-      let t = (timestamp - this.startTime!) * this.rate
+      let t = 0
+      if (this.pauseTime !== undefined) {
+        t = this.pauseTime
+      } else {
+        t = (timestamp - this.startTime!) * this.rate
+      }
 
       this.t = t
 
@@ -85,7 +88,9 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
        * If this animation has finished, set the current time
        * to the total duration.
        */
-      if (this.playState === "finished") t = totalDuration
+      if (this.playState === "finished" && this.pauseTime === undefined) {
+        t = totalDuration
+      }
 
       /**
        * Get the current progress (0-1) of the animation. If t is >
@@ -136,7 +141,8 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
       output(latest)
 
       const isAnimationFinished =
-        this.playState === "finished" || t >= totalDuration + endDelay
+        this.pauseTime === undefined &&
+        (this.playState === "finished" || t >= totalDuration + endDelay)
 
       if (isAnimationFinished) {
         this.playState = "finished"
@@ -158,7 +164,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
     const now = performance.now()
     this.playState = "running"
 
-    if (this.pauseTime) {
+    if (this.pauseTime !== undefined) {
       this.startTime = now - (this.pauseTime - (this.startTime ?? 0))
     } else if (!this.startTime) {
       this.startTime = now
@@ -205,7 +211,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
   }
 
   set currentTime(t: number) {
-    if (this.pauseTime || this.rate === 0) {
+    if (this.pauseTime !== undefined || this.rate === 0) {
       this.pauseTime = t
     } else {
       this.startTime = performance.now() - t / this.rate

@@ -1,5 +1,4 @@
 import type {
-  AcceptedElements,
   AnimationFactory,
   AnimationOptionsWithOverrides,
   MotionKeyframesDefinition,
@@ -7,12 +6,13 @@ import type {
 import { animateStyle } from "./animate-style"
 import { getOptions } from "./utils/options"
 import { resolveElements } from "../utils/resolve-elements"
-import { wrapAnimationWithControls } from "./utils/controls"
+import { withControls } from "./utils/controls"
 import { resolveOption } from "../utils/stagger"
 import { AnimationControls } from "@motionone/types"
+import { ElementOrSelector } from "../types"
 
 export function animate(
-  elements: AcceptedElements,
+  elements: ElementOrSelector,
   keyframes: MotionKeyframesDefinition,
   options: AnimationOptionsWithOverrides = {}
 ): AnimationControls {
@@ -41,7 +41,7 @@ export function animate(
     }
   }
 
-  return wrapAnimationWithControls(
+  return withControls(
     animationFactories,
     /**
      * TODO:
