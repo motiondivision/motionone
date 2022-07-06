@@ -32,11 +32,7 @@ const thresholds = {
 export function inView(
   elements: AcceptedElements,
   onStart: (entry: IntersectionObserverEntry) => void | ViewChangeHandler,
-  {
-    root = getDefaultRoot(),
-    margin: rootMargin,
-    amount = "any",
-  }: InViewOptions = {}
+  { root, margin: rootMargin, amount = "any" }: InViewOptions = {}
 ): VoidFunction {
   /**
    * If this browser doesn't support IntersectionObserver, return a dummy stop function.
@@ -77,7 +73,7 @@ export function inView(
   }
 
   const observer = new IntersectionObserver(onIntersectionChange, {
-    root,
+    root: root || getDefaultRoot(),
     rootMargin,
     threshold: typeof amount === "number" ? amount : thresholds[amount],
   })
