@@ -8,6 +8,8 @@ export { style } from "./animate/style"
 export * from "./gestures/in-view"
 export * from "./gestures/resize/index"
 export * from "./gestures/scroll/index"
+export * from "./gestures/scroll/types"
+export { ScrollOffset } from "./gestures/scroll/offsets/presets"
 
 export { withControls } from "./animate/utils/controls"
 export { getAnimationData } from "./animate/data"

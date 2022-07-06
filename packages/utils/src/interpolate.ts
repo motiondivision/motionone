@@ -1,12 +1,9 @@
-import type { EasingFunction } from "@motionone/easing"
-import {
-  noopReturn,
-  progress,
-  mix,
-  defaultOffset,
-  fillOffset,
-} from "@motionone/utils"
+import { mix } from "./mix"
+import { noopReturn } from "./noop"
+import { defaultOffset, fillOffset } from "./offset"
+import { progress } from "./progress"
 import { getEasingForSegment } from "./easing"
+import type { EasingFunction } from "@motionone/types"
 
 const clampProgress = (p: number) => Math.min(1, Math.max(p, 0))
 

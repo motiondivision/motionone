@@ -9,8 +9,6 @@ import { ValueKeyframe } from "@motionone/types"
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
-export type BezierDefinition = [number, number, number, number]
-
 export interface CSSStyleDeclarationWithTransform
   extends Omit<CSSStyleDeclaration, "direction" | "transition"> {
   x: number

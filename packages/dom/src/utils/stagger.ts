@@ -1,5 +1,4 @@
-import type { Easing, OptionResolver } from "@motionone/types"
-import type { EasingFunction } from "@motionone/easing"
+import type { Easing, OptionResolver, EasingFunction } from "@motionone/types"
 import { isNumber } from "@motionone/utils"
 import { getEasingFunction } from "@motionone/animation"
 

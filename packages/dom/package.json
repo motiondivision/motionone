@@ -45,7 +45,7 @@
     },
     {
       "path": "./dist/size-webpack-animate.js",
-      "maxSize": "3.6 kB"
+      "maxSize": "3.7 kB"
     },
     {
       "path": "./dist/size-in-view.js",
@@ -53,7 +53,7 @@
     },
     {
       "path": "./dist/size-scroll.js",
-      "maxSize": "0.55 kB"
+      "maxSize": "2 kB"
     },
     {
       "path": "./dist/size-resize.js",

@@ -1,6 +1,4 @@
-import { AnimationControls, AnimationOptions } from "@motionone/types"
-import { ElementOrSelector } from "../../types"
-import { resolveElements } from "../../utils/resolve-elements"
+import { resize } from "../resize/index"
 import { createScrollInfo } from "./info"
 import { createOnScrollHandler } from "./on-scroll-handler"
 import { OnScroll, OnScrollHandler, ScrollOptions } from "./types"
@@ -15,147 +13,140 @@ const getEventTarget = (element: HTMLElement) =>
 
 /**
  * TODO:
- * -  Tests
- * -  Support offset without target shorthand
- * -  Support vw/vh/%/px
- * -  Test updating size only on resize
- * -  Provide ability to do multiple scroll animations on the same value
  * -  Scroll animations
+ * =============================================
+ * -  Smoothing
  */
 export function scroll(
+  options?: ScrollOptions
+): (onScroll: OnScroll) => VoidFunction
+export function scroll(
   onScroll: OnScroll,
   options?: ScrollOptions
 ): VoidFunction
-export function scroll(
-  elementOrSelector: ElementOrSelector,
-  onScroll: OnScroll,
-  options?: ScrollOptions
-): VoidFunction
-export function scroll(
-  a: OnScroll | ElementOrSelector,
-  b?: ScrollOptions | OnScroll,
-  c?: ScrollOptions
-) {
-  let containers: ScrollTargets = [document.documentElement]
-  let onScroll: OnScroll
-  let options: ScrollOptions
-
-  if (typeof a === "function") {
-    onScroll = a
-    options = b as ScrollOptions
-  } else {
-    containers = resolveElements(a) as HTMLElement[]
-    onScroll = b as OnScroll
-    options = c as ScrollOptions
+export function scroll(a?: OnScroll | ScrollOptions, b: ScrollOptions = {}) {
+  /**
+   * Support overloading so we can set scroll(options) to animation.duration.
+   */
+  if (typeof a !== "function") {
+    return (onScroll: OnScroll) => scroll(onScroll, a)
   }
 
-  const sessionOnScrollHandlers = new WeakMap<
-    Element | Window,
-    OnScrollHandler
-  >()
+  const onScroll = a
+  const { container = document.documentElement, ...options } = b
 
-  containers.forEach((container) => {
-    /**
-     * Get the onScroll handlers for this container.
-     * If one isn't found, create a new one.
-     */
-    let handlers = onScrollHandlers.get(container)
-    if (!handlers) {
-      handlers = new Set()
-      onScrollHandlers.set(container, handlers)
+  let containerHandlers = onScrollHandlers.get(container)
+
+  /**
+   * Get the onScroll handlers for this container.
+   * If one isn't found, create a new one.
+   */
+  if (!containerHandlers) {
+    containerHandlers = new Set()
+    onScrollHandlers.set(container, containerHandlers)
+  }
+
+  /**
+   * Create a new onScroll handler for the provided callback.
+   */
+  const info = createScrollInfo()
+  const containerHandler = createOnScrollHandler(
+    container,
+    onScroll,
+    info,
+    options
+  )
+  containerHandlers.add(containerHandler)
+
+  /**
+   * Check if there's a scroll event listener for this container.
+   * If not, create one.
+   */
+  if (!scrollListeners.has(container)) {
+    const listener = () => {
+      const time = performance.now()
+
+      for (const handler of containerHandlers!) handler.measure()
+      for (const handler of containerHandlers!) handler.update(time)
+      for (const handler of containerHandlers!) handler.notify()
     }
 
-    /**
-     * Create a new onScroll handler for the provided callback.
-     */
-    const info = createScrollInfo()
-    const handler = createOnScrollHandler(container, onScroll, info, options)
-    sessionOnScrollHandlers.set(container, handler)
-    handlers.add(handler)
+    scrollListeners.set(container, listener)
 
-    /**
-     * Check if there's a scroll event listener for this container.
-     * If not, create one.
-     */
-    if (!scrollListeners.has(container) && handlers) {
-      const listener = () => {
-        if (!handlers) return
+    const target = getEventTarget(container)
+    window.addEventListener("resize", listener, { passive: true })
+    target.addEventListener("scroll", listener, { passive: true })
+  }
 
-        for (const handler of handlers) handler.measure()
-        for (const handler of handlers) handler.update()
-        for (const handler of handlers) handler.notify()
-      }
-
-      scrollListeners.set(container, listener)
-
-      getEventTarget(container).addEventListener("scroll", listener)
-    }
-
-    requestAnimationFrame(scrollListeners.get(container)!)
-  })
+  const listener = scrollListeners.get(container)!
+  // TODO Move this to within scrollListeners lazy load
+  const stopResize = resize(container, listener)
+  const onLoadProcesss = requestAnimationFrame(listener)
 
   return () => {
-    containers.forEach((container) => {
-      /**
-       * Check if we even have any handlers for this container.
-       */
-      let handlers = onScrollHandlers.get(container)
-      if (!handlers) return
+    stopResize()
+    cancelAnimationFrame(onLoadProcesss)
 
-      /**
-       * Get the handler for this scroll session's
-       */
-      const sessionHandler = sessionOnScrollHandlers.get(container)
-      if (sessionHandler) handlers.delete(sessionHandler)
-      sessionOnScrollHandlers.delete(container)
+    /**
+     * Check if we even have any handlers for this container.
+     */
+    const containerHandlers = onScrollHandlers.get(container)
+    if (!containerHandlers) return
 
-      if (!handlers.size) {
-        const listener = scrollListeners.get(container)
-        listener &&
-          getEventTarget(container).removeEventListener("scroll", listener)
-        scrollListeners.delete(container)
-      }
-    })
+    containerHandlers.delete(containerHandler)
+
+    if (containerHandlers.size) return
+
+    /**
+     * If no more handlers, remove the scroll listener too.
+     */
+    const listener = scrollListeners.get(container)
+    scrollListeners.delete(container)
+
+    if (listener) {
+      getEventTarget(container).removeEventListener("scroll", listener)
+      window.removeEventListener("resize", listener)
+    }
   }
 }
 
-scroll.timeline =
-  (options: ScrollOptions = {}) =>
-  (controls: AnimationControls) => {
-    controls.pause()
+// scroll.timeline =
+//   (options: ScrollOptions = {}) =>
+//   (controls: AnimationControls) => {
+//     controls.pause()
 
-    let driver: VoidFunction | undefined
+//     let driver: VoidFunction | undefined
 
-    const startDriver = () => {
-      if (driver) return
+//     const startDriver = () => {
+//       if (driver) return
 
-      const axis = options.axis || "y"
-      driver = scroll((info) => {
-        controls.currentTime = controls.duration * info[axis].progress
-      }, options)
-    }
+//       const axis = options.axis || "y"
+//       driver = scroll((info) => {
+//         controls.currentTime = controls.duration * info[axis].progress
+//       }, options)
+//     }
 
-    startDriver()
+//     startDriver()
 
-    return new Proxy(controls, {
-      get: (target: AnimationControls, key: string) => {
-        switch (key) {
-          case "play": {
-            return () => {
-              if (!driver) startDriver()
-            }
-          }
-          case "pause":
-          case "stop": {
-            return () => {
-              driver?.()
-              driver = undefined
-              target[key]()
-            }
-          }
-        }
+//     return new Proxy(controls, {
+//       get: (target: AnimationControls, key: string) => {
+//         switch (key) {
+//           case "play": {
+//             return () => {
+//               if (!driver) startDriver()
+//             }
+//           }
+//           case "pause":
+//           case "stop": {
+//             return () => {
+//               driver?.()
+//               driver = undefined
+//               target[key]()
+//             }
+//           }
+//         }
 
-        return Reflect.get(target, key)
-      },
-    })
-  }
+//         return Reflect.get(target, key)
+//       },
+//     })
+//   }

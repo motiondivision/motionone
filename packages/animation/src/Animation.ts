@@ -8,9 +8,9 @@ import {
   isEasingList,
   defaults,
   noopReturn,
+  interpolate as createInterpolate,
 } from "@motionone/utils"
 import { getEasingFunction } from "./utils/easing"
-import { interpolate as createInterpolate } from "./utils/interpolate"
 
 export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
   private resolve?: (value: any) => void

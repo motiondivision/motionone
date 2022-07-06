@@ -1,6 +1,6 @@
-import type { Easing } from "@motionone/types"
-import { cubicBezier, steps, EasingFunction } from "@motionone/easing"
-import { noopReturn, wrap, isEasingList } from "@motionone/utils"
+import type { Easing, EasingFunction } from "@motionone/types"
+import { cubicBezier, steps } from "@motionone/easing"
+import { noopReturn } from "@motionone/utils"
 
 const namedEasings = {
   ease: cubicBezier(0.25, 0.1, 0.25, 1.0),
@@ -33,10 +33,4 @@ export function getEasingFunction(
   }
 
   return noopReturn
-}
-
-export function getEasingForSegment<T>(easing: T | T[], i: number) {
-  return isEasingList(easing as any)
-    ? easing[wrap(0, (easing as T[]).length, i)]
-    : easing
 }

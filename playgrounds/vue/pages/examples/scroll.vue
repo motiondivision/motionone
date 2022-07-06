@@ -1,6 +1,6 @@
 <template>
   <main>
-    <header><h1>Header</h1></header>
+    <header><h1>Scroll</h1></header>
     <article>
       <div id="video">
         <div id="carousel">
@@ -32,35 +32,44 @@
         </div>
       </div>
     </article>
-    <footer><h1>Footer</h1></footer>
+    <footer><h1>Animations</h1></footer>
     <div id="debug"></div>
   </main>
 </template>
 
 <style scoped>
-body {
-  margin: 0;
-  padding: 0;
+main {
+  --white: #f5f5f5;
+  --black: #0f1115;
+  --yellow: #ffeb0e;
+  --strong-blue: #0d63f8;
+  --blue: #31a6fa;
+  --green: #57eb64;
+  --pink: #ff2965;
+  --red: #ff1231;
+  --splash: #00ffdb;
+}
+
+header,
+footer {
+  color: white;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Inter;
+  color: rgba(0, 0, 0, 0.7);
+  letter-spacing: -3px;
 }
 
 header {
   height: 100vh;
-  background: red;
-  color: white;
-  font-size: 48px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background: var(--red);
 }
 
 footer {
   height: 100vh;
-  background: blue;
-  color: white;
-  font-size: 48px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background: var(--yellow);
 }
 
 article {
@@ -73,7 +82,7 @@ article {
   width: 100%;
   position: sticky;
   top: 0;
-  background: green;
+  background: var(--green);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,18 +91,20 @@ article {
 
 #carousel {
   display: flex;
-  width: 300px;
+  width: 265px;
   height: 200px;
   gap: 20px;
 }
 
 .item {
-  flex: 0 0 300px;
+  flex: 0 0 265px;
   background: white;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 video {
-  width: 300px;
+  width: 267px;
   height: 200px;
 }
 
@@ -126,7 +137,7 @@ video {
   position: absolute;
   top: 0;
   left: 0;
-  transform: scale(4);
+  transform: scale(4.5);
   transform-origin: 0% 0%;
 }
 </style>
@@ -140,7 +151,7 @@ export default {
     onMounted(() => {
       const controls = animate(
         "#video",
-        { backgroundColor: ["green", "purple"] },
+        { backgroundColor: ["var(--green)", "var(--splash)"] },
         { duration: 1, easing: "linear" }
       )
       controls.pause()
@@ -188,16 +199,16 @@ export default {
       )
 
       var scene = new THREE.Scene()
-      var camera = new THREE.PerspectiveCamera(75, 300 / 200, 0.1, 1000)
+      var camera = new THREE.PerspectiveCamera(75, 265 / 200, 0.1, 1000)
 
-      var renderer = new THREE.WebGLRenderer()
-      renderer.setSize(300, 200)
+      var renderer = new THREE.WebGLRenderer({ alpha: true })
+      renderer.setSize(265, 200)
       renderer.setPixelRatio(2)
       document.querySelector(".three").appendChild(renderer.domElement)
 
       var geometry = new THREE.BoxGeometry(1, 1, 1)
       var material = new THREE.MeshPhongMaterial({
-        color: "red",
+        color: 0xff1231,
         shininess: 70,
       })
       var cube = new THREE.Mesh(geometry, material)
@@ -228,7 +239,7 @@ export default {
           if (video.readyState > 0) {
             video.currentTime = video.duration * y.progress
           }
-          cube.rotation.y = y.progress * 10
+          cube.rotation.y = Math.max(y.progress, 0) * 10
           renderer.render(scene, camera)
           offsetBox.style.offsetDistance = `${y.progress * 100}%`
         },

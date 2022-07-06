@@ -14,5 +14,3 @@
     </li>
   </ul>
 </template>
-
-<style></style>
