@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.11.2] [2022-07-06]
+
+### Removed
+
+- Removing default `root` in `inView` as this [silently fails in iOS Safari 14-15](https://bugs.webkit.org/show_bug.cgi?id=224324).
+
 ## [10.11.1] [2022-07-06]
 
 ### Added
