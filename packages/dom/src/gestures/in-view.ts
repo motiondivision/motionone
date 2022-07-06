@@ -1,10 +1,25 @@
+import { noop } from "@motionone/utils"
 import { AcceptedElements } from "../animate/types"
 import { resolveElements } from "../utils/resolve-elements"
+
+let supportsDocumentRoot: boolean
+function getDefaultRoot() {
+  if (supportsDocumentRoot === undefined) {
+    try {
+      new IntersectionObserver(noop, { root: document })
+      supportsDocumentRoot = true
+    } catch (e) {
+      supportsDocumentRoot = false
+    }
+  }
+
+  return supportsDocumentRoot ? document : undefined
+}
 
 export type ViewChangeHandler = (entry: IntersectionObserverEntry) => void
 
 export interface InViewOptions {
-  root?: Element
+  root?: Element | Document
   margin?: string
   amount?: "any" | "all" | number
 }
@@ -17,7 +32,11 @@ const thresholds = {
 export function inView(
   elements: AcceptedElements,
   onStart: (entry: IntersectionObserverEntry) => void | ViewChangeHandler,
-  { root, margin: rootMargin, amount = "any" }: InViewOptions = {}
+  {
+    root = getDefaultRoot(),
+    margin: rootMargin,
+    amount = "any",
+  }: InViewOptions = {}
 ): VoidFunction {
   /**
    * If this browser doesn't support IntersectionObserver, return a dummy stop function.

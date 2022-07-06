@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.11.1] [2022-07-06]
+
+### Added
+
+- In supported browsers, `inView` will use `document` as the default value for `root` to ensure `rootMargin` works within iframes.
+
 ## [10.11.0] [2022-06-24]
 
 ### Added
