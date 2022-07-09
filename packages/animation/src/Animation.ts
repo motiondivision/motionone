@@ -183,7 +183,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
 
     this.cancelTimestamp = this.startTime
     this.pauseTime = undefined
-    requestAnimationFrame(this.tick)
+    this.frameRequestId = requestAnimationFrame(this.tick)
   }
 
   pause() {
