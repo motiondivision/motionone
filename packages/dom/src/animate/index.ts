@@ -8,13 +8,13 @@ import { getOptions } from "./utils/options"
 import { resolveElements } from "../utils/resolve-elements"
 import { withControls } from "./utils/controls"
 import { resolveOption } from "../utils/stagger"
-import { AnimationControls, AnimationDriver } from "@motionone/types"
+import { AnimationControls } from "@motionone/types"
 import { ElementOrSelector } from "../types"
 
 export function animate(
   elements: ElementOrSelector,
   keyframes: MotionKeyframesDefinition,
-  options: AnimationOptionsWithOverrides & { driver?: AnimationDriver } = {}
+  options: AnimationOptionsWithOverrides = {}
 ): AnimationControls {
   elements = resolveElements(elements)
   const numElements = elements.length
@@ -43,6 +43,7 @@ export function animate(
 
   return withControls(
     animationFactories,
+    options,
     /**
      * TODO:
      * If easing is set to spring or glide, duration will be dynamically
@@ -52,7 +53,6 @@ export function animate(
      * to Proxy animations returned from animateStyle that has duration
      * as a getter.
      */
-    options.duration,
-    options.driver
+    options.duration
   )
 }

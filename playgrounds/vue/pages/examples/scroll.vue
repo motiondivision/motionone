@@ -143,7 +143,7 @@ video {
 </style>
 
 <script lang="ts">
-import { animate, scroll } from "motion"
+import { animate, scroll, ScrollOffset } from "motion"
 import * as THREE from "three"
 
 export default {
@@ -156,14 +156,10 @@ export default {
       )
       controls.pause()
 
-      const scaleControls = animate(
-        "header",
-        { scale: [1, 0] },
-        { duration: 1, easing: "linear" }
-      )
-
-      scaleControls.pause()
-      scaleControls.finished.then(() => console.log("animation finished"))
+      scroll(animate("header", { scale: [1, 0] }), {
+        target: document.querySelector("header"),
+        offset: ScrollOffset.Exit,
+      })
 
       const carousel = animate(
         "#carousel",
@@ -185,16 +181,7 @@ export default {
         },
         {
           target: document.querySelector("footer"),
-          offset: "enter",
-        }
-      )
-      scroll(
-        ({ y }) => {
-          scaleControls.currentTime = y.progress
-        },
-        {
-          target: document.querySelector("header"),
-          offset: "exit",
+          offset: ScrollOffset.Enter,
         }
       )
 

@@ -2,6 +2,7 @@ import type {
   AnimationControls,
   AnimationOptions,
   Easing,
+  EasingFunction,
 } from "@motionone/types"
 import {
   isEasingGenerator,
@@ -31,14 +32,24 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
 
   private frameRequestId?: number
 
+  private easing: EasingFunction = noopReturn
+
+  private hasDefinedEasing: boolean
+
+  private duration: number = 0
+
+  private totalDuration: number = 0
+
+  private repeat: number = 0
+
   playState: AnimationPlayState = "idle"
 
   constructor(
     output: (v: number) => void,
     keyframes: number[] = [0, 1],
     {
-      easing = defaults.easing as Easing,
-      duration = defaults.duration,
+      easing,
+      duration: initialDuration = defaults.duration,
       delay = defaults.delay,
       endDelay = defaults.endDelay,
       repeat = defaults.repeat,
@@ -46,18 +57,19 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
       direction = "normal",
     }: AnimationOptions = {}
   ) {
+    this.hasDefinedEasing = Boolean(easing)
+    easing = easing || (defaults.easing as Easing)
+
     if (isEasingGenerator(easing)) {
       const custom = easing.createAnimation(keyframes, () => "0", true)
       easing = custom.easing
       if (custom.keyframes !== undefined) keyframes = custom.keyframes
-      if (custom.duration !== undefined) duration = custom.duration
+      if (custom.duration !== undefined) initialDuration = custom.duration
     }
 
-    const animationEasing = isEasingList(easing)
-      ? noopReturn
-      : getEasingFunction(easing)
-
-    const totalDuration = duration * (repeat + 1)
+    this.repeat = repeat
+    this.updateEasing(easing)
+    this.updateDuration(initialDuration)
 
     const interpolate = createInterpolate(
       keyframes,
@@ -89,7 +101,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
        * to the total duration.
        */
       if (this.playState === "finished" && this.pauseTime === undefined) {
-        t = totalDuration
+        t = this.totalDuration
       }
 
       /**
@@ -97,7 +109,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
        * than duration we'll get values like 2.5 (midway through the
        * third iteration)
        */
-      const progress = t / duration
+      const progress = t / this.duration
 
       // TODO progress += iterationStart
 
@@ -135,14 +147,14 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
         iterationProgress = 1 - iterationProgress
       }
 
-      const p = t >= totalDuration ? 1 : Math.min(iterationProgress, 1)
-      const latest = interpolate(animationEasing(p))
+      const p = t >= this.totalDuration ? 1 : Math.min(iterationProgress, 1)
+      const latest = interpolate(this.easing(p))
 
       output(latest)
 
       const isAnimationFinished =
         this.pauseTime === undefined &&
-        (this.playState === "finished" || t >= totalDuration + endDelay)
+        (this.playState === "finished" || t >= this.totalDuration + endDelay)
 
       if (isAnimationFinished) {
         this.playState = "finished"
@@ -205,6 +217,20 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
   }
 
   commitStyles() {}
+
+  normalize() {
+    if (!this.hasDefinedEasing) this.updateEasing("linear")
+    this.updateDuration(1)
+  }
+
+  private updateEasing(easing: Easing | Easing[]) {
+    this.easing = isEasingList(easing) ? noopReturn : getEasingFunction(easing)
+  }
+
+  private updateDuration(duration: number) {
+    this.duration = duration
+    this.totalDuration = duration * (this.repeat + 1)
+  }
 
   get currentTime() {
     return this.t

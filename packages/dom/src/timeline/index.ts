@@ -1,7 +1,6 @@
 import { invariant } from "hey-listen"
 import type {
   AnimationOptions,
-  AnimationDriver,
   Easing,
   PlaybackOptions,
   UnresolvedValueKeyframe,
@@ -43,7 +42,6 @@ type AnimateStyleDefinition = [
 
 export type TimelineOptions = PlaybackOptions & {
   duration?: number
-  driver?: AnimationDriver
   defaultOptions?: AnimationOptionsWithOverrides
 }
 
@@ -62,9 +60,9 @@ export function timeline(
 
   return withControls(
     animationFactories,
+    options,
     // Get the duration from the first animation definition
-    animationDefinitions[0]?.[3].duration,
-    options.driver
+    animationDefinitions[0]?.[3].duration
   )
 }
 

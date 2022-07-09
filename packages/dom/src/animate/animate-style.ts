@@ -8,7 +8,7 @@ import {
   isEasingGenerator,
   isEasingList,
 } from "@motionone/utils"
-import { AnimationDriver, AnimationOptions } from "@motionone/types"
+import { AnimationOptions } from "@motionone/types"
 import {
   addTransformToElement,
   isTransform,
@@ -30,7 +30,7 @@ export function animateStyle(
   element: Element,
   key: string,
   keyframesDefinition: ValueKeyframesDefinition,
-  options: AnimationOptions & { driver?: AnimationDriver } = {}
+  options: AnimationOptions = {}
 ): AnimationFactory {
   const record = getDevToolsRecord()
   const isRecording = options.record !== false && record
@@ -41,7 +41,7 @@ export function animateStyle(
     delay = defaults.delay,
     endDelay = defaults.endDelay,
     repeat = defaults.repeat,
-    easing = options.driver ? "linear" : defaults.easing,
+    easing = defaults.easing,
     direction,
     offset,
     allowWebkitAcceleration = false,

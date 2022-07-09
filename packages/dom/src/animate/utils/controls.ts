@@ -1,38 +1,30 @@
 import { defaults, noop, time } from "@motionone/utils"
-import type { AnimationControls, AnimationDriver } from "@motionone/types"
+import type { AnimationControls, AnimationOptions } from "@motionone/types"
 import type { AnimationFactory, AnimationWithCommitStyles } from "../types"
 import { stopAnimation } from "./stop-animation"
 
 interface MotionState {
   animations: AnimationWithCommitStyles[]
   duration: number
-  startDriver?: () => void
-  stopDriver?: () => void
   finished?: Promise<any>
+  options: AnimationOptions
 }
 
 const createAnimation = (factory: AnimationFactory) => factory()
 
 export const withControls = (
   animationFactory: AnimationFactory[],
-  duration = defaults.duration,
-  driver?: AnimationDriver
+  options: AnimationOptions,
+  duration = defaults.duration
 ) => {
-  const animationControls = new Proxy(
+  return new Proxy(
     {
       animations: animationFactory.map(createAnimation).filter(Boolean),
       duration,
-      startDriver: () => driver?.subscribe(animationControls),
-      stopDriver: () => driver?.unsubscribe(animationControls),
+      options,
     } as any,
     controls
   ) as AnimationControls
-
-  if (driver) {
-    driver.subscribe(animationControls)
-  }
-
-  return animationControls
 }
 /**
  * TODO:
@@ -65,15 +57,24 @@ export const controls = {
         return target.finished
       case "stop":
         return () => {
-          target.stopDriver?.()
           target.animations.forEach((animation) => stopAnimation(animation))
         }
-      case "play": {
+      case "normalize":
         return () => {
-          target.startDriver?.()
-          target.animations.forEach((animation) => animation.play())
+          target.animations.forEach((animation) => {
+            if (animation.normalize) {
+              animation.normalize()
+            } else {
+              const timingOptions: OptionalEffectTiming = { duration: 1000 }
+
+              if (!target.options.easing) {
+                timingOptions.easing = "linear"
+              }
+
+              animation.effect?.updateTiming?.(timingOptions)
+            }
+          })
         }
-      }
       default:
         return typeof activeAnimation?.[key] === "undefined"
           ? undefined

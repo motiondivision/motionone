@@ -65,7 +65,8 @@ export type MotionKeyframesDefinition = StyleKeyframesDefinition &
   VariableKeyframesDefinition
 
 export interface AnimationWithCommitStyles extends Animation {
-  commitStyles: () => void
+  commitStyles: VoidFunction
+  normalize: VoidFunction
 }
 
 export type AnimationListOptions = Omit<

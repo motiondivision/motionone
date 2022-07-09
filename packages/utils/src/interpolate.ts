@@ -4,8 +4,7 @@ import { defaultOffset, fillOffset } from "./offset"
 import { progress } from "./progress"
 import { getEasingForSegment } from "./easing"
 import type { EasingFunction } from "@motionone/types"
-
-const clampProgress = (p: number) => Math.min(1, Math.max(p, 0))
+import { clamp } from "./clamp"
 
 export function interpolate(
   output: number[],
@@ -29,7 +28,7 @@ export function interpolate(
       if (t < input[i + 1]) break
     }
 
-    let progressInRange = clampProgress(progress(input[i], input[i + 1], t))
+    let progressInRange = clamp(0, 1, progress(input[i], input[i + 1], t))
     const segmentEasing = getEasingForSegment(easing, i)
     progressInRange = segmentEasing(progressInRange)
 

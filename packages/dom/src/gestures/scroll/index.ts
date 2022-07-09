@@ -1,4 +1,4 @@
-import { AnimationControls, AnimationDriver } from "@motionone/types"
+import { AnimationControls } from "@motionone/types"
 import { resize } from "../resize/index"
 import { createScrollInfo } from "./info"
 import { createOnScrollHandler } from "./on-scroll-handler"
@@ -12,50 +12,18 @@ export type ScrollTargets = Array<HTMLElement>
 const getEventTarget = (element: HTMLElement) =>
   element === document.documentElement ? window : element
 
-function scrollDriver(options: ScrollOptions = {}): AnimationDriver {
-  const { axis = "y" } = options
-  const subscribers = new Set<AnimationControls>()
-  let stopScroll: VoidFunction | undefined
-
-  const startScroll = () => {
-    stopScroll = scroll((info) => {
-      for (const controls of subscribers) {
-        controls.currentTime = controls.duration * info[axis].progress
-      }
-    }, options)
-  }
-
-  return {
-    subscribe: (controls) => {
-      subscribers.add(controls)
-      controls.pause()
-      if (!stopScroll) startScroll()
-    },
-    unsubscribe: (controls) => {
-      subscribers.delete(controls)
-
-      if (!subscribers.size && stopScroll) {
-        stopScroll()
-        stopScroll = undefined
-      }
-    },
-  }
-}
-
-export function scroll(options?: ScrollOptions): AnimationDriver
+export function scroll(
+  controls: AnimationControls,
+  options?: ScrollOptions
+): VoidFunction
 export function scroll(
   onScroll: OnScroll,
   options?: ScrollOptions
 ): VoidFunction
-export function scroll(a?: OnScroll | ScrollOptions, b: ScrollOptions = {}) {
-  /**
-   * Support overloading so we can set scroll(options) to animation.duration.
-   */
-  if (typeof a !== "function") return scrollDriver(a)
-
-  const onScroll = a
-  const { container = document.documentElement, ...options } = b
-
+export function scroll(
+  onScroll: OnScroll | AnimationControls,
+  { container = document.documentElement, ...options }: ScrollOptions = {}
+) {
   let containerHandlers = onScrollHandlers.get(container)
 
   /**
@@ -105,6 +73,8 @@ export function scroll(a?: OnScroll | ScrollOptions, b: ScrollOptions = {}) {
   const onLoadProcesss = requestAnimationFrame(listener)
 
   return () => {
+    if (typeof onScroll !== "function") onScroll.stop()
+
     stopResize()
     cancelAnimationFrame(onLoadProcesss)
 

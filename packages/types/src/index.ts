@@ -17,11 +17,6 @@ export type AnimationGeneratorFactory<Options> = (
 
 export type AnimationGenerator = (t: number) => AnimationGeneratorState
 
-export type AnimationDriver = {
-  subscribe: (controls: AnimationControls) => void
-  unsubscribe: (controls: AnimationControls) => void
-}
-
 export type BezierDefinition = [number, number, number, number]
 
 export type PlayState = "idle" | "running" | "paused" | "finished"
@@ -46,6 +41,7 @@ export interface AnimationControls extends BasicAnimationControls {
   duration: number
   playbackRate: number
   playState: AnimationPlayState
+  normalize: () => void
 }
 
 export type CustomAnimationSettings = {
