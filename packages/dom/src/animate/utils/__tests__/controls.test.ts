@@ -94,6 +94,7 @@ describe("Animation controls Proxy", () => {
   test("Reads playState", () => {
     const controls = withControls(
       [() => testAnimation({ playState: "finished" })],
+      {},
       1
     )
     expect(controls.playState).toEqual("finished")

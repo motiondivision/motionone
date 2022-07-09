@@ -57,7 +57,7 @@
     },
     {
       "path": "./dist/size-resize.js",
-      "maxSize": "0.55 kB"
+      "maxSize": "0.65 kB"
     }
   ]
 }
