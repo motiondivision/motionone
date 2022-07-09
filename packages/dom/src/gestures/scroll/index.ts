@@ -1,3 +1,4 @@
+import { AnimationControls, AnimationDriver } from "@motionone/types"
 import { resize } from "../resize/index"
 import { createScrollInfo } from "./info"
 import { createOnScrollHandler } from "./on-scroll-handler"
@@ -11,15 +12,37 @@ export type ScrollTargets = Array<HTMLElement>
 const getEventTarget = (element: HTMLElement) =>
   element === document.documentElement ? window : element
 
-/**
- * TODO:
- * -  Scroll animations
- * =============================================
- * -  Smoothing
- */
-export function scroll(
-  options?: ScrollOptions
-): (onScroll: OnScroll) => VoidFunction
+function scrollDriver(options: ScrollOptions = {}): AnimationDriver {
+  const { axis = "y" } = options
+  const subscribers = new Set<AnimationControls>()
+  let stopScroll: VoidFunction | undefined
+
+  const startScroll = () => {
+    stopScroll = scroll((info) => {
+      for (const controls of subscribers) {
+        controls.currentTime = controls.duration * info[axis].progress
+      }
+    }, options)
+  }
+
+  return {
+    subscribe: (controls) => {
+      subscribers.add(controls)
+      controls.pause()
+      if (!stopScroll) startScroll()
+    },
+    unsubscribe: (controls) => {
+      subscribers.delete(controls)
+
+      if (!subscribers.size && stopScroll) {
+        stopScroll()
+        stopScroll = undefined
+      }
+    },
+  }
+}
+
+export function scroll(options?: ScrollOptions): AnimationDriver
 export function scroll(
   onScroll: OnScroll,
   options?: ScrollOptions
@@ -28,9 +51,7 @@ export function scroll(a?: OnScroll | ScrollOptions, b: ScrollOptions = {}) {
   /**
    * Support overloading so we can set scroll(options) to animation.duration.
    */
-  if (typeof a !== "function") {
-    return (onScroll: OnScroll) => scroll(onScroll, a)
-  }
+  if (typeof a !== "function") return scrollDriver(a)
 
   const onScroll = a
   const { container = document.documentElement, ...options } = b
@@ -109,44 +130,3 @@ export function scroll(a?: OnScroll | ScrollOptions, b: ScrollOptions = {}) {
     }
   }
 }
-
-// scroll.timeline =
-//   (options: ScrollOptions = {}) =>
-//   (controls: AnimationControls) => {
-//     controls.pause()
-
-//     let driver: VoidFunction | undefined
-
-//     const startDriver = () => {
-//       if (driver) return
-
-//       const axis = options.axis || "y"
-//       driver = scroll((info) => {
-//         controls.currentTime = controls.duration * info[axis].progress
-//       }, options)
-//     }
-
-//     startDriver()
-
-//     return new Proxy(controls, {
-//       get: (target: AnimationControls, key: string) => {
-//         switch (key) {
-//           case "play": {
-//             return () => {
-//               if (!driver) startDriver()
-//             }
-//           }
-//           case "pause":
-//           case "stop": {
-//             return () => {
-//               driver?.()
-//               driver = undefined
-//               target[key]()
-//             }
-//           }
-//         }
-
-//         return Reflect.get(target, key)
-//       },
-//     })
-//   }

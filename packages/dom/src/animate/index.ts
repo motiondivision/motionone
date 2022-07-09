@@ -8,13 +8,13 @@ import { getOptions } from "./utils/options"
 import { resolveElements } from "../utils/resolve-elements"
 import { withControls } from "./utils/controls"
 import { resolveOption } from "../utils/stagger"
-import { AnimationControls } from "@motionone/types"
+import { AnimationControls, AnimationDriver } from "@motionone/types"
 import { ElementOrSelector } from "../types"
 
 export function animate(
   elements: ElementOrSelector,
   keyframes: MotionKeyframesDefinition,
-  options: AnimationOptionsWithOverrides = {}
+  options: AnimationOptionsWithOverrides & { driver?: AnimationDriver } = {}
 ): AnimationControls {
   elements = resolveElements(elements)
   const numElements = elements.length
@@ -52,6 +52,7 @@ export function animate(
      * to Proxy animations returned from animateStyle that has duration
      * as a getter.
      */
-    options.duration
+    options.duration,
+    options.driver
   )
 }

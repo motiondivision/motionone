@@ -1,11 +1,13 @@
 import { defaults, noop, time } from "@motionone/utils"
-import type { AnimationControls } from "@motionone/types"
+import type { AnimationControls, AnimationDriver } from "@motionone/types"
 import type { AnimationFactory, AnimationWithCommitStyles } from "../types"
 import { stopAnimation } from "./stop-animation"
 
 interface MotionState {
   animations: AnimationWithCommitStyles[]
   duration: number
+  startDriver?: () => void
+  stopDriver?: () => void
   finished?: Promise<any>
 }
 
@@ -13,16 +15,25 @@ const createAnimation = (factory: AnimationFactory) => factory()
 
 export const withControls = (
   animationFactory: AnimationFactory[],
-  duration: number = defaults.duration
-) =>
-  new Proxy(
+  duration = defaults.duration,
+  driver?: AnimationDriver
+) => {
+  const animationControls = new Proxy(
     {
       animations: animationFactory.map(createAnimation).filter(Boolean),
       duration,
+      startDriver: () => driver?.subscribe(animationControls),
+      stopDriver: () => driver?.unsubscribe(animationControls),
     } as any,
     controls
   ) as AnimationControls
 
+  if (driver) {
+    driver.subscribe(animationControls)
+  }
+
+  return animationControls
+}
 /**
  * TODO:
  * Currently this returns the first animation, ideally it would return
@@ -53,8 +64,16 @@ export const controls = {
         }
         return target.finished
       case "stop":
-        return () =>
+        return () => {
+          target.stopDriver?.()
           target.animations.forEach((animation) => stopAnimation(animation))
+        }
+      case "play": {
+        return () => {
+          target.startDriver?.()
+          target.animations.forEach((animation) => animation.play())
+        }
+      }
       default:
         return typeof activeAnimation?.[key] === "undefined"
           ? undefined

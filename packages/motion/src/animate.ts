@@ -8,13 +8,14 @@ import {
 import { Animation } from "@motionone/animation"
 import {
   AnimationControls,
+  AnimationDriver,
   AnimationOptions,
   ProgressFunction,
 } from "@motionone/types"
 
 export function animateProgress(
   target: ProgressFunction,
-  options?: AnimationOptions
+  options: AnimationOptions & { driver?: AnimationDriver } = {}
 ) {
   return withControls(
     [
@@ -24,7 +25,8 @@ export function animateProgress(
         return animation
       },
     ],
-    options?.duration
+    options.duration,
+    options.driver
   )
 }
 
