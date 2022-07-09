@@ -176,7 +176,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
     this.playState = "running"
 
     if (this.pauseTime !== undefined) {
-      this.startTime = now - (this.pauseTime - (this.startTime ?? 0))
+      this.startTime = now - this.pauseTime
     } else if (!this.startTime) {
       this.startTime = now
     }
@@ -188,7 +188,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
 
   pause() {
     this.playState = "paused"
-    this.pauseTime = performance.now()
+    this.pauseTime = this.t
   }
 
   finish() {

@@ -331,11 +331,11 @@ describe("animateNumber", () => {
     )
     await animation.finished
     expect(output).toEqual([
-      0.125, 0.25, 0.37499999999999994, 0.5, 0.25, 0.25, 0.25,
+      0.125, 0.25, 0.37499999999999994, 0.37499999999999994, 0.25, 0.25, 0.25,
       0.37499999999999994, 0.5, 0.625, 0.7499999999999999, 0.8749999999999999,
       1,
     ])
-    expect(currentTime).toBe(200)
+    expect(currentTime).toBe(150)
   })
 
   test("stopAnimation is compatible", async () => {

@@ -5,6 +5,7 @@ import { createOnScrollHandler } from "./on-scroll-handler"
 import { OnScroll, OnScrollHandler, ScrollOptions } from "./types"
 
 const scrollListeners = new WeakMap<Element, VoidFunction>()
+const resizeListeners = new WeakMap<Element, VoidFunction>()
 const onScrollHandlers = new WeakMap<Element, Set<OnScrollHandler>>()
 
 export type ScrollTargets = Array<HTMLElement>
@@ -63,19 +64,20 @@ export function scroll(
     scrollListeners.set(container, listener)
 
     const target = getEventTarget(container)
-    window.addEventListener("resize", listener, { passive: true })
+    if (container === document.documentElement) {
+      window.addEventListener("resize", listener, { passive: true })
+    } else {
+      resizeListeners.set(container, resize(container, listener))
+    }
     target.addEventListener("scroll", listener, { passive: true })
   }
 
   const listener = scrollListeners.get(container)!
-  // TODO Move this to within scrollListeners lazy load
-  const stopResize = resize(container, listener)
   const onLoadProcesss = requestAnimationFrame(listener)
 
   return () => {
     if (typeof onScroll !== "function") onScroll.stop()
 
-    stopResize()
     cancelAnimationFrame(onLoadProcesss)
 
     /**
@@ -96,6 +98,7 @@ export function scroll(
 
     if (listener) {
       getEventTarget(container).removeEventListener("scroll", listener)
+      resizeListeners.get(container)?.()
       window.removeEventListener("resize", listener)
     }
   }
