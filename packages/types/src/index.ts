@@ -41,7 +41,6 @@ export interface AnimationControls extends BasicAnimationControls {
   duration: number
   playbackRate: number
   playState: AnimationPlayState
-  normalize: () => void
 }
 
 export type CustomAnimationSettings = {

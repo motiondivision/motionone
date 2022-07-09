@@ -1,4 +1,4 @@
-import { defaults, noop, time } from "@motionone/utils"
+import { defaults, noop, noopReturn, time } from "@motionone/utils"
 import type { AnimationControls, AnimationOptions } from "@motionone/types"
 import type { AnimationFactory, AnimationWithCommitStyles } from "../types"
 import { stopAnimation } from "./stop-animation"
@@ -61,15 +61,15 @@ export const controls = {
         }
       case "normalize":
         return () => {
-          target.animations.forEach((animation) => {
-            if (animation.normalize) {
-              animation.normalize()
+          const { easing } = target.options
+
+          target.animations.forEach((animation: any) => {
+            if (animation.updateDuration) {
+              if (!easing) animation.easing = noopReturn
+              animation.updateDuration(1)
             } else {
               const timingOptions: OptionalEffectTiming = { duration: 1000 }
-
-              if (!target.options.easing) {
-                timingOptions.easing = "linear"
-              }
+              if (!easing) timingOptions.easing = "linear"
 
               animation.effect?.updateTiming?.(timingOptions)
             }

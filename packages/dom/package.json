@@ -29,7 +29,7 @@
   "bundlesize": [
     {
       "path": "./dist/size-animate.js",
-      "maxSize": "3.7 kB"
+      "maxSize": "3.75 kB"
     },
     {
       "path": "./dist/size-animate-style.js",
@@ -45,7 +45,7 @@
     },
     {
       "path": "./dist/size-webpack-animate.js",
-      "maxSize": "3.7 kB"
+      "maxSize": "3.76 kB"
     },
     {
       "path": "./dist/size-in-view.js",

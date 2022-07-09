@@ -34,8 +34,6 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
 
   private easing: EasingFunction = noopReturn
 
-  private hasDefinedEasing: boolean
-
   private duration: number = 0
 
   private totalDuration: number = 0
@@ -57,7 +55,6 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
       direction = "normal",
     }: AnimationOptions = {}
   ) {
-    this.hasDefinedEasing = Boolean(easing)
     easing = easing || (defaults.easing as Easing)
 
     if (isEasingGenerator(easing)) {
@@ -68,7 +65,9 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
     }
 
     this.repeat = repeat
-    this.updateEasing(easing)
+
+    this.easing = isEasingList(easing) ? noopReturn : getEasingFunction(easing)
+
     this.updateDuration(initialDuration)
 
     const interpolate = createInterpolate(
@@ -217,15 +216,6 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
   }
 
   commitStyles() {}
-
-  normalize() {
-    if (!this.hasDefinedEasing) this.updateEasing("linear")
-    this.updateDuration(1)
-  }
-
-  private updateEasing(easing: Easing | Easing[]) {
-    this.easing = isEasingList(easing) ? noopReturn : getEasingFunction(easing)
-  }
 
   private updateDuration(duration: number) {
     this.duration = duration

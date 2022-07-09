@@ -61,7 +61,7 @@ export function createOnScrollHandler(
 
 function scrubAnimation(controls: AnimationControls, axisInfo: AxisScrollInfo) {
   controls.pause()
-  controls.normalize()
+  ;(controls as any).normalize()
 
   return () => {
     controls.currentTime = axisInfo.progress
