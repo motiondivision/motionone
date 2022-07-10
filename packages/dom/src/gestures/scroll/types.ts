@@ -9,8 +9,8 @@ export interface AxisScrollInfo {
   targetOffset: number
   targetLength: number
   containerLength: number
-  interpolatorOffsets: number[]
-  interpolate: EasingFunction
+  interpolatorOffsets?: number[]
+  interpolate?: EasingFunction
 }
 
 export interface ScrollInfo {
