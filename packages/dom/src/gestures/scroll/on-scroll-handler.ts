@@ -1,4 +1,5 @@
 import { AnimationControls } from "@motionone/types"
+import { noopReturn } from "@motionone/utils"
 import { updateScrollInfo } from "./info"
 import { resolveOffsets } from "./offsets/index"
 import {
@@ -61,7 +62,24 @@ export function createOnScrollHandler(
 
 function scrubAnimation(controls: AnimationControls, axisInfo: AxisScrollInfo) {
   controls.pause()
-  ;(controls as any).normalize()
+
+  /**
+   * Normalize the animations to linear/1s to make them more
+   * predictable to scrub through.
+   *
+   * TODO: Fix casting here
+   */
+  ;(controls as any).forEachNative((animation: any, { easing }: any) => {
+    if (animation.updateDuration) {
+      if (!easing) animation.easing = noopReturn
+      animation.updateDuration(1)
+    } else {
+      const timingOptions: OptionalEffectTiming = { duration: 1000 }
+      if (!easing) timingOptions.easing = "linear"
+
+      animation.effect?.updateTiming?.(timingOptions)
+    }
+  })
 
   return () => {
     controls.currentTime = axisInfo.progress

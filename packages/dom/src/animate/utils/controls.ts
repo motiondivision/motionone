@@ -1,4 +1,4 @@
-import { defaults, noop, noopReturn, time } from "@motionone/utils"
+import { defaults, noop, time } from "@motionone/utils"
 import type { AnimationControls, AnimationOptions } from "@motionone/types"
 import type { AnimationFactory, AnimationWithCommitStyles } from "../types"
 import { stopAnimation } from "./stop-animation"
@@ -43,8 +43,7 @@ export const controls = {
       case "duration":
         return target.duration
       case "currentTime":
-        let time = activeAnimation?.[key] || 0
-        return time ? time / 1000 : 0
+        return time.s(activeAnimation?.[key] || 0)
       case "playbackRate":
       case "playState":
         return activeAnimation?.[key]
@@ -59,21 +58,18 @@ export const controls = {
         return () => {
           target.animations.forEach((animation) => stopAnimation(animation))
         }
-      case "normalize":
-        return () => {
-          const { easing } = target.options
-
-          target.animations.forEach((animation: any) => {
-            if (animation.updateDuration) {
-              if (!easing) animation.easing = noopReturn
-              animation.updateDuration(1)
-            } else {
-              const timingOptions: OptionalEffectTiming = { duration: 1000 }
-              if (!easing) timingOptions.easing = "linear"
-
-              animation.effect?.updateTiming?.(timingOptions)
-            }
-          })
+      case "forEachNative":
+        /**
+         * This is for internal use only, fire a callback for each
+         * underlying animation.
+         */
+        return (
+          callback: (
+            animation: AnimationWithCommitStyles,
+            state: MotionState
+          ) => void
+        ) => {
+          target.animations.forEach((animation) => callback(animation, target))
         }
       default:
         return typeof activeAnimation?.[key] === "undefined"

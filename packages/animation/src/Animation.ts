@@ -1,7 +1,6 @@
 import type {
   AnimationControls,
   AnimationOptions,
-  Easing,
   EasingFunction,
 } from "@motionone/types"
 import {
