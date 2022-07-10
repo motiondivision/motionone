@@ -1,3 +1,5 @@
+import { EasingFunction } from "@motionone/types"
+
 export interface AxisScrollInfo {
   current: number
   offset: number[]
@@ -7,6 +9,8 @@ export interface AxisScrollInfo {
   targetOffset: number
   targetLength: number
   containerLength: number
+  interpolatorOffsets: number[]
+  interpolate: EasingFunction
 }
 
 export interface ScrollInfo {

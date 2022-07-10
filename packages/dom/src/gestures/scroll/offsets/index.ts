@@ -43,24 +43,35 @@ export function resolveOffsets(
    * Populate the offset array by resolving the user's offset definition into
    * a list of pixel scroll offets.
    */
+  let hasChanged = !info[axis].interpolate
+
   const numOffsets = offsetDefinition.length
   for (let i = 0; i < numOffsets; i++) {
-    info[axis].offset[i] = resolveOffset(
+    const offset = resolveOffset(
       offsetDefinition[i],
       containerSize[lengthLabel],
       targetSize[lengthLabel],
       inset[axis]
     )
+
+    if (!hasChanged && offset !== info[axis].interpolatorOffsets![i]) {
+      hasChanged = true
+    }
+
+    info[axis].offset[i] = offset
   }
 
   /**
    * If the pixel scroll offsets have changed, create a new interpolator function
    * to map scroll value into a progress.
-   *
-   * TODO: Only create a new interpolator if offsets have changed
    */
-  info[axis].progress = interpolate(
-    defaultOffset(numOffsets),
-    info[axis].offset
-  )(info[axis].current)
+  if (hasChanged) {
+    info[axis].interpolate = interpolate(
+      defaultOffset(numOffsets),
+      info[axis].offset
+    )
+
+    info[axis].interpolatorOffsets = [...info[axis].offset]
+  }
+  info[axis].progress = info[axis].interpolate!(info[axis].current)
 }
