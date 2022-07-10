@@ -6,7 +6,10 @@ export interface AxisScrollInfo {
   progress: number
   scrollLength: number
   velocity: number
+
+  // TODO Rename before documenting
   targetOffset: number
+
   targetLength: number
   containerLength: number
   interpolatorOffsets?: number[]
