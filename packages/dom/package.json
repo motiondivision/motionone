@@ -29,7 +29,7 @@
   "bundlesize": [
     {
       "path": "./dist/size-animate.js",
-      "maxSize": "3.6 kB"
+      "maxSize": "3.62 kB"
     },
     {
       "path": "./dist/size-animate-style.js",
@@ -37,7 +37,7 @@
     },
     {
       "path": "./dist/size-timeline.js",
-      "maxSize": "4.5 kB"
+      "maxSize": "4.55 kB"
     },
     {
       "path": "./dist/size-spring.js",
@@ -45,11 +45,19 @@
     },
     {
       "path": "./dist/size-webpack-animate.js",
-      "maxSize": "3.6 kB"
+      "maxSize": "3.66 kB"
     },
     {
       "path": "./dist/size-in-view.js",
-      "maxSize": "0.5 kB"
+      "maxSize": "0.45 kB"
+    },
+    {
+      "path": "./dist/size-scroll.js",
+      "maxSize": "2.5 kB"
+    },
+    {
+      "path": "./dist/size-resize.js",
+      "maxSize": "0.65 kB"
     }
   ]
 }

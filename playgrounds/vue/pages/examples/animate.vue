@@ -63,7 +63,7 @@ body {
 }
 </style>
 
-<style>
+<style scoped>
 .container {
   width: 100vw;
   height: 100vh;

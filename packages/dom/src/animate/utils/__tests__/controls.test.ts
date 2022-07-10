@@ -1,5 +1,5 @@
 import { BasicAnimationControls } from "@motionone/types"
-import { wrapAnimationWithControls } from "../controls"
+import { withControls } from "../controls"
 
 interface TestAnimationOptions {
   startTime?: number
@@ -44,36 +44,39 @@ function testAnimation({
 
 describe("Animation controls Proxy", () => {
   test("Returns duration from explicitly provided argument", () => {
-    const controls = wrapAnimationWithControls(
+    const controls = withControls(
       [() => testAnimation({ currentTime: 500 })],
+      {},
       1
     )
     expect(controls.duration).toBe(1)
   })
 
   test("Returns currentTime in seconds", () => {
-    const controls = wrapAnimationWithControls(
+    const controls = withControls(
       [() => testAnimation({ currentTime: 500 })],
+      {},
       1
     )
     expect(controls.currentTime).toBe(0.5)
   })
 
   test("Returns playbackRate", () => {
-    const controls = wrapAnimationWithControls(
+    const controls = withControls(
       [() => testAnimation({ playbackRate: 0.5 })],
+      {},
       1
     )
     expect(controls.playbackRate).toBe(0.5)
   })
 
   test("Returns finished promise", () => {
-    const controls = wrapAnimationWithControls([() => testAnimation({})], 1)
+    const controls = withControls([() => testAnimation({})], {}, 1)
     expect(isPromise(controls.finished)).toEqual(true)
   })
 
   test("Returns supported functions", () => {
-    const controls = wrapAnimationWithControls([() => testAnimation({})], 1)
+    const controls = withControls([() => testAnimation({})], {}, 1)
     expect(isFunction(controls.play)).toEqual(true)
     expect(isFunction(controls.pause)).toEqual(true)
     expect(isFunction(controls.commitStyles)).toEqual(true)
@@ -84,13 +87,14 @@ describe("Animation controls Proxy", () => {
   })
 
   test("Unsupported functions/values are undefined", () => {
-    const controls = wrapAnimationWithControls([() => testAnimation({})], 1)
+    const controls = withControls([() => testAnimation({})], {}, 1)
     expect((controls as any).wooooo).toEqual(undefined)
   })
 
   test("Reads playState", () => {
-    const controls = wrapAnimationWithControls(
+    const controls = withControls(
       [() => testAnimation({ playState: "finished" })],
+      {},
       1
     )
     expect(controls.playState).toEqual("finished")

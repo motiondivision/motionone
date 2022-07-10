@@ -1,9 +1,9 @@
 import {
-  AcceptedElements,
+  ElementOrSelector,
   animate as animateDom,
   AnimationOptionsWithOverrides,
   MotionKeyframesDefinition,
-  wrapAnimationWithControls,
+  withControls,
 } from "@motionone/dom"
 import { Animation } from "@motionone/animation"
 import {
@@ -14,9 +14,9 @@ import {
 
 export function animateProgress(
   target: ProgressFunction,
-  options?: AnimationOptions
+  options: AnimationOptions = {}
 ) {
-  return wrapAnimationWithControls(
+  return withControls(
     [
       () => {
         const animation = new Animation(target, [0, 1], options)
@@ -24,12 +24,13 @@ export function animateProgress(
         return animation
       },
     ],
-    options?.duration
+    options,
+    options.duration
   )
 }
 
 export function animate(
-  elements: AcceptedElements,
+  elements: ElementOrSelector,
   keyframes: MotionKeyframesDefinition,
   options?: AnimationOptionsWithOverrides
 ): AnimationControls
@@ -38,12 +39,12 @@ export function animate(
   options?: AnimationOptions
 ): AnimationControls
 export function animate(
-  target: ProgressFunction | AcceptedElements,
+  target: ProgressFunction | ElementOrSelector,
   keyframesOrOptions?: MotionKeyframesDefinition | AnimationOptions,
   options?: AnimationOptionsWithOverrides
 ): AnimationControls {
-  const animationFunction: any =
+  const factory: any =
     typeof target === "function" ? animateProgress : animateDom
 
-  return animationFunction(target, keyframesOrOptions, options)
+  return factory(target, keyframesOrOptions, options)
 }

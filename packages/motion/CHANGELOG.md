@@ -2,6 +2,16 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.12.0] [UNRELEASED]
+
+### Added
+
+- `scroll` function for tracking scroll events and powering scroll-driven animations.
+
+### Fixed
+
+- Fixing `play` -> `cancel` behaviour in Safari. [Issue (sponsors only)](https://github.com/motiondivision/motionone/issues/102)
+
 ## [10.11.2] [2022-07-06]
 
 ### Removed

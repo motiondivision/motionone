@@ -1,7 +1,7 @@
-import { AcceptedElements } from "../animate/types"
+import { ElementOrSelector } from "../types"
 
 export function resolveElements(
-  elements: AcceptedElements,
+  elements: ElementOrSelector,
   selectorCache?: { [key: string]: NodeListOf<Element> }
 ): Element[] {
   if (typeof elements === "string") {

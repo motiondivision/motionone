@@ -1,4 +1,4 @@
-import { AcceptedElements } from "../animate/types"
+import { ElementOrSelector } from "../types"
 import { resolveElements } from "../utils/resolve-elements"
 
 export type ViewChangeHandler = (entry: IntersectionObserverEntry) => void
@@ -15,7 +15,7 @@ const thresholds = {
 }
 
 export function inView(
-  elements: AcceptedElements,
+  elementOrSelector: ElementOrSelector,
   onStart: (entry: IntersectionObserverEntry) => void | ViewChangeHandler,
   { root, margin: rootMargin, amount = "any" }: InViewOptions = {}
 ): VoidFunction {
@@ -29,7 +29,7 @@ export function inView(
     return () => {}
   }
 
-  const resolvedElements = resolveElements(elements)
+  const elements = resolveElements(elementOrSelector)
 
   const activeIntersections = new WeakMap<Element, ViewChangeHandler>()
 
@@ -63,7 +63,7 @@ export function inView(
     threshold: typeof amount === "number" ? amount : thresholds[amount],
   })
 
-  resolvedElements.forEach((element) => observer.observe(element))
+  elements.forEach((element) => observer.observe(element))
 
   return () => observer.disconnect()
 }

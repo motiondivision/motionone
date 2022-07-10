@@ -108,3 +108,5 @@ export interface DevTools {
   ) => void
   isRecording: boolean
 }
+
+export type EasingFunction = (t: number) => number

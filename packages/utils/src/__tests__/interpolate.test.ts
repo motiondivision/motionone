@@ -1,4 +1,4 @@
-import { noopReturn } from "@motionone/utils"
+import { noopReturn } from "../noop"
 import { interpolate } from "../interpolate"
 
 describe("interpolate", () => {

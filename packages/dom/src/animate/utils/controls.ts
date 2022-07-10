@@ -1,5 +1,5 @@
 import { defaults, noop, time } from "@motionone/utils"
-import type { AnimationControls } from "@motionone/types"
+import type { AnimationControls, AnimationOptions } from "@motionone/types"
 import type { AnimationFactory, AnimationWithCommitStyles } from "../types"
 import { stopAnimation } from "./stop-animation"
 
@@ -7,22 +7,25 @@ interface MotionState {
   animations: AnimationWithCommitStyles[]
   duration: number
   finished?: Promise<any>
+  options: AnimationOptions
 }
 
 const createAnimation = (factory: AnimationFactory) => factory()
 
-export const wrapAnimationWithControls = (
+export const withControls = (
   animationFactory: AnimationFactory[],
-  duration: number = defaults.duration
-) =>
-  new Proxy(
+  options: AnimationOptions,
+  duration = defaults.duration
+) => {
+  return new Proxy(
     {
       animations: animationFactory.map(createAnimation).filter(Boolean),
       duration,
+      options,
     } as any,
     controls
   ) as AnimationControls
-
+}
 /**
  * TODO:
  * Currently this returns the first animation, ideally it would return
@@ -40,8 +43,7 @@ export const controls = {
       case "duration":
         return target.duration
       case "currentTime":
-        let time = activeAnimation?.[key] || 0
-        return time ? time / 1000 : 0
+        return time.s(activeAnimation?.[key] || 0)
       case "playbackRate":
       case "playState":
         return activeAnimation?.[key]
@@ -53,8 +55,22 @@ export const controls = {
         }
         return target.finished
       case "stop":
-        return () =>
+        return () => {
           target.animations.forEach((animation) => stopAnimation(animation))
+        }
+      case "forEachNative":
+        /**
+         * This is for internal use only, fire a callback for each
+         * underlying animation.
+         */
+        return (
+          callback: (
+            animation: AnimationWithCommitStyles,
+            state: MotionState
+          ) => void
+        ) => {
+          target.animations.forEach((animation) => callback(animation, target))
+        }
       default:
         return typeof activeAnimation?.[key] === "undefined"
           ? undefined

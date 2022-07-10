@@ -1,16 +1,16 @@
 import type {
   AnimationControls,
   AnimationOptions,
-  Easing,
+  EasingFunction,
 } from "@motionone/types"
 import {
   isEasingGenerator,
   isEasingList,
   defaults,
   noopReturn,
+  interpolate as createInterpolate,
 } from "@motionone/utils"
 import { getEasingFunction } from "./utils/easing"
-import { interpolate as createInterpolate } from "./utils/interpolate"
 
 export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
   private resolve?: (value: any) => void
@@ -31,14 +31,22 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
 
   private frameRequestId?: number
 
+  private easing: EasingFunction = noopReturn
+
+  private duration: number = 0
+
+  private totalDuration: number = 0
+
+  private repeat: number = 0
+
   playState: AnimationPlayState = "idle"
 
   constructor(
     output: (v: number) => void,
     keyframes: number[] = [0, 1],
     {
-      easing = defaults.easing as Easing,
-      duration = defaults.duration,
+      easing,
+      duration: initialDuration = defaults.duration,
       delay = defaults.delay,
       endDelay = defaults.endDelay,
       repeat = defaults.repeat,
@@ -46,18 +54,20 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
       direction = "normal",
     }: AnimationOptions = {}
   ) {
+    easing = easing || defaults.easing
+
     if (isEasingGenerator(easing)) {
       const custom = easing.createAnimation(keyframes, () => "0", true)
       easing = custom.easing
       if (custom.keyframes !== undefined) keyframes = custom.keyframes
-      if (custom.duration !== undefined) duration = custom.duration
+      if (custom.duration !== undefined) initialDuration = custom.duration
     }
 
-    const animationEasing = isEasingList(easing)
-      ? noopReturn
-      : getEasingFunction(easing)
+    this.repeat = repeat
 
-    const totalDuration = duration * (repeat + 1)
+    this.easing = isEasingList(easing) ? noopReturn : getEasingFunction(easing)
+
+    this.updateDuration(initialDuration)
 
     const interpolate = createInterpolate(
       keyframes,
@@ -69,9 +79,12 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
       // TODO: Temporary fix for OptionsResolver typing
       delay = delay as number
 
-      if (this.pauseTime) timestamp = this.pauseTime
-
-      let t = (timestamp - this.startTime!) * this.rate
+      let t = 0
+      if (this.pauseTime !== undefined) {
+        t = this.pauseTime
+      } else {
+        t = (timestamp - this.startTime!) * this.rate
+      }
 
       this.t = t
 
@@ -85,14 +98,16 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
        * If this animation has finished, set the current time
        * to the total duration.
        */
-      if (this.playState === "finished") t = totalDuration
+      if (this.playState === "finished" && this.pauseTime === undefined) {
+        t = this.totalDuration
+      }
 
       /**
        * Get the current progress (0-1) of the animation. If t is >
        * than duration we'll get values like 2.5 (midway through the
        * third iteration)
        */
-      const progress = t / duration
+      const progress = t / this.duration
 
       // TODO progress += iterationStart
 
@@ -130,13 +145,14 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
         iterationProgress = 1 - iterationProgress
       }
 
-      const p = t >= totalDuration ? 1 : Math.min(iterationProgress, 1)
-      const latest = interpolate(animationEasing(p))
+      const p = t >= this.totalDuration ? 1 : Math.min(iterationProgress, 1)
+      const latest = interpolate(this.easing(p))
 
       output(latest)
 
       const isAnimationFinished =
-        this.playState === "finished" || t >= totalDuration + endDelay
+        this.pauseTime === undefined &&
+        (this.playState === "finished" || t >= this.totalDuration + endDelay)
 
       if (isAnimationFinished) {
         this.playState = "finished"
@@ -158,20 +174,20 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
     const now = performance.now()
     this.playState = "running"
 
-    if (this.pauseTime) {
-      this.startTime = now - (this.pauseTime - (this.startTime ?? 0))
+    if (this.pauseTime !== undefined) {
+      this.startTime = now - this.pauseTime
     } else if (!this.startTime) {
       this.startTime = now
     }
 
     this.cancelTimestamp = this.startTime
     this.pauseTime = undefined
-    requestAnimationFrame(this.tick)
+    this.frameRequestId = requestAnimationFrame(this.tick)
   }
 
   pause() {
     this.playState = "paused"
-    this.pauseTime = performance.now()
+    this.pauseTime = this.t
   }
 
   finish() {
@@ -200,12 +216,17 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
 
   commitStyles() {}
 
+  private updateDuration(duration: number) {
+    this.duration = duration
+    this.totalDuration = duration * (this.repeat + 1)
+  }
+
   get currentTime() {
     return this.t
   }
 
   set currentTime(t: number) {
-    if (this.pauseTime || this.rate === 0) {
+    if (this.pauseTime !== undefined || this.rate === 0) {
       this.pauseTime = t
     } else {
       this.startTime = performance.now() - t / this.rate
