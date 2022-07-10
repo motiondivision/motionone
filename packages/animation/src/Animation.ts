@@ -55,7 +55,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
       direction = "normal",
     }: AnimationOptions = {}
   ) {
-    easing = easing || (defaults.easing as Easing)
+    easing = easing || defaults.easing
 
     if (isEasingGenerator(easing)) {
       const custom = easing.createAnimation(keyframes, () => "0", true)
