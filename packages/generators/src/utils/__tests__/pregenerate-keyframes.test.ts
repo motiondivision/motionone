@@ -1,6 +1,5 @@
 import { mix } from "@motionone/utils"
-import { EasingFunction } from "@motionone/easing"
-import { AnimationGenerator } from "@motionone/types"
+import { AnimationGenerator, EasingFunction } from "@motionone/types"
 import { hasReachedTarget } from "../has-reached-target"
 import { pregenerateKeyframes } from "../pregenerate-keyframes"
 
