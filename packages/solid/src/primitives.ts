@@ -4,6 +4,7 @@ import {
   MotionState,
   style,
 } from "@motionone/dom"
+import { isFunction } from "@motionone/utils"
 import {
   Accessor,
   createEffect,
@@ -55,7 +56,7 @@ export function createMotion(
   options: Options | Accessor<Options>,
   presenceState: PresenceContextState = defaultPresenceContextState
 ): MotionState {
-  const getOptions = () => (typeof options === "function" ? options() : options)
+  const getOptions = () => (isFunction(options) ? options() : options)
 
   const state = createAndBindMotionState(
     () => target,

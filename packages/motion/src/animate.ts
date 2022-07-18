@@ -43,8 +43,7 @@ export function animate(
   keyframesOrOptions?: MotionKeyframesDefinition | AnimationOptions,
   options?: AnimationOptionsWithOverrides
 ): AnimationControls {
-  const factory: any =
-    typeof target === "function" ? animateProgress : animateDom
+  const factory: any = isFunction(target) ? animateProgress : animateDom
 
   return factory(target, keyframesOrOptions, options)
 }

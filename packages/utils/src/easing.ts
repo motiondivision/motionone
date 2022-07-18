@@ -1,4 +1,4 @@
-import { isEasingList } from "./is"
+import { isEasingList } from "./is-easing-list"
 import { wrap } from "./wrap"
 
 export function getEasingForSegment<T>(easing: T | T[], i: number) {

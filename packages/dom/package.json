@@ -29,15 +29,15 @@
   "bundlesize": [
     {
       "path": "./dist/size-animate.js",
-      "maxSize": "3.62 kB"
+      "maxSize": "3.8 kB"
     },
     {
       "path": "./dist/size-animate-style.js",
-      "maxSize": "3.2 kB"
+      "maxSize": "3.35 kB"
     },
     {
       "path": "./dist/size-timeline.js",
-      "maxSize": "4.55 kB"
+      "maxSize": "4.7 kB"
     },
     {
       "path": "./dist/size-spring.js",
@@ -45,7 +45,7 @@
     },
     {
       "path": "./dist/size-webpack-animate.js",
-      "maxSize": "3.66 kB"
+      "maxSize": "3.8 kB"
     },
     {
       "path": "./dist/size-in-view.js",

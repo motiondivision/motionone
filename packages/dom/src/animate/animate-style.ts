@@ -5,6 +5,7 @@ import { Animation } from "@motionone/animation"
 import {
   defaults,
   time,
+  isFunction,
   isEasingGenerator,
   isEasingList,
 } from "@motionone/utils"
@@ -48,8 +49,8 @@ export function animateStyle(
   } = options
 
   const data = getAnimationData(element)
-  let canAnimateNatively = supports.waapi()
   const valueIsTransform = isTransform(key)
+  let canAnimateNatively = supports.waapi()
 
   /**
    * If this is an individual transform, we need to map its
@@ -121,8 +122,17 @@ export function animateStyle(
     }
 
     /**
-     * If we can animate this value with WAAPI, do so. Currently this only
-     * feature detects CSS.registerProperty but could check WAAPI too.
+     * If we've been passed a custom easing function, and this browser
+     * does **not** support linear() easing, and the value is a transform
+     * (and thus a pure number) we can still support the custom easing
+     * by falling back to the animation polyfill.
+     */
+    if (isFunction(easing) && !supports.linearEasing() && valueIsTransform) {
+      canAnimateNatively = false
+    }
+
+    /**
+     * If we can animate this value with WAAPI, do so.
      */
     if (canAnimateNatively) {
       /**
@@ -150,7 +160,9 @@ export function animateStyle(
         delay: time.ms(delay as number),
         duration: time.ms(duration),
         endDelay: time.ms(endDelay),
-        easing: !isEasingList(easing) ? convertEasing(easing) : undefined,
+        easing: !isEasingList(easing)
+          ? convertEasing(easing, duration)
+          : undefined,
         direction,
         iterations: repeat + 1,
         fill: "both" as FillMode,
@@ -160,7 +172,9 @@ export function animateStyle(
         {
           [name]: keyframes,
           offset,
-          easing: isEasingList(easing) ? easing.map(convertEasing) : undefined,
+          easing: isEasingList(easing)
+            ? easing.map((thisEasing) => convertEasing(thisEasing, duration))
+            : undefined,
         } as PropertyIndexedKeyframes,
         animationOptions
       )
