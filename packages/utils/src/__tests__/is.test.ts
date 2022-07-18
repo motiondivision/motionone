@@ -1,4 +1,5 @@
-import { isCubicBezier, isEasingList } from "../is"
+import { isCubicBezier } from "../is-cubic-bezier"
+import { isEasingList } from "../is-easing-list"
 
 describe("isCubicBezier", () => {
   test("Detects a bezier array", () => {
