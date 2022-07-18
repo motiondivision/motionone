@@ -1,6 +1,6 @@
 {
   "name": "@motionone/generators",
-  "version": "10.12.0",
+  "version": "10.13.0",
   "description": "A collection of animation generators.",
   "license": "MIT",
   "author": "Matt Perry",
@@ -15,12 +15,12 @@
     "measure": "bundlesize"
   },
   "dependencies": {
-    "@motionone/types": "^10.12.0",
-    "@motionone/utils": "^10.12.0",
+    "@motionone/types": "^10.13.0",
+    "@motionone/utils": "^10.13.0",
     "tslib": "^2.3.1"
   },
   "devDependencies": {
-    "@motionone/easing": "^10.12.0"
+    "@motionone/easing": "^10.13.0"
   },
   "bundlesize": [
     {
