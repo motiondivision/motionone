@@ -24,11 +24,9 @@ export const convertEasing = (
   duration: number
 ): string => {
   if (isFunction(easing)) {
-    if (supports.linearEasing()) {
-      return `linear(${generateLinearEasingPoints(easing, duration)})`
-    } else {
-      return defaults.easing as string
-    }
+    return supports.linearEasing()
+      ? `linear(${generateLinearEasingPoints(easing, duration)})`
+      : (defaults.easing as string)
   } else {
     return isCubicBezier(easing) ? cubicBezierAsString(easing) : easing
   }
