@@ -1,5 +1,5 @@
 import { AnimationControls } from "@motionone/types"
-import { noopReturn } from "@motionone/utils"
+import { noopReturn, isFunction } from "@motionone/utils"
 import { updateScrollInfo } from "./info"
 import { resolveOffsets } from "./offsets/index"
 import {
@@ -53,10 +53,9 @@ export function createOnScrollHandler(
         resolveOffsets(element, info, options)
       }
     },
-    notify:
-      typeof onScroll === "function"
-        ? () => onScroll(info)
-        : scrubAnimation(onScroll, info[axis]),
+    notify: isFunction(onScroll)
+      ? () => onScroll(info)
+      : scrubAnimation(onScroll, info[axis]),
   }
 }
 

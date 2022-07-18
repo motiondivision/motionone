@@ -1,5 +1,7 @@
-const testAnimation = (keyframes: PropertyIndexedKeyframes) =>
-  document.createElement("div").animate(keyframes, { duration: 0.001 })
+const testAnimation = (
+  keyframes: PropertyIndexedKeyframes,
+  options?: KeyframeAnimationOptions
+) => document.createElement("div").animate(keyframes, options)
 
 const featureTests = {
   cssRegisterProperty: () =>
@@ -14,17 +16,21 @@ const featureTests = {
     }
     return true
   },
-  finished: () => Boolean(testAnimation({ opacity: [0, 1] }).finished),
+  finished: () =>
+    Boolean(testAnimation({ opacity: [0, 1] }, { duration: 0.001 }).finished),
+  linearEasing: () => {
+    try {
+      testAnimation({ opacity: 0 }, { easing: "linear(0, 1)" })
+    } catch (e) {
+      return false
+    }
+    return true
+  },
 }
 
 const results = {}
 
-interface FeatureTests {
-  cssRegisterProperty: () => boolean
-  waapi: () => boolean
-  partialKeyframes: () => boolean
-  finished: () => boolean
-}
+type FeatureTests = Record<keyof typeof featureTests, () => boolean>
 
 export const supports = {} as FeatureTests
 for (const key in featureTests) {

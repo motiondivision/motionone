@@ -76,7 +76,7 @@ export type EasingGenerator = {
 
 export type KeyframeOptions = {
   duration?: number
-  easing?: EasingGenerator | Easing | Easing[]
+  easing?: EasingGenerator | Easing | Easing[] | EasingFunction
   offset?: number[]
 }
 

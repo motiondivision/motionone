@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.13.0] [2022-07-10]
+
+### Added
+
+- `animate` and `timeline` now support custom easing functions.
+
 ## [10.12.0] [2022-07-10]
 
 ### Added

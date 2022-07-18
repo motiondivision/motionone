@@ -66,7 +66,6 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
     this.repeat = repeat
 
     this.easing = isEasingList(easing) ? noopReturn : getEasingFunction(easing)
-
     this.updateDuration(initialDuration)
 
     const interpolate = createInterpolate(
@@ -147,7 +146,6 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
 
       const p = t >= this.totalDuration ? 1 : Math.min(iterationProgress, 1)
       const latest = interpolate(this.easing(p))
-
       output(latest)
 
       const isAnimationFinished =

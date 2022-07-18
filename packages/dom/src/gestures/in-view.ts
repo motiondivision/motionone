@@ -1,5 +1,6 @@
 import { ElementOrSelector } from "../types"
 import { resolveElements } from "../utils/resolve-elements"
+import { isFunction } from "@motionone/utils"
 
 export type ViewChangeHandler = (entry: IntersectionObserverEntry) => void
 
@@ -45,7 +46,7 @@ export function inView(
 
       if (entry.isIntersecting) {
         const newOnEnd = onStart(entry)
-        if (typeof newOnEnd === "function") {
+        if (isFunction(newOnEnd)) {
           activeIntersections.set(entry.target, newOnEnd)
         } else {
           observer.unobserve(entry.target)

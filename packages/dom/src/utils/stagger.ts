@@ -1,5 +1,5 @@
 import type { Easing, OptionResolver, EasingFunction } from "@motionone/types"
-import { isNumber } from "@motionone/utils"
+import { isNumber, isFunction } from "@motionone/utils"
 import { getEasingFunction } from "@motionone/animation"
 
 export type From = "first" | "last" | "center" | number
@@ -43,7 +43,5 @@ export function resolveOption<T>(
   i: number,
   total: number
 ) {
-  return typeof option === "function"
-    ? (option as OptionResolver<T>)(i, total)
-    : option
+  return isFunction(option) ? (option as OptionResolver<T>)(i, total) : option
 }
