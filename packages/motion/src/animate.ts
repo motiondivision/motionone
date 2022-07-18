@@ -5,6 +5,7 @@ import {
   MotionKeyframesDefinition,
   withControls,
 } from "@motionone/dom"
+import { isFunction } from "@motionone/utils"
 import { Animation } from "@motionone/animation"
 import {
   AnimationControls,

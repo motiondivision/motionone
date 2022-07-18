@@ -45,7 +45,7 @@ const umdProd = Object.assign({}, umd, {
 
 const distEntries = {
   main: "lib/index.js",
-  react: "lib/react.js",
+  // react: "lib/react.js",
   vue: "lib/vue.js",
 }
 
