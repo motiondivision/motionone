@@ -13,6 +13,7 @@
       style="background-color: #fff208"
     >
     </Motion>
+    <div class="test"></div>
     <!-- <Motion
       class="motion-one-box"
       :initial="{ opacity: 0, y: 50 }"
@@ -80,10 +81,16 @@ body {
   width: 200px;
   height: 200px;
 }
+
+.test {
+  width: 100px;
+  height: 100px;
+  background: red;
+}
 </style>
 
 <script lang="ts">
-import { animate, spring } from "motion"
+import { timeline } from "motion"
 import { Motion } from "@motionone/vue"
 
 export default {
@@ -92,11 +99,38 @@ export default {
   },
   setup() {
     onMounted(() => {
-      setTimeout(() => {
-        const animation = animate((p) => {}, {
-          easing: spring({ stiffness: 300, damping: 10 }),
-        })
-      }, 3000)
+      // From https://easings.net/#easeOutCirc
+      function circOut(x: number): number {
+        return Math.sqrt(1 - Math.pow(x - 1, 2))
+      }
+
+      // From https://easings.net/#easeOutBounce
+      function bounce(x: number): number {
+        const n1 = 7.5625
+        const d1 = 2.75
+
+        if (x < 1 / d1) {
+          return n1 * x * x
+        } else if (x < 2 / d1) {
+          return n1 * (x -= 1.5 / d1) * x + 0.75
+        } else if (x < 2.5 / d1) {
+          return n1 * (x -= 2.25 / d1) * x + 0.9375
+        } else {
+          return n1 * (x -= 2.625 / d1) * x + 0.984375
+        }
+      }
+
+      timeline(
+        [
+          [
+            ".test",
+            { y: -300 },
+            { easing: circOut, duration: 0.5, delay: 0.5 },
+          ],
+          [".test", { y: 0 }, { easing: bounce, duration: 1 }],
+        ],
+        { repeat: Infinity }
+      )
     })
   },
 }

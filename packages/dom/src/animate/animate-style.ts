@@ -127,7 +127,11 @@ export function animateStyle(
      * (and thus a pure number) we can still support the custom easing
      * by falling back to the animation polyfill.
      */
-    if (isFunction(easing) && !supports.linearEasing() && valueIsTransform) {
+    if (
+      valueIsTransform &&
+      !supports.linearEasing() &&
+      (isFunction(easing) || (isEasingList(easing) && easing.some(isFunction)))
+    ) {
       canAnimateNatively = false
     }
 
