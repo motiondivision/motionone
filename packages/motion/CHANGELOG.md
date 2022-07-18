@@ -6,7 +6,7 @@ Motion One adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- `animate` and `timeline` now support custom easing functions.
+- `animate` now support custom easing functions.
 
 ### Removed
 
