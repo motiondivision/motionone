@@ -1,6 +1,6 @@
 # `@motionone/react`
 
-Prototype React bindings for Motion One. Not intended for public.
+Prototype React bindings for Motion One. Not intended for public consumption.
 
 ## 📚 Documentation
 
