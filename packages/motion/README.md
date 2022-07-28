@@ -16,14 +16,12 @@ Create Motion One and CSS animations faster than ever with [Motion DevTools](htt
 
 A huge thank you to all sponsors of this project, with a special shoutout to:
 
-- [Victor Pontis](https://github.com/vpontis)
 - [‹div›RIOTS](https://github.com/divriots)
 - [Alex Frazer](https://github.com/AlexFrazer)
-- [Derek Reynolds](https://github.com/derekr)
 - [Martin Pitt](https://github.com/Martin-Pitt)
 - [Mihael Konjević](https://github.com/retro)
 - [impactvelocity](https://github.com/impactvelocity)
 - [Namit Chadha](https://github.com/nc)
 - [Adam Snodgrass](https://twitter.com/overra)
 
-[Become a sponsor](https://github.com/sponsors/mattgperry) and get access to the private Motion One repo. File issues, read the changelog and source code, and join discussions that help shape the future of the API.
+[Become a sponsor](https://motion.dev/pro).
