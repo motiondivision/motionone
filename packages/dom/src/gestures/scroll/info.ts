@@ -9,6 +9,7 @@ const maxElapsed = 50
 const createAxisInfo = (): AxisScrollInfo => ({
   current: 0,
   offset: [],
+  offsetData: [],
   progress: 0,
   scrollLength: 0,
   targetOffset: 0,

@@ -8,6 +8,10 @@ const scrollListeners = new WeakMap<Element, VoidFunction>()
 const resizeListeners = new WeakMap<Element, VoidFunction>()
 const onScrollHandlers = new WeakMap<Element, Set<OnScrollHandler>>()
 
+function getDevToolsUpdateScroll() {
+  return (window as any).__MOTION_DEV_TOOLS_SCROLL
+}
+
 export type ScrollTargets = Array<HTMLElement>
 
 const getEventTarget = (element: HTMLElement) =>
@@ -58,6 +62,12 @@ export function scroll(
 
       for (const handler of containerHandlers!) handler.measure()
       for (const handler of containerHandlers!) handler.update(time)
+
+      const devTools = getDevToolsUpdateScroll()
+      if (devTools) {
+        for (const handler of containerHandlers!) devTools(handler.getLatest())
+      }
+
       for (const handler of containerHandlers!) handler.notify()
     }
 

@@ -81,8 +81,7 @@ import { animate, scroll } from "motion"
 export default {
   setup() {
     onMounted(() => {
-      console.log(scroll.options)
-      animate(".scroll-box", { rotate: [0, 360] }, { duration: scroll })
+      scroll(animate(".scroll-box", { rotate: [0, 360] }))
 
       // animate((p) => console.log({ p }), { duration: scroll() })
 

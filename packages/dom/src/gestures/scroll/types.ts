@@ -1,8 +1,14 @@
 import { EasingFunction } from "@motionone/types"
 
+export interface OffsetData {
+  targetPoint: number
+  containerPoint: number
+}
+
 export interface AxisScrollInfo {
   current: number
   offset: number[]
+  offsetData: OffsetData[]
   progress: number
   scrollLength: number
   velocity: number
@@ -27,6 +33,11 @@ export type OnScroll = (info: ScrollInfo) => void
 export type OnScrollHandler = {
   measure: () => void
   update: (time: number) => void
+  getLatest: () => {
+    container: HTMLElement
+    options: ScrollOptions
+    info: ScrollInfo
+  }
   notify: () => void
 }
 

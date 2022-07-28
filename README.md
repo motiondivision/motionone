@@ -2,7 +2,7 @@
 
 # Motion One
 
-This is the Motion One monorepo. It contains the source code for all Motion One libraries, as well as framework-specific playgrounds.
+This is the Motion One monorepo. It contains the source code for all Motion One packages, as well as framework-specific playgrounds.
 
 ## 🕵️‍♂️ Source code
 

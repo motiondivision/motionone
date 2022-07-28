@@ -10,6 +10,14 @@ import {
   ScrollOptions,
 } from "./types"
 
+let id = 0
+
+function getSessionId() {
+  const sessionId = id
+  id++
+  return sessionId
+}
+
 function measure(
   container: HTMLElement,
   target: Element = container,
@@ -44,6 +52,8 @@ export function createOnScrollHandler(
   options: ScrollOptions = {}
 ): OnScrollHandler {
   const axis = options.axis || "y"
+  const sessionId = "" + getSessionId()
+
   return {
     measure: () => measure(element, options.target, info),
     update: (time) => {
@@ -53,6 +63,12 @@ export function createOnScrollHandler(
         resolveOffsets(element, info, options)
       }
     },
+    getLatest: () => ({
+      id: sessionId,
+      container: element,
+      options,
+      info,
+    }),
     notify: isFunction(onScroll)
       ? () => onScroll(info)
       : scrubAnimation(onScroll, info[axis]),

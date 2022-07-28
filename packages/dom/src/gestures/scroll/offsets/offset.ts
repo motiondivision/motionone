@@ -41,5 +41,5 @@ export function resolveOffset(
   targetPoint = resolveEdge(offsetDefinition[0], targetLength, targetInset)
   containerPoint = resolveEdge(offsetDefinition[1], containerLength)
 
-  return targetPoint - containerPoint
+  return { targetPoint, containerPoint, offset: targetPoint - containerPoint }
 }

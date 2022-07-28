@@ -37,7 +37,7 @@ export function resolveOffsets(
    * Reset the length of the resolved offset array rather than creating a new one.
    * TODO: More reusable data structures for targetSize/containerSize would also be good.
    */
-  info[axis].offset.length = 0
+  info[axis].offsetData.length = info[axis].offset.length = 0
 
   /**
    * Populate the offset array by resolving the user's offset definition into
@@ -47,18 +47,22 @@ export function resolveOffsets(
 
   const numOffsets = offsetDefinition.length
   for (let i = 0; i < numOffsets; i++) {
-    const offset = resolveOffset(
+    const offsetData = resolveOffset(
       offsetDefinition[i],
       containerSize[lengthLabel],
       targetSize[lengthLabel],
       inset[axis]
     )
 
-    if (!hasChanged && offset !== info[axis].interpolatorOffsets![i]) {
+    if (
+      !hasChanged &&
+      offsetData.offset !== info[axis].interpolatorOffsets![i]
+    ) {
       hasChanged = true
     }
 
-    info[axis].offset[i] = offset
+    info[axis].offset[i] = offsetData.offset
+    info[axis].offsetData[i] = offsetData
   }
 
   /**
