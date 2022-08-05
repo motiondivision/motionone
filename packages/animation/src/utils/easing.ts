@@ -1,6 +1,6 @@
 import type { Easing, EasingFunction } from "@motionone/types"
 import { cubicBezier, steps } from "@motionone/easing"
-import { noopReturn, isFunction } from "@motionone/utils"
+import { noopReturn, isFunction, isCubicBezier } from "@motionone/utils"
 
 const namedEasings = {
   ease: cubicBezier(0.25, 0.1, 0.25, 1.0),
@@ -18,7 +18,7 @@ export function getEasingFunction(
   if (isFunction(definition)) return definition
 
   // If an easing curve definition, return bezier function
-  if (Array.isArray(definition)) return cubicBezier(...definition)
+  if (isCubicBezier(definition)) return cubicBezier(...definition)
 
   // If we have a predefined easing function, return
   if (namedEasings[definition]) return namedEasings[definition]

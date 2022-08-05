@@ -17,7 +17,7 @@ export type AnimationGeneratorFactory<Options> = (
 
 export type AnimationGenerator = (t: number) => AnimationGeneratorState
 
-export type BezierDefinition = [number, number, number, number]
+export type BezierDefinition = readonly [number, number, number, number]
 
 export type PlayState = "idle" | "running" | "paused" | "finished"
 

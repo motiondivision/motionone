@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.13.2] [2022-08-05]
+
+### Fixed
+
+- Making `BezierDefinition` `readonly`.
+
 ## [10.13.1] [2022-07-18]
 
 ### Added
