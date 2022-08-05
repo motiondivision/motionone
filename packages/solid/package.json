@@ -45,7 +45,6 @@
   "devDependencies": {
     "@babel/preset-env": "7.16.11",
     "@babel/preset-typescript": "^7.16.7",
-    "@testing-library/jest-dom": "^5.16.4",
     "rollup-preset-solid": "^1.4.0",
     "solid-jest": "^0.2.0",
     "solid-js": "^1.4.1",
