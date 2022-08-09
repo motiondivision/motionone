@@ -296,6 +296,7 @@ function extractKeyframeUnit(keyframe: string | number): string | undefined {
   if (typeof keyframe !== "string") {
     return undefined
   }
+
   let numberCharFound = false
   let i: number
   for (i = keyframe.length - 1; i >= 0 && !numberCharFound; i--) {
@@ -313,6 +314,7 @@ function extractKeyframeUnit(keyframe: string | number): string | undefined {
       case "9":
       case ".":
       case "-":
+      case "+":
         return keyframe.slice(i + 1).trim()
     }
   }
