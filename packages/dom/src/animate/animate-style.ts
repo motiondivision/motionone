@@ -220,6 +220,12 @@ export function animateStyle(
        * polyfill for transforms.
        */
     } else if (valueIsTransform) {
+      // We use the last keyframe to detect the unit since the first ones might be null.
+      const detectedUnit: string | undefined =
+        keyframes.length > 0
+          ? extractKeyframeUnit(keyframes[keyframes.length - 1])
+          : undefined
+
       /**
        * If any keyframe is a string (because we measured it from the DOM), we need to convert
        * it into a number before passing to the Animation polyfill.
@@ -237,8 +243,15 @@ export function animateStyle(
       }
 
       const render = (latest: number) => {
-        if (definition) latest = definition.toDefaultUnit(latest) as any
-        style.set(element, name, latest)
+        let formattedLatest: string | number
+        if (detectedUnit !== undefined) {
+          formattedLatest = String(latest) + detectedUnit
+        } else if (definition) {
+          formattedLatest = definition.toDefaultUnit(latest)
+        } else {
+          formattedLatest = latest
+        }
+        style.set(element, name, formattedLatest)
       }
 
       animation = new Animation(render, keyframes as any, {
@@ -277,4 +290,31 @@ export function animateStyle(
 
     return animation
   }
+}
+
+function extractKeyframeUnit(keyframe: string | number): string | undefined {
+  if (typeof keyframe !== "string") {
+    return undefined
+  }
+  let numberCharFound = false
+  let i: number
+  for (i = keyframe.length - 1; i >= 0 && !numberCharFound; i--) {
+    const char = keyframe[i]
+    switch (char) {
+      case "0":
+      case "1":
+      case "2":
+      case "3":
+      case "4":
+      case "5":
+      case "6":
+      case "7":
+      case "8":
+      case "9":
+      case ".":
+      case "-":
+        return keyframe.slice(i + 1).trim()
+    }
+  }
+  return keyframe.trim()
 }

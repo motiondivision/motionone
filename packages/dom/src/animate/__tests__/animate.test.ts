@@ -132,3 +132,12 @@ describe("animate", () => {
     return expect(promise).resolves.not.toBe("0px")
   })
 })
+
+test("Split transforms support other units", async () => {
+  const div = document.createElement("div")
+  const animation = animate(div, { x: "10%" }, { duration })
+  await animation.finished.then(() => {
+    expect(div).toHaveStyle("transform: translateX(var(--motion-translateX))")
+    expect(style.get(div, "--motion-translateX")).toBe("10%")
+  })
+})
