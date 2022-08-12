@@ -102,10 +102,6 @@ export function animateStyle(
     const toUnit = getUnitConverter(keyframes, definition)
 
     if (isEasingGenerator(easing)) {
-      /**
-       * TODO: createAnimation should parse keyframes for unit types and output
-       * those into keyframes
-       */
       const custom = easing.createAnimation(
         keyframes,
         readInitialValue as any,
