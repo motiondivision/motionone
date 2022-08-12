@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.13.3] [2022-08-12]
+
+### Fixed
+
+- Fixing `InViewOptions` within Motion One for Solid.
+
 ## [10.13.2] [2022-08-05]
 
 ### Fixed
