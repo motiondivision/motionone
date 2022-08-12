@@ -297,9 +297,8 @@ function extractKeyframeUnit(keyframe: string | number): string | undefined {
     return undefined
   }
 
-  let numberCharFound = false
   let i: number
-  for (i = keyframe.length - 1; i >= 0 && !numberCharFound; i--) {
+  for (i = keyframe.length - 1; i >= 0; i--) {
     const char = keyframe[i]
     switch (char) {
       case "0":
