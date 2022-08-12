@@ -8,6 +8,8 @@ import {
   isFunction,
   isEasingGenerator,
   isEasingList,
+  noopReturn,
+  isString,
 } from "@motionone/utils"
 import { AnimationOptions } from "@motionone/types"
 import {
@@ -22,6 +24,7 @@ import { style } from "./style"
 import { getStyleName } from "./utils/get-style-name"
 import { isNumber, noop } from "@motionone/utils"
 import { stopAnimation } from "./utils/stop-animation"
+import { getUnit } from "./utils/get-unit"
 
 function getDevToolsRecord() {
   return (window as any).__MOTION_DEV_TOOLS_RECORD
@@ -95,7 +98,21 @@ export function animateStyle(
       readInitialValue
     )
 
+    /**
+     * Detect unit type of keyframes.
+     */
+    let toUnit = definition?.toDefaultUnit || noopReturn
+    const finalKeyframe = keyframes[keyframes.length - 1]
+    if (isString(finalKeyframe)) {
+      const unit = getUnit(finalKeyframe)
+      if (unit) toUnit = (value: number) => value + unit
+    }
+
     if (isEasingGenerator(easing)) {
+      /**
+       * TODO: createAnimation should parse keyframes for unit types and output
+       * those into keyframes
+       */
       const custom = easing.createAnimation(
         keyframes,
         readInitialValue as any,
@@ -104,7 +121,8 @@ export function animateStyle(
         motionValue
       )
       easing = custom.easing
-      if (custom.keyframes !== undefined) keyframes = custom.keyframes
+      if (custom.keyframes !== undefined)
+        keyframes = custom.keyframes.map(toUnit)
       if (custom.duration !== undefined) duration = custom.duration
     }
 
@@ -236,16 +254,17 @@ export function animateStyle(
         keyframes.unshift(parseFloat(readInitialValue() as string))
       }
 
-      const render = (latest: number) => {
-        if (definition) latest = definition.toDefaultUnit(latest) as any
-        style.set(element, name, latest)
-      }
-
-      animation = new Animation(render, keyframes as any, {
-        ...options,
-        duration,
-        easing,
-      })
+      animation = new Animation(
+        (latest: number) => {
+          style.set(element, name, toUnit ? toUnit(latest) : latest)
+        },
+        keyframes as any,
+        {
+          ...options,
+          duration,
+          easing,
+        }
+      )
     } else {
       const target = keyframes[keyframes.length - 1]
       style.set(
