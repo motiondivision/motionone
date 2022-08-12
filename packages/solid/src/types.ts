@@ -2,7 +2,7 @@ import type { JSX, ParentProps } from "solid-js"
 import type {
   ValueKeyframesDefinition,
   MotionKeyframesDefinition,
-  ViewOptions,
+  InViewOptions,
 } from "@motionone/dom"
 import type { MotionEvent, CustomPointerEvent, ViewEvent } from "@motionone/dom"
 import { AnimationOptions } from "@motionone/types"
@@ -47,7 +47,7 @@ export type Options = {
   press?: VariantDefinition
   exit?: VariantDefinition
   variants?: Record<string, Variant>
-  inViewOptions?: ViewOptions
+  inViewOptions?: InViewOptions
   transition?: AnimationOptionsWithOverrides
 }
 
