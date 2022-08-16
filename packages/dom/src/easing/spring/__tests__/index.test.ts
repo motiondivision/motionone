@@ -199,7 +199,10 @@ describe("spring", () => {
       velocity: 0,
     })
 
-    const expectedKeyframes = pregenerateKeyframes(expectedSpring).keyframes
+    const expectedKeyframes = pregenerateKeyframes(
+      expectedSpring,
+      (v) => v + "px"
+    ).keyframes
     expect(animation.keyframes).toEqual(expectedKeyframes)
     expect(animation.easing).toEqual("linear")
     expect(animation.duration).toEqual(0.59)
