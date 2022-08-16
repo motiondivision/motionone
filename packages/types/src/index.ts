@@ -45,7 +45,7 @@ export interface AnimationControls extends BasicAnimationControls {
 
 export type CustomAnimationSettings = {
   easing: Easing
-  keyframes?: number[]
+  keyframes?: Array<number | string>
   duration?: number
 }
 
@@ -67,8 +67,8 @@ export type Easing =
 export type EasingGenerator = {
   createAnimation: (
     keyframes: UnresolvedValueKeyframe[],
-    getOrigin: () => string,
-    isNumber: boolean,
+    shouldGenerate?: boolean,
+    readInitialKeyframe?: () => number | string,
     name?: string,
     value?: MotionValue
   ) => CustomAnimationSettings

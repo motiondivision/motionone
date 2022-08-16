@@ -2,13 +2,14 @@
   <div class="container">
     <Motion
       class="motion-one-box"
-      :initial="{ opacity: 0, y: 50 }"
-      :animate="{ opacity: 1, y: 0 }"
+      :initial="{ opacity: 0, y: '100%' }"
+      :animate="{ opacity: 1, y: '0%' }"
       :hover="{ scale: 1.2, backgroundColor: `#00ffdb`, rotate: 90 }"
       :press="{ scale: 0.9 }"
       :transition="{
-        duration: 1,
-        easing: [0.7, -0.46, 0.24, 1.31],
+        easing: spring(),
+        // duration: 1,
+        // easing: [0.7, -0.46, 0.24, 1.31],
       }"
       style="background-color: #fff208"
     >
@@ -98,6 +99,8 @@ export default {
         })
       }, 3000)
     })
+
+    return { spring }
   },
 }
 </script>
