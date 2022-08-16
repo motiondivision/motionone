@@ -78,7 +78,7 @@ export const addTransformToElement = (element: HTMLElement, name: string) => {
 
   const { transforms } = getAnimationData(element)
   addUniqueItem(transforms, name)
-  console.log(transforms, element)
+
   /**
    * TODO: An optimisation here could be to cache the transform in element data
    * and only update if this has changed.
