@@ -11,17 +11,17 @@ export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 export interface CSSStyleDeclarationWithTransform
   extends Omit<CSSStyleDeclaration, "direction" | "transition"> {
-  x: number
-  y: number
-  z: number
-  rotateX: number
-  rotateY: number
-  rotateZ: number
+  x: number | string
+  y: number | string
+  z: number | string
+  rotateX: number | string
+  rotateY: number | string
+  rotateZ: number | string
   scaleX: number
   scaleY: number
   scaleZ: number
-  skewX: number
-  skewY: number
+  skewX: number | string
+  skewY: number | string
 }
 
 export type StyleAnimationOptions = {

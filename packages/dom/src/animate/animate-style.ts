@@ -104,14 +104,14 @@ export function animateStyle(
     if (isEasingGenerator(easing)) {
       const custom = easing.createAnimation(
         keyframes,
-        readInitialValue as any,
         valueIsTransform,
+        readInitialValue,
         name,
         motionValue
       )
+
       easing = custom.easing
-      if (custom.keyframes !== undefined)
-        keyframes = custom.keyframes.map(toUnit)
+      if (custom.keyframes !== undefined) keyframes = custom.keyframes
       if (custom.duration !== undefined) duration = custom.duration
     }
 

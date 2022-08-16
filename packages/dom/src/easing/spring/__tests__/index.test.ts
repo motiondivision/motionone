@@ -11,7 +11,7 @@ describe("spring", () => {
     const target = 100
     const config = { stiffness: 800, damping: 20 }
     const spring = createSpring(config)
-    const animation = spring.createAnimation([target], () => "50px", true)
+    const animation = spring.createAnimation([target], true, () => "50px")
 
     const expectedSpring = createSpringGenerator({
       ...config,
@@ -30,7 +30,7 @@ describe("spring", () => {
     const target = 100
     const config = { stiffness: 800, damping: 20 }
     const spring = createSpring(config)
-    const animation = spring.createAnimation([target], () => "50px", false)
+    const animation = spring.createAnimation([target], false, () => "50px")
 
     expect(animation.keyframes).toEqual(undefined)
     expect(animation.easing).toEqual("ease")
@@ -41,7 +41,7 @@ describe("spring", () => {
     const target = 100
     const config = { stiffness: 800, damping: 20 }
     const spring = createSpring(config)
-    const animation = spring.createAnimation([null, target], () => "50px", true)
+    const animation = spring.createAnimation([null, target], true, () => "50px")
 
     const expectedSpring = createSpringGenerator({
       ...config,
@@ -62,7 +62,7 @@ describe("spring", () => {
     const config = { stiffness: 800, damping: 20 }
     const spring = createSpring(config)
     const readFn = jest.fn()
-    const animation = spring.createAnimation([origin, target], readFn, true)
+    const animation = spring.createAnimation([origin, target], true, readFn)
 
     const expectedSpring = createSpringGenerator({
       ...config,
@@ -98,8 +98,8 @@ describe("spring", () => {
     const readFn = jest.fn()
     const animation = spring.createAnimation(
       [target],
-      readFn,
       true,
+      readFn,
       "x",
       data as any
     )
@@ -138,8 +138,8 @@ describe("spring", () => {
     const readFn = jest.fn()
     const animation = spring.createAnimation(
       [null, target],
-      readFn,
       true,
+      readFn,
       "x",
       data as any
     )
@@ -179,8 +179,8 @@ describe("spring", () => {
 
     const animation = spring.createAnimation(
       [origin, target],
-      readFn,
       true,
+      readFn,
       "x",
       data as any
     )
@@ -205,7 +205,7 @@ describe("spring", () => {
       damping: 20,
     }
     const spring = createSpring(config)
-    const animation = spring.createAnimation(["#fff"], () => "50px", true)
+    const animation = spring.createAnimation(["#fff"], true, () => "50px")
 
     const expectedSpring = createSpringGenerator({
       ...config,
@@ -226,7 +226,7 @@ describe("spring", () => {
       damping: 20,
     }
     const spring = createSpring(config)
-    const animation = spring.createAnimation([null, "#fff"], () => "50px", true)
+    const animation = spring.createAnimation([null, "#fff"], true, () => "50px")
 
     const expectedSpring = createSpringGenerator({
       ...config,
@@ -249,8 +249,8 @@ describe("spring", () => {
     const spring = createSpring(config)
     const animation = spring.createAnimation(
       ["0px", "500px"],
-      () => "50px",
-      true
+      true,
+      () => "50px"
     )
 
     const expectedSpring = createSpringGenerator({
@@ -272,7 +272,7 @@ describe("spring", () => {
       damping: 20,
     }
     const spring = createSpring(config)
-    const animation = spring.createAnimation([0, 100, 200], () => "50px", true)
+    const animation = spring.createAnimation([0, 100, 200], true, () => "50px")
 
     const expectedSpring = createSpringGenerator({
       ...config,
@@ -307,8 +307,8 @@ describe("spring", () => {
     const readFn = jest.fn()
     const animation = spring.createAnimation(
       [target],
-      readFn,
       true,
+      readFn,
       "x",
       data as any
     )
@@ -348,8 +348,8 @@ describe("spring", () => {
     const readFn = jest.fn()
     const animation = spring.createAnimation(
       [origin, target],
-      readFn,
       true,
+      readFn,
       "x",
       data as any
     )

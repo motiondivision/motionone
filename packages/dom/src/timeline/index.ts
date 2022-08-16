@@ -23,7 +23,7 @@ import { withControls } from "../animate/utils/controls"
 import { keyframesList } from "../animate/utils/keyframes"
 import { getOptions } from "../animate/utils/options"
 import { resolveElements } from "../utils/resolve-elements"
-import { isTransform, transformDefinitions } from "../animate/utils/transforms"
+import { isTransform } from "../animate/utils/transforms"
 import type {
   ElementSequence,
   TimelineDefinition,
@@ -32,8 +32,6 @@ import type {
 import { calcNextTime } from "./utils/calc-time"
 import { addKeyframes } from "./utils/edit"
 import { compareByTime } from "./utils/sort"
-import { getUnitConverter } from "../animate/utils/get-unit"
-import { getStyleName } from "../animate/utils/get-style-name"
 
 type AnimateStyleDefinition = [
   Element,
@@ -140,10 +138,10 @@ export function createAnimationsFromTimeline(
 
         if (isEasingGenerator(easing)) {
           const valueIsTransform = isTransform(key)
-          const toUnit = getUnitConverter(
-            valueKeyframes,
-            transformDefinitions.get(getStyleName(key))
-          )
+          // const toUnit = getUnitConverter(
+          //   valueKeyframes,
+          //   transformDefinitions.get(getStyleName(key))
+          // )
 
           invariant(
             valueKeyframes.length === 2 || !valueIsTransform,
@@ -151,16 +149,12 @@ export function createAnimationsFromTimeline(
           )
 
           const custom = easing.createAnimation(
-            (valueKeyframes as any).map(parseFloat),
-            // TODO We currently only support explicit keyframes
-            // so this doesn't currently read from the DOM
-            () => "0",
+            valueKeyframes,
             valueIsTransform
           )
 
           easing = custom.easing
-          if (custom.keyframes !== undefined)
-            valueKeyframes = custom.keyframes.map(toUnit)
+          if (custom.keyframes !== undefined) valueKeyframes = custom.keyframes
           if (custom.duration !== undefined) duration = custom.duration
         }
 

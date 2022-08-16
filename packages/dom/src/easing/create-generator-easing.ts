@@ -5,10 +5,19 @@ import type {
   AnimationGeneratorFactory,
 } from "@motionone/types"
 import type { KeyframesMetadata } from "@motionone/generators"
-import {
-  pregenerateKeyframes,
-  calcGeneratorVelocity,
-} from "@motionone/generators"
+import { pregenerateKeyframes } from "@motionone/generators"
+import { isNumber, isString, noopReturn } from "@motionone/utils"
+import { getUnitConverter } from "../animate/utils/get-unit"
+
+type ToUnit = (value: number) => number | string
+
+function canGenerate(value: any): value is number {
+  return isNumber(value) && !isNaN(value)
+}
+
+function getAsNumber(value: string | number | null): number | null {
+  return isString(value) ? parseFloat(value) : value
+}
 
 export function createGeneratorEasing<Options extends {} = {}>(
   createGenerator: AnimationGeneratorFactory<Options>
@@ -42,9 +51,9 @@ export function createGeneratorEasing<Options extends {} = {}>(
       return generatorCache.get(key) as AnimationGenerator
     }
 
-    const getKeyframes = (generator: AnimationGenerator) => {
+    const getKeyframes = (generator: AnimationGenerator, toUnit?: ToUnit) => {
       if (!keyframesCache.has(generator)) {
-        keyframesCache.set(generator, pregenerateKeyframes(generator))
+        keyframesCache.set(generator, pregenerateKeyframes(generator, toUnit))
       }
 
       return keyframesCache.get(generator) as KeyframesMetadata
@@ -53,72 +62,73 @@ export function createGeneratorEasing<Options extends {} = {}>(
     return {
       createAnimation: (
         keyframes,
+        shouldGenerate = true,
         getOrigin,
-        canUseGenerator,
         name,
         motionValue
       ) => {
-        let settings: CustomAnimationSettings
-        const numKeyframes = keyframes.length
+        let settings: CustomAnimationSettings | undefined
 
-        let shouldUseGenerator =
-          canUseGenerator &&
-          numKeyframes <= 2 &&
-          keyframes.every(isNumberOrNull)
+        let origin: number | undefined | null
+        let target: number | undefined | null
+        let velocity = 0
+        let toUnit: undefined | ((value: number) => string | number) =
+          noopReturn
 
-        if (shouldUseGenerator) {
-          const target = keyframes[numKeyframes - 1] as number
-          const unresolvedOrigin = numKeyframes === 1 ? null : keyframes[0]
+        /**
+         * If we should generate an animation for this value, run some preperation
+         * like resolving target/origin, finding a unit (if any) and determine if
+         * it is actually possible to generate.
+         */
+        if (shouldGenerate) {
+          toUnit = getUnitConverter(keyframes)
 
-          let velocity = 0
-          let origin = 0
+          const targetDefinition = keyframes[keyframes.length - 1]
 
-          const prevGenerator = motionValue?.generator
+          target = getAsNumber(targetDefinition)
 
-          if (prevGenerator) {
-            /**
-             * If we have a generator for this value we can use it to resolve
-             * the animations's current value and velocity.
-             */
-            const { animation, generatorStartTime } = motionValue!
-
-            const startTime = animation?.startTime || generatorStartTime || 0
-            const currentTime =
-              animation?.currentTime || performance.now() - startTime
-            const prevGeneratorCurrent = prevGenerator(currentTime).current
-
-            origin = (unresolvedOrigin as number) ?? prevGeneratorCurrent
-
-            if (
-              numKeyframes === 1 ||
-              (numKeyframes === 2 && keyframes[0] === null)
-            ) {
-              velocity = calcGeneratorVelocity(
-                (t: number) => prevGenerator(t).current,
-                currentTime,
-                prevGeneratorCurrent
-              )
-            }
+          if (keyframes.length > 1 && keyframes[0] !== null) {
+            origin = getAsNumber(keyframes[0])
           } else {
-            origin = (unresolvedOrigin as number) ?? parseFloat(getOrigin())
-          }
+            const prevGenerator = motionValue?.generator
 
+            /**
+             * If we have an existing generator for this value we can use it to resolve
+             * the animation's current value and velocity.
+             */
+            if (prevGenerator) {
+            } else if (getOrigin) {
+              origin = getAsNumber(getOrigin())
+            }
+          }
+        }
+        console.log(origin, target)
+        /**
+         * If we've determined it is possible to generate an animation, do so.
+         */
+        if (canGenerate(origin) && canGenerate(target)) {
           const generator = getGenerator(
-            origin as number,
+            origin,
             target,
             velocity,
             name?.includes("scale")
           )
-
-          const keyframesMetadata = getKeyframes(generator)
-          settings = { ...keyframesMetadata, easing: "linear" }
+          settings = { ...getKeyframes(generator, toUnit), easing: "linear" }
 
           // TODO Add test for this
           if (motionValue) {
             motionValue.generator = generator
             motionValue.generatorStartTime = performance.now()
           }
-        } else {
+        }
+
+        /**
+         * If by now we haven't generated a set of keyframes, create a generic generator
+         * based on the provided props that animates from 0-100 to fetch a rough
+         * "overshootDuration" - the moment when the generator first hits the animation target.
+         * Then return animation settings that will run a normal animation for that duration.
+         */
+        if (!settings) {
           const keyframesMetadata = getKeyframes(getGenerator(0, 100))
 
           settings = {
@@ -132,6 +142,3 @@ export function createGeneratorEasing<Options extends {} = {}>(
     }
   }
 }
-
-const isNumberOrNull = (value: null | number | string) =>
-  typeof value !== "string"
