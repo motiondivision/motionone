@@ -5,7 +5,6 @@ const data = new WeakMap<Element, ElementAnimationData>()
 
 export function getAnimationData(element: Element): ElementAnimationData {
   if (!data.has(element)) {
-    console.trace()
     data.set(element, {
       transforms: [],
       values: new Map(),

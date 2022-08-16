@@ -621,14 +621,6 @@ describe("createAnimationsFromTimeline", () => {
       createAnimationsFromTimeline([[a, { x: 100 }, { easing: spring() }]])
     ).toThrow()
   })
-
-  test("It throws when provided a spring with more than 2 keyframes", () => {
-    expect(() =>
-      createAnimationsFromTimeline([
-        [a, { x: [100, 200, 300] }, { easing: spring() }],
-      ])
-    ).toThrow()
-  })
 })
 
 describe("timeline", () => {

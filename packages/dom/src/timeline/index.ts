@@ -137,7 +137,7 @@ export function createAnimationsFromTimeline(
 
         if (isEasingGenerator(easing)) {
           invariant(
-            valueKeyframes.length === 2 && key !== "opacity",
+            key === "opacity" || valueKeyframes.length > 1,
             "spring must be provided 2 keyframes within timeline()"
           )
 

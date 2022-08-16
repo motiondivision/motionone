@@ -96,6 +96,9 @@ export function createGeneratorEasing<Options extends {} = {}>(
           target = getAsNumber(targetDefinition)
 
           if (numKeyframes > 1 && keyframes[0] !== null) {
+            /**
+             * If we have multiple keyframes, take the initial keyframe as the origin.
+             */
             origin = getAsNumber(keyframes[0])
           } else {
             const prevGenerator = motionValue?.generator
@@ -118,17 +121,15 @@ export function createGeneratorEasing<Options extends {} = {}>(
 
               origin = prevGeneratorCurrent
 
-              if (
-                numKeyframes === 1 ||
-                (numKeyframes === 2 && keyframes[0] === null)
-              ) {
-                velocity = calcGeneratorVelocity(
-                  (t: number) => prevGenerator(t).current,
-                  currentTime,
-                  prevGeneratorCurrent
-                )
-              }
+              velocity = calcGeneratorVelocity(
+                (t: number) => prevGenerator(t).current,
+                currentTime,
+                prevGeneratorCurrent
+              )
             } else if (getOrigin) {
+              /**
+               * As a last resort, read the origin from the DOM.
+               */
               origin = getAsNumber(getOrigin())
             }
           }
