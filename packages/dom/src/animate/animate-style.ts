@@ -104,15 +104,15 @@ export function animateStyle(
     if (isEasingGenerator(easing)) {
       const custom = easing.createAnimation(
         keyframes,
-        valueIsTransform,
+        key !== "opacity",
         readInitialValue,
         name,
         motionValue
       )
 
       easing = custom.easing
-      if (custom.keyframes !== undefined) keyframes = custom.keyframes
-      if (custom.duration !== undefined) duration = custom.duration
+      keyframes = custom.keyframes || keyframes
+      duration = custom.duration || duration
     }
 
     /**

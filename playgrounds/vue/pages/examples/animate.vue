@@ -2,8 +2,8 @@
   <div class="container">
     <Motion
       class="motion-one-box"
-      :initial="{ opacity: 0, y: '100%' }"
-      :animate="{ opacity: 1, y: '0%' }"
+      :initial="{ opacity: 0, y: 100 }"
+      :animate="{ opacity: 1, y: 0 }"
       :hover="{ scale: 1.2, backgroundColor: `#00ffdb`, rotate: 90 }"
       :press="{ scale: 0.9 }"
       :transition="{
@@ -92,13 +92,7 @@ export default {
     Motion,
   },
   setup() {
-    onMounted(() => {
-      setTimeout(() => {
-        const animation = animate((p) => {}, {
-          easing: spring({ stiffness: 300, damping: 10 }),
-        })
-      }, 3000)
-    })
+    onMounted(() => {})
 
     return { spring }
   },

@@ -59,9 +59,8 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
     if (isEasingGenerator(easing)) {
       const custom = easing.createAnimation(keyframes)
       easing = custom.easing
-      if (custom.keyframes !== undefined)
-        keyframes = custom.keyframes as number[]
-      if (custom.duration !== undefined) initialDuration = custom.duration
+      keyframes = (custom.keyframes as number[]) || keyframes
+      initialDuration = custom.duration || initialDuration
     }
 
     this.repeat = repeat
