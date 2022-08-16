@@ -16,7 +16,7 @@ export function pregenerateKeyframes(
   let overshootDuration: number | undefined = undefined
   let timestamp = timeStep
   let state = generator(0)
-  const keyframes: Array<string | number> = [state.current]
+  const keyframes: Array<string | number> = [toUnit(state.current)]
 
   while (!state.done && timestamp < maxDuration) {
     state = generator(timestamp)

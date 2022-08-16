@@ -8,6 +8,7 @@ import type { KeyframesMetadata } from "@motionone/generators"
 import { pregenerateKeyframes } from "@motionone/generators"
 import { isNumber, isString, noopReturn } from "@motionone/utils"
 import { getUnitConverter } from "../animate/utils/get-unit"
+import { calcGeneratorVelocity } from "@motionone/generators"
 
 type ToUnit = (value: number) => number | string
 
@@ -75,6 +76,8 @@ export function createGeneratorEasing<Options extends {} = {}>(
         let toUnit: undefined | ((value: number) => string | number) =
           noopReturn
 
+        const numKeyframes = keyframes.length
+
         /**
          * If we should generate an animation for this value, run some preperation
          * like resolving target/origin, finding a unit (if any) and determine if
@@ -83,11 +86,11 @@ export function createGeneratorEasing<Options extends {} = {}>(
         if (shouldGenerate) {
           toUnit = getUnitConverter(keyframes)
 
-          const targetDefinition = keyframes[keyframes.length - 1]
+          const targetDefinition = keyframes[numKeyframes - 1]
 
           target = getAsNumber(targetDefinition)
 
-          if (keyframes.length > 1 && keyframes[0] !== null) {
+          if (numKeyframes > 1 && keyframes[0] !== null) {
             origin = getAsNumber(keyframes[0])
           } else {
             const prevGenerator = motionValue?.generator
@@ -97,12 +100,35 @@ export function createGeneratorEasing<Options extends {} = {}>(
              * the animation's current value and velocity.
              */
             if (prevGenerator) {
+              /**
+               * If we have a generator for this value we can use it to resolve
+               * the animations's current value and velocity.
+               */
+              const { animation, generatorStartTime } = motionValue!
+
+              const startTime = animation?.startTime || generatorStartTime || 0
+              const currentTime =
+                animation?.currentTime || performance.now() - startTime
+              const prevGeneratorCurrent = prevGenerator(currentTime).current
+
+              origin = prevGeneratorCurrent
+
+              if (
+                numKeyframes === 1 ||
+                (numKeyframes === 2 && keyframes[0] === null)
+              ) {
+                velocity = calcGeneratorVelocity(
+                  (t: number) => prevGenerator(t).current,
+                  currentTime,
+                  prevGeneratorCurrent
+                )
+              }
             } else if (getOrigin) {
               origin = getAsNumber(getOrigin())
             }
           }
         }
-        console.log(origin, target)
+
         /**
          * If we've determined it is possible to generate an animation, do so.
          */
