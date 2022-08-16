@@ -533,8 +533,9 @@ describe("createAnimationsFromTimeline", () => {
     })
 
     const expectedKeyframes = pregenerateKeyframes(
-      expectedSpring
-    ).keyframes.map((value) => value + "px")
+      expectedSpring,
+      (value) => value + "px"
+    ).keyframes
 
     animations[0][3]!.offset = animations[0][3]!.offset!.map((v) =>
       parseFloat(v.toFixed(4))
@@ -581,8 +582,9 @@ describe("createAnimationsFromTimeline", () => {
     })
 
     const expectedKeyframes = pregenerateKeyframes(
-      expectedSpring
-    ).keyframes.map((value) => value + "%")
+      expectedSpring,
+      (value) => value + "%"
+    ).keyframes
 
     animations[0][3]!.offset = animations[0][3]!.offset!.map((v) =>
       parseFloat(v.toFixed(4))

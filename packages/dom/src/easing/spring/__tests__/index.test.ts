@@ -112,7 +112,10 @@ describe("spring", () => {
       velocity: 1031.01858338282,
     })
 
-    const expectedKeyframes = pregenerateKeyframes(expectedSpring).keyframes
+    const expectedKeyframes = pregenerateKeyframes(
+      expectedSpring,
+      (v) => v + "px"
+    ).keyframes
     expect(animation.keyframes).toEqual(expectedKeyframes)
     expect(animation.easing).toEqual("linear")
     expect(animation.duration).toEqual(0.71)
@@ -152,7 +155,10 @@ describe("spring", () => {
       velocity: 1031.01858338282,
     })
 
-    const expectedKeyframes = pregenerateKeyframes(expectedSpring).keyframes
+    const expectedKeyframes = pregenerateKeyframes(
+      expectedSpring,
+      (v) => v + "px"
+    ).keyframes
     expect(animation.keyframes).toEqual(expectedKeyframes)
     expect(animation.easing).toEqual("linear")
     expect(animation.duration).toEqual(0.71)
@@ -213,7 +219,10 @@ describe("spring", () => {
       to: 100,
     })
 
-    const keyframesMetadata = pregenerateKeyframes(expectedSpring)
+    const keyframesMetadata = pregenerateKeyframes(
+      expectedSpring,
+      (v) => v + "px"
+    )
 
     expect(animation.keyframes).toEqual(undefined)
     expect(animation.easing).toEqual("ease")
@@ -227,52 +236,6 @@ describe("spring", () => {
     }
     const spring = createSpring(config)
     const animation = spring.createAnimation([null, "#fff"], true, () => "50px")
-
-    const expectedSpring = createSpringGenerator({
-      ...config,
-      from: 0,
-      to: 100,
-    })
-
-    const keyframesMetadata = pregenerateKeyframes(expectedSpring)
-
-    expect(animation.keyframes).toEqual(undefined)
-    expect(animation.easing).toEqual("ease")
-    expect(animation.duration).toEqual(keyframesMetadata.overshootDuration)
-  })
-
-  test("[string, string] should return spring-linked 'ease' with duration based on default spring overshoot", () => {
-    const config = {
-      stiffness: 800,
-      damping: 20,
-    }
-    const spring = createSpring(config)
-    const animation = spring.createAnimation(
-      ["0px", "500px"],
-      true,
-      () => "50px"
-    )
-
-    const expectedSpring = createSpringGenerator({
-      ...config,
-      from: 0,
-      to: 100,
-    })
-
-    const keyframesMetadata = pregenerateKeyframes(expectedSpring)
-
-    expect(animation.keyframes).toEqual(undefined)
-    expect(animation.easing).toEqual("ease")
-    expect(animation.duration).toEqual(keyframesMetadata.overshootDuration)
-  })
-
-  test("Multiple keyframes should return spring-linked animation", () => {
-    const config = {
-      stiffness: 800,
-      damping: 20,
-    }
-    const spring = createSpring(config)
-    const animation = spring.createAnimation([0, 100, 200], true, () => "50px")
 
     const expectedSpring = createSpringGenerator({
       ...config,
@@ -321,7 +284,10 @@ describe("spring", () => {
       velocity: 10000,
     })
 
-    const expectedKeyframes = pregenerateKeyframes(expectedSpring)
+    const expectedKeyframes = pregenerateKeyframes(
+      expectedSpring,
+      (v) => v + "px"
+    )
     expect(animation.keyframes).toEqual(expectedKeyframes.keyframes)
     expect(animation.easing).toEqual("linear")
     expect(animation.duration).toEqual(expectedKeyframes.duration)
@@ -362,7 +328,10 @@ describe("spring", () => {
       velocity: 10000,
     })
 
-    const expectedKeyframes = pregenerateKeyframes(expectedSpring)
+    const expectedKeyframes = pregenerateKeyframes(
+      expectedSpring,
+      (v) => v + "px"
+    )
     expect(animation.keyframes).toEqual(expectedKeyframes.keyframes)
     expect(animation.easing).toEqual("linear")
     expect(animation.duration).toEqual(expectedKeyframes.duration)

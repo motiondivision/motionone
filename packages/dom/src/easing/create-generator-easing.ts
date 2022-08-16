@@ -9,6 +9,8 @@ import { pregenerateKeyframes } from "@motionone/generators"
 import { isNumber, isString, noopReturn } from "@motionone/utils"
 import { getUnitConverter } from "../animate/utils/get-unit"
 import { calcGeneratorVelocity } from "@motionone/generators"
+import { transformDefinitions } from "../animate/utils/transforms"
+import { getStyleName } from "../animate/utils/get-style-name"
 
 type ToUnit = (value: number) => number | string
 
@@ -84,7 +86,10 @@ export function createGeneratorEasing<Options extends {} = {}>(
          * it is actually possible to generate.
          */
         if (shouldGenerate) {
-          toUnit = getUnitConverter(keyframes)
+          toUnit = getUnitConverter(
+            keyframes,
+            name ? transformDefinitions.get(getStyleName(name)) : undefined
+          )
 
           const targetDefinition = keyframes[numKeyframes - 1]
 

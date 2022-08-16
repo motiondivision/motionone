@@ -138,19 +138,17 @@ export function createAnimationsFromTimeline(
 
         if (isEasingGenerator(easing)) {
           const valueIsTransform = isTransform(key)
-          // const toUnit = getUnitConverter(
-          //   valueKeyframes,
-          //   transformDefinitions.get(getStyleName(key))
-          // )
 
           invariant(
             valueKeyframes.length === 2 || !valueIsTransform,
-            "spring must be provided 2 keyframes within timeline"
+            "spring must be provided 2 keyframes within timeline()"
           )
 
           const custom = easing.createAnimation(
             valueKeyframes,
-            valueIsTransform
+            valueIsTransform,
+            () => 0,
+            key
           )
 
           easing = custom.easing
