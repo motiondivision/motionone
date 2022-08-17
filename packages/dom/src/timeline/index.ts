@@ -23,7 +23,6 @@ import { withControls } from "../animate/utils/controls"
 import { keyframesList } from "../animate/utils/keyframes"
 import { getOptions } from "../animate/utils/options"
 import { resolveElements } from "../utils/resolve-elements"
-import { isTransform } from "../animate/utils/transforms"
 import type {
   ElementSequence,
   TimelineDefinition,
@@ -137,24 +136,21 @@ export function createAnimationsFromTimeline(
         } = valueOptions
 
         if (isEasingGenerator(easing)) {
-          const valueIsTransform = isTransform(key)
-
           invariant(
-            valueKeyframes.length === 2 || !valueIsTransform,
-            "spring must be provided 2 keyframes within timeline"
+            key === "opacity" || valueKeyframes.length > 1,
+            "spring must be provided 2 keyframes within timeline()"
           )
 
           const custom = easing.createAnimation(
             valueKeyframes,
-            // TODO We currently only support explicit keyframes
-            // so this doesn't currently read from the DOM
-            () => "0",
-            valueIsTransform
+            key !== "opacity",
+            () => 0,
+            key
           )
 
           easing = custom.easing
-          if (custom.keyframes !== undefined) valueKeyframes = custom.keyframes
-          if (custom.duration !== undefined) duration = custom.duration
+          valueKeyframes = custom.keyframes || valueKeyframes
+          duration = custom.duration || duration
         }
 
         const delay =

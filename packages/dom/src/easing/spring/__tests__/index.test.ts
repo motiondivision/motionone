@@ -11,7 +11,7 @@ describe("spring", () => {
     const target = 100
     const config = { stiffness: 800, damping: 20 }
     const spring = createSpring(config)
-    const animation = spring.createAnimation([target], () => "50px", true)
+    const animation = spring.createAnimation([target], true, () => "50px")
 
     const expectedSpring = createSpringGenerator({
       ...config,
@@ -30,7 +30,7 @@ describe("spring", () => {
     const target = 100
     const config = { stiffness: 800, damping: 20 }
     const spring = createSpring(config)
-    const animation = spring.createAnimation([target], () => "50px", false)
+    const animation = spring.createAnimation([target], false, () => "50px")
 
     expect(animation.keyframes).toEqual(undefined)
     expect(animation.easing).toEqual("ease")
@@ -41,7 +41,7 @@ describe("spring", () => {
     const target = 100
     const config = { stiffness: 800, damping: 20 }
     const spring = createSpring(config)
-    const animation = spring.createAnimation([null, target], () => "50px", true)
+    const animation = spring.createAnimation([null, target], true, () => "50px")
 
     const expectedSpring = createSpringGenerator({
       ...config,
@@ -62,7 +62,7 @@ describe("spring", () => {
     const config = { stiffness: 800, damping: 20 }
     const spring = createSpring(config)
     const readFn = jest.fn()
-    const animation = spring.createAnimation([origin, target], readFn, true)
+    const animation = spring.createAnimation([origin, target], true, readFn)
 
     const expectedSpring = createSpringGenerator({
       ...config,
@@ -98,8 +98,8 @@ describe("spring", () => {
     const readFn = jest.fn()
     const animation = spring.createAnimation(
       [target],
-      readFn,
       true,
+      readFn,
       "x",
       data as any
     )
@@ -112,7 +112,10 @@ describe("spring", () => {
       velocity: 1031.01858338282,
     })
 
-    const expectedKeyframes = pregenerateKeyframes(expectedSpring).keyframes
+    const expectedKeyframes = pregenerateKeyframes(
+      expectedSpring,
+      (v) => v + "px"
+    ).keyframes
     expect(animation.keyframes).toEqual(expectedKeyframes)
     expect(animation.easing).toEqual("linear")
     expect(animation.duration).toEqual(0.71)
@@ -138,8 +141,8 @@ describe("spring", () => {
     const readFn = jest.fn()
     const animation = spring.createAnimation(
       [null, target],
-      readFn,
       true,
+      readFn,
       "x",
       data as any
     )
@@ -152,7 +155,10 @@ describe("spring", () => {
       velocity: 1031.01858338282,
     })
 
-    const expectedKeyframes = pregenerateKeyframes(expectedSpring).keyframes
+    const expectedKeyframes = pregenerateKeyframes(
+      expectedSpring,
+      (v) => v + "px"
+    ).keyframes
     expect(animation.keyframes).toEqual(expectedKeyframes)
     expect(animation.easing).toEqual("linear")
     expect(animation.duration).toEqual(0.71)
@@ -179,8 +185,8 @@ describe("spring", () => {
 
     const animation = spring.createAnimation(
       [origin, target],
-      readFn,
       true,
+      readFn,
       "x",
       data as any
     )
@@ -193,7 +199,10 @@ describe("spring", () => {
       velocity: 0,
     })
 
-    const expectedKeyframes = pregenerateKeyframes(expectedSpring).keyframes
+    const expectedKeyframes = pregenerateKeyframes(
+      expectedSpring,
+      (v) => v + "px"
+    ).keyframes
     expect(animation.keyframes).toEqual(expectedKeyframes)
     expect(animation.easing).toEqual("linear")
     expect(animation.duration).toEqual(0.59)
@@ -205,7 +214,7 @@ describe("spring", () => {
       damping: 20,
     }
     const spring = createSpring(config)
-    const animation = spring.createAnimation(["#fff"], () => "50px", true)
+    const animation = spring.createAnimation(["#fff"], true, () => "50px")
 
     const expectedSpring = createSpringGenerator({
       ...config,
@@ -213,7 +222,10 @@ describe("spring", () => {
       to: 100,
     })
 
-    const keyframesMetadata = pregenerateKeyframes(expectedSpring)
+    const keyframesMetadata = pregenerateKeyframes(
+      expectedSpring,
+      (v) => v + "px"
+    )
 
     expect(animation.keyframes).toEqual(undefined)
     expect(animation.easing).toEqual("ease")
@@ -226,53 +238,7 @@ describe("spring", () => {
       damping: 20,
     }
     const spring = createSpring(config)
-    const animation = spring.createAnimation([null, "#fff"], () => "50px", true)
-
-    const expectedSpring = createSpringGenerator({
-      ...config,
-      from: 0,
-      to: 100,
-    })
-
-    const keyframesMetadata = pregenerateKeyframes(expectedSpring)
-
-    expect(animation.keyframes).toEqual(undefined)
-    expect(animation.easing).toEqual("ease")
-    expect(animation.duration).toEqual(keyframesMetadata.overshootDuration)
-  })
-
-  test("[string, string] should return spring-linked 'ease' with duration based on default spring overshoot", () => {
-    const config = {
-      stiffness: 800,
-      damping: 20,
-    }
-    const spring = createSpring(config)
-    const animation = spring.createAnimation(
-      ["0px", "500px"],
-      () => "50px",
-      true
-    )
-
-    const expectedSpring = createSpringGenerator({
-      ...config,
-      from: 0,
-      to: 100,
-    })
-
-    const keyframesMetadata = pregenerateKeyframes(expectedSpring)
-
-    expect(animation.keyframes).toEqual(undefined)
-    expect(animation.easing).toEqual("ease")
-    expect(animation.duration).toEqual(keyframesMetadata.overshootDuration)
-  })
-
-  test("Multiple keyframes should return spring-linked animation", () => {
-    const config = {
-      stiffness: 800,
-      damping: 20,
-    }
-    const spring = createSpring(config)
-    const animation = spring.createAnimation([0, 100, 200], () => "50px", true)
+    const animation = spring.createAnimation([null, "#fff"], true, () => "50px")
 
     const expectedSpring = createSpringGenerator({
       ...config,
@@ -307,8 +273,8 @@ describe("spring", () => {
     const readFn = jest.fn()
     const animation = spring.createAnimation(
       [target],
-      readFn,
       true,
+      readFn,
       "x",
       data as any
     )
@@ -321,7 +287,10 @@ describe("spring", () => {
       velocity: 10000,
     })
 
-    const expectedKeyframes = pregenerateKeyframes(expectedSpring)
+    const expectedKeyframes = pregenerateKeyframes(
+      expectedSpring,
+      (v) => v + "px"
+    )
     expect(animation.keyframes).toEqual(expectedKeyframes.keyframes)
     expect(animation.easing).toEqual("linear")
     expect(animation.duration).toEqual(expectedKeyframes.duration)
@@ -348,8 +317,8 @@ describe("spring", () => {
     const readFn = jest.fn()
     const animation = spring.createAnimation(
       [origin, target],
-      readFn,
       true,
+      readFn,
       "x",
       data as any
     )
@@ -362,7 +331,10 @@ describe("spring", () => {
       velocity: 10000,
     })
 
-    const expectedKeyframes = pregenerateKeyframes(expectedSpring)
+    const expectedKeyframes = pregenerateKeyframes(
+      expectedSpring,
+      (v) => v + "px"
+    )
     expect(animation.keyframes).toEqual(expectedKeyframes.keyframes)
     expect(animation.easing).toEqual("linear")
     expect(animation.duration).toEqual(expectedKeyframes.duration)

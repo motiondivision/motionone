@@ -22,6 +22,7 @@ import { style } from "./style"
 import { getStyleName } from "./utils/get-style-name"
 import { isNumber, noop } from "@motionone/utils"
 import { stopAnimation } from "./utils/stop-animation"
+import { getUnitConverter } from "./utils/get-unit"
 
 function getDevToolsRecord() {
   return (window as any).__MOTION_DEV_TOOLS_RECORD
@@ -95,17 +96,23 @@ export function animateStyle(
       readInitialValue
     )
 
+    /**
+     * Detect unit type of keyframes.
+     */
+    const toUnit = getUnitConverter(keyframes, definition)
+
     if (isEasingGenerator(easing)) {
       const custom = easing.createAnimation(
         keyframes,
-        readInitialValue as any,
-        valueIsTransform,
+        key !== "opacity",
+        readInitialValue,
         name,
         motionValue
       )
+
       easing = custom.easing
-      if (custom.keyframes !== undefined) keyframes = custom.keyframes
-      if (custom.duration !== undefined) duration = custom.duration
+      keyframes = custom.keyframes || keyframes
+      duration = custom.duration || duration
     }
 
     /**
@@ -236,16 +243,17 @@ export function animateStyle(
         keyframes.unshift(parseFloat(readInitialValue() as string))
       }
 
-      const render = (latest: number) => {
-        if (definition) latest = definition.toDefaultUnit(latest) as any
-        style.set(element, name, latest)
-      }
-
-      animation = new Animation(render, keyframes as any, {
-        ...options,
-        duration,
-        easing,
-      })
+      animation = new Animation(
+        (latest: number) => {
+          style.set(element, name, toUnit ? toUnit(latest) : latest)
+        },
+        keyframes as any,
+        {
+          ...options,
+          duration,
+          easing,
+        }
+      )
     } else {
       const target = keyframes[keyframes.length - 1]
       style.set(

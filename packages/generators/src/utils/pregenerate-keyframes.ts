@@ -1,7 +1,8 @@
 import { AnimationGenerator } from "@motionone/types"
+import { noopReturn } from "@motionone/utils"
 
 export interface KeyframesMetadata {
-  keyframes: number[]
+  keyframes: Array<string | number>
   duration: number
   overshootDuration: number
 }
@@ -9,16 +10,17 @@ export interface KeyframesMetadata {
 const timeStep = 10
 const maxDuration = 10000
 export function pregenerateKeyframes(
-  generator: AnimationGenerator
+  generator: AnimationGenerator,
+  toUnit: (value: number) => number | string = noopReturn
 ): KeyframesMetadata {
   let overshootDuration: number | undefined = undefined
   let timestamp = timeStep
   let state = generator(0)
-  const keyframes: number[] = [state.current]
+  const keyframes: Array<string | number> = [toUnit(state.current)]
 
   while (!state.done && timestamp < maxDuration) {
     state = generator(timestamp)
-    keyframes.push(state.done ? state.target : state.current)
+    keyframes.push(toUnit(state.done ? state.target : state.current))
 
     if (overshootDuration === undefined && state.hasReachedTarget) {
       overshootDuration = timestamp

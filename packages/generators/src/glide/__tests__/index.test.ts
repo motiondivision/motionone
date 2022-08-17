@@ -39,7 +39,9 @@ describe("glide", () => {
     const positiveGenerator = glide({ velocity: 100 })
     const negativeGenerator = glide({ velocity: 100 })
     expect(pregenerateKeyframes(positiveGenerator).keyframes).toEqual(
-      pregenerateKeyframes(negativeGenerator).keyframes.map(Math.abs)
+      pregenerateKeyframes(negativeGenerator).keyframes.map((value) =>
+        typeof value === "string" ? value : Math.abs(value)
+      )
     )
   })
 
