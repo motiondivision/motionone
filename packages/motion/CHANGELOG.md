@@ -6,7 +6,6 @@ Motion One adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- Support for `glide` and `spring` for non-transform numerical values.
 - Support for animating transforms as unit values.
 
 ## [10.13.3] [2022-08-12]
