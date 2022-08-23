@@ -1,4 +1,5 @@
 export { animate } from "./animate/index"
+export { createAnimate } from "./animate/create-animate"
 export { animateStyle } from "./animate/animate-style"
 export { timeline } from "./timeline/index"
 export { stagger } from "./utils/stagger"

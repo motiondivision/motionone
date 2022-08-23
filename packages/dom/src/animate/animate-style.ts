@@ -1,7 +1,7 @@
 import { getAnimationData, getMotionValue } from "./data"
 import type { AnimationFactory, ValueKeyframesDefinition } from "./types"
 import { isCssVar, registerCssVariable } from "./utils/css-var"
-import { Animation } from "@motionone/animation"
+import type { Animation } from "@motionone/animation"
 import {
   defaults,
   time,
@@ -32,7 +32,8 @@ export function animateStyle(
   element: Element,
   key: string,
   keyframesDefinition: ValueKeyframesDefinition,
-  options: AnimationOptions = {}
+  options: AnimationOptions = {},
+  AnimationPolyfill?: typeof Animation
 ): AnimationFactory {
   const record = getDevToolsRecord()
   const isRecording = options.record !== false && record
@@ -226,7 +227,7 @@ export function animateStyle(
        * If we can't animate the value natively then we can fallback to the numbers-only
        * polyfill for transforms.
        */
-    } else if (valueIsTransform) {
+    } else if (AnimationPolyfill && valueIsTransform) {
       /**
        * If any keyframe is a string (because we measured it from the DOM), we need to convert
        * it into a number before passing to the Animation polyfill.
@@ -243,7 +244,7 @@ export function animateStyle(
         keyframes.unshift(parseFloat(readInitialValue() as string))
       }
 
-      animation = new Animation(
+      animation = new AnimationPolyfill(
         (latest: number) => {
           style.set(element, name, toUnit ? toUnit(latest) : latest)
         },

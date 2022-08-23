@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.14.1] [2022-08-23]
+
+### Added
+
+- `createAnimate` export for creating `animate()` without the `Animation` polyfill. This is not a public API.
+
 ## [10.14.0] [2022-08-17]
 
 ### Added
