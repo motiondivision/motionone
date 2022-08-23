@@ -16,6 +16,7 @@ import { inView } from "./gestures/in-view"
 import { hover } from "./gestures/hover"
 import { press } from "./gestures/press"
 import { motionEvent } from "./utils/events"
+import { Animation } from "@motionone/animation"
 
 interface GestureSubscriptions {
   [key: string]: VoidFunction
@@ -152,7 +153,13 @@ export function createMotionState(
         baseTarget[key] ??= style.get(element, key) as string
 
         animationFactories.push(
-          animateStyle(element, key, target[key], animationOptions[key])
+          animateStyle(
+            element,
+            key,
+            target[key],
+            animationOptions[key],
+            Animation
+          )
         )
       }
     })
