@@ -89,13 +89,12 @@ export const Presence: FlowComponent<{
               batch(() => {
                 // exit -> enter
                 if (props.exitBeforeEnter) {
-                  setEl()
                   exitTransition(() => !exiting && enterTransition(newEl))
                 }
                 // exit & enter
                 else {
-                  enterTransition(newEl)
                   exitTransition()
+                  enterTransition(newEl)
                 }
               })
             })
