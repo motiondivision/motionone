@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.14.2] [2022-09-07]
+
+### Fixed
+
+- Fixed exit animations in Solid 1.5.
+
 ## [10.14.1] [2022-08-23]
 
 ### Added
