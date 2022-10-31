@@ -176,7 +176,7 @@ export function createAnimationsFromTimeline(
         /**
          * Fill out if offset if fewer offsets than keyframes
          */
-        const remainder = length - valueKeyframes.length
+        const remainder = offset.length - valueKeyframes.length
         remainder > 0 && fillOffset(offset, remainder)
 
         /**

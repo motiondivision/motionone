@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.14.3] [2022-10-31]
+
+### Fixed
+
+- Fixed type of argument for `createAnimate`.
+
 ## [10.14.2] [2022-09-07]
 
 ### Fixed
