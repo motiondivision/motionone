@@ -12,7 +12,7 @@ import { AnimationControls } from "@motionone/types"
 import { ElementOrSelector } from "../types"
 import type { Animation } from "@motionone/animation"
 
-export function createAnimate(AnimatePolyfill: typeof Animation) {
+export function createAnimate(AnimatePolyfill?: typeof Animation) {
   return function animate(
     elements: ElementOrSelector,
     keyframes: MotionKeyframesDefinition,
