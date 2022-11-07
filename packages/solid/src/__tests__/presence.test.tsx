@@ -36,7 +36,7 @@ describe("Presence", () => {
       <TestComponent show initial={false} animate={{ opacity: 0.5 }} />
     ))
     expect(wrapper.container.outerHTML).toEqual(
-      `<div><div style="opacity: 0.5;" data-testid="child"></div></div>`
+      `<div><div data-testid="child" style="opacity: 0.5;"></div></div>`
     )
   })
 

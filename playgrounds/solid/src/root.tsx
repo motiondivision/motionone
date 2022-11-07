@@ -1,26 +1,46 @@
 // @refresh reload
-import { Routes } from "solid-start/root"
-import { ErrorBoundary } from "solid-start/error-boundary"
-import { Portal } from "solid-js/web"
+import { Suspense } from "solid-js"
+import {
+  A,
+  Body,
+  ErrorBoundary,
+  FileRoutes,
+  Head,
+  Html,
+  Meta,
+  Routes,
+  Scripts,
+  Title,
+} from "solid-start"
 
 export default function Root() {
   return (
-    <>
-      <ErrorBoundary>
-        <Routes />
-      </ErrorBoundary>
-      <Portal mount={document.body}>
-        <a
-          href="/"
-          style={{
-            position: "absolute",
-            right: "16px",
-            top: "16px",
-          }}
-        >
-          ROOT
-        </a>
-      </Portal>
-    </>
+    <Html lang="en">
+      <Head>
+        <Title>Motionone Solid Playground</Title>
+        <Meta charset="utf-8" />
+        <Meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+      <Body>
+        <Suspense>
+          <ErrorBoundary>
+            <A
+              href="/"
+              style={{
+                position: "absolute",
+                right: "16px",
+                top: "16px",
+              }}
+            >
+              Index
+            </A>
+            <Routes>
+              <FileRoutes />
+            </Routes>
+          </ErrorBoundary>
+        </Suspense>
+        <Scripts />
+      </Body>
+    </Html>
   )
 }
