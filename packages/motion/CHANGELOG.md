@@ -2,7 +2,7 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
-## [10.14.4] [2022-12-05]
+## [10.15.0] [2022-12-05]
 
 ### Fixed
 
