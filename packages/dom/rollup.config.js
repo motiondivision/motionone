@@ -1,4 +1,5 @@
 const resolve = require("@rollup/plugin-node-resolve").default
+const replace = require("@rollup/plugin-replace").default
 const { createDistBuild, createSizeBuild } = require("config/rollup.config")
 const pkg = require("./package.json")
 
@@ -14,6 +15,21 @@ const sizeBundles = [
   createSizeBuild({ input: `lib/${input}`, output: `dist/${output}` }, pkg)
 )
 
+const replaceSettings = (env) => {
+  const replaceConfig = env
+    ? {
+        "process.env.NODE_ENV": JSON.stringify(env),
+        preventAssignment: false,
+      }
+    : {
+        preventAssignment: false,
+      }
+
+  replaceConfig.__VERSION__ = `${pkg.version}`
+
+  return replace(replaceConfig)
+}
+
 const umd = {
   input: "lib/index.js",
   output: {
@@ -22,7 +38,7 @@ const umd = {
     name: "Motion",
     exports: "named",
   },
-  plugins: [resolve()],
+  plugins: [resolve(), replaceSettings("development")],
 }
 
 module.exports = [...createDistBuild(pkg), ...sizeBundles, umd]
