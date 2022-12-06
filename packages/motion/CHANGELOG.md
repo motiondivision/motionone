@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.15.0] [2022-12-05]
+
+### Fixed
+
+- Add options `persist: true` to leave an animation running when complete.
+
 ## [10.14.3] [2022-10-31]
 
 ### Fixed
