@@ -1,6 +1,6 @@
 {
   "name": "@motionone/react",
-  "version": "10.15.1",
+  "version": "10.15.2",
   "description": "A tiny, performant animation library for React",
   "license": "MIT",
   "author": "Matt Perry",
@@ -14,7 +14,7 @@
     "measure": "bundlesize"
   },
   "dependencies": {
-    "@motionone/dom": "^10.15.1",
+    "@motionone/dom": "^10.15.2",
     "hey-listen": "^1.0.8",
     "tslib": "^2.3.1"
   },
