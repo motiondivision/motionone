@@ -13,4 +13,14 @@ const sizeBundles = [
   createSizeBuild({ input: `lib/${input}`, output: `dist/${output}` }, pkg)
 )
 
-module.exports = [...createDistBuild(pkg), ...sizeBundles]
+const umd = {
+  input: "lib/index.js",
+  output: {
+    file: `dist/motion-umd.dev.js`,
+    format: "umd",
+    name: "Motion",
+    exports: "named",
+  },
+}
+
+module.exports = [...createDistBuild(pkg), ...sizeBundles, umd]
