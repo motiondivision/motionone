@@ -1,3 +1,4 @@
+const resolve = require("@rollup/plugin-node-resolve").default
 const { createDistBuild, createSizeBuild } = require("config/rollup.config")
 const pkg = require("./package.json")
 
@@ -21,6 +22,7 @@ const umd = {
     name: "Motion",
     exports: "named",
   },
+  plugins: [resolve()],
 }
 
 module.exports = [...createDistBuild(pkg), ...sizeBundles, umd]

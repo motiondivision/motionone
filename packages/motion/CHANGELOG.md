@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.15.2] [2022-12-06]
+
+### Fixed
+
+- Fixed imports in UMD package.
+
 ## [10.15.1] [2022-12-06]
 
 ### Added
