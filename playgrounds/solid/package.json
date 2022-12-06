@@ -1,6 +1,6 @@
 {
   "name": "playgrounds-solid",
-  "version": "10.15.0",
+  "version": "10.15.1",
   "private": true,
   "scripts": {
     "dev": "solid-start dev --port 3001",
@@ -9,7 +9,7 @@
   },
   "type": "module",
   "devDependencies": {
-    "@motionone/solid": "^10.15.0",
+    "@motionone/solid": "^10.15.1",
     "solid-app-router": "^0.3.0",
     "solid-js": "^1.3.13",
     "solid-meta": "^0.27.3",
