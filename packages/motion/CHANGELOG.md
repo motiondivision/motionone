@@ -2,6 +2,30 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.15.3] [2022-12-06]
+
+### Fixed
+
+- Fixed `process` in UMD package.
+
+## [10.15.2] [2022-12-06]
+
+### Fixed
+
+- Fixed imports in UMD package.
+
+## [10.15.1] [2022-12-06]
+
+### Added
+
+- UMD package for `@motionone/dom`.
+
+## [10.15.0] [2022-12-05]
+
+### Fixed
+
+- Add options `persist: true` to leave an animation running when complete.
+
 ## [10.14.3] [2022-10-31]
 
 ### Fixed

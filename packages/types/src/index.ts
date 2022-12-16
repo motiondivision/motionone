@@ -87,6 +87,7 @@ export type PlaybackOptions = {
   endDelay?: number
   repeat?: number
   direction?: PlaybackDirection
+  persist?: boolean
 }
 
 export type DevToolsOptions = {

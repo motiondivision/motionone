@@ -45,6 +45,7 @@ export function animateStyle(
     endDelay = defaults.endDelay,
     repeat = defaults.repeat,
     easing = defaults.easing,
+    persist = false,
     direction,
     offset,
     allowWebkitAcceleration = false,
@@ -204,6 +205,8 @@ export function animateStyle(
       const target = keyframes[keyframes.length - 1]
       animation.finished
         .then(() => {
+          if (persist) return
+
           // Apply styles to target
           style.set(element, name, target)
 
