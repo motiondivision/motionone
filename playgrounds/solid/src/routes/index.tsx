@@ -1,31 +1,33 @@
+import { A } from "@solidjs/router"
+
 export default function Home() {
   return (
     <main>
       <h1>Examples</h1>
       <ul>
         <li>
-          <a href="/examples/render">Render</a>
+          <A href="/examples/render">Render</A>
         </li>
         <li>
-          <a href="/examples/animate">Animation</a>
+          <A href="/examples/animate">Animation</A>
         </li>
         <li>
-          <a href="/examples/animate-prop-change">Animation on prop change</a>
+          <A href="/examples/animate-prop-change">Animation on prop change</A>
         </li>
         <li>
-          <a href="/examples/events">Events</a>
+          <A href="/examples/events">Events</A>
         </li>
         <li>
-          <a href="/examples/motion-primitive">Motion Primitive</a>
+          <A href="/examples/motion-primitive">Motion Primitive</A>
         </li>
         <li>
-          <a href="/examples/presence-initial">Presence</a>
+          <A href="/examples/presence-initial">Presence</A>
         </li>
         <li>
-          <a href="/examples/presence-switch">Presence with Switch</a>
+          <A href="/examples/presence-switch">Presence with Switch</A>
         </li>
         <li>
-          <a href="/examples/presence-multiple">Presence (Multiple Nodes)</a>
+          <A href="/examples/presence-multiple">Presence (Multiple Nodes)</A>
         </li>
       </ul>
     </main>
