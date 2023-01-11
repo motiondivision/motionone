@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.15.5] [2023-01-11]
+
+### Added
+
+- Adding checks for present `Element` and `keyframes`.
+
 ## [10.15.4] [2022-12-18]
 
 ### Fixed
