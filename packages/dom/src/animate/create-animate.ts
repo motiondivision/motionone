@@ -3,6 +3,7 @@ import type {
   AnimationOptionsWithOverrides,
   MotionKeyframesDefinition,
 } from "./types"
+import { invariant } from "hey-listen"
 import { animateStyle } from "./animate-style"
 import { getOptions } from "./utils/options"
 import { resolveElements } from "../utils/resolve-elements"
@@ -20,6 +21,9 @@ export function createAnimate(AnimatePolyfill?: typeof Animation) {
   ): AnimationControls {
     elements = resolveElements(elements)
     const numElements = elements.length
+
+    invariant(Boolean(numElements), "No valid element provided.")
+    invariant(Boolean(keyframes), "No keyframes defined.")
 
     /**
      * Create and start new animations
