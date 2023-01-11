@@ -1,6 +1,6 @@
 {
   "name": "playgrounds-vue",
-  "version": "10.15.3",
+  "version": "10.15.5",
   "private": true,
   "scripts": {
     "dev": "nuxi dev"
@@ -9,9 +9,9 @@
     "nuxt": "npm:nuxt3@latest"
   },
   "dependencies": {
-    "@motionone/vue": "^10.15.3",
+    "@motionone/vue": "^10.15.5",
     "gsap": "^3.9.1",
-    "motion": "^10.15.3",
+    "motion": "^10.15.5",
     "nuxi": "^0.10.1",
     "three": "^0.142.0"
   }
