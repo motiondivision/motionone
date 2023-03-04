@@ -1,30 +1,13 @@
-import {
-  FlowComponent,
-  createSignal,
-  children,
-  createComputed,
-  untrack,
-  onMount,
-  on,
-  createMemo,
-  onCleanup,
-  batch,
-} from "solid-js"
-import type { ResolvedChildren } from "solid-js/types/reactive/signal"
+import { createContext, FlowComponent } from "solid-js"
 import { mountedStates } from "@motionone/dom"
-import { PresenceContext, ParentContext } from "./context"
-import { isServer } from "solid-js/web"
+import { resolveFirst } from "@solid-primitives/refs"
+import { createSwitchTransition } from "@solid-primitives/transition-group"
+import { ParentContext } from "./motion"
+import { onCompleteExit } from "./primitives"
+import { Options } from "./types"
 
-const getSingleElement = (resolved: ResolvedChildren): Element | undefined => {
-  resolved = Array.isArray(resolved) ? resolved[0] : resolved
-  return resolved instanceof Element ? resolved : undefined
-}
-
-const addCompleteListener = (el: Element, fn: VoidFunction) => {
-  const options: AddEventListenerOptions = { once: true }
-  el.addEventListener("motioncomplete", fn, options)
-  onCleanup(el.removeEventListener.bind(el, "motioncomplete", fn, options))
-}
+export type PresenceContextState = () => boolean
+export const PresenceContext = createContext<PresenceContextState>()
 
 /**
  * Perform exit/enter trantisions of children `<Motion>` components.
@@ -50,85 +33,28 @@ export const Presence: FlowComponent<{
   initial?: boolean
   exitBeforeEnter?: boolean
 }> = (props) => {
-  let { initial = true } = props
-  onMount(() => (initial = true))
+  let initial = props.initial !== false
 
-  let exiting = false
-  let mounts: VoidFunction[] = []
-  let newUnmounts: VoidFunction[] = []
-  let exitUnmounts: VoidFunction[] = []
-
-  onCleanup(() => {
-    exitUnmounts.concat(newUnmounts).forEach((f) => f())
-    newUnmounts = exitUnmounts = mounts = []
-  })
-
-  return (
-    <PresenceContext.Provider
-      value={{
-        addCleanup: (fn) => newUnmounts.push(fn),
-        addMount: (fn) => mounts.push(fn),
-        initial: () => initial,
-      }}
-    >
+  const render = (
+    <PresenceContext.Provider value={() => initial}>
       <ParentContext.Provider value={undefined}>
-        {untrack(() => {
-          if (isServer) return props.children
-
-          // children need to be accessed under a context provider
-          const resolved = children(() => props.children)
-          const resolvedChild = createMemo(() => getSingleElement(resolved()))
-          const [el, setEl] = createSignal<Element>()
-          const [el2, setEl2] = createSignal<Element>()
-
-          createComputed(
-            on(resolvedChild, (newEl) => {
-              exitUnmounts.push(...newUnmounts)
-              newUnmounts = []
-
-              batch(() => {
-                // exit -> enter
-                if (props.exitBeforeEnter) {
-                  exitTransition(() => !exiting && enterTransition(newEl))
-                }
-                // exit & enter
-                else {
-                  exitTransition()
-                  enterTransition(newEl)
-                }
-              })
-            })
-          )
-
-          return [el, el2]
-
-          function enterTransition(el?: Element) {
-            setEl(el)
-            mounts.forEach((f) => f())
-            mounts = []
+        {createSwitchTransition(
+          resolveFirst(() => props.children),
+          {
+            appear: initial,
+            mode: props.exitBeforeEnter ? "out-in" : "parallel",
+            onExit(el, remove) {
+              const state = mountedStates.get(el)
+              if (state && (state.getOptions() as Options).exit)
+                onCompleteExit(el, remove)
+              else remove()
+            },
           }
-
-          function exitTransition(done?: VoidFunction) {
-            const complete = () => {
-              setEl2()
-              exitUnmounts.forEach((f) => f())
-              exitUnmounts = []
-              done?.()
-            }
-
-            const exitEl = setEl2(el() ?? el2())
-            if (!exitEl) return complete()
-            const state = mountedStates.get(exitEl)
-            if (!state || !(state.getOptions() as any).exit) return complete()
-
-            state.setActive("exit", (exiting = true))
-            addCompleteListener(exitEl, () => {
-              exiting = false
-              complete()
-            })
-          }
-        })}
+        )}
       </ParentContext.Provider>
     </PresenceContext.Provider>
   )
+
+  initial = true
+  return render
 }

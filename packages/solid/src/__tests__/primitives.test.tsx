@@ -29,7 +29,7 @@ describe("motion directive", () => {
     const element = await new Promise((resolve) => {
       const Component = () => {
         let ref!: HTMLDivElement
-        setTimeout(() => resolve(ref), 50)
+        setTimeout(() => resolve(ref), 60)
         return (
           <div
             ref={ref}

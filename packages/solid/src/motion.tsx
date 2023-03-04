@@ -4,11 +4,39 @@ import type {
   MotionProxyComponent,
 } from "./types"
 import { Dynamic } from "solid-js/web"
-import { useContext, splitProps, untrack, JSX } from "solid-js"
-import { createStyles } from "@motionone/dom"
-import { PresenceContext, ParentContext } from "./context"
+import { useContext, splitProps, JSX, createContext } from "solid-js"
 import { createAndBindMotionState } from "./primitives"
 import { combineStyle } from "@solid-primitives/props"
+import { MotionState } from "@motionone/dom"
+import { PresenceContext } from "./presence"
+
+const OPTION_KEYS = [
+  "initial",
+  "animate",
+  "inView",
+  "inViewOptions",
+  "hover",
+  "press",
+  "variants",
+  "transition",
+  "exit",
+] as const
+
+const ATTR_KEYS = [
+  "tag",
+  "ref",
+  "style",
+  "onMotionStart",
+  "onMotionComplete",
+  "onHoverStart",
+  "onHoverEnd",
+  "onPressStart",
+  "onPressEnd",
+  "onViewEnter",
+  "onViewLeave",
+] as const
+
+export const ParentContext = createContext<MotionState>()
 
 /** @internal */
 export const MotionComponent = (
@@ -18,41 +46,14 @@ export const MotionComponent = (
     style?: JSX.CSSProperties | string
   }
 ) => {
-  const [options, , attrs] = splitProps(
-    props,
-    [
-      "initial",
-      "animate",
-      "inView",
-      "inViewOptions",
-      "hover",
-      "press",
-      "variants",
-      "transition",
-      "exit",
-    ],
-    [
-      "tag",
-      "ref",
-      "style",
-      "onMotionStart",
-      "onMotionComplete",
-      "onHoverStart",
-      "onHoverEnd",
-      "onPressStart",
-      "onPressEnd",
-      "onViewEnter",
-      "onViewLeave",
-    ]
-  )
+  const [options, , attrs] = splitProps(props, OPTION_KEYS, ATTR_KEYS)
 
-  const state = createAndBindMotionState(
+  const [state, style] = createAndBindMotionState(
     () => root,
     () => ({ ...options }),
     useContext(PresenceContext),
     useContext(ParentContext)
   )
-  const style = createStyles(state.getTarget())
 
   let root!: Element
   return (
@@ -62,7 +63,7 @@ export const MotionComponent = (
           root = el
           props.ref?.(el)
         }}
-        component={untrack(() => props.tag || "div")}
+        component={props.tag || "div"}
         style={props.style ? combineStyle(props.style, style) : style}
         on:motionstart={props.onMotionStart}
         on:motioncomplete={props.onMotionComplete}
@@ -107,8 +108,6 @@ export const MotionComponent = (
 export const Motion = new Proxy(MotionComponent, {
   get:
     (_, tag: string): MotionProxyComponent<any> =>
-    (props) => {
-      delete props.tag
-      return <MotionComponent {...props} tag={tag} />
-    },
+    (props) =>
+      <MotionComponent {...props} tag={tag} />,
 }) as MotionProxy
