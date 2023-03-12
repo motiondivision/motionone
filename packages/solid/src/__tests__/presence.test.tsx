@@ -67,7 +67,7 @@ describe("Presence", () => {
       })
     }))
 
-  test("All children have their state unmounted", () =>
+  test("All children run their exit animation", () =>
     createRoot(async () => {
       const [show, setShow] = createSignal(true)
       render(() => (
@@ -77,7 +77,10 @@ describe("Presence", () => {
               data-testid="child1"
               exit={{ opacity: 0, transition: { duration: 0.001 } }}
             >
-              <Motion data-testid="child2"></Motion>
+              <Motion
+                data-testid="child2"
+                exit={{ opacity: 0, transition: { duration: 0.001 } }}
+              ></Motion>
             </Motion.div>
           </Show>
         </Presence>
@@ -89,8 +92,10 @@ describe("Presence", () => {
 
       return new Promise<void>((resolve) => {
         setTimeout(() => {
-          expect(mountedStates.get(child1)).toBeUndefined()
-          expect(mountedStates.get(child2)).toBeUndefined()
+          expect(child1.style.opacity).toBe("0")
+          expect(mountedStates.has(child1)).toBeFalsy()
+          expect(child2.style.opacity).toBe("0")
+          expect(mountedStates.has(child2)).toBeFalsy()
           resolve()
         }, 100)
       })

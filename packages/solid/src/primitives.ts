@@ -8,39 +8,40 @@ import { isFunction } from "@motionone/utils"
 import {
   Accessor,
   createEffect,
-  getOwner,
-  runWithOwner,
+  onCleanup,
+  onMount,
   useContext,
 } from "solid-js"
-import {
-  defaultPresenceContextState,
-  PresenceContext,
-  PresenceContextState,
-} from "./context"
+import { PresenceContext, PresenceContextState } from "./presence"
 import { Options } from "./types"
+
+export const onCompleteExit = (el: Element, fn: VoidFunction) =>
+  el.addEventListener("motioncomplete", fn)
 
 /** @internal */
 export function createAndBindMotionState(
-  target: Accessor<Element>,
+  el: () => Element,
   options: Accessor<Options>,
-  presenceState: PresenceContextState,
+  presenceState?: PresenceContextState,
   parentState?: MotionState
-): MotionState {
-  const { addCleanup, addMount, initial } = presenceState
-
+) {
   const state = createMotionState(
-    initial() ? options() : { ...options(), initial: false },
+    presenceState?.() === false ? { ...options(), initial: false } : options(),
     parentState
   )
 
-  addMount(
-    runWithOwner.bind(void 0, getOwner()!, () => {
-      addCleanup(state.mount(target()))
-      createEffect(() => state.update(options()))
+  onMount(() => {
+    const unmount = state.mount(el())
+    onCleanup(() => {
+      if (presenceState && options().exit) {
+        state.setActive("exit", true)
+        onCompleteExit(el(), unmount)
+      } else unmount()
     })
-  )
+    isFunction(options) && createEffect(() => state.update(options()))
+  })
 
-  return state
+  return [state, createStyles(state.getTarget())] as const
 }
 
 /**
@@ -53,18 +54,15 @@ export function createAndBindMotionState(
  */
 export function createMotion(
   target: Element,
-  options: Options | Accessor<Options>,
-  presenceState: PresenceContextState = defaultPresenceContextState
+  options: Accessor<Options> | Options,
+  presenceState?: PresenceContextState
 ): MotionState {
-  const getOptions = () => (isFunction(options) ? options() : options)
-
-  const state = createAndBindMotionState(
+  const [state, styles] = createAndBindMotionState(
     () => target,
-    getOptions,
+    typeof options === "function" ? options : () => options,
     presenceState
   )
 
-  const styles = createStyles(state.getTarget())
   for (const key in styles) {
     style.set(target, key, styles[key])
   }
