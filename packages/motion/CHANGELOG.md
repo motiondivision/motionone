@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.16.0] [2023-03-23]
+
+### Added
+
+- `Presence` re-implemented using Solid primitives.
+
 ## [10.15.5] [2023-01-11]
 
 ### Added
