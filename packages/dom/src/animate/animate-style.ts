@@ -1,7 +1,6 @@
 import { getAnimationData, getMotionValue } from "./data"
 import type { AnimationFactory, ValueKeyframesDefinition } from "./types"
 import { isCssVar, registerCssVariable } from "./utils/css-var"
-import type { Animation } from "@motionone/animation"
 import {
   defaults,
   time,
@@ -22,7 +21,6 @@ import { style } from "./style"
 import { getStyleName } from "./utils/get-style-name"
 import { isNumber, noop } from "@motionone/utils"
 import { stopAnimation } from "./utils/stop-animation"
-import { getUnitConverter } from "./utils/get-unit"
 
 function getDevToolsRecord() {
   return (window as any).__MOTION_DEV_TOOLS_RECORD
@@ -32,8 +30,7 @@ export function animateStyle(
   element: Element,
   key: string,
   keyframesDefinition: ValueKeyframesDefinition,
-  options: AnimationOptions = {},
-  AnimationPolyfill?: typeof Animation
+  options: AnimationOptions = {}
 ): AnimationFactory {
   const record = getDevToolsRecord()
   const isRecording = options.record !== false && record
@@ -97,11 +94,6 @@ export function animateStyle(
       keyframesList(keyframesDefinition),
       readInitialValue
     )
-
-    /**
-     * Detect unit type of keyframes.
-     */
-    const toUnit = getUnitConverter(keyframes, definition)
 
     if (isEasingGenerator(easing)) {
       const custom = easing.createAnimation(
@@ -225,39 +217,6 @@ export function animateStyle(
        * accelerated animations in WKWebView.
        */
       if (!allowWebkitAcceleration) animation.playbackRate = 1.000001
-
-      /**
-       * If we can't animate the value natively then we can fallback to the numbers-only
-       * polyfill for transforms.
-       */
-    } else if (AnimationPolyfill && valueIsTransform) {
-      /**
-       * If any keyframe is a string (because we measured it from the DOM), we need to convert
-       * it into a number before passing to the Animation polyfill.
-       */
-      keyframes = keyframes.map((value) =>
-        typeof value === "string" ? parseFloat(value) : value
-      )
-
-      /**
-       * If we only have a single keyframe, we need to create an initial keyframe by reading
-       * the current value from the DOM.
-       */
-      if (keyframes.length === 1) {
-        keyframes.unshift(parseFloat(readInitialValue() as string))
-      }
-
-      animation = new AnimationPolyfill(
-        (latest: number) => {
-          style.set(element, name, toUnit ? toUnit(latest) : latest)
-        },
-        keyframes as any,
-        {
-          ...options,
-          duration,
-          easing,
-        }
-      )
     } else {
       const target = keyframes[keyframes.length - 1]
       style.set(
