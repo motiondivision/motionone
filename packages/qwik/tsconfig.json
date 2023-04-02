@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "module": "ES2020",
+    "lib": ["es2020", "DOM"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "@builder.io/qwik",
+    "strict": true,
+    "declaration": true,
+    "declarationDir": "lib-types",
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "incremental": true,
+    "isolatedModules": true
+  },
+  "include": [
+    "./src",
+    "./.eslintrc.cjs",
+    "./vite.config.ts",
+    "./tsconfig.json",
+    "./playwright.config.ts",
+    "./tests"
+  ]
+}
