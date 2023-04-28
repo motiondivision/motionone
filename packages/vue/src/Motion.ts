@@ -21,7 +21,6 @@ import { contextId, presenceId, PresenceState } from "./context"
 
 const objectType = <T>() => ({
   type: Object as PropType<T>,
-  default: undefined,
 })
 
 export const Motion = defineComponent({
