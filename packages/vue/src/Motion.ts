@@ -6,13 +6,22 @@ import {
   provide,
   ref,
   defineComponent,
+  PropType,
+  CSSProperties,
 } from "vue"
-import { createMotionState, createStyles, style } from "@motionone/dom"
+import {
+  createMotionState,
+  createStyles,
+  style,
+  VariantDefinition,
+  InViewOptions,
+  AnimationOptionsWithOverrides,
+} from "@motionone/dom"
 import { contextId, presenceId, PresenceState } from "./context"
 
-const objectType = {
-  type: Object,
-}
+const objectType = <T>() => ({
+  type: Object as PropType<T>,
+})
 
 export const Motion = defineComponent({
   name: "Motion",
@@ -23,16 +32,16 @@ export const Motion = defineComponent({
       default: "div",
     },
     initial: {
-      type: [Object, Boolean],
+      type: [Object, Boolean] as PropType<VariantDefinition | boolean>,
     },
-    animate: objectType,
-    inView: objectType,
-    hover: objectType,
-    press: objectType,
-    exit: objectType,
-    inViewOptions: objectType,
-    transition: objectType,
-    style: objectType,
+    animate: objectType<VariantDefinition>(),
+    inView: objectType<VariantDefinition>(),
+    hover: objectType<VariantDefinition>(),
+    press: objectType<VariantDefinition>(),
+    exit: objectType<VariantDefinition>(),
+    inViewOptions: objectType<InViewOptions>(),
+    transition: objectType<AnimationOptionsWithOverrides>(),
+    style: objectType<CSSProperties>(),
   },
   setup(props) {
     const root = ref<Element | null>(null)
