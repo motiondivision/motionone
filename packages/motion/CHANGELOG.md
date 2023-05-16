@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.16.1] [2023-05-16]
+
+### Added
+
+- Types for Vue `Motion` component.
+
 ## [10.16.0] [2023-03-23]
 
 ### Added
