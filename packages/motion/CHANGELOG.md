@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.16.2] [2023-05-16]
+
+### Added
+
+- Exporting more types including `GlideOptions` and `SpringOptions`.
+
 ## [10.16.1] [2023-05-16]
 
 ### Added
