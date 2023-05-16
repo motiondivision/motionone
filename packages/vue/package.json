@@ -1,6 +1,6 @@
 {
   "name": "@motionone/vue",
-  "version": "10.15.5",
+  "version": "10.16.1",
   "description": "A tiny, performant animation library for Vue",
   "author": "Matt Perry",
   "license": "MIT",
