@@ -55,6 +55,7 @@ export type UnresolvedValueKeyframe = ValueKeyframe | null
 
 export type Easing =
   | "linear"
+  | `linear(${string})`
   | "ease"
   | "ease-in"
   | "ease-out"
