@@ -63,6 +63,7 @@ export type Easing =
   | "steps-start"
   | "steps-end"
   | `steps(${number}, ${"start" | "end"})`
+  | `cubic-bezier(${string})`
   | BezierDefinition
 
 export type EasingGenerator = {
