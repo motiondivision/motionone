@@ -30,7 +30,7 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "rm -rf dist && rollup -c",
+    "build": "rimraf dist && rollup -c",
     "test": "yarn test:browser && yarn test:ssr",
     "test:browser": "jest --coverage --config jest.config.js",
     "test:ssr": "jest --config jest.ssrconfig.js",

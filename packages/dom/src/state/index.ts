@@ -102,7 +102,7 @@ export function createMotionState(
 
   /**
    * A generator that will be processed by the global animation scheduler.
-   * This yeilds when it switches from reading the DOM to writing to it
+   * This yields when it switches from reading the DOM to writing to it
    * to prevent layout thrashing.
    */
   function* animateUpdates() {

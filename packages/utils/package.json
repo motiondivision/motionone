@@ -9,7 +9,7 @@
   "types": "types/index.d.ts",
   "sideEffects": false,
   "scripts": {
-    "build": "rm -rf lib dist types && tsc -p . && rollup -c",
+    "build": "rimraf lib dist types && tsc -p . && rollup -c",
     "test": "jest --coverage --config jest.config.js",
     "dev": "concurrently -c blue,red -n tsc,rollup --kill-others \"tsc --watch -p . --preserveWatchOutput\" \"rollup --c --watch --no-watch.clearScreen\""
   },
