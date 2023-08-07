@@ -13,6 +13,8 @@ import {
   Title,
 } from "solid-start"
 
+import "./styles.css"
+
 export default function Root() {
   return (
     <Html lang="en">

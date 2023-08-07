@@ -2,8 +2,6 @@ import { createSignal, Switch, Match } from "solid-js"
 // import { Motion, Presence } from "@motionone/solid"
 import { Motion, Presence } from "../../../../../packages/solid/src"
 
-import "./presence.css"
-
 const options = {
   initial: { opacity: 0, scale: 0 },
   animate: { opacity: 1, scale: 1 },

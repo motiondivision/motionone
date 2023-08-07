@@ -1,3 +1,8 @@
+body {
+  /* for testing entering view */
+  min-height: 150vh;
+}
+
 .container {
   width: 100px;
   display: flex;

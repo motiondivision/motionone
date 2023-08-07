@@ -2,8 +2,6 @@ import { createSignal, Show } from "solid-js"
 // import { Motion, Presence } from "@motionone/solid"
 import { Motion, Presence } from "../../../../../packages/solid/src"
 
-import "./presence.css"
-
 export default function PresenceInitial() {
   const [toggle, setToggle] = createSignal(true)
 

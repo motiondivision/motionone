@@ -9,6 +9,8 @@ export default function Animate() {
       hover={{ scale: 1.2 }}
       press={{ scale: 0.9 }}
       inView={{ "background-color": "black" }}
+      onViewEnter={() => console.log("enter")}
+      onViewLeave={() => console.log("leave")}
       transition={{ duration: 1 }}
       style={{ width: "200px", "background-color": "red", height: "200px" }}
     />
