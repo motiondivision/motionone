@@ -4,7 +4,7 @@ const baseConfig = require("config/jest.config")
 const config = {
   ...baseConfig,
   preset: "solid-jest/preset/browser",
-  setupFilesAfterEnv: ["<rootDir>/../jest.setup.js"],
+  setupFilesAfterEnv: ["<rootDir>/../jest.setup.cjs"],
   testPathIgnorePatterns: ["/node_modules/", "ssr"],
 }
 

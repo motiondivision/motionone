@@ -1,11 +1,9 @@
 import type { JSX, ParentProps } from "solid-js"
-import type {
-  ValueKeyframesDefinition,
-  MotionKeyframesDefinition,
-  InViewOptions,
-} from "@motionone/dom"
+import type { PropertiesHyphen } from "csstype"
+import type { Options as DomOptions, VariantDefinition } from "@motionone/dom"
 import type { MotionEvent, CustomPointerEvent, ViewEvent } from "@motionone/dom"
-import { AnimationOptions } from "@motionone/types"
+
+export type { VariantDefinition }
 
 export interface MotionEventHandlers {
   onMotionStart?: (event: MotionEvent) => void
@@ -18,38 +16,17 @@ export interface MotionEventHandlers {
   onViewLeave?: (event: ViewEvent) => void
 }
 
-export type SolidCSSPropertyKeys = Exclude<
-  keyof {
-    [K in keyof JSX.CSSProperties as string extends K ? never : K]: never
-  },
-  "transition"
->
-
-export type KeyframesDefinition = MotionKeyframesDefinition & {
-  [K in SolidCSSPropertyKeys]?: ValueKeyframesDefinition
+/*
+  Solid style attribute supports only kebab-case properties.
+  While @motionone/dom supports both camelCase and kebab-case,
+  but provides only camelCase properties in the types.
+*/
+declare module "@motionone/dom" {
+  interface CSSStyleDeclarationWithTransform
+    extends Omit<PropertiesHyphen, "direction" | "transition"> {}
 }
 
-export type Variant = KeyframesDefinition & {
-  transition?: AnimationOptionsWithOverrides
-}
-
-export type VariantDefinition = string | Variant
-
-export type AnimationOptionsWithOverrides = AnimationOptions & {
-  [K in keyof KeyframesDefinition]: AnimationOptions
-}
-
-export type Options = {
-  initial?: false | VariantDefinition
-  animate?: VariantDefinition
-  inView?: VariantDefinition
-  hover?: VariantDefinition
-  press?: VariantDefinition
-  exit?: VariantDefinition
-  variants?: Record<string, Variant>
-  inViewOptions?: InViewOptions
-  transition?: AnimationOptionsWithOverrides
-}
+export type Options = DomOptions & { exit?: VariantDefinition }
 
 export type MotionComponentProps = ParentProps<MotionEventHandlers & Options>
 

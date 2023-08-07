@@ -11,7 +11,7 @@ export default function Events() {
       animate={{ opacity: 1 }}
       hover={{ scale: 1.2 }}
       press={{ scale: 0.9 }}
-      inView={{ "background-color": "black" }}
+      inView={{ backgroundColor: "black" }}
       transition={{ duration: 1 }}
       onHoverStart={log}
       onHoverEnd={log}

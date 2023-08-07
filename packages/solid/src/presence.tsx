@@ -1,12 +1,21 @@
-import { createContext, FlowComponent } from "solid-js"
 import { mountedStates } from "@motionone/dom"
 import { resolveFirst } from "@solid-primitives/refs"
 import { createSwitchTransition } from "@solid-primitives/transition-group"
-import { ParentContext } from "./motion"
+import {
+  createContext,
+  createSignal,
+  batch,
+  type FlowComponent,
+  type JSX,
+  type Accessor,
+} from "solid-js"
 import { onCompleteExit } from "./primitives"
-import { Options } from "./types"
+import type { Options } from "./types"
 
-export type PresenceContextState = () => boolean
+export type PresenceContextState = {
+  initial: boolean
+  mount: Accessor<boolean>
+}
 export const PresenceContext = createContext<PresenceContextState>()
 
 /**
@@ -33,28 +42,36 @@ export const Presence: FlowComponent<{
   initial?: boolean
   exitBeforeEnter?: boolean
 }> = (props) => {
-  let initial = props.initial !== false
+  const [mount, setMount] = createSignal(true),
+    state = { initial: props.initial ?? true, mount },
+    render = (
+      <PresenceContext.Provider value={state}>
+        {
+          createSwitchTransition(
+            resolveFirst(() => props.children),
+            {
+              appear: state.initial,
+              mode: props.exitBeforeEnter ? "out-in" : "parallel",
+              onExit(el, done) {
+                batch(() => {
+                  setMount(false)
+                  ;(mountedStates.get(el)?.getOptions() as Options).exit
+                    ? onCompleteExit(el, done)
+                    : done()
+                })
+              },
+              onEnter(_, done) {
+                batch(() => {
+                  setMount(true)
+                  done()
+                })
+              },
+            }
+          ) as any as JSX.Element
+        }
+      </PresenceContext.Provider>
+    )
 
-  const render = (
-    <PresenceContext.Provider value={() => initial}>
-      <ParentContext.Provider value={undefined}>
-        {createSwitchTransition(
-          resolveFirst(() => props.children),
-          {
-            appear: initial,
-            mode: props.exitBeforeEnter ? "out-in" : "parallel",
-            onExit(el, remove) {
-              const state = mountedStates.get(el)
-              if (state && (state.getOptions() as Options).exit)
-                onCompleteExit(el, remove)
-              else remove()
-            },
-          }
-        )}
-      </ParentContext.Provider>
-    </PresenceContext.Provider>
-  )
-
-  initial = true
+  state.initial = true
   return render
 }

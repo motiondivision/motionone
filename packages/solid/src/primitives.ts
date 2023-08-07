@@ -5,13 +5,7 @@ import {
   style,
 } from "@motionone/dom"
 import { isFunction } from "@motionone/utils"
-import {
-  Accessor,
-  createEffect,
-  onCleanup,
-  onMount,
-  useContext,
-} from "solid-js"
+import { Accessor, createEffect, onCleanup, useContext } from "solid-js"
 import { PresenceContext, PresenceContextState } from "./presence"
 import { Options } from "./types"
 
@@ -22,23 +16,34 @@ export const onCompleteExit = (el: Element, fn: VoidFunction) =>
 export function createAndBindMotionState(
   el: () => Element,
   options: Accessor<Options>,
-  presenceState?: PresenceContextState,
-  parentState?: MotionState
+  presence_state?: PresenceContextState,
+  parent_state?: MotionState
 ) {
   const state = createMotionState(
-    presenceState?.() === false ? { ...options(), initial: false } : options(),
-    parentState
+    presence_state?.initial === false
+      ? { ...options(), initial: false }
+      : options(),
+    parent_state
   )
 
-  onMount(() => {
-    const unmount = state.mount(el())
+  createEffect(() => {
+    /*
+      Motion components under <Presence exitBeforeEnter> should wait before animating in
+      this is done with additional signal, because effects will still run immediately
+    */
+    if (presence_state && !presence_state.mount()) return
+
+    const el_ref = el(),
+      unmount = state.mount(el_ref)
+
+    createEffect(() => state.update(options()))
+
     onCleanup(() => {
-      if (presenceState && options().exit) {
+      if (presence_state && options().exit) {
         state.setActive("exit", true)
-        onCompleteExit(el(), unmount)
+        onCompleteExit(el_ref, unmount)
       } else unmount()
     })
-    isFunction(options) && createEffect(() => state.update(options()))
   })
 
   return [state, createStyles(state.getTarget())] as const
@@ -59,7 +64,7 @@ export function createMotion(
 ): MotionState {
   const [state, styles] = createAndBindMotionState(
     () => target,
-    typeof options === "function" ? options : () => options,
+    isFunction(options) ? options : () => options,
     presenceState
   )
 

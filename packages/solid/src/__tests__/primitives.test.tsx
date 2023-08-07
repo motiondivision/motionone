@@ -5,6 +5,8 @@ motion
 
 const duration = 0.001
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
 describe("motion directive", () => {
   test("Applies initial as style to DOM node", async () => {
     await render(() => (
@@ -47,37 +49,31 @@ describe("motion directive", () => {
   })
 
   test("Animation runs when target changes", async () => {
-    await createRoot(async (dispose) => {
-      const [animate, setAnimate] = createSignal({ opacity: 0.5 })
+    const [opacity, setOpacity] = createSignal(0.5)
 
-      const element = await new Promise((resolve) => {
-        const Component = (props: any) => {
-          let ref!: HTMLDivElement
-          setTimeout(() => resolve(ref), 100)
-          return (
-            <div
-              ref={ref}
-              use:motion={{
-                initial: { opacity: 0 },
-                animate: props.animate,
-                transition: { duration },
-              }}
-            />
-          )
-        }
-        render(() => <Component animate={animate()} />)
-      })
-      expect(element).toHaveStyle("opacity: 0.5")
+    const element = createRoot(() => (
+      <div
+        use:motion={{
+          initial: { opacity: 0 },
+          animate: { opacity: opacity() },
+          transition: { duration },
+        }}
+      />
+    )) as HTMLDivElement
 
-      await new Promise<void>((resolve) => {
-        setAnimate({ opacity: 0.8 })
-        setTimeout(() => {
-          expect(element).toHaveStyle("opacity: 0.8")
-          dispose()
-          resolve()
-        }, 100)
-      })
-    })
+    expect(element.style.opacity).toBe("0")
+
+    await sleep(100)
+
+    expect(element.style.opacity).toBe("0.5")
+
+    setOpacity(0.8)
+
+    expect(element.style.opacity).toBe("0.5")
+
+    await sleep(100)
+
+    expect(element.style.opacity).toBe("0.8")
   })
 
   test("Accepts default transition", async () => {

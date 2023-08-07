@@ -17,7 +17,7 @@ export default function PresenceInitial() {
   return (
     <div class="container">
       <button onClick={toggle}>TOGGLE</button>
-      <Presence initial={false}>
+      <Presence initial={false} exitBeforeEnter>
         <Switch>
           <Match when={show() === 1}>
             <Motion.div class="box 1" {...options} transition={{ duration: 1 }}>

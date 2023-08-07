@@ -22,19 +22,7 @@ const OPTION_KEYS = [
   "exit",
 ] as const
 
-const ATTR_KEYS = [
-  "tag",
-  "ref",
-  "style",
-  "onMotionStart",
-  "onMotionComplete",
-  "onHoverStart",
-  "onHoverEnd",
-  "onPressStart",
-  "onPressEnd",
-  "onViewEnter",
-  "onViewLeave",
-] as const
+const ATTR_KEYS = ["tag"] as const
 
 export const ParentContext = createContext<MotionState>()
 
@@ -59,21 +47,13 @@ export const MotionComponent = (
   return (
     <ParentContext.Provider value={state}>
       <Dynamic
+        {...attrs}
         ref={(el: Element) => {
           root = el
           props.ref?.(el)
         }}
         component={props.tag || "div"}
-        style={props.style ? combineStyle(props.style, style) : style}
-        on:motionstart={props.onMotionStart}
-        on:motioncomplete={props.onMotionComplete}
-        on:hoverstart={props.onHoverStart}
-        on:hoverend={props.onHoverEnd}
-        on:pressstart={props.onPressStart}
-        on:pressend={props.onPressEnd}
-        on:viewenter={props.onViewEnter}
-        on:viewleave={props.onViewLeave}
-        {...attrs}
+        style={combineStyle(props.style, style)}
       />
     </ParentContext.Provider>
   )

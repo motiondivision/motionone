@@ -9,12 +9,12 @@ jest.mock("solid-js/web", () => ({
 describe("ssr", () => {
   test("Renders", () => {
     const html = renderToString(() => <Motion.div />)
-    expect(html).toBe('<div data-hk="0-0-0-0-0" style="" ></div>')
+    expect(html).toBe('<div data-hk="0-0-0-0-0" style=""></div>')
   })
 
   test("Renders style", () => {
     const html = renderToString(() => <Motion.div style={{ opacity: 1 }} />)
-    expect(html).toBe(`<div data-hk="0-0-0-0-0" style="opacity:1" ></div>`)
+    expect(html).toBe(`<div data-hk="0-0-0-0-0" style="opacity:1"></div>`)
   })
 
   test("Renders initial as style", () => {
@@ -22,7 +22,7 @@ describe("ssr", () => {
       <Motion.div initial={{ scale: 1.2, opacity: 1 }} />
     ))
     expect(html).toBe(
-      `<div data-hk=\"0-0-0-0-0\" style=\"--motion-scale:1.2;opacity:1;transform:scale(var(--motion-scale))\" ></div>`
+      `<div data-hk=\"0-0-0-0-0\" style=\"--motion-scale:1.2;opacity:1;transform:scale(var(--motion-scale))\"></div>`
     )
   })
 
@@ -34,14 +34,14 @@ describe("ssr", () => {
       />
     ))
     expect(html1).toBe(
-      `<div data-hk=\"0-0-0-0-0\" style=\"margin:24px;--motion-scale:1.2;opacity:1;transform:scale(var(--motion-scale))\" ></div>`
+      `<div data-hk=\"0-0-0-0-0\" style=\"margin:24px;--motion-scale:1.2;opacity:1;transform:scale(var(--motion-scale))\"></div>`
     )
 
     const html2 = renderToString(() => (
       <Motion.div style={`margin: 24px`} initial={{ scale: 1.2, opacity: 1 }} />
     ))
     expect(html2).toBe(
-      `<div data-hk=\"0-0-0-0-0\" style=\"margin:24px;--motion-scale:1.2;opacity:1;transform:scale(var(--motion-scale))\" ></div>`
+      `<div data-hk=\"0-0-0-0-0\" style=\"margin:24px;--motion-scale:1.2;opacity:1;transform:scale(var(--motion-scale))\"></div>`
     )
   })
 
@@ -50,7 +50,7 @@ describe("ssr", () => {
       <Motion.rect initial={{ height: 50 }} width="50" x="0" y="100" />
     ))
     expect(html).toBe(
-      `<rect data-hk=\"0-0-0-0-0\" style=\"height:50\" width=\"50\" x=\"0\" y=\"100\"></rect>`
+      `<rect data-hk=\"0-0-0-0-0\" width=\"50\" x=\"0\" y=\"100\" style=\"height:50\"></rect>`
     )
   })
 
@@ -68,7 +68,7 @@ describe("ssr", () => {
       </Motion.div>
     ))
     expect(html).toBe(
-      `<div data-hk=\"0-0-0-0-0\" style=\"opacity:0;background-color:red\" ><ul data-hk=\"0-0-0-0-1-0-0-0-0\" style=\"--motion-translateY:100px;background-color:purple;transform:translateY(var(--motion-translateY))\" ><li data-hk=\"0-0-0-0-1-0-0-0-1-0-0-0-0\" style=\"background-color:green\" ></li></ul></div>`
+      `<div data-hk=\"0-0-0-0-0\" style=\"opacity:0;background-color:red\"><ul data-hk=\"0-0-0-0-1-0-0-0-0\" style=\"--motion-translateY:100px;background-color:purple;transform:translateY(var(--motion-translateY))\"><li data-hk=\"0-0-0-0-1-0-0-0-1-0-0-0-0\" style=\"background-color:green\"></li></ul></div>`
     )
   })
 
@@ -76,7 +76,7 @@ describe("ssr", () => {
     const div = renderToString(() => (
       <Motion.div initial={{ opacity: [0, 1] }} />
     ))
-    expect(div).toBe(`<div data-hk=\"0-0-0-0-0\" style=\"opacity:0\" ></div>`)
+    expect(div).toBe(`<div data-hk=\"0-0-0-0-0\" style=\"opacity:0\"></div>`)
   })
 
   test("Renders expected CSS variables", () => {
@@ -87,14 +87,14 @@ describe("ssr", () => {
       />
     ))
     expect(div).toBe(
-      `<div data-hk=\"0-0-0-0-0\" style=\"--bar:2;--car:3;--foo:0\" ></div>`
+      `<div data-hk=\"0-0-0-0-0\" style=\"--bar:2;--car:3;--foo:0\"></div>`
     )
   })
 
   test("Renders expected transform", () => {
     const div = renderToString(() => <Motion.div initial={{ x: 100 }} />)
     expect(div).toBe(
-      `<div data-hk=\"0-0-0-0-0\" style=\"--motion-translateX:100px;transform:translateX(var(--motion-translateX))\" ></div>`
+      `<div data-hk=\"0-0-0-0-0\" style=\"--motion-translateX:100px;transform:translateX(var(--motion-translateX))\"></div>`
     )
   })
 
@@ -102,7 +102,7 @@ describe("ssr", () => {
     const div = renderToString(() => (
       <Motion.div hover={{ opacity: 1 }} press={{ opacity: 1 }} variants={{}} />
     ))
-    expect(div).toBe('<div data-hk="0-0-0-0-0" style="" ></div>')
+    expect(div).toBe('<div data-hk="0-0-0-0-0" style=""></div>')
   })
 
   test("Renders Presence", () => {
@@ -111,7 +111,7 @@ describe("ssr", () => {
         <Motion.div />
       </Presence>
     ))
-    expect(html).toBe('<div data-hk="0-0-0-0-0-0-0-0" style="" ></div>')
+    expect(html).toBe('<div data-hk="0-0-0-0-0-0-0" style=""></div>')
   })
 
   test("Renders Presence with initial styles", () => {
@@ -120,9 +120,7 @@ describe("ssr", () => {
         <Motion.div initial={{ opacity: 1 }} />
       </Presence>
     ))
-    expect(html).toBe(
-      '<div data-hk="0-0-0-0-0-0-0-0" style="opacity:1" ></div>'
-    )
+    expect(html).toBe('<div data-hk="0-0-0-0-0-0-0" style="opacity:1"></div>')
   })
 
   test("Renders Presence without initial styles", () => {
@@ -131,6 +129,6 @@ describe("ssr", () => {
         <Motion.div initial={{ opacity: 1 }} />
       </Presence>
     ))
-    expect(html).toBe('<div data-hk="0-0-0-0-0-0-0-0" style="" ></div>')
+    expect(html).toBe('<div data-hk="0-0-0-0-0-0-0" style=""></div>')
   })
 })
