@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.16.3] [2023-09-21]
+
+### Added
+
+- Fixed duplicated `currentTime` case.
+
 ## [10.16.2] [2023-05-16]
 
 ### Added
