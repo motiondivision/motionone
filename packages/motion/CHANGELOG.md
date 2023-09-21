@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.16.4] [2023-09-21]
+
+### Added
+
+- Better rest values for spring animations.
+
 ## [10.16.3] [2023-09-21]
 
 ### Added
