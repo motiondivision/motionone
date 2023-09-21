@@ -13,8 +13,8 @@ export const spring = ({
   from = 0,
   to = 1,
   velocity = 0.0,
-  restSpeed = 2,
-  restDistance = 0.5,
+  restSpeed,
+  restDistance,
 }: SpringOptions = {}): AnimationGenerator => {
   velocity = velocity ? time.s(velocity) : 0.0
 
@@ -28,6 +28,10 @@ export const spring = ({
   const initialDelta = to - from
   const undampedAngularFreq = Math.sqrt(stiffness / mass) / 1000
   const dampingRatio = calcDampingRatio(stiffness, damping, mass)
+
+  const isGranularScale = Math.abs(initialDelta) < 5
+  restSpeed ||= isGranularScale ? 0.01 : 2
+  restDistance ||= isGranularScale ? 0.005 : 0.5
 
   let resolveSpring: (t: number) => number
 
@@ -61,9 +65,9 @@ export const spring = ({
       t === 0
         ? velocity
         : calcGeneratorVelocity(resolveSpring, t, state.current)
-    const isBelowVelocityThreshold = Math.abs(currentVelocity) <= restSpeed
+    const isBelowVelocityThreshold = Math.abs(currentVelocity) <= restSpeed!
     const isBelowDisplacementThreshold =
-      Math.abs(to - state.current) <= restDistance
+      Math.abs(to - state.current) <= restDistance!
     state.done = isBelowVelocityThreshold && isBelowDisplacementThreshold
     state.hasReachedTarget = hasReachedTarget(from, to, state.current)
 
