@@ -44,8 +44,6 @@ export function createGeneratorEasing<Options extends {} = {}>(
             from,
             to,
             velocity,
-            restSpeed: isScale ? 0.05 : 2,
-            restDistance: isScale ? 0.01 : 0.5,
             ...options,
           })
         )
