@@ -93,6 +93,24 @@ describe("animate", () => {
     expect(animation.currentTime).toBe(5)
   })
 
+  test("autoplay false pauses animation", async () => {
+    const div = document.createElement("div")
+    const animation = animate(
+      div,
+      { opacity: 0.5 },
+      { duration: 0.1, autoplay: false }
+    )
+    let hasFinished = false
+
+    animation.finished.then(() => {
+      hasFinished = true
+    })
+
+    setTimeout(() => {
+      expect(hasFinished).toBe(false)
+    }, 200)
+  })
+
   test("currentTime can be set to duration", async () => {
     const div = document.createElement("div")
     div.style.opacity = "0"

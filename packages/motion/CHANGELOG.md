@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.17.0] [2024-01-02]
+
+### Added
+
+- `autoplay`
+
 ## [10.16.4] [2023-09-21]
 
 ### Added
