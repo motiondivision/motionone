@@ -106,9 +106,12 @@ describe("animate", () => {
       hasFinished = true
     })
 
-    setTimeout(() => {
-      expect(hasFinished).toBe(false)
-    }, 200)
+    await new Promise<void>((resolve) => {
+      setTimeout(() => {
+        expect(hasFinished).toBe(false)
+        resolve()
+      }, 200)
+    })
   })
 
   test("currentTime can be set to duration", async () => {
