@@ -20,15 +20,18 @@ export default {
     const root = ref<HTMLElement | null>(null)
 
     function startSpring() {
-      timeline([
+      timeline(
         [
-          root.value!,
-          { x: 400 },
-          {
-            duration: 2,
-          },
+          [
+            root.value!,
+            { x: 400 },
+            {
+              duration: 2,
+            },
+          ],
         ],
-      ])
+        { autoplay: false }
+      )
     }
 
     onMounted(() => {

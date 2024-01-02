@@ -644,4 +644,25 @@ describe("timeline", () => {
     )
     expect(controls.duration).toEqual(1)
   })
+
+  it("Doesn't autoplay is autoplay is false", async () => {
+    const div = document.createElement("div")
+    const controls = timeline(
+      [
+        [div, { opacity: 0 }, { duration: 1 }],
+        [div, { opacity: 1 }, { duration: 2 }],
+      ],
+      { duration: 0.1 }
+    )
+    let hasFinished = false
+    controls.finished.then(() => {
+      hasFinished = true
+    })
+    await new Promise<void>((resolve) => {
+      setTimeout(() => {
+        expect(hasFinished).toBe(false)
+        resolve()
+      }, 200)
+    })
+  })
 })

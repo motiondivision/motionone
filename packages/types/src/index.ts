@@ -88,6 +88,7 @@ export type PlaybackOptions = {
   repeat?: number
   direction?: PlaybackDirection
   persist?: boolean
+  autoplay?: boolean
 }
 
 export type DevToolsOptions = {
