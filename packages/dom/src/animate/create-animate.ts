@@ -11,9 +11,8 @@ import { withControls } from "./utils/controls"
 import { resolveOption } from "../utils/stagger"
 import { AnimationControls } from "@motionone/types"
 import { ElementOrSelector } from "../types"
-import type { Animation } from "@motionone/animation"
 
-export function createAnimate(AnimatePolyfill?: typeof Animation) {
+export function createAnimate() {
   return function animate(
     elements: ElementOrSelector,
     keyframes: MotionKeyframesDefinition,
@@ -40,8 +39,7 @@ export function createAnimate(AnimatePolyfill?: typeof Animation) {
           element,
           key,
           keyframes[key]!,
-          valueOptions,
-          AnimatePolyfill
+          valueOptions
         )
 
         animationFactories.push(animation)

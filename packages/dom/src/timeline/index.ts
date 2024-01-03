@@ -31,7 +31,6 @@ import type {
 import { calcNextTime } from "./utils/calc-time"
 import { addKeyframes } from "./utils/edit"
 import { compareByTime } from "./utils/sort"
-import { Animation } from "@motionone/animation"
 
 type AnimateStyleDefinition = [
   Element,
@@ -55,7 +54,7 @@ export function timeline(
    * Create and start animations
    */
   const animationFactories = animationDefinitions
-    .map((definition) => animateStyle(...definition, Animation))
+    .map((definition) => animateStyle(...definition))
     .filter(Boolean)
 
   return withControls(
