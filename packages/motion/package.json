@@ -13,8 +13,7 @@
     "spring",
     "tween",
     "timeline",
-    "dom",
-    "vue"
+    "dom"
   ],
   "sideEffects": false,
   "scripts": {
