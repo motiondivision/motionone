@@ -26,5 +26,6 @@
     "@motionone/dom": "^10.17.0",
     "@motionone/types": "^10.17.0",
     "@motionone/utils": "^10.17.0"
-  }
+  },
+  "gitHead": "1c67c845fb4032c9d27f3761094939b30b759f9e"
 }

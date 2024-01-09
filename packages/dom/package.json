@@ -55,5 +55,6 @@
       "path": "./dist/size-resize.js",
       "maxSize": "0.65 kB"
     }
-  ]
+  ],
+  "gitHead": "1c67c845fb4032c9d27f3761094939b30b759f9e"
 }
