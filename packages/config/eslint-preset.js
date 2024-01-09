@@ -4,13 +4,9 @@ module.exports = {
     next: {
       rootDir: [
         "sites/web/",
-        "sites/playground-vue/",
         "packages/config/",
         "packages/dom/",
         "packages/motion/",
-        "packages/react/",
-        "packages/svelte/",
-        "packages/vue/",
       ],
     },
   },

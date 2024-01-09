@@ -1,8 +1,0 @@
-src/**
-.turbo
-tsconfig.json
-rollup.config.js
-README.md
-coverage/**
-jest.*
-svelte.config.js
