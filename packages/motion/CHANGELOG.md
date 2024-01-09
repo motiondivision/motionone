@@ -7,6 +7,7 @@ Motion One adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - `autoplay`
+- Improved tsdocs for `animate()`.
 
 ## [10.16.4] [2023-09-21]
 
