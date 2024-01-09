@@ -25,9 +25,7 @@
   "dependencies": {
     "@motionone/animation": "^10.17.0",
     "@motionone/dom": "^10.17.0",
-    "@motionone/svelte": "^10.17.0",
     "@motionone/types": "^10.17.0",
-    "@motionone/utils": "^10.17.0",
-    "@motionone/vue": "^10.17.0"
+    "@motionone/utils": "^10.17.0"
   }
 }
