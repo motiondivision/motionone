@@ -6,7 +6,6 @@ import {
 import { spring } from "../../easing/spring"
 import { defaultOffset } from "@motionone/utils"
 import { stagger } from "../../utils/stagger"
-import "config/waapi-polyfill"
 
 describe("createAnimationsFromTimeline", () => {
   const a = document.createElement("div")
