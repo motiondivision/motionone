@@ -288,7 +288,7 @@ export function animateStyle(
 
     motionValue.setAnimation(animation)
 
-    if (!autoplay) animation.pause()
+    if (animation && !autoplay) animation.pause()
 
     return animation
   }

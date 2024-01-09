@@ -1,9 +1,5 @@
 import { fireEvent } from "@testing-library/dom"
-const {
-  pointerDown,
-  pointerEnter,
-  pointerLeave,
-} = require("config/jest.setup.js")
+import { pointerDown, pointerEnter, pointerLeave } from "config/jest.setup"
 import "config/waapi-polyfill"
 import { createTestMotionState } from "./utils"
 
