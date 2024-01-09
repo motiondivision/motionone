@@ -24,6 +24,8 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.6",
     "@rollup/plugin-replace": "^5.0.1",
+    "@testing-library/dom": "^9.3.4",
+    "@testing-library/jest-dom": "^6.2.0",
     "@types/jest": "^27.0.3",
     "bundlesize": "^0.18.1",
     "concurrently": "^7.3.0",
