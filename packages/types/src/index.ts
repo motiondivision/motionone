@@ -162,8 +162,8 @@ export type Easing =
   | "ease-in"
   | "ease-out"
   | "ease-in-out"
-  | "steps-start"
-  | "steps-end"
+  | "step-start"
+  | "step-end"
   | `steps(${number}, ${"start" | "end"})`
   | BezierDefinition
 
