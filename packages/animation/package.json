@@ -1,6 +1,6 @@
 {
   "name": "@motionone/animation",
-  "version": "10.15.1",
+  "version": "10.17.0",
   "description": "A semi-polyfill WAAPI animation.",
   "license": "MIT",
   "author": "Matt Perry",
@@ -15,9 +15,9 @@
     "measure": "bundlesize"
   },
   "dependencies": {
-    "@motionone/easing": "^10.15.1",
-    "@motionone/types": "^10.15.1",
-    "@motionone/utils": "^10.15.1",
+    "@motionone/easing": "^10.17.0",
+    "@motionone/types": "^10.17.0",
+    "@motionone/utils": "^10.17.0",
     "tslib": "^2.3.1"
   },
   "bundlesize": [
@@ -25,5 +25,6 @@
       "path": "./dist/size-index.js",
       "maxSize": "1.6 kB"
     }
-  ]
+  ],
+  "gitHead": "1c67c845fb4032c9d27f3761094939b30b759f9e"
 }

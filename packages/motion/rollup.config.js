@@ -1,8 +1,8 @@
-import fs from "fs"
-import resolve from "@rollup/plugin-node-resolve"
-import { terser } from "rollup-plugin-terser"
-import replace from "@rollup/plugin-replace"
-import pkg from "./package.json"
+const fs = require("fs")
+const resolve = require("@rollup/plugin-node-resolve").default
+const replace = require("@rollup/plugin-replace").default
+const { terser } = require("rollup-plugin-terser")
+const pkg = require("./package.json")
 
 const config = {
   input: "lib/index.js",
@@ -45,8 +45,6 @@ const umdProd = Object.assign({}, umd, {
 
 const distEntries = {
   main: "lib/index.js",
-  // react: "lib/react.js",
-  vue: "lib/vue.js",
 }
 
 const dist = {
@@ -111,4 +109,4 @@ const sizeAnimateDom = createSizeBuild({
   output: "dist/size-index.js",
 })
 
-export default [dist, umd, umdProd, sizeAnimateDom]
+module.exports = [dist, umd, umdProd, sizeAnimateDom]

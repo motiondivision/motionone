@@ -269,6 +269,21 @@ describe("animateNumber", () => {
     })
   })
 
+  test("If autoplay is set to false, animation is paused", async () => {
+    const output: number[] = []
+    mockTimeFrom(1)
+    new Animation((v) => output.push(v), [0, 1], {
+      duration: 0.2,
+      easing: "linear",
+      repeat: 1,
+      autoplay: false,
+    })
+    await new Promise((resolve) => {
+      setTimeout(resolve, 100)
+    })
+    expect(output).toEqual([])
+  })
+
   test("Can be paused and played", async () => {
     const output: number[] = []
     mockTimeFrom(1)

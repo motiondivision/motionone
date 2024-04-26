@@ -49,6 +49,7 @@ export function animateStyle(
     direction,
     offset,
     allowWebkitAcceleration = false,
+    autoplay = true,
   } = options
 
   const data = getAnimationData(element)
@@ -286,6 +287,8 @@ export function animateStyle(
     }
 
     motionValue.setAnimation(animation)
+
+    if (animation && !autoplay) animation.pause()
 
     return animation
   }

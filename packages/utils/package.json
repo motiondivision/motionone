@@ -1,6 +1,6 @@
 {
   "name": "@motionone/utils",
-  "version": "10.15.1",
+  "version": "10.17.0",
   "description": "A collection of utility functions for animations.",
   "license": "MIT",
   "author": "Matt Perry",
@@ -14,8 +14,9 @@
     "dev": "concurrently -c blue,red -n tsc,rollup --kill-others \"tsc --watch -p . --preserveWatchOutput\" \"rollup --c --watch --no-watch.clearScreen\""
   },
   "dependencies": {
-    "@motionone/types": "^10.15.1",
+    "@motionone/types": "^10.17.0",
     "hey-listen": "^1.0.8",
     "tslib": "^2.3.1"
-  }
+  },
+  "gitHead": "1c67c845fb4032c9d27f3761094939b30b759f9e"
 }

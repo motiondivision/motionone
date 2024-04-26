@@ -2,6 +2,25 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.17.0] [2024-01-02]
+
+### Added
+
+- `autoplay`
+- Improved tsdocs for `animate()`.
+
+## [10.16.4] [2023-09-21]
+
+### Added
+
+- Better rest values for spring animations.
+
+## [10.16.3] [2023-09-21]
+
+### Added
+
+- Fixed duplicated `currentTime` case.
+
 ## [10.16.2] [2023-05-16]
 
 ### Added

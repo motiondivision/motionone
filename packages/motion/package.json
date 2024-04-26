@@ -1,7 +1,7 @@
 {
   "name": "motion",
   "description": "A tiny, performant animation library for the web",
-  "version": "10.16.2",
+  "version": "10.17.0",
   "license": "MIT",
   "author": "Matt Perry",
   "main": "dist/main.cjs.js",
@@ -13,8 +13,7 @@
     "spring",
     "tween",
     "timeline",
-    "dom",
-    "vue"
+    "dom"
   ],
   "sideEffects": false,
   "scripts": {
@@ -23,11 +22,10 @@
     "dev": "concurrently -c blue,red -n tsc,rollup --kill-others \"tsc --watch -p . --preserveWatchOutput\" \"rollup --c --watch --no-watch.clearScreen\""
   },
   "dependencies": {
-    "@motionone/animation": "^10.15.1",
-    "@motionone/dom": "^10.16.2",
-    "@motionone/svelte": "^10.16.2",
-    "@motionone/types": "^10.15.1",
-    "@motionone/utils": "^10.15.1",
-    "@motionone/vue": "^10.16.2"
-  }
+    "@motionone/animation": "^10.17.0",
+    "@motionone/dom": "^10.17.0",
+    "@motionone/types": "^10.17.0",
+    "@motionone/utils": "^10.17.0"
+  },
+  "gitHead": "1c67c845fb4032c9d27f3761094939b30b759f9e"
 }

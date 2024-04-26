@@ -1,6 +1,0 @@
-{
-  "private": true,
-  "main": "../dist/vue.cjs.js",
-  "module": "../dist/vue.es.js",
-  "types": "../types/vue.d.ts"
-}

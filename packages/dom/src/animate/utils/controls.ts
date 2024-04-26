@@ -81,7 +81,7 @@ export const controls = {
     switch (key) {
       case "currentTime":
         value = time.ms(value)
-      case "currentTime":
+        // Fall-through
       case "playbackRate":
         for (let i = 0; i < target.animations.length; i++) {
           target.animations[i][key] = value

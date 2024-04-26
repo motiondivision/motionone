@@ -1,6 +1,6 @@
 {
   "name": "@motionone/types",
-  "version": "10.15.1",
+  "version": "10.17.0",
   "description": "Shared types for the Motion One packages.",
   "license": "MIT",
   "author": "Matt Perry",
@@ -11,5 +11,6 @@
   "scripts": {
     "build": "rimraf lib dist types && tsc -p . && rollup -c",
     "dev": "concurrently -c blue,red -n tsc,rollup --kill-others \"tsc --watch -p . --preserveWatchOutput\" \"rollup --c --watch --no-watch.clearScreen\""
-  }
+  },
+  "gitHead": "1c67c845fb4032c9d27f3761094939b30b759f9e"
 }

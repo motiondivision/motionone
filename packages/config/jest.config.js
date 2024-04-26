@@ -10,7 +10,6 @@ const config = {
   ],
   testMatch: ["**/__tests__/**/*.test.(js|ts)?(x)"],
   coverageDirectory: "<rootDir>/../coverage",
-  coveragePathIgnorePatterns: ["supported-elements.ts", "src/index.ts"],
 }
 
 module.exports = config

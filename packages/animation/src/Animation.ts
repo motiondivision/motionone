@@ -52,6 +52,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
       repeat = defaults.repeat,
       offset,
       direction = "normal",
+      autoplay = true,
     }: AnimationOptions = {}
   ) {
     easing = easing || defaults.easing
@@ -160,7 +161,7 @@ export class Animation implements Omit<AnimationControls, "stop" | "duration"> {
       }
     }
 
-    this.play()
+    if (autoplay) this.play()
   }
 
   finished = new Promise((resolve, reject) => {
