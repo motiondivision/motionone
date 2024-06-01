@@ -13,7 +13,7 @@ export function createStyles(keyframes?: MotionKeyframes): any {
   const transformKeys: string[] = []
 
   for (let key in keyframes) {
-    const value = keyframes[key]
+    const value = keyframes[key as keyof typeof keyframes]
     if (isTransform(key)) {
       if (transformAlias[key]) key = transformAlias[key]
       transformKeys.push(key)
@@ -30,7 +30,7 @@ export function createStyles(keyframes?: MotionKeyframes): any {
     if (definition) {
       initialKeyframe = isNumber(value)
         ? definition.toDefaultUnit!(value)
-        : value
+        : (value as any)
     }
 
     initialKeyframes[key] = initialKeyframe

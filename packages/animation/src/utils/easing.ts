@@ -21,7 +21,8 @@ export function getEasingFunction(
   if (isCubicBezier(definition)) return cubicBezier(...definition)
 
   // If we have a predefined easing function, return
-  if (namedEasings[definition]) return namedEasings[definition]
+  const namedEasing = namedEasings[definition as keyof typeof namedEasings]
+  if (namedEasing) return namedEasing
 
   // If this is a steps function, attempt to create easing curve
   if (definition.startsWith("steps")) {

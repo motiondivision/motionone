@@ -13,4 +13,4 @@ export const getOptions = (
    * Always return a new object otherwise delay is overwritten by results of stagger
    * and this results in no stagger
    */
-  options[key] ? { ...options, ...options[key] } : { ...options }
+  options[key as any] ? { ...options, ...options[key as any] } : { ...options }

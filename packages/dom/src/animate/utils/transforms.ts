@@ -70,11 +70,14 @@ export const compareTransformOrder = (a: string, b: string) =>
  * Provide a quick way to check if a string is the name of a transform
  */
 const transformLookup = new Set(transforms)
-export const isTransform = (name: string) => transformLookup.has(name)
+export const isTransform = (
+  name: string
+): name is keyof typeof transformAlias => transformLookup.has(name)
 
 export const addTransformToElement = (element: HTMLElement, name: string) => {
   // Map x to translateX etc
-  if (transformAlias[name]) name = transformAlias[name]
+  if (transformAlias[name as keyof typeof transformAlias])
+    name = transformAlias[name as keyof typeof transformAlias]
 
   const { transforms } = getAnimationData(element)
   addUniqueItem(transforms, name)

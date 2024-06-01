@@ -71,10 +71,10 @@ export function createMotionState(
    */
   const context: MotionStateContext = {}
   for (const name of stateTypes) {
-    context[name] =
-      typeof options[name] === "string"
-        ? options[name]
-        : parent?.getContext()[name]
+    context[name as keyof typeof context] =
+      typeof options[name as keyof typeof options] === "string"
+        ? options[name as keyof typeof options]
+        : (parent?.getContext()[name as keyof typeof context] as any)
   }
 
   /**
@@ -113,9 +113,11 @@ export function createMotionState(
     const enteringInto: { [key: string]: string } = {}
     const animationOptions: AnimationOptionsWithOverrides = {}
     for (const name of stateTypes) {
-      if (!activeStates[name]) continue
+      if (!activeStates[name as keyof typeof activeStates]) continue
 
-      const variant = resolveVariant(options[name])
+      const variant = resolveVariant(
+        options[name as keyof typeof options] as any
+      )
 
       if (!variant) continue
 
@@ -124,9 +126,11 @@ export function createMotionState(
       for (const key in variant) {
         if (key === "transition") continue
 
-        target[key] = variant[key]
+        target[key as keyof typeof target] = variant[
+          key as keyof typeof variant
+        ] as any
 
-        animationOptions[key] = getOptions(
+        animationOptions[key as any] = getOptions(
           variant.transition ?? options.transition ?? {},
           key
         )
@@ -144,7 +148,7 @@ export function createMotionState(
     ])
 
     const animationFactories: AnimationFactory[] = []
-    allTargetKeys.forEach((key) => {
+    allTargetKeys.forEach((key: any) => {
       if (target[key] === undefined) {
         target[key] = baseTarget[key]
       }
@@ -184,17 +188,20 @@ export function createMotionState(
   }
 
   const setGesture = (name: string, isActive: boolean) => () => {
-    activeStates[name] = isActive
+    activeStates[name as keyof typeof activeStates] = isActive
     scheduleAnimation(state)
   }
 
   const updateGestureSubscriptions = () => {
     for (const name in gestures) {
-      const isGestureActive = gestures[name].isActive(options)
+      const isGestureActive =
+        gestures[name as keyof typeof gestures].isActive(options)
       const remove = gestureSubscriptions[name]
 
       if (isGestureActive && !remove) {
-        gestureSubscriptions[name] = gestures[name].subscribe(
+        gestureSubscriptions[name] = gestures[
+          name as keyof typeof gestures
+        ].subscribe(
           element,
           {
             enable: setGesture(name, true),
@@ -219,7 +226,7 @@ export function createMotionState(
     },
     setActive: (name, isActive) => {
       if (!element) return
-      activeStates[name] = isActive
+      activeStates[name as keyof typeof activeStates] = isActive
       scheduleAnimation(state)
     },
     animateUpdates,

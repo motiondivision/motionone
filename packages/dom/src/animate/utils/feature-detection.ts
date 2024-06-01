@@ -34,8 +34,10 @@ type FeatureTests = Record<keyof typeof featureTests, () => boolean>
 
 export const supports = {} as FeatureTests
 for (const key in featureTests) {
-  supports[key] = () => {
-    if (results[key] === undefined) results[key] = featureTests[key]()
-    return results[key]
+  supports[key as keyof typeof supports] = () => {
+    if (results[key as keyof typeof results] === undefined)
+      (results[key as keyof typeof results] as any) =
+        featureTests[key as keyof typeof featureTests]()
+    return results[key as keyof typeof results]
   }
 }

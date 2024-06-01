@@ -129,7 +129,9 @@ export function createAnimationsFromTimeline(
 
       for (const key in keyframes) {
         const valueSequence = getValueSequence(key, elementSequence)
-        let valueKeyframes = keyframesList(keyframes[key]!)
+        let valueKeyframes = keyframesList(
+          keyframes[key as keyof typeof keyframes]!
+        )
         const valueOptions = getOptions(options, key)
         let {
           duration = defaultOptions.duration || defaults.duration,
