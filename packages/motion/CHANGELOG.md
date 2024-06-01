@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.17.1] [2024-06-01]
+
+### Fixed
+
+- Fixed type of `step-start` and `step-end` easing functions.
+
 ## [10.17.0] [2024-01-02]
 
 ### Added
