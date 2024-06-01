@@ -27,7 +27,7 @@
     "@testing-library/dom": "^9.3.4",
     "@testing-library/jest-dom": "^6.2.0",
     "@types/jest": "^27.0.3",
-    "bundlesize": "^0.18.1",
+    "bundlesize2": "^0.0.31",
     "concurrently": "^7.3.0",
     "jest": "^27.4.4",
     "lerna": "^4.0.0",
