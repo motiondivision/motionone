@@ -2,6 +2,12 @@
 
 Motion One adheres to [Semantic Versioning](http://semver.org/).
 
+## [10.18.0] [2024-06-02]
+
+### Updated
+
+- Typescript to `5.4.0`.
+
 ## [10.17.1] [2024-06-01]
 
 ### Fixed
