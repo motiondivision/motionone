@@ -41,5 +41,8 @@
     "webpack": "5",
     "webpack-cli": "^4.9.1"
   },
-  "packageManager": "yarn@1.22.17"
+  "packageManager": "yarn@1.22.17",
+  "dependencies": {
+    "jest-environment-jsdom": "^29"
+  }
 }
