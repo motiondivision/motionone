@@ -26,7 +26,7 @@
     "@rollup/plugin-replace": "^5.0.1",
     "@testing-library/dom": "^9.3.4",
     "@testing-library/jest-dom": "^6.2.0",
-    "@types/jest": "^27.0.3",
+    "@types/jest": "29",
     "bundlesize2": "^0.0.31",
     "concurrently": "^7.3.0",
     "jest": "^29",
