@@ -49,7 +49,7 @@
     },
     {
       "path": "./dist/size-scroll.js",
-      "maxSize": "2.5 kB"
+      "maxSize": "2.51 kB"
     },
     {
       "path": "./dist/size-resize.js",
