@@ -1,6 +1,6 @@
 {
   "name": "config",
-  "version": "10.17.1",
+  "version": "10.18.0",
   "main": "index.js",
   "private": true,
   "license": "MIT",
