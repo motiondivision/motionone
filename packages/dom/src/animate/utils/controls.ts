@@ -43,7 +43,7 @@ export const controls = {
       case "duration":
         return target.duration
       case "currentTime":
-        return time.s(activeAnimation?.[key] || 0)
+        return time.s((activeAnimation?.[key] as number) || 0)
       case "playbackRate":
       case "playState":
         return activeAnimation?.[key]
@@ -56,7 +56,9 @@ export const controls = {
         return target.finished
       case "stop":
         return () => {
-          target.animations.forEach((animation) => stopAnimation(animation))
+          target.animations.forEach((animation) =>
+            stopAnimation(animation as any)
+          )
         }
       case "forEachNative":
         /**
@@ -72,16 +74,24 @@ export const controls = {
           target.animations.forEach((animation) => callback(animation, target))
         }
       default:
-        return typeof activeAnimation?.[key] === "undefined"
+        return typeof activeAnimation?.[key as keyof typeof activeAnimation] ===
+          "undefined"
           ? undefined
-          : () => target.animations.forEach((animation) => animation[key]())
+          : () =>
+              target.animations.forEach((animation) =>
+                (
+                  animation[
+                    key as keyof AnimationWithCommitStyles
+                  ] as VoidFunction
+                )()
+              )
     }
   },
   set: (target: MotionState, key: string, value: number) => {
     switch (key) {
       case "currentTime":
         value = time.ms(value)
-        // Fall-through
+      // Fall-through
       case "playbackRate":
         for (let i = 0; i < target.animations.length; i++) {
           target.animations[i][key] = value

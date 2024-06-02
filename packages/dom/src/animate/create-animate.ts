@@ -39,7 +39,7 @@ export function createAnimate(AnimatePolyfill?: typeof Animation) {
         const animation = animateStyle(
           element,
           key,
-          keyframes[key]!,
+          keyframes[key as keyof typeof keyframes]!,
           valueOptions,
           AnimatePolyfill
         )

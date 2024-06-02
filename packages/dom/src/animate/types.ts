@@ -10,7 +10,7 @@ import { ValueKeyframe } from "@motionone/types"
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 export interface CSSStyleDeclarationWithTransform
-  extends Omit<CSSStyleDeclaration, "direction" | "transition"> {
+  extends Omit<CSSStyleDeclaration, "direction" | "transition" | "x" | "y"> {
   x: number | string
   y: number | string
   z: number | string

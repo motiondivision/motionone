@@ -6,7 +6,7 @@ export interface StateHandlers {
 }
 
 export interface Gesture {
-  isActive: (options: Options) => void
+  isActive: (options: Options) => boolean
   subscribe: (
     element: Element,
     stateHandlers: StateHandlers,

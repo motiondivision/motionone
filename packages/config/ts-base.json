@@ -20,7 +20,6 @@
     "emitDecoratorMetadata": true,
     "noLib": false,
     "preserveConstEnums": true,
-    "suppressImplicitAnyIndexErrors": true,
     "sourceMap": true,
     "baseUrl": "src",
     "strictNullChecks": true,
