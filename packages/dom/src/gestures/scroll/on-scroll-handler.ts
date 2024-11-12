@@ -68,7 +68,7 @@ function scrubAnimation(controls: AnimationControls, axisInfo: AxisScrollInfo) {
    *
    * TODO: Fix casting here
    */
-  ;(controls as any).forEachNative((animation: any, { easing }: any) => {
+  ;(controls as any).forEachNative((animation: any, { options: { easing } }: any) => {
     if (animation.updateDuration) {
       if (!easing) animation.easing = noopReturn
       animation.updateDuration(1)
